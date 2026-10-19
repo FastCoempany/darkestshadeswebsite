@@ -1,0 +1,49 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 front (A1). The GCD sits on the right wing (the wearer's right; image left), centered on the two pin heads (founder, Oct 19 2026).",
+ "shot": "IMG_3423",
+ "frame": "F02",
+ "angle": "A1",
+ "region": [0, 2250, 3213, 3950],
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[700, 3300], [1150, 2950]]
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2450, 3300], [2050, 2950]]
+  }
+ ],
+ "marks": [
+  {
+   "name": "pin heads on the right wing (under the GCD)",
+   "poly": [[188, 2712], [296, 2712], [296, 2768], [188, 2768]],
+   "kind": "light",
+   "fill_whole": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "paint": [
+   [[2390, 2660], [2670, 2660], [2670, 3120], [2390, 3120]]
+  ],
+  "smooth": "flat"
+ },
+ "gcd": {
+  "view": "yaw-5",
+  "relief_mm": 0.15,
+  "center": [241, 2740],
+  "axis": [0.9998, -0.02],
+  "down": [0.02, 0.9998],
+  "px_per_mm_along": 20.8,
+  "px_per_mm_down": 20.8,
+  "length_mm": 8.8,
+  "soften_px": 0.7
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

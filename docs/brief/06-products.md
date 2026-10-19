@@ -8,16 +8,16 @@ IDs follow the factory and photo-group numbering. F07 ("Hunter Kept Owl Hours", 
 
 | Look | Name · descriptor | Front / temples | Lens | Size (lens□bridge temple) | Lens h. | Front w. | Drawing | Lightbox shots |
 |---|---|---|---|---|---|---|---|---|
-| 01 | **Lou Went Underground** · Blue navigator | Blue-black tortoise acetate / same | Light blue | 54□11 145 | 44 | 150 | 01 | IMG_3554–3581 (28) |
-| 02 | **Holly Wore Them to Breakfast** · Crimson tortoise, wire temples | Red-black tortoise acetate / black metal wire | Dark grey | 45□7 145 | 38 | 142 | 03 | IMG_3410–3441, 3465–3475 (43) |
-| 03 | **Roy Forgot the Clear Ones** · Black wayfarer, yellow lens | Gloss black acetate / same | Yellow | 45□— 150 | 38 | 145 | 02 | IMG_3316–3341, 3492–3505 (40) |
-| 04 | **K Was Never Here** · Flat-top square, wire temples | Black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□13 148 | 34 | 147 | 05 | IMG_3442–3464 (23) |
-| 05 | **Jackie Gave Them Nothing** · Puffy square, wire temples | Gloss black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□— 148 | 34 | 147 | 04 | IMG_3506–3553 (48) |
-| 06 | **What Anna Thought** · Flat-top shield | Gloss black acetate / same | Grey gradient | 60□10 150 | 48 | 145 | 06 | IMG_3342–3371, 3482–3491 (40) |
-| 08 | **What Arnie Hid** · Black octagon navigator | Black acetate / translucent smoke-grey acetate | Grey gradient | 56□20 153 | 44 | 154 | 08 | IMG_3582–3632 (51) |
-| 09 | **What Stevie Saw** · The blackout | Gloss black acetate / wide gloss black acetate | Dark grey | 47□— 145 | 34 | 146 | 09 | IMG_3372–3409, 3477–3481 (43) |
+| 01 | **Lou Went Underground** · Blue navigator | Blue-black tortoise acetate / same | Light blue | 54□22 145 | 44 | 150 | 01 | IMG_3554–3581 (28) |
+| 02 | **Holly Wore Them to Breakfast** · Crimson tortoise, wire temples | Red-black tortoise acetate / black metal wire | Dark grey | 45□24 145 | 38 | 142 | 03 | IMG_3410–3441, 3465–3475 (43) |
+| 03 | **Roy Forgot the Clear Ones** · Black wayfarer, yellow lens | Gloss black acetate / same | Yellow | 45□24 150 | 38 | 145 | 02 | IMG_3316–3341, 3492–3505 (40) |
+| 04 | **K Was Never Here** · Flat-top square, wire temples | Black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□25 148 | 34 | 147 | 05 | IMG_3442–3464 (23) |
+| 05 | **Jackie Gave Them Nothing** · Puffy square, wire temples | Gloss black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□25 148 | 34 | 147 | 04 | IMG_3506–3553 (48) |
+| 06 | **What Anna Thought** · Flat-top shield | Gloss black acetate / same | Grey gradient | 139□— 150 | 48 | 145 | 06 | IMG_3342–3371, 3482–3491 (40) |
+| 08 | **What Arnie Hid** · Black octagon navigator | Black acetate / translucent smoke-grey acetate | Grey gradient | 56□18 153 | 44 | 154 | 08 | IMG_3582–3632 (51) |
+| 09 | **What Stevie Saw** · The blackout | Gloss black acetate / wide gloss black acetate | Dark grey | 47□25 145 | 34 | 146 | 09 | IMG_3372–3409, 3477–3481 (43) |
 
-All measurements in mm. "—": not dimensioned on the drawing. Frame heights not dimensioned were measured from the 1:1 front views (`measurementNotes` in each file). F08's bridge is the span of the double-bridge opening; confirm.
+All measurements in mm. The bridge is the distance between the lens openings, the number a size marking uses, measured on the 1:1 front views: the drawings dimension other things there (the gap between the nose pads, F08's opening between its two bridges), so the factory's own size marking wins when it is known (`00-decisions.md` O13). F06 is a one-piece shield lens: 139 mm across, no bridge gap. Frame heights not dimensioned were measured from the 1:1 front views (`measurementNotes` in each file).
 
 ### Telling the three black squares apart
 F04, F05 and F09 are different designs (`00-decisions.md`), and the site has to show it:
@@ -38,7 +38,7 @@ Length = 0.98 × the temple face height where it sits (logo kit placement ratios
 | Frame | Sits on | Face height | GCD length |
 |---|---|---|---|
 | F01 | Acetate temple | 12 mm (dimensioned) | 11.8 mm |
-| F02 | Hinge block on the front (wire temple) | — | open (`00-decisions.md` O3) |
+| F02 | Right wing of the front, over the pin heads (founder, Oct 19 2026); the left wing keeps its pins | flat face about 11 × 10 mm (measured) | 8.8 mm, as F04/F05 |
 | F03 | Acetate temple | 9 mm (dimensioned) | 8.8 mm |
 | F04 | Triangular end-piece | 15 mm at the hinge, 9 mm at the emblem's centre | 8.8 mm |
 | F05 | Triangular end-piece | as F04 | 8.8 mm |

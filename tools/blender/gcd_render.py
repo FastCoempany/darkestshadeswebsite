@@ -322,6 +322,40 @@ def add_camera(view):
     return ob
 
 
+PHONE_DEG = 6.0                      # angular radius of the phone body seen from the frame
+RING_MIN_YAW = 12.0                  # below this a flat face mirrors the ring light: glare
+
+
+def phone_and_ring(cam, view):
+    """The phone as the emblem sees it: a black disk around the lens that only reflections see
+    (camera, shadow and diffuse rays pass through it), and the ring light around it. A face turned
+    nearly to the camera would mirror the ring as glare, so near-frontal views go without it; the
+    tent's light carries them."""
+    d = (cam.location - Vector((0, 0, 0))).length
+    bpy.ops.mesh.primitive_circle_add(vertices=48, fill_type="NGON", radius=d * math.tan(math.radians(PHONE_DEG)),
+                                      location=cam.location + Vector((0, 0.002, 0)), rotation=(math.radians(90), 0, 0))
+    body = bpy.context.active_object
+    mat = bpy.data.materials.new("phone")
+    mat.use_nodes = True
+    bsdf = mat.node_tree.nodes["Principled BSDF"]
+    bsdf.inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1)
+    bsdf.inputs["Roughness"].default_value = 0.6
+    body.data.materials.append(mat)
+    body.visible_camera = False
+    body.visible_shadow = False
+    body.visible_diffuse = False
+    body.visible_transmission = False
+    if abs(math.degrees(yaw_of(view))) >= RING_MIN_YAW:
+        ring = bpy.data.lights.new("ring", "AREA")
+        ring.shape = "DISK"
+        ring.size = 0.02
+        ring.energy = 0.25
+        ob = bpy.data.objects.new("ring", ring)
+        ob.location = cam.location
+        bpy.context.scene.collection.objects.link(ob)
+        look_at(ob, (0, 0, 0))
+
+
 def yaw_of(view):
     return 0.0 if view == "front" else math.radians(float(view.replace("yaw", "")))
 
@@ -380,14 +414,7 @@ def main(argv):
                 if "Coat Weight" in bsdf.inputs:
                     bsdf.inputs["Coat Weight"].default_value = 0.0
             cam = add_camera(view)
-            ring = bpy.data.lights.new("ring", "AREA")   # the ring light around the phone
-            ring.shape = "DISK"
-            ring.size = 0.02
-            ring.energy = 0.25
-            ob = bpy.data.objects.new("ring", ring)
-            ob.location = cam.location
-            bpy.context.scene.collection.objects.link(ob)
-            look_at(ob, (0, 0, 0))
+            phone_and_ring(cam, view)
             name = f"gcd-3d-{view}-lightbox-{a.size}"
             render_to(out_dir / f"{name}.png")
             if a.anchors:

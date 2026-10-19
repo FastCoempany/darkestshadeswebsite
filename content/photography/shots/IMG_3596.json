@@ -3,73 +3,27 @@
  "shot": "IMG_3596",
  "frame": "F08",
  "angle": "A2",
- "region": [
-  0,
-  2500,
-  3213,
-  5100
- ],
+ "region": [0, 2500, 3213, 5100],
  "lenses": [
   {
    "name": "left (far) lens",
-   "points": [
-    [
-     620,
-     3760
-    ],
-    [
-     520,
-     3480
-    ],
-    [
-     430,
-     3640
-    ]
-   ]
+   "points": [[620, 3760], [520, 3480], [430, 3640]]
   },
   {
    "name": "right (near) lens",
-   "points": [
-    [
-     1640,
-     3940
-    ]
-   ]
+   "points": [[1640, 3940]]
   }
  ],
  "marks": [
   {
    "name": "engraved wordmark and old logo, near temple",
-   "poly": [
-    [
-     2470,
-     3747
-    ],
-    [
-     2725,
-     3619
-    ],
-    [
-     2725,
-     3810
-    ],
-    [
-     2470,
-     3960
-    ]
-   ],
+   "poly": [[2470, 3747], [2725, 3619], [2725, 3810], [2470, 3960]],
    "kind": "dark",
    "stroke_px": 15,
    "threshold": 9,
    "temple": {
-    "top": [
-     -0.501,
-     4976.2
-    ],
-    "bottom": [
-     -0.5875,
-     5419.1
-    ]
+    "top": [-0.501, 4976.2],
+    "bottom": [-0.5875, 5419.1]
    },
    "fill_whole": true
   }
@@ -81,28 +35,16 @@
  "gcd": {
   "view": "yaw72",
   "relief_mm": 0.15,
-  "hinge_top": [
-   2355,
-   3796
-  ],
-  "hinge_bottom": [
-   2365,
-   4030
-  ],
+  "hinge_top": [2355, 3796],
+  "hinge_bottom": [2365, 4030],
   "temple_mm": 10,
-  "axis": [
-   0.879,
-   -0.478
-  ],
+  "axis": [0.879, -0.478],
   "px_per_mm_along": 6.5,
   "length_mm": 9.8,
   "soften_px": 0.6
  },
  "framing": {
-  "aspect": [
-   4,
-   5
-  ],
+  "aspect": [4, 5],
   "fill": 0.86,
   "center_y": 0.56
  }

@@ -145,6 +145,27 @@ def shadow_zone(obj, reach=600, side=150, soft=40):
     return cv2.GaussianBlur(zone, (0, 1), sigmaX=soft, sigmaY=0.1) if soft else zone
 
 
+def smooth_fill(ch, mask, support, degree=2):
+    """Values for `mask` from a robust low-order surface fitted on `support` (a lens is smooth)."""
+    ys, xs = np.nonzero(support)
+    step = max(1, len(xs) // 40000)
+    ys, xs = ys[::step], xs[::step]
+    h, w = ch.shape
+    u, v = xs / w * 2 - 1, ys / h * 2 - 1
+    terms = lambda U, V: [U ** i * V ** j for i in range(degree + 1) for j in range(degree + 1 - i)]
+    A = np.stack(terms(u, v), 1)
+    y = ch[ys, xs]
+    keep = np.ones_like(y, bool)
+    for _ in range(3):
+        coef, *_ = np.linalg.lstsq(A[keep], y[keep], rcond=None)
+        r = y - A @ coef
+        keep = np.abs(r) < 2.5 * r[keep].std() + 1e-6
+    my, mx = np.nonzero(mask)
+    out = ch.copy()
+    out[my, mx] = np.stack(terms(mx / w * 2 - 1, my / h * 2 - 1), 1) @ coef
+    return out
+
+
 def lowres_inpaint(img, mask, scale=4, radius=12):
     """Fill `mask` from its surroundings at low resolution (smooth fields: shadow, transmission)."""
     h, w = mask.shape
@@ -186,6 +207,8 @@ def remove_marks(srgb, marks, region_xy):
             total |= strokes          # small marks: plain inpainting, all at once below
     if total.any():
         out = cv2.inpaint(out, total, 6, cv2.INPAINT_NS)
+        noise = np.random.default_rng(3).normal(0, 1.4, out.shape)   # grain back, as along the temples
+        out = np.where(total[..., None] > 0, np.clip(out + noise, 0, 255), out).astype(np.uint8)
     return out.astype(np.float32) / 255.0, report_mask
 
 
@@ -290,16 +313,23 @@ def place_gcd(F, A, cfg, region_xy, report):
     path = gcd_render(g)
     render = np.asarray(Image.open(path).convert("RGBA"), np.float32) / 255.0
     anc = json.loads(path.with_suffix(".json").read_text())
-    T = g["temple_mm"]
-    ht = np.array(g["hinge_top"], np.float32) - region_xy
-    hb = np.array(g["hinge_bottom"], np.float32) - region_xy
-    ev = (hb - ht) / T                               # px per mm down the temple face
     eu = np.array(g["axis"], np.float32)
-    eu = eu / np.linalg.norm(eu) * g["px_per_mm_along"]  # px per mm along the temple, away from the hinge
+    eu = eu / np.linalg.norm(eu) * g["px_per_mm_along"]  # px per mm along the face (away from the hinge on a temple)
+    if "center" in g:
+        # a placement measured directly (F02's wing on the frame front): center, axis, down, scale
+        c = np.array(g["center"], np.float32) - region_xy
+        ev = np.array(g["down"], np.float32)
+        ev = ev / np.linalg.norm(ev) * g["px_per_mm_down"]
+    else:
+        # on a temple, from the hinge line with the logo-kit placement ratios
+        T = g["temple_mm"]
+        ht = np.array(g["hinge_top"], np.float32) - region_xy
+        hb = np.array(g["hinge_bottom"], np.float32) - region_xy
+        ev = (hb - ht) / T                           # px per mm down the temple face
+        c = ht + ev * (0.39 * T) + eu * (0.82 * T)
     bx0, by0, bx1, by1 = anc["bbox_svg"]
     L = g["length_mm"]
     H = L * (by1 - by0) / (bx1 - bx0)
-    c = ht + ev * (0.39 * T) + eu * (0.82 * T)       # logo-kit placement ratios
     er = eu if eu[0] >= 0 else -eu                   # the emblem reads left to right in the picture
     dst = {"center": c, "left": c - er * L / 2, "right": c + er * L / 2, "top": c - ev * H / 2, "bottom": c + ev * H / 2}
     keys = ["center", "left", "right", "top", "bottom"]
@@ -437,6 +467,44 @@ def main(cfg_path):
         for c in range(3):
             ch = (Tc[..., c] * 65535).astype(np.uint16)
             Tc[..., c] = cv2.inpaint(ch, spots.astype(np.uint8), 5, cv2.INPAINT_TELEA).astype(np.float32) / 65535
+    # reflections too big to detect (a striped light panel mirrored in the lens): per-shot polygons,
+    # refilled as the smooth field a clean lens is, with the lens's own grain put back
+    paint = np.zeros(T.shape, np.uint8)
+    for poly in lc.get("paint", []):
+        cv2.fillPoly(paint, [np.array([[x - x0, y - y0] for x, y in poly], np.int32)], 1)
+    paint = (cv2.dilate(paint, np.ones((9, 9), np.uint8)) > 0) & holes
+    if paint.any():
+        # fitted only on clean lens around the patch, so the rim's color never bleeds in
+        support = (cv2.dilate(paint.astype(np.uint8), np.ones((301, 301), np.uint8)) > 0) & lens_in & ~paint & ~spots
+        ring = (cv2.dilate(paint.astype(np.uint8), np.ones((41, 41), np.uint8)) > 0) & ~paint & lens_in
+        rng = np.random.default_rng(5)
+        for c in range(3):
+            ch = Tc[..., c]
+            grain = float(np.std((ch - cv2.GaussianBlur(ch, (0, 0), 2))[ring])) if ring.any() else 0.0
+            fill = smooth_fill(ch, paint, support)
+            Tc[..., c] = np.where(paint, fill + rng.normal(0, grain, ch.shape).astype(np.float32), ch)
+        spots |= paint
+    # A lens on an even stage shows its own tint, not the tent's horizon seen through it (front
+    # views look straight through to where the floor meets the back wall): "flat" gives each lens
+    # one tint, "gradient" a smooth fit for gradient lenses. Dark things behind the lens (the
+    # temples) are kept as measured.
+    mode = lc.get("smooth")
+    if mode:
+        deg = 0 if mode == "flat" else 2
+        lab, nl = ndi.label(lens_in)
+        rng2 = np.random.default_rng(9)
+        for i in range(1, nl + 1):
+            li = lab == i
+            if li.sum() < 2000:
+                continue
+            fitimg = Tc.copy()
+            for c in range(3):
+                fitimg[..., c] = smooth_fill(Tc[..., c], li, li & ~spots, degree=deg)
+            behind = li & (lum(Tc) < 0.35 * lum(fitimg))
+            w_obj = cv2.GaussianBlur(cv2.dilate(behind.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(np.float32), (0, 0), 2)
+            grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[li & ~behind]))
+            new = w_obj[..., None] * Tc + (1 - w_obj[..., None]) * (fitimg + rng2.normal(0, grain, Tc.shape).astype(np.float32))
+            Tc[li] = new[li]
     report["lens"] = {"hole_px": int(holes.sum()), "cleaned_px": int(spots.sum()),
                       "dust_px": int((dust & holes).sum()),
                       "transmission_median_rgb": [round(float(np.median(Tc[..., c][holes])), 3) for c in range(3)] if holes.any() else None}

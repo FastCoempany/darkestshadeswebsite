@@ -1,0 +1,65 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. The GCD sits on the right wing of the front (the wearer's right; image left), founder Oct 19 2026, centered on the two pin heads (they set the scale: 2.67 mm apart, from the front shot).",
+ "shot": "IMG_3467",
+ "frame": "F02",
+ "angle": "H",
+ "region": [0, 0, 4032, 2268],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[1300, 1000], [1750, 600]]
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[2900, 950], [2750, 700]]
+  }
+ ],
+ "marks": [
+  {
+   "name": "pin heads on the right wing (under the GCD)",
+   "poly": [[722, 318], [878, 318], [878, 388], [722, 388]],
+   "kind": "light",
+   "fill_whole": true
+  },
+  {
+   "name": "printed wordmark on the near wire temple, seen edge-on under the hinge block (1 of 3)",
+   "poly": [[553, 409], [567, 407], [567, 420], [553, 421]],
+   "kind": "dark",
+   "fill_whole": true
+  },
+  {
+   "name": "printed wordmark (2 of 3)",
+   "poly": [[526, 422], [550, 421], [550, 434], [526, 435]],
+   "kind": "dark",
+   "fill_whole": true
+  },
+  {
+   "name": "printed wordmark (3 of 3)",
+   "poly": [[558, 423], [567, 423], [567, 433], [558, 433]],
+   "kind": "dark",
+   "fill_whole": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "paint": [
+   [[1000, 270], [1510, 270], [1510, 890], [1030, 890], [990, 600]],
+   [[1340, 1085], [1510, 1085], [1510, 1175], [1340, 1175]]
+  ]
+ },
+ "gcd": {
+  "view": "yaw-15",
+  "relief_mm": 0.15,
+  "center": [798.5, 351],
+  "axis": [0.999, -0.043],
+  "down": [0.0, 1.0],
+  "px_per_mm_along": 27.3,
+  "px_per_mm_down": 28.3,
+  "length_mm": 8.8,
+  "soften_px": 0.8
+ },
+ "framing": {
+  "box": [0, 0, 4032, 2268]
+ }
+}
