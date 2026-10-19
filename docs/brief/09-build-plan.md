@@ -21,7 +21,7 @@
    - **Claude Code on the web** (where Fable builds): open the session, select the caret after the session title, choose **Edit cloud environment**, set **Network access** to **Full** (or **Custom** with the domains above plus the default list). Running sessions pick it up within about a minute.
 2. **Setup script** (Claude Code on the web, same dialog), so every session starts ready:
    ```bash
-   pip install --break-system-packages -q bpy==5.2.2 pymupdf opencv-contrib-python-headless "rembg[cpu]" pymatting cairosvg pillow numpy scipy scikit-image
+   pip install --break-system-packages -q bpy==5.2.2 pymupdf opencv-contrib-python-headless "rembg[cpu]" pymatting cairosvg pillow numpy scipy scikit-image insightface onnxruntime jsonschema
    ```
    `bpy` is Blender as a Python module (about 350 MB); with the environment cache it installs once.
 3. **Fonts**: put the licensed or trial font files in `brand/fonts/private/` (git-ignored), or set `PUBLIC_ADOBE_FONTS_KIT` to an Adobe Fonts web project ID. `brand/fonts/README.md` has both routes.

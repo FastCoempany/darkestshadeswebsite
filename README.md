@@ -45,4 +45,10 @@ python3 tools/photo/zipget.py --picks content/photography/lightbox-angle-set.jso
 python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json
 ```
 
+A cast member wearing a real frame (the person is generated without glasses; the frame is the cleaned photograph, sized from the 1:1 drawing):
+```
+pip install --break-system-packages insightface onnxruntime
+python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json
+```
+
 Fonts (Owners Wide, Stolzl) are not in this repo: see `brand/fonts/README.md`.

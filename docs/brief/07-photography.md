@@ -62,7 +62,7 @@ Outputs in `work/out/<shot>/` (git-ignored; finals go to the DAM): `stage.jpg` (
 ### The cast
 Seven original, generated people (#15): three women, three men, one non-binary person, matching the Brand Story personas' ages and range (24–42). "Prada-esque" is about features and build: defined bone structure, lean or long, an unstyled, serious presence.
 
-**Round 1** (Oct 19 2026): fourteen candidates, two per slot, in a Figma file in the founder's drafts, all in one shared setup so only the person changes. The founder picks seven (`00-decisions.md` O5). The pick becomes `reference/casting/` contact sheets and a **model bible** per person: one fixed paragraph (age, build, skin, hair, brows, jaw, grooming, attitude) reused word for word in every prompt. Record the Figma file link in `reference/casting/README.md` the moment a file is created.
+**Round 1** (Oct 19 2026): fourteen candidates, two per slot, in a Figma file in the founder's drafts, all in one shared setup so only the person changes. The seven are picked (`00-decisions.md` #30): **W1A, W2A, W3A, M1A, M2B, M3A, NBA**. Each has a **model bible** in `reference/casting/model-bibles.md`: one fixed paragraph (age, build, skin, hair, face, grooming, attitude) reused word for word in every prompt. Record the Figma file link in `reference/casting/README.md` the moment a file is created.
 
 | Slot | Candidate A | Candidate B |
 |---|---|---|
@@ -80,14 +80,15 @@ The generator is **Figma `generate_image` with `gpt-image-2.5-sunburst`** on the
 1. **Generate the person and the scene together, without glasses.** One image per shot, so light and perspective agree. Eyes open, looking past the camera, nothing touching the face or temples, hair clear of the ears where a temple must sit.
 2. **Pose to match the cut-outs.** The frames exist at three head angles (A1 front, A2 three-quarter, A3 side), so every prompt fixes the head angle to one of them ("head turned three-quarters to the left, chin level"). The composite then needs a small warp, not a re-render.
 3. **Hold the face with the model bible plus the glasses.** The frames cover the eyes and brows, the most identity-defining part of a face, so a fixed description of hair, skin, jaw, lips and build carries identity across shots. Cast faces without glasses appear only in the casting sheets.
-4. **Composite the real frame** (`tools/photo/wear.py`, phase 5):
-   - face landmarks (MediaPipe Face Mesh, from PyPI) give eye centers, nose bridge, temples and ears;
-   - scale so the frame's lens-center distance (lens width + bridge, from product data) sits on the pupils (adult pupillary distance about 63 mm, so a 54□11 frame is 65 mm between lens centers);
-   - perspective-warp the matching cut-out (A1, A2 or A3) to the landmarks; the far temple is hidden behind the head, the near one runs to the ear and goes under hair where hair crosses it (hair mask from the segmentation);
-   - lens layer: `layers/lens.png` (the measured color transmission) multiplies what's behind it, plus a reflection rebuilt for the scene's light (window, runway lights) instead of the ring light. Anything the product shot sees through a lens that the face would hide (the far temple in A2) is painted out of the lens layer first;
-   - contact shadows: under the nose pads, along the cheek under the lower rim, a thin shadow under the temple on the skin;
-   - the GCD stays as in the product master, re-lit to the scene if its angle changed.
-5. **Grade everything together**: the SS90 look (`01-brand-system.md`): fine 35 mm grain, lifted blacks, warm paper whites, faint halation, low saturation. One LUT plus grain, applied to the finished composite so person, scene and frame share one surface.
+4. **Composite the real frame** (`tools/photo/wear.py`, settings per image in `content/photography/people/`):
+   - face landmarks and head pose from InsightFace (`pip install insightface onnxruntime`; its models download from GitHub releases; MediaPipe's models sit on a host this workspace can't reach);
+   - scale from the pupils (an assumed pupillary distance, about 62 mm), then fit the photographed lens openings onto the 1:1 drawing's lens openings at that scale and the head's pose (a homography from eight points), so the frame is as big on the face as it is in life (a 45□24 frame has its lens centres 69 mm apart, so the pupils sit a little inside them);
+   - the cut-out comes from the cleaned shot of the matching angle (A1 for a face to camera); in A2 and A3 the far temple is hidden behind the head and the near one runs to the ear, under hair where hair crosses it;
+   - lens layer: each lens's measured tint, flat, multiplies what's behind it; nothing the product shot saw through the lens (temples, the tent) comes along. One soft reflection per lens for the scene's light;
+   - the frame's contact shadow on the skin, offset and softened for the scene's light;
+   - the frame lit like the scene: its color and level scaled by the scene's backdrop against the tent it was shot in;
+   - the GCD comes with the frame, as placed on the product shot.
+5. **Grade everything together**: the SS90 look (`01-brand-system.md`): fine grain, lifted blacks, warm paper whites, faint halation, low saturation, applied to the finished composite in `wear.py` so person, scene and frame share one surface.
 6. **Check** each final against a list: scale against the face, nose-pad contact, temple to ear, no glasses artifacts from the generator, hands and fingers plausible, no text or logos in the scene, the GCD correct and once.
 
 Why not the alternatives: generating people *with* glasses would invent the product, which the founder's own AI-photography guide rules out; separate person and background generations never quite agree on light; local open models (SDXL, Flux) are too slow and too large for this workspace's CPU; the Gemini app holds faces from references but its free output carries a visible watermark, so it can only make references, never finals; Weave and every paid route are out (#24).

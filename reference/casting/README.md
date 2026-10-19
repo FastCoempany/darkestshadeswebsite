@@ -18,4 +18,4 @@ Seven original, generated models: three women, three men, one non-binary person 
 | M3 | South Asian, 38 | `6:2` | Middle Eastern, 37 | `13:2` |
 | NB | Mexican / Indigenous, 27 | `7:2` | East Asian / white, 26 | `14:2` |
 
-**Pick:** pending (`docs/brief/00-decisions.md` O5). After the pick, each chosen person gets a model bible (one fixed paragraph reused in every prompt) in `model-bibles.md`.
+**Pick** (Oct 19 2026, made by Claude at the founder's request): **W1A, W2A, W3A, M1A, M2B, M3A, NBA**. The reasons and each person's model bible (one fixed paragraph reused in every prompt) are in `model-bibles.md`.

@@ -1,0 +1,33 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. The portrait is generated without glasses; the frame is the cleaned lightbox shot of the same angle.",
+ "id": "DS-CAST-W1-S07-F02-v01",
+ "cast": "W1",
+ "scene": "S07",
+ "frame": "F02",
+ "angle": "A1",
+ "portrait": "work/people/W1-S07-A1-raw.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "18:2",
+  "size": [960, 1280],
+  "prompt": "Studio portrait photograph against a warm white seamless paper backdrop. Head and shoulders, framed from mid-chest up, the head centered in the upper half of the frame. On-camera flash just above the lens: crisp, even light on the face and a short, hard-edged shadow on the backdrop just behind the head. 85 mm lens, eye level.\nA 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed.\nWardrobe: a black nylon jacket zipped to the collar, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3423",
+ "pd_mm": 62,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "backdrop_box": [20, 20, 200, 200],
+ "shadow": {
+  "strength": 0.55,
+  "offset_mm": 1.5,
+  "blur_mm": 1.0
+ },
+ "reflection": {
+  "strength": 0.02
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}
