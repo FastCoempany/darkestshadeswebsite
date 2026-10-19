@@ -97,9 +97,11 @@ def masks_for(cfg_path, cfg):
             args = [sys.executable, __file__, "--mask", kind, str(cfg_path)] + ([str(i)] if i is not None else [])
             subprocess.run(args, check=True)
     alpha = np.asarray(Image.open(masks / "alpha.png"), np.float32) / 255.0
+    from scipy import ndimage as ndi
     lens = np.zeros(alpha.shape, bool)
     for i in range(len(cfg.get("lenses", []))):
-        lens |= np.asarray(Image.open(masks / f"lens-{i}.png")) > 128
+        # a lens has no holes: what SAM leaves out inside it is something seen through it
+        lens |= ndi.binary_fill_holes(np.asarray(Image.open(masks / f"lens-{i}.png")) > 128)
     return alpha, lens
 
 
@@ -486,8 +488,8 @@ def main(cfg_path):
         spots |= paint
     # A lens on an even stage shows its own tint, not the tent's horizon seen through it (front
     # views look straight through to where the floor meets the back wall): "flat" gives each lens
-    # one tint, "gradient" a smooth fit for gradient lenses. Dark things behind the lens (the
-    # temples) are kept as measured.
+    # one tint, "gradient" a smooth fit for gradient lenses, each with the lens's own grain. What
+    # sat behind the lens goes too (in a front view, the temples): kept, it came out in fragments.
     mode = lc.get("smooth")
     if mode:
         deg = 0 if mode == "flat" else 2
@@ -500,10 +502,8 @@ def main(cfg_path):
             fitimg = Tc.copy()
             for c in range(3):
                 fitimg[..., c] = smooth_fill(Tc[..., c], li, li & ~spots, degree=deg)
-            behind = li & (lum(Tc) < 0.35 * lum(fitimg))
-            w_obj = cv2.GaussianBlur(cv2.dilate(behind.astype(np.uint8), np.ones((5, 5), np.uint8)).astype(np.float32), (0, 0), 2)
-            grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[li & ~behind]))
-            new = w_obj[..., None] * Tc + (1 - w_obj[..., None]) * (fitimg + rng2.normal(0, grain, Tc.shape).astype(np.float32))
+            grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[li & ~spots]))
+            new = fitimg + rng2.normal(0, grain, Tc.shape).astype(np.float32)
             Tc[li] = new[li]
     report["lens"] = {"hole_px": int(holes.sum()), "cleaned_px": int(spots.sum()),
                       "dust_px": int((dust & holes).sum()),

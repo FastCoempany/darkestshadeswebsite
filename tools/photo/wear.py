@@ -128,8 +128,9 @@ def main(cfg_path):
     T = srgb_to_lin(np.asarray(Image.open(po / "layers" / "lens.png"), np.float32) / 255)
     masks = sorted(po.glob("masks/lens-*.png"))
     lens_src = []
+    from scipy import ndimage as ndi
     for mp in masks:
-        m = np.asarray(Image.open(mp)) > 128
+        m = ndi.binary_fill_holes(np.asarray(Image.open(mp)) > 128)   # a lens has no holes
         full = np.zeros(A.shape, bool)                                # region coords -> layer coords
         ys, xs = np.nonzero(m)
         xs, ys = xs + rx - cl, ys + ry - ct
