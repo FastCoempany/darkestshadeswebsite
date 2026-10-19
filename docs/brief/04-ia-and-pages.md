@@ -48,7 +48,7 @@ See `03-references.md`. Sections: Manifesto → The detail → The drop → The 
 1. **Gallery**: A1 front, A2 three-quarter, A3 side, A4 top, A5 inside, A6 GCD detail, then on-model shots. Mobile: full-width swipe with a numeric index ("3 / 9"); desktop: two-column stack beside a sticky buy panel.
 2. **Buy panel**: look number, name, descriptor, **price $100**, drop status and pairs left, `Add to bag` / `Get notified` / `Sold out`, the two promises in one line each (45-day exchange, 6-month warranty).
 3. **The detail**: the held GCD view with one line ("The God Cloud Device. Gold, black onyx inset.").
-4. **Specs**: size in the standard eyewear notation (lens–bridge–temple, e.g. `54□11 145`), lens height, front width, frame and temple material, lens color and type, UV400, polarized. Every value from `content/products/`.
+4. **Specs**: size in the standard eyewear notation (lens–bridge–temple, e.g. `54□22 145`), lens height, front width, frame and temple material, lens color and type, UV400, polarized. Every value from `content/products/`.
 5. **Drawn**: the technical line drawings (front, side, top) as vector, with the key measurements.
 6. **Worn by**: the cast members wearing this frame.
 7. **Next look**: the following frame by look number.

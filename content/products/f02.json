@@ -27,24 +27,28 @@
   },
   "measurementsMm": {
     "lensWidth": 45,
-    "bridge": 7,
+    "bridge": 24,
     "templeLength": 145,
     "lensHeight": 38,
     "frameHeight": 48,
     "frontWidth": 142
   },
-  "sizeNotation": "45□7 145",
+  "sizeNotation": "45□24 145",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
     "frameHeight": "measured from the 1:1 front view",
-    "bridge": "dimensioned (7 mm)"
+    "bridge": "measured on the 1:1 front view between the lens openings (24.4 mm), the distance a size marking uses; the drawing's 7 mm is the gap between the nose pads in the top view; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Outer face of the hinge block on the front (the wire temple has no flat face)",
-    "templeFaceHeightMm": 3,
-    "templeFaceHeightSource": "measured from the 1:1 side view (wire)",
-    "lengthMm": null,
-    "note": "Open: the wire temple has no flat face; images use the hinge block on the front (00-decisions.md O3).",
+    "placement": "Right wing of the frame front (the wearer's right end-piece), centered on its flat front face where the two pin heads sit; the left wing keeps its pins",
+    "placementSource": "Founder, Oct 19 2026 (marked on a photo)",
+    "faceMm": {
+      "width": 11,
+      "height": 10
+    },
+    "faceSource": "flat front face of the wing, measured from the 1:1 front view (drawing 03)",
+    "lengthMm": 8.8,
+    "note": "Same length as F04 and F05; leaves about 1 mm each side on the wing. How it is set over the hinge pins, and the final size, are for the factory (00-decisions.md O4).",
     "stone": "Black onyx",
     "metal": "Gold tone"
   },
@@ -63,7 +67,7 @@
   },
   "photography": {
     "angleSet": "content/photography/lightbox-angle-set.json#F02",
-    "status": "selected, not yet cleaned"
+    "status": "selected; H (IMG_3467) cleaned"
   },
   "copy": {
     "line": null,

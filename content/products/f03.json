@@ -27,17 +27,17 @@
   },
   "measurementsMm": {
     "lensWidth": 45,
-    "bridge": null,
+    "bridge": 24,
     "templeLength": 150,
     "lensHeight": 38,
     "frameHeight": 48,
     "frontWidth": 145
   },
-  "sizeNotation": "45□— 150",
+  "sizeNotation": "45□24 150",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
     "frameHeight": "dimensioned",
-    "bridge": "not dimensioned on the drawing"
+    "bridge": "measured on the 1:1 front view between the lens openings (24.4 mm), the distance a size marking uses; not dimensioned on the drawing; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
     "placement": "Outer face of the acetate temple",

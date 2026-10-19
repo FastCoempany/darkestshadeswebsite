@@ -27,17 +27,17 @@
   },
   "measurementsMm": {
     "lensWidth": 47,
-    "bridge": null,
+    "bridge": 25,
     "templeLength": 148,
     "lensHeight": 34,
     "frameHeight": 49,
     "frontWidth": 147
   },
-  "sizeNotation": "47□— 148",
+  "sizeNotation": "47□25 148",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
     "frameHeight": "measured from the 1:1 front view (includes nose pads)",
-    "bridge": "not dimensioned on the drawing"
+    "bridge": "measured on the 1:1 front view between the lens openings (24.9 mm), the distance a size marking uses; not dimensioned on the drawing; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
     "placement": "Triangular end-piece, centered between hinge and wire joint",

@@ -26,18 +26,19 @@
     "scratch": "Scratch resistant"
   },
   "measurementsMm": {
-    "lensWidth": 60,
-    "bridge": 10,
+    "lensWidth": 139,
+    "bridge": null,
     "templeLength": 150,
     "lensHeight": 48,
     "frameHeight": 54,
     "frontWidth": 145
   },
-  "sizeNotation": "60□10 150",
+  "sizeNotation": "139□— 150",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
     "frameHeight": "measured from the 1:1 front view",
-    "lensWidth": "per side of the shield, from the top view"
+    "lensWidth": "one-piece shield lens: 139 mm across, dimensioned on the front view (the drawing's 60 mm, in the top view, runs from the hinge to the nose pad); confirm with the factory's size marking (00-decisions.md O13)",
+    "bridge": "none: a one-piece shield lens has no gap between lenses (the drawing's 10 mm is the gap between the nose pads in the top view)"
   },
   "gcd": {
     "placement": "Outer face of the acetate temple",

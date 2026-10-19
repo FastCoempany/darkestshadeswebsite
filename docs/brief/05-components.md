@@ -45,7 +45,7 @@ Two layers, enforced by folder:
 | `DropLine` | The one-line status under the header | hidden when no drop | `04` |
 | `Countdown` | Counts to a real start or end time from drop data; stops at zero and switches the state | running, reached, no-time (renders nothing) | Never resets, never loops, never invents a time |
 | `PairsLeft` | Real remaining quantity from inventory | many (hidden above a threshold the founder sets), few, none | Never a made-up number |
-| `SpecSheet` | Size notation (`54□11 145`), lens height, front width, materials, lens color, UV400, polarized | full, compact | Values only from `content/products/` |
+| `SpecSheet` | Size notation (`54□22 145`), lens height, front width, materials, lens color, UV400, polarized | full, compact | Values only from `content/products/` |
 | `LineDrawing` | The frame's technical drawing (front, side, top) as inline SVG, strokes in `text-primary`, key measurements | single view, triptych, print | `06`, `tools/drawings.py` |
 | `Seal` | The GCD as a small seal: flat gold under 48 px, onyx vector above, 3D render for large hero use | night, paper | `01` GCD rules |
 | `CastFrame` | Full-bleed model photo with the frame they wear | default, wire | `07` |

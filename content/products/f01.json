@@ -27,16 +27,17 @@
   },
   "measurementsMm": {
     "lensWidth": 54,
-    "bridge": 11,
+    "bridge": 22,
     "templeLength": 145,
     "lensHeight": 44,
     "frameHeight": 54,
     "frontWidth": 150
   },
-  "sizeNotation": "54□11 145",
+  "sizeNotation": "54□22 145",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
-    "frameHeight": "dimensioned"
+    "frameHeight": "dimensioned",
+    "bridge": "measured on the 1:1 front view between the lens openings (22.2 mm), the distance a size marking uses; the drawing's 11 mm is the gap between the nose pads in the top view; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
     "placement": "Outer face of the acetate temple",

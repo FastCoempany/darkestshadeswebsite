@@ -27,17 +27,17 @@
   },
   "measurementsMm": {
     "lensWidth": 56,
-    "bridge": 20,
+    "bridge": 18,
     "templeLength": 153,
     "lensHeight": 44,
     "frameHeight": 54,
     "frontWidth": 154
   },
-  "sizeNotation": "56□20 153",
+  "sizeNotation": "56□18 153",
   "measurementNotes": {
     "default": "From the 1:1 technical drawing; values in mm.",
     "frameHeight": "measured from the 1:1 front view",
-    "bridge": "span of the double bridge opening (20 mm); confirm"
+    "bridge": "measured on the 1:1 front view between the lens openings (18.4 mm), the distance a size marking uses; the drawing's 20 mm is the width of the opening between the two bridges; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
     "placement": "Outer face of the acetate temple",
