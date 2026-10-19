@@ -1,0 +1,32 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 from behind (A5), the wearer's right at image right. The hinge plates are hardware and stay; the GCD's face looks away.",
+ "shot": "IMG_3327",
+ "frame": "F03",
+ "angle": "A5",
+ "region": [0, 2000, 3213, 3800],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "left lens (image left)",
+   "points": [[1100, 2600], [900, 2450]],
+   "convex": true
+  },
+  {
+   "name": "right lens (image right)",
+   "points": [[2000, 2600], [2200, 2450]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.2,
+  "smooth": "flat",
+  "keep_behind": true,
+  "tint": "frame"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

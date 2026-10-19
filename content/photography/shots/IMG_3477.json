@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. Temple edges and hinge from darkestshades/brand/lightbox/onyx-emblem/process/cfgs.py.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 hero (H). Temple edges first from darkestshades/brand/lightbox/onyx-emblem/process/cfgs.py. The GCD was re-measured on Oct 19 2026 with tools/photo/temple_gcd.py, which models the temple's face in 3D from its converging edges and checks the model against the old print's proportions. The first placement drew the GCD about 40% too long for the angle at which the temple is seen.",
  "shot": "IMG_3477",
  "frame": "F09",
  "angle": "H",
@@ -31,15 +31,27 @@
   "threshold": 0.05
  },
  "gcd": {
-  "view": "yaw-16",
+  "view": "yaw-58p10",
   "relief_mm": 0.15,
-  "hinge_top": [1697, 905],
-  "hinge_bottom": [1697, 1300],
-  "temple_mm": 15,
-  "axis": [-0.966, -0.258],
-  "px_per_mm_along": 25.3,
+  "anchors_px": {
+   "center": [1495.4, 1023.0],
+   "left": [1384.3, 993.5],
+   "right": [1613.4, 1054.3],
+   "top": [1494.9, 953.5],
+   "bottom": [1495.9, 1092.2]
+  },
   "length_mm": 14.7,
-  "soften_px": 0.9
+  "soften_px": 0.9,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3477 --cols 1000:1700:50 --band 500:1600 --face-dark 70 --hinge-x 1697 --temple-mm 15 --face-mm 14.5 --length-mm 14.7 --print 1102,898 1320,952 1316,1017 1103,955",
+  "measured": {
+   "model": "3d",
+   "print_check": {
+    "length_mm": 16.18,
+    "height_mm": 2.32,
+    "ratio": 6.97,
+    "from_hinge_mm": 24.1
+   }
+  }
  },
  "framing": {
   "box": [0, 0, 4032, 2268]

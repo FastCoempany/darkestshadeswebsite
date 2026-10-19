@@ -1,0 +1,16 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 from above (A4): the front at the bottom, the temples open. The hinges' metal shows and stays; the GCD's face is upright and not seen.",
+ "shot": "IMG_3320",
+ "frame": "F03",
+ "angle": "A4",
+ "region": [0, 1100, 3213, 3800],
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

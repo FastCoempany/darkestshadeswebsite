@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge, so the photographer's crop is kept. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD goes on the right temple from the hinge line; the temple's face is seen at about 44 degrees: the old print's block is 1.9 times as long as it is tall here and about 2.7 times on the near-straight views (IMG_3558, IMG_3579).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge, so the photographer's crop is kept. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD is placed on the right temple with tools/photo/temple_gcd.py (gcd.measured_with): the temple's edges converge well here, so its face is modelled in 3D, and the model gets the old print's proportions right.",
  "shot": "IMG_3556",
  "frame": "F01",
  "angle": "A2",
@@ -35,18 +35,31 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true
+  "keep_behind": true,
+  "tint": "frame"
  },
  "gcd": {
-  "view": "yaw-44",
+  "view": "yaw-56p7",
   "relief_mm": 0.15,
-  "hinge_top": [904, 2885],
-  "hinge_bottom": [895, 3169],
-  "temple_mm": 12,
-  "axis": [-0.981, -0.195],
-  "px_per_mm_along": 16.5,
+  "anchors_px": {
+   "center": [751.3, 2962.6],
+   "left": [668.2, 2947.9],
+   "right": [838.9, 2978.2],
+   "top": [751.2, 2914.3],
+   "bottom": [751.5, 3010.8]
+  },
   "length_mm": 11.8,
-  "soften_px": 0.8
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3556 --cols 100:880:60 --band 2600:3300 --face-dark 40 --hinge-x 900 --temple-mm 12 --face-mm 11.5 --length-mm 11.8 --print 331.7,2875 535,2905 525,2958.3 333.3,2926.7",
+  "measured": {
+   "model": "3d",
+   "print_check": {
+    "length_mm": 16.75,
+    "height_mm": 2.44,
+    "ratio": 6.87,
+    "from_hinge_mm": 25.8
+   }
+  }
  },
  "framing": {
   "box": [0, 1042, 3213, 5058]

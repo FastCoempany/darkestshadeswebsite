@@ -43,6 +43,8 @@ Lightbox clean-up (old marks out, see-through lenses, the GCD in, re-staged), on
 pip install --break-system-packages "rembg[cpu]" opencv-contrib-python-headless scipy
 python3 tools/photo/zipget.py --picks content/photography/lightbox-angle-set.json --frames F08
 python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json
+python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --face-dark 40 --hinge-x 1603 \
+    --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1025,982 1228,1013 1232,1060 1030,1028
 ```
 
 A cast member wearing a real frame (the person is generated without glasses; the frame is the cleaned photograph, sized from the 1:1 drawing):

@@ -27,7 +27,8 @@
  "lens_cleanup": {
   "tophat_px": 31,
   "threshold": 0.05,
-  "smooth": "flat"
+  "smooth": "flat",
+  "tint": "frame"
  },
  "gcd": {
   "view": "yaw40",

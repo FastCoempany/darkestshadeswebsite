@@ -9,6 +9,7 @@ then renders with Cycles on a transparent background.
     python3 tools/blender/gcd_render.py --size 1024 --samples 64            # quick check
     python3 tools/blender/gcd_render.py --size 4096 --samples 160 --views front,yaw35,yaw60
     python3 tools/blender/gcd_render.py --light lightbox --views yaw72 --anchors --out work/gcd   # for a composite
+    python3 tools/blender/gcd_render.py --light lightbox --views yaw-57p31 --anchors --out work/gcd   # turned 57, tilted 31 (seen from above)
 
 Real-world scale: the emblem is 0.98 x the temple face height long (about 11-12 mm on most
 frames, see brand/emblems/gcd/README.md). The model is built at 12 mm so bevels and stone
@@ -345,7 +346,7 @@ def phone_and_ring(cam, view):
     body.visible_shadow = False
     body.visible_diffuse = False
     body.visible_transmission = False
-    if abs(math.degrees(yaw_of(view))) >= RING_MIN_YAW:
+    if math.degrees(math.hypot(yaw_of(view), pitch_of(view))) >= RING_MIN_YAW:
         ring = bpy.data.lights.new("ring", "AREA")
         ring.shape = "DISK"
         ring.size = 0.02
@@ -357,13 +358,22 @@ def phone_and_ring(cam, view):
 
 
 def yaw_of(view):
-    return 0.0 if view == "front" else math.radians(float(view.replace("yaw", "")))
+    """"yaw35", "yaw-16", or with a pitch, "yaw-20p55" (a temple seen from above: its face tilted
+    away at the top as well as turned)."""
+    m = re.match(r"yaw(-?[\d.]+)", view)
+    return math.radians(float(m.group(1))) if m else 0.0
+
+
+def pitch_of(view):
+    m = re.search(r"p(-?[\d.]+)$", view)
+    return math.radians(float(m.group(1))) if m else 0.0
 
 
 def stand_up(gold, view):
     """Turn the emblem upright, front face toward the camera on -Y, then turn it by the view's yaw
-    (a temple seen at an angle). The stone is parented to the gold."""
-    gold.rotation_euler = (math.radians(90.0), 0.0, yaw_of(view))
+    (a temple seen at an angle) and tilt it back by the pitch (seen from above). The stone is
+    parented to the gold."""
+    gold.rotation_euler = (math.radians(90.0) + pitch_of(view), 0.0, yaw_of(view))
     gold.location = (0.0, 0.0, 0.0)
 
 

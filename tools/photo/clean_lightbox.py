@@ -550,7 +550,15 @@ def main(cfg_path):
     # A light lens (F01's blue, F03's yellow) shows the tent's textured wall through it; with
     # `keep_behind`, things clearly darker than the lens's own tint (a temple or nose pad behind
     # it) stay, and only the tent behind is evened out.
+    # The same lens looks the same in every view: with "tint": "frame", a flat lens takes the
+    # transmission measured once for the frame, looking straight through it on the front view
+    # (content/photography/lens-tints.json); what the lens sees keeps its structure, scaled alike.
+    # Measured per shot it drifts with the reflections on the lens and the tent behind it.
     mode = lc.get("smooth")
+    tint = None
+    if mode == "flat" and lc.get("tint") == "frame":
+        tints = json.loads((ROOT / "content" / "photography" / "lens-tints.json").read_text())
+        tint = np.array(tints["frames"][cfg["frame"]]["tint_rgb"], np.float32)
     if mode:
         deg = 0 if mode == "flat" else 2
         lab, nl = ndi.label(lens_in)
@@ -569,7 +577,10 @@ def main(cfg_path):
                 lo, hi = lc.get("behind_ratio", [0.5, 0.75])
                 m = cv2.GaussianBlur(np.clip((hi - ratio) / (hi - lo), 0, 1).astype(np.float32), (0, 0), 1.5)
                 new = new * (1 - m[..., None]) + Tc * m[..., None]
-            Tc[li] = new[li]
+            if tint is not None:
+                level = np.array([float(np.median(fitimg[..., c][li])) for c in range(3)], np.float32)
+                new = new * (tint / np.maximum(level, 1e-4))
+            Tc[li] = np.clip(new[li], 0, 1)
     report["lens"] = {"hole_px": int(holes.sum()), "cleaned_px": int(spots.sum()),
                       "dust_px": int((dust & holes).sum()),
                       "transmission_median_rgb": [round(float(np.median(Tc[..., c][holes])), 3) for c in range(3)] if holes.any() else None}

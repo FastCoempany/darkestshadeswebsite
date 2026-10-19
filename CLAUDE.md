@@ -46,6 +46,7 @@ python3 tools/drawings.py         # vector line art from the technical drawings 
 python3 tools/blender/gcd_render.py --size 4096 --samples 160 --views front,yaw35,yaw60   # needs bpy==5.2.2
 python3 tools/photo/zipget.py --picks content/photography/lightbox-angle-set.json --frames F08   # originals → work/originals/
 python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json   # one shot → work/out/IMG_3596/ (07-photography.md)
+python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --face-dark 40 --hinge-x 1603 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1025,982 1228,1013 1232,1060 1030,1028   # GCD placement on a temple, for the shot's settings
 python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json      # a cast member wearing a cleaned frame → work/people/
 ```
 App commands (`npm run dev`, `npm run storybook`, `npm run test:visual`) are added in phase 0.

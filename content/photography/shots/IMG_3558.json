@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke. The temple's face is seen nearly straight on here (the old print's block is 2.7 times as long as it is tall, as on the side view IMG_3579), so the GCD is barely foreshortened.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py: the temple's edges are nearly parallel in this view, so the old print's proportions give how much the temple is foreshortened along its length.",
  "shot": "IMG_3558",
  "frame": "F01",
  "angle": "A6",
@@ -35,18 +35,29 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true
+  "keep_behind": true,
+  "tint": "frame"
  },
  "gcd": {
-  "view": "yaw-16",
+  "view": "yaw-54p11",
   "relief_mm": 0.15,
-  "hinge_top": [909, 2075],
-  "hinge_bottom": [896, 2330],
-  "temple_mm": 12,
-  "axis": [-0.9677, -0.2523],
-  "px_per_mm_along": 20.7,
+  "anchors_px": {
+   "center": [766.8, 2126.3],
+   "left": [684.0, 2104.7],
+   "right": [849.7, 2147.9],
+   "top": [766.8, 2080.9],
+   "bottom": [766.8, 2171.7]
+  },
   "length_mm": 11.8,
-  "soften_px": 0.8
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3558 --cols 150:880:60 --band 1700:2500 --face-dark 40 --hinge-x 905 --temple-mm 12 --face-mm 11.5 --length-mm 11.8 --print 214,1984 462,2044 456,2102 222,2040",
+  "measured": {
+   "model": "affine (print)",
+   "px_per_mm": {
+    "along": 14.51,
+    "down": 23.47
+   }
+  }
  },
  "framing": {
   "box": [0, 600, 2268, 3435]

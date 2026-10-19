@@ -1,0 +1,13 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 side (A3), low, from the wearer's left: the shoot has no right profile. The lenses are edge-on slivers and stay as shot; no old mark shows on this side.",
+ "shot": "IMG_3323",
+ "frame": "F03",
+ "angle": "A3",
+ "region": [0, 1550, 2268, 2650],
+ "tent_fill": "rows",
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}
