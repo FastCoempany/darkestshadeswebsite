@@ -40,7 +40,7 @@
     "bridge": "measured on the 1:1 front view between the lens openings (24.4 mm), the distance a size marking uses; the drawing's 7 mm is the gap between the nose pads in the top view; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Right wing of the frame front (the wearer's right end-piece), centered on its flat front face where the two pin heads sit; the left wing keeps its pins",
+    "placement": "Right wing of the frame front (the wearer's right end-piece), centered on its flat front face where the two pin heads sit, clear of the lens bay's bevel inlay; the left wing keeps its pins (one GCD per frame)",
     "placementSource": "Founder, Oct 19 2026 (marked on a photo)",
     "faceMm": {
       "width": 11,

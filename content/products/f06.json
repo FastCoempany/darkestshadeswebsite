@@ -41,7 +41,7 @@
     "bridge": "none: a one-piece shield lens has no gap between lenses (the drawing's 10 mm is the gap between the nose pads in the top view)"
   },
   "gcd": {
-    "placement": "Outer face of the acetate temple",
+    "placement": "Outer face of the right acetate temple (one GCD per frame, on the wearer's right)",
     "templeFaceHeightMm": 9.5,
     "templeFaceHeightSource": "measured from the 1:1 side view (about 9.5 mm)",
     "lengthMm": 9.3,

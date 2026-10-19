@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. This three-quarter view shows the wearer's left temple, which carries no GCD (one GCD per frame, on the right side; founder Oct 19 2026): the old engraving comes off and nothing goes on.",
  "shot": "IMG_3596",
  "frame": "F08",
  "angle": "A2",
@@ -31,17 +31,6 @@
  "lens_cleanup": {
   "tophat_px": 31,
   "threshold": 0.05
- },
- "gcd": {
-  "view": "yaw72",
-  "relief_mm": 0.15,
-  "hinge_top": [2355, 3796],
-  "hinge_bottom": [2365, 4030],
-  "temple_mm": 10,
-  "axis": [0.879, -0.478],
-  "px_per_mm_along": 6.5,
-  "length_mm": 9.8,
-  "soften_px": 0.6
  },
  "framing": {
   "aspect": [4, 5],

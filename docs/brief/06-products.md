@@ -33,18 +33,18 @@ From the Brand Story, treated as tested (`00-decisions.md` #23): polarized TAC l
 - "Acetate" describes the fronts. F02, F04 and F05 have metal temples and say so.
 
 ## The GCD on each frame
-Length = 0.98 × the temple face height where it sits (logo kit placement ratios, `01-brand-system.md`). Heights come from the drawings.
+One GCD per frame, on the wearer's right (`00-decisions.md` #31). Length = 0.98 × the temple face height where it sits (logo kit placement ratios, `01-brand-system.md`). Heights come from the drawings.
 
 | Frame | Sits on | Face height | GCD length |
 |---|---|---|---|
-| F01 | Acetate temple | 12 mm (dimensioned) | 11.8 mm |
-| F02 | Right wing of the front, over the pin heads (founder, Oct 19 2026); the left wing keeps its pins | flat face about 11 × 10 mm (measured) | 8.8 mm, as F04/F05 |
-| F03 | Acetate temple | 9 mm (dimensioned) | 8.8 mm |
-| F04 | Triangular end-piece | 15 mm at the hinge, 9 mm at the emblem's centre | 8.8 mm |
-| F05 | Triangular end-piece | as F04 | 8.8 mm |
-| F06 | Acetate temple | about 9.5 mm (measured) | 9.3 mm |
-| F08 | Acetate temple | 10 mm at the hinge (dimensioned) | 9.8 mm |
-| F09 | Wide acetate temple | 15 mm (dimensioned) | 14.7 mm |
+| F01 | Right acetate temple | 12 mm (dimensioned) | 11.8 mm |
+| F02 | Right wing of the front, over the pin heads and clear of the lens bay's bevel (founder, Oct 19 2026); the left wing keeps its pins | flat face about 11 × 10 mm (measured) | 8.8 mm, as F04/F05 |
+| F03 | Right acetate temple | 9 mm (dimensioned) | 8.8 mm |
+| F04 | Right triangular end-piece | 15 mm at the hinge, 9 mm at the emblem's centre | 8.8 mm |
+| F05 | Right triangular end-piece | as F04 | 8.8 mm |
+| F06 | Right acetate temple | about 9.5 mm (measured) | 9.3 mm |
+| F08 | Right acetate temple | 10 mm at the hinge (dimensioned) | 9.8 mm |
+| F09 | Right wide acetate temple | 15 mm (dimensioned) | 14.7 mm |
 
 These are estimates for imagery. The factory confirms the production sizes (`00-decisions.md` O4).
 

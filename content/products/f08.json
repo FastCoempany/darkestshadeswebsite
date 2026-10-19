@@ -40,7 +40,7 @@
     "bridge": "measured on the 1:1 front view between the lens openings (18.4 mm), the distance a size marking uses; the drawing's 20 mm is the width of the opening between the two bridges; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Outer face of the acetate temple",
+    "placement": "Outer face of the right acetate temple (one GCD per frame, on the wearer's right)",
     "templeFaceHeightMm": 10,
     "templeFaceHeightSource": "dimensioned (10 mm at the hinge, 13 mm further back)",
     "lengthMm": 9.8,

@@ -40,7 +40,7 @@
     "bridge": "measured on the 1:1 front view between the lens openings (24.8 mm), the distance a size marking uses; the drawing's 13 mm is the gap between the nose pads in the front view; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Triangular end-piece, centered between hinge and wire joint",
+    "placement": "Right triangular end-piece, centered between hinge and wire joint (one GCD per frame, on the wearer's right)",
     "templeFaceHeightMm": 15,
     "templeFaceHeightSource": "end-piece height at the hinge (15 mm), tapering to the wire",
     "lengthMm": 8.8,

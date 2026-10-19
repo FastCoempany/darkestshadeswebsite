@@ -40,7 +40,7 @@
     "bridge": "measured on the 1:1 front view between the lens openings (24.9 mm), the distance a size marking uses; not dimensioned on the drawing; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Triangular end-piece, centered between hinge and wire joint",
+    "placement": "Right triangular end-piece, centered between hinge and wire joint (one GCD per frame, on the wearer's right)",
     "templeFaceHeightMm": 15,
     "templeFaceHeightSource": "end-piece height at the hinge (15 mm), tapering to the wire",
     "lengthMm": 8.8,

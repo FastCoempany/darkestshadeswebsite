@@ -9,7 +9,7 @@ Anastasiia's identity (logotype, brand mark, fonts, "Sustainable elegance" palet
 | **Primary logo, horizontal**: angular brand mark + DARKEST SHADES on one line (Anastasiia's "Primary Logo") | `brand/marks/web/ds-logo-horizontal.svg` (currentColor), masters `brand/marks/ds-logo-horizontal-{black,white}.svg` | Header on wide screens, footer sign-off, email header, order confirmation | Recolored to gold; stretched; set in live type |
 | **Primary logo, stacked** (Anastasiia's "Secondary Logo" file) | `brand/marks/web/ds-logo-stacked.svg` | Square-ish spaces: entry end card, packaging inserts, social avatars | Called "secondary" anywhere in the product; that word now belongs to the GCD |
 | **Brand mark** (the angular shape alone) | `brand/marks/web/ds-brand-mark.svg`, favicon set in `brand/marks/favicon/` | **Nav on small screens, favicon, app icons**, loading state | Replaced by the GCD at small sizes |
-| **GCD** (God Cloud Device): gold band, black onyx inset | Vector: `brand/emblems/gcd/svg/`; 3D renders: `brand/emblems/gcd/render/` | On the product (temple, hinge), the product-page detail view, the footer seal, drop "live" seal, packaging | In the nav or favicon; below 24 px wide; more than once per screen; as a pattern or wallpaper |
+| **GCD** (God Cloud Device): gold band, black onyx inset | Vector: `brand/emblems/gcd/svg/`; 3D renders: `brand/emblems/gcd/render/` | On the product, once, on the wearer's right (right temple, F02's right wing), the product-page detail view, the footer seal, drop "live" seal, packaging | In the nav or favicon; below 24 px wide; more than once per screen; as a pattern or wallpaper |
 
 Retired: the Eclipse Silhouette (`darkestshades` repo, `brand/emblems/eclipse-silhouette/`) and the old engraved DARKEST SHADES wordmark on the frames. Neither appears anywhere on the site, including in photos.
 
@@ -17,7 +17,7 @@ Retired: the Eclipse Silhouette (`darkestshades` repo, `brand/emblems/eclipse-si
 - **Size steps.** Under 48 px wide: `gcd-flat-gold.svg` (no veins). 48–160 px: `gcd-onyx.svg` (metallic gradient, veins). Above 160 px or in photography: the 3D render (`gcd-3d-front-*.png`) or the emblem as it appears on the product.
 - **On light surfaces** use `gcd-gold-black.svg` or the 3D render. Flat gold on paper is 2.1:1, so it is decoration only, never a carrier of meaning.
 - **Clear space**: a quarter of the emblem's height on every side.
-- **Physical scale on the frames**: length = 0.98 × the temple face height at the hinge; centre 0.82 × that height from the hinge; 39% down the temple face; parallel to the temple. Per-frame sizes are in `06-products.md`.
+- **Physical scale on the frames**: one GCD, on the right temple (F02: the right wing; F04, F05: the right end-piece). Length = 0.98 × the temple face height at the hinge; centre 0.82 × that height from the hinge; 39% down the temple face; parallel to the temple; always clear of the lens bay's bevel. Per-frame sizes are in `06-products.md`.
 - The kit's `logo-kit/svg/eclipse-*.svg` files in `darkestshades` are the wrong (lopsided) shape. The master is `brand/emblems/gcd/svg/gcd-geometry.svg`, redrawn from the symmetric render and checked against it.
 
 ## Color

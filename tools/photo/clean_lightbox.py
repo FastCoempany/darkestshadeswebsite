@@ -315,40 +315,52 @@ def place_gcd(F, A, cfg, region_xy, report):
     path = gcd_render(g)
     render = np.asarray(Image.open(path).convert("RGBA"), np.float32) / 255.0
     anc = json.loads(path.with_suffix(".json").read_text())
-    eu = np.array(g["axis"], np.float32)
-    eu = eu / np.linalg.norm(eu) * g["px_per_mm_along"]  # px per mm along the face (away from the hinge on a temple)
-    if "center" in g:
-        # a placement measured directly (F02's wing on the frame front): center, axis, down, scale
-        c = np.array(g["center"], np.float32) - region_xy
-        ev = np.array(g["down"], np.float32)
-        ev = ev / np.linalg.norm(ev) * g["px_per_mm_down"]
-    else:
-        # on a temple, from the hinge line with the logo-kit placement ratios
-        T = g["temple_mm"]
-        ht = np.array(g["hinge_top"], np.float32) - region_xy
-        hb = np.array(g["hinge_bottom"], np.float32) - region_xy
-        ev = (hb - ht) / T                           # px per mm down the temple face
-        c = ht + ev * (0.39 * T) + eu * (0.82 * T)
     bx0, by0, bx1, by1 = anc["bbox_svg"]
     L = g["length_mm"]
     H = L * (by1 - by0) / (bx1 - bx0)
-    er = eu if eu[0] >= 0 else -eu                   # the emblem reads left to right in the picture
-    dst = {"center": c, "left": c - er * L / 2, "right": c + er * L / 2, "top": c - ev * H / 2, "bottom": c + ev * H / 2}
     keys = ["center", "left", "right", "top", "bottom"]
     src_pts = np.array([anc[k] for k in keys], np.float32)
-    dst_pts = np.array([dst[k] for k in keys], np.float32)
-    M, _ = cv2.estimateAffine2D(src_pts, dst_pts, method=cv2.LMEDS)
+    if "anchors_px" in g:
+        # a placement in perspective, anchor by anchor (a wing seen at an angle and close up: its near
+        # half looks bigger than its far half); the anchors come from an approved placement mapped
+        # onto this shot through the face's own landmarks
+        dst_pts = np.array([np.array(g["anchors_px"][k], np.float32) - region_xy for k in keys], np.float32)
+        M, _ = cv2.findHomography(src_pts, dst_pts, 0)
+        c = dst_pts[0]
+        scale = float(np.linalg.norm(dst_pts[2] - dst_pts[1]) / np.linalg.norm(src_pts[2] - src_pts[1]))
+        eu_len = float(np.linalg.norm(dst_pts[2] - dst_pts[1]) / L)
+        ev_len = float(np.linalg.norm(dst_pts[4] - dst_pts[3]) / H)
+    else:
+        eu = np.array(g["axis"], np.float32)
+        eu = eu / np.linalg.norm(eu) * g["px_per_mm_along"]  # px per mm along the face (away from the hinge on a temple)
+        if "center" in g:
+            # a placement measured directly (F02's wing on the frame front): center, axis, down, scale
+            c = np.array(g["center"], np.float32) - region_xy
+            ev = np.array(g["down"], np.float32)
+            ev = ev / np.linalg.norm(ev) * g["px_per_mm_down"]
+        else:
+            # on a temple, from the hinge line with the logo-kit placement ratios
+            T = g["temple_mm"]
+            ht = np.array(g["hinge_top"], np.float32) - region_xy
+            hb = np.array(g["hinge_bottom"], np.float32) - region_xy
+            ev = (hb - ht) / T                       # px per mm down the temple face
+            c = ht + ev * (0.39 * T) + eu * (0.82 * T)
+        er = eu if eu[0] >= 0 else -eu               # the emblem reads left to right in the picture
+        dst = {"center": c, "left": c - er * L / 2, "right": c + er * L / 2, "top": c - ev * H / 2, "bottom": c + ev * H / 2}
+        dst_pts = np.array([dst[k] for k in keys], np.float32)
+        M, _ = cv2.estimateAffine2D(src_pts, dst_pts, method=cv2.LMEDS)
+        M = np.vstack([M, [0, 0, 1]]).astype(np.float32)
+        scale = float(np.sqrt(abs(np.linalg.det(M[:2, :2]))))
+        eu_len, ev_len = float(np.linalg.norm(eu)), float(np.linalg.norm(ev))
     # premultiply, pre-shrink to about twice the target size to avoid aliasing, then warp
-    scale = np.sqrt(abs(np.linalg.det(M[:, :2])))
     pre = min(1.0, 2.0 * scale)
     if pre < 1.0:
-        small = cv2.resize(render, None, fx=pre, fy=pre, interpolation=cv2.INTER_AREA)
+        render = cv2.resize(render, None, fx=pre, fy=pre, interpolation=cv2.INTER_AREA)
         M = M @ np.array([[1 / pre, 0, 0], [0, 1 / pre, 0], [0, 0, 1]], np.float32)
-        render = small
     rgb_lin = srgb_to_lin(render[..., :3]) * render[..., 3:4]
     h, w = A.shape
-    warped = cv2.warpAffine(np.dstack([rgb_lin, render[..., 3]]), M, (w, h), flags=cv2.INTER_LINEAR,
-                            borderMode=cv2.BORDER_CONSTANT, borderValue=0)
+    warped = cv2.warpPerspective(np.dstack([rgb_lin, render[..., 3]]), M, (w, h), flags=cv2.INTER_LINEAR,
+                                 borderMode=cv2.BORDER_CONSTANT, borderValue=0)
     ea = cv2.GaussianBlur(warped[..., 3], (0, 0), g.get("soften_px", 0.6))
     ec = cv2.GaussianBlur(warped[..., :3], (0, 0), g.get("soften_px", 0.6))   # premultiplied
     # contact shadow: a soft occlusion just outside the emblem's edge
@@ -359,7 +371,7 @@ def place_gcd(F, A, cfg, region_xy, report):
     A[:] = ea + A * (1 - ea)
     F[:] = np.where(A[..., None] > 1e-4, P / np.maximum(A[..., None], 1e-4), 0)
     report["gcd"] = {"center_px": (c + region_xy).round(1).tolist(), "length_mm": L, "height_mm": round(H, 2),
-                     "px_per_mm": {"along": round(float(np.linalg.norm(eu)), 2), "down": round(float(np.linalg.norm(ev)), 2)}}
+                     "px_per_mm": {"along": round(eu_len, 2), "down": round(ev_len, 2)}}
 
 
 # ---------- framing ----------

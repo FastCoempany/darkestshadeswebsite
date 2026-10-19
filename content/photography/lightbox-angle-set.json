@@ -1,5 +1,5 @@
 {
- "$comment": "First pass, picked from 240 px thumbnails of the 317 lightbox shots (Apr 15 2025). Each pick is confirmed at full resolution when its frame goes through the clean-up (docs/brief/07-photography.md). Angles: A1 front, A2 three-quarter, A3 side, A4 top-down, A5 inside, A6 GCD detail, H landscape hero.",
+ "$comment": "First pass, picked from 240 px thumbnails of the 317 lightbox shots (Apr 15 2025). Each pick is confirmed at full resolution when its frame goes through the clean-up (docs/brief/07-photography.md). Angles: A1 front, A2 three-quarter, A3 side, A4 top-down, A5 inside, A6 GCD detail, H landscape hero. 'sides' gives the wearer's side each A2 and A3 pick shows (checked Oct 19 2026). The GCD is on the right side only (00-decisions.md #31): left-side picks are re-picked from right-side alternates where the set has them.",
  "source": "darkestshades release asset DARKESTSHADES.zip, folder DARKESTSHADES/Lighbox shots/",
  "frames": {
   "F01": {
@@ -77,8 +77,12 @@
     "IMG_3572"
    ],
    "notes": [
-    "No clean 90\u00b0 profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped."
-   ]
+    "No clean 90° profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped."
+   ],
+   "sides": {
+    "A2": "right",
+    "A3": "left"
+   }
   },
   "F02": {
    "group": [
@@ -173,7 +177,11 @@
     "IMG_3465": "shot inside the F04 run; it is the red tortoise frame",
     "IMG_3476": "shot inside this run; looks like F09 in the tent, moved to F09"
    },
-   "onyxComposites": []
+   "onyxComposites": [],
+   "sides": {
+    "A2": "right",
+    "A3": "left"
+   }
   },
   "F03": {
    "group": [
@@ -264,7 +272,11 @@
    "onyxComposites": [
     "IMG_3337",
     "IMG_3498"
-   ]
+   ],
+   "sides": {
+    "A2": "left",
+    "A3": "left"
+   }
   },
   "F04": {
    "group": [
@@ -338,8 +350,12 @@
    ],
    "onyxComposites": [],
    "notes": [
-    "A6 IMG_3464 is a rear three-quarter with the tent floor edge; a hinge close-up may need IMG_3453\u20133455 cropped."
-   ]
+    "A6 IMG_3464 is a rear three-quarter with the tent floor edge; a hinge close-up may need IMG_3453–3455 cropped."
+   ],
+   "sides": {
+    "A2": "right",
+    "A3": "right"
+   }
   },
   "F05": {
    "group": [
@@ -442,7 +458,11 @@
     "IMG_3544",
     "IMG_3545",
     "IMG_3551"
-   ]
+   ],
+   "sides": {
+    "A2": "left",
+    "A3": "left"
+   }
   },
   "F06": {
    "group": [
@@ -541,7 +561,11 @@
    "onyxComposites": [
     "IMG_3371",
     "IMG_3483"
-   ]
+   ],
+   "sides": {
+    "A2": "right",
+    "A3": "left"
+   }
   },
   "F08": {
    "group": [
@@ -639,7 +663,11 @@
     "IMG_3595": "tent floor edge in frame"
    },
    "gaps": [],
-   "onyxComposites": []
+   "onyxComposites": [],
+   "sides": {
+    "A2": "left",
+    "A3": "left"
+   }
   },
   "F09": {
    "group": [
@@ -738,7 +766,11 @@
     "IMG_3381",
     "IMG_3477",
     "IMG_3478"
-   ]
+   ],
+   "sides": {
+    "A2": "left",
+    "A3": "left"
+   }
   }
  }
 }
