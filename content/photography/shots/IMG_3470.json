@@ -1,0 +1,56 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 three-quarter (A2) from the wearer's right: the whole near temple is in frame. The GCD sits on the right wing as on the approved front shot (IMG_3423): centered on the two pin heads, 8.8 mm, scaled by the pins' spacing (2.64 mm there). The wrap turns this wing toward the camera, so it is barely foreshortened.",
+ "shot": "IMG_3470",
+ "frame": "F02",
+ "angle": "A2",
+ "region": [420, 200, 3660, 2268],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[1880, 1050], [2000, 750], [2040, 615]]
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[2950, 800], [3050, 550]]
+  }
+ ],
+ "marks": [
+  {
+   "name": "pin heads on the right wing (under the GCD)",
+   "poly": [[1322, 680], [1430, 672], [1432, 732], [1324, 740]],
+   "kind": "light",
+   "fill_whole": true
+  },
+  {
+   "name": "printed wordmark and old emblem on the near temple",
+   "poly": [[838, 552], [1002, 604], [1002, 670], [838, 605]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.319, 284.8],
+    "bottom": [0.396, 273.2]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "gcd": {
+  "view": "yaw5",
+  "relief_mm": 0.15,
+  "center": [1376.0, 704.6],
+  "axis": [0.9972, -0.0744],
+  "down": [0.025, 0.9997],
+  "px_per_mm_along": 21.35,
+  "px_per_mm_down": 21.3,
+  "length_mm": 8.8,
+  "soften_px": 0.8
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.56
+ }
+}

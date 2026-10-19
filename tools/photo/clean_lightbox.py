@@ -99,9 +99,19 @@ def masks_for(cfg_path, cfg):
     alpha = np.asarray(Image.open(masks / "alpha.png"), np.float32) / 255.0
     from scipy import ndimage as ndi
     lens = np.zeros(alpha.shape, bool)
+    round_k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31))
     for i in range(len(cfg.get("lenses", []))):
-        # a lens has no holes: what SAM leaves out inside it is something seen through it
-        lens |= ndi.binary_fill_holes(np.asarray(Image.open(masks / f"lens-{i}.png")) > 128)
+        # a lens has no holes and no notches: what SAM leaves out inside it, or bites out of its
+        # edge, is something seen through it (a temple behind, a dark reflection)
+        m = ndi.binary_fill_holes(np.asarray(Image.open(masks / f"lens-{i}.png")) > 128)
+        m = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_CLOSE, round_k) > 0
+        if cfg["lenses"][i].get("convex"):
+            # a lens with no concave edge (round, square, octagon; not F06's shield): bigger bites go too
+            pts = cv2.findNonZero(m.astype(np.uint8))
+            hull = np.zeros(m.shape, np.uint8)
+            cv2.fillConvexPoly(hull, cv2.convexHull(pts), 1)
+            m = hull > 0
+        lens |= ndi.binary_fill_holes(m)
     return alpha, lens
 
 
@@ -131,11 +141,16 @@ def fit_background(lin, alpha, dist_px=160, degree=3):
     return np.clip(B, 1e-4, None)
 
 
-def shadow_zone(obj, reach=600, side=150, soft=40):
+def shadow_zone(obj, reach=600, side=150, soft=40, around=None):
     """Where the frame's own shadow can fall in this tent: below the frame in the picture (light from
     above, camera looking down) and a little to either side. Anything darker elsewhere (the sweep's
     horizon behind the frame) is tent, not shadow. Weight 0..1, soft at the sides only: it starts
-    inside the frame, so it never bleeds above it."""
+    inside the frame, so it never bleeds above it. Seen from straight above (`around`, px), the
+    shadow lies all round the frame instead, and there is no horizon to confuse it with."""
+    if around:
+        k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * around + 1,) * 2)
+        zone = cv2.dilate(obj.astype(np.uint8), k).astype(np.float32)
+        return cv2.GaussianBlur(zone, (0, 0), soft) if soft else zone
     h, w = obj.shape
     last = np.full(w, -10 ** 6, np.int64)
     zone = np.zeros((h, w), bool)
@@ -445,8 +460,18 @@ def main(cfg_path):
     w = np.clip((450 - d) / 300, 0, 1) * zone
     hh, ww = S.shape
     yy, xx = np.mgrid[0:hh, 0:ww]
-    edge = np.minimum.reduce([xx, yy, ww - 1 - xx, hh - 1 - yy]).astype(np.float32)
-    w = w * np.clip(edge / 120.0, 0, 1)      # and to 1 at the region's border: no seam with the padding
+    # and to 1 at the region's border where the picture is padded beyond it: no seam with the
+    # padding. A border that is also the picture's edge (a close-up kept in the photographer's
+    # crop, the frame running off it) keeps its shadow right up to the edge.
+    box = cfg.get("framing", {}).get("box")
+    sides = {"left": xx, "top": yy, "right": ww - 1 - xx, "bottom": hh - 1 - yy}
+    open_side = {"left": box is None or box[0] < x0, "top": box is None or box[1] < y0,
+                 "right": box is None or box[2] > x1, "bottom": box is None or box[3] > y1}
+    edge = np.full((hh, ww), 1e9, np.float32)
+    for side, dist in sides.items():
+        if open_side[side]:
+            edge = np.minimum(edge, dist.astype(np.float32))
+    w = w * np.clip(edge / 120.0, 0, 1)
     S = 1 - (1 - S) * w
     # Whatever is seen through a lens or a gap stays in its transmission (below), so the shadow
     # layer is 1 there; the frame itself hides the rest of the inpainted shadow.

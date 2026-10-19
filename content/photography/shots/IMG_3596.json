@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. This three-quarter view shows the wearer's left temple, which carries no GCD (one GCD per frame, on the right side; founder Oct 19 2026): the old engraving comes off and nothing goes on.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. This three-quarter view shows the wearer's left temple, which carries no GCD (one GCD per frame, on the right side; founder Oct 19 2026): the old engraving comes off and nothing goes on. Its lenses are refilled as an even gradient: the nose pad and the far temple seen through them came out patchy.",
  "shot": "IMG_3596",
  "frame": "F08",
  "angle": "A2",
@@ -7,11 +7,13 @@
  "lenses": [
   {
    "name": "left (far) lens",
-   "points": [[620, 3760], [520, 3480], [430, 3640]]
+   "points": [[620, 3760], [520, 3480], [430, 3640]],
+   "convex": true
   },
   {
    "name": "right (near) lens",
-   "points": [[1640, 3940]]
+   "points": [[1640, 3940]],
+   "convex": true
   }
  ],
  "marks": [
@@ -30,7 +32,8 @@
  ],
  "lens_cleanup": {
   "tophat_px": 31,
-  "threshold": 0.05
+  "threshold": 0.05,
+  "smooth": "gradient"
  },
  "framing": {
   "aspect": [4, 5],

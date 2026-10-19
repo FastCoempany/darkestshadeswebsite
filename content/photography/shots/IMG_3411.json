@@ -1,0 +1,29 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 from behind (A5): the wearer's right is image right. No old mark shows on the inside; the rivet ends inside each wing are hinge hardware and stay; the GCD's face looks away from the camera.",
+ "shot": "IMG_3411",
+ "frame": "F02",
+ "angle": "A5",
+ "region": [0, 1400, 3213, 4300],
+ "lenses": [
+  {
+   "name": "left lens (image left)",
+   "points": [[1050, 2100], [900, 1950]],
+   "convex": true
+  },
+  {
+   "name": "right lens (image right)",
+   "points": [[2100, 2100], [2300, 1950]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

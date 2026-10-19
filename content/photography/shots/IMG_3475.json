@@ -1,0 +1,46 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 GCD detail (A6): the right wing up close from the front right, framed on the wing. The GCD replaces the two pin heads as on IMG_3423: centered between them, scaled by their spacing (2.64 mm) and height (1.68 mm); the wing's face is seen at about 40 degrees, so the emblem is foreshortened the same way.",
+ "shot": "IMG_3475",
+ "frame": "F02",
+ "angle": "A6",
+ "region": [0, 700, 2268, 3100],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[900, 1900], [800, 1500]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[1850, 1800], [1800, 1500]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "pin heads on the right wing (under the GCD)",
+   "poly": [[285, 1225], [440, 1232], [440, 1325], [285, 1318]],
+   "kind": "light",
+   "fill_whole": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "gcd": {
+  "view": "yaw40",
+  "relief_mm": 0.15,
+  "center": [361.5, 1275.0],
+  "axis": [0.996, 0.093],
+  "down": [0.0, 1.0],
+  "px_per_mm_along": 29.3,
+  "px_per_mm_down": 37.8,
+  "length_mm": 8.8,
+  "soften_px": 1.0
+ },
+ "framing": {
+  "box": [0, 600, 1760, 2800]
+ }
+}

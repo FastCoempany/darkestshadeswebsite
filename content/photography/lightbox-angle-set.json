@@ -1,5 +1,5 @@
 {
- "$comment": "First pass, picked from 240 px thumbnails of the 317 lightbox shots (Apr 15 2025). Each pick is confirmed at full resolution when its frame goes through the clean-up (docs/brief/07-photography.md). Angles: A1 front, A2 three-quarter, A3 side, A4 top-down, A5 inside, A6 GCD detail, H landscape hero. 'sides' gives the wearer's side each A2 and A3 pick shows (checked Oct 19 2026). The GCD is on the right side only (00-decisions.md #31): left-side picks are re-picked from right-side alternates where the set has them.",
+ "$comment": "First pass, picked from 240 px thumbnails of the 317 lightbox shots (Apr 15 2025); re-picked for the right side at full resolution on Oct 19 2026. Each pick is confirmed again when its frame goes through the clean-up (docs/brief/07-photography.md). Angles: A1 front, A2 three-quarter, A3 side, A4 top-down, A5 inside, A6 GCD detail, H landscape hero. 'sides' gives the wearer's side each pick shows ('front' when no temple face is seen). The GCD is on the right side only (00-decisions.md #31), so A2, A6 and the hero use right-side shots wherever the shoot has them; A3 keeps a true left profile where the shoot has no right one. How to tell the side: on an outside view, the front at the image right with the temple running left is the right side. Views from behind flip that rule, so they are checked by the hinge hardware (it sits on the inside) and by the old print reading the right way round (it sits on the outside).",
  "source": "darkestshades release asset DARKESTSHADES.zip, folder DARKESTSHADES/Lighbox shots/",
  "frames": {
   "F01": {
@@ -39,7 +39,7 @@
     "A3": "IMG_3572",
     "A4": "IMG_3568",
     "A5": "IMG_3555",
-    "A6": "IMG_3565",
+    "A6": "IMG_3558",
     "H": "IMG_3570"
    },
    "alternates": {
@@ -48,7 +48,7 @@
      "IMG_3562"
     ],
     "A2": [
-     "IMG_3558",
+     "IMG_3557",
      "IMG_3575"
     ],
     "A3": [
@@ -62,9 +62,9 @@
      "IMG_3560"
     ],
     "A6": [
-     "IMG_3564",
      "IMG_3580",
-     "IMG_3581"
+     "IMG_3581",
+     "IMG_3559"
     ],
     "H": [
      "IMG_3561"
@@ -77,11 +77,14 @@
     "IMG_3572"
    ],
    "notes": [
-    "No clean 90° profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped."
+    "No clean 90° profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped.",
+    "A6 was IMG_3565 (alternate IMG_3564): both show the inside of the left hinge, where no GCD sits. A6 is now IMG_3558, a close three-quarter of the right temple at the hinge."
    ],
    "sides": {
     "A2": "right",
-    "A3": "left"
+    "A3": "left",
+    "A6": "right",
+    "H": "front"
    }
   },
   "F02": {
@@ -132,11 +135,11 @@
    ],
    "picks": {
     "A1": "IMG_3423",
-    "A2": "IMG_3431",
-    "A3": "IMG_3421",
+    "A2": "IMG_3470",
+    "A3": "IMG_3430",
     "A4": "IMG_3426",
     "A5": "IMG_3411",
-    "A6": "IMG_3465",
+    "A6": "IMG_3475",
     "H": "IMG_3467"
    },
    "alternates": {
@@ -145,11 +148,13 @@
      "IMG_3472"
     ],
     "A2": [
+     "IMG_3431",
      "IMG_3429",
+     "IMG_3432",
      "IMG_3474"
     ],
     "A3": [
-     "IMG_3430"
+     "IMG_3421"
     ],
     "A4": [
      "IMG_3425",
@@ -160,8 +165,8 @@
      "IMG_3424"
     ],
     "A6": [
-     "IMG_3440",
-     "IMG_3475"
+     "IMG_3465",
+     "IMG_3440"
     ],
     "H": [
      "IMG_3466",
@@ -180,8 +185,13 @@
    "onyxComposites": [],
    "sides": {
     "A2": "right",
-    "A3": "left"
-   }
+    "A3": "right",
+    "A6": "right",
+    "H": "right"
+   },
+   "notes": [
+    "A2 is IMG_3470 (landscape), the whole frame and near temple from the right; IMG_3431 cut the temple off at the edge. A3 is the right side view IMG_3430 (was the left IMG_3421): the photographer let the front run off the edge and focused on the temple. A6 is IMG_3475, the right wing with its pin heads, sharper than IMG_3465, which also has the tent floor in frame."
+   ]
   },
   "F03": {
    "group": [
@@ -228,7 +238,7 @@
    ],
    "picks": {
     "A1": "IMG_3316",
-    "A2": "IMG_3330",
+    "A2": "IMG_3495",
     "A3": "IMG_3323",
     "A4": "IMG_3320",
     "A5": "IMG_3327",
@@ -241,9 +251,11 @@
      "IMG_3340"
     ],
     "A2": [
+     "IMG_3494",
+     "IMG_3500",
+     "IMG_3330",
      "IMG_3329",
-     "IMG_3337",
-     "IMG_3494"
+     "IMG_3337"
     ],
     "A3": [
      "IMG_3322",
@@ -274,9 +286,14 @@
     "IMG_3498"
    ],
    "sides": {
-    "A2": "left",
-    "A3": "left"
-   }
+    "A2": "right",
+    "A3": "left",
+    "A6": "right",
+    "H": "front"
+   },
+   "notes": [
+    "A2 is the right three-quarter IMG_3495 (was the left IMG_3330). The shoot has no right profile, so A3 stays the left profile IMG_3323. A6 IMG_3503 shows the right temple."
+   ]
   },
   "F04": {
    "group": [
@@ -310,7 +327,7 @@
     "A3": "IMG_3450",
     "A4": null,
     "A5": "IMG_3446",
-    "A6": "IMG_3464",
+    "A6": "IMG_3463",
     "H": null
    },
    "alternates": {
@@ -334,6 +351,7 @@
      "IMG_3448"
     ],
     "A6": [
+     "IMG_3464",
      "IMG_3453",
      "IMG_3454",
      "IMG_3455"
@@ -350,11 +368,12 @@
    ],
    "onyxComposites": [],
    "notes": [
-    "A6 IMG_3464 is a rear three-quarter with the tent floor edge; a hinge close-up may need IMG_3453–3455 cropped."
+    "A6 is IMG_3463, a close three-quarter of the right end-piece; the dark tent edge at the bottom is framed out. IMG_3453–3455 (alternates) see the right end-piece from behind."
    ],
    "sides": {
     "A2": "right",
-    "A3": "right"
+    "A3": "right",
+    "A6": "right"
    }
   },
   "F05": {
@@ -410,11 +429,11 @@
    ],
    "picks": {
     "A1": "IMG_3510",
-    "A2": "IMG_3530",
+    "A2": "IMG_3547",
     "A3": "IMG_3526",
     "A4": "IMG_3512",
     "A5": "IMG_3520",
-    "A6": "IMG_3537",
+    "A6": "IMG_3545",
     "H": "IMG_3536"
    },
    "alternates": {
@@ -423,9 +442,11 @@
      "IMG_3511"
     ],
     "A2": [
-     "IMG_3529",
-     "IMG_3531",
-     "IMG_3517"
+     "IMG_3550",
+     "IMG_3542",
+     "IMG_3543",
+     "IMG_3530",
+     "IMG_3529"
     ],
     "A3": [
      "IMG_3546",
@@ -442,7 +463,8 @@
      "IMG_3521"
     ],
     "A6": [
-     "IMG_3545",
+     "IMG_3546",
+     "IMG_3537",
      "IMG_3535"
     ],
     "H": [
@@ -460,9 +482,14 @@
     "IMG_3551"
    ],
    "sides": {
-    "A2": "left",
-    "A3": "left"
-   }
+    "A2": "right",
+    "A3": "left",
+    "A6": "right",
+    "H": "front"
+   },
+   "notes": [
+    "A2 is the right three-quarter IMG_3547 (was the left IMG_3530). A6 is IMG_3545, the right end-piece up close (IMG_3537 is soft there). Every right-side shot is a three-quarter, so A3 stays the left side view IMG_3526."
+   ]
   },
   "F06": {
    "group": [
@@ -512,11 +539,11 @@
    "picks": {
     "A1": "IMG_3345",
     "A2": "IMG_3357",
-    "A3": "IMG_3342",
+    "A3": "IMG_3356",
     "A4": "IMG_3348",
     "A5": "IMG_3354",
-    "A6": "IMG_3365",
-    "H": "IMG_3482"
+    "A6": "IMG_3487",
+    "H": "IMG_3483"
    },
    "alternates": {
     "A1": [
@@ -529,6 +556,8 @@
      "IMG_3371"
     ],
     "A3": [
+     "IMG_3353",
+     "IMG_3342",
      "IMG_3343",
      "IMG_3344",
      "IMG_3491"
@@ -542,12 +571,12 @@
      "IMG_3395"
     ],
     "A6": [
-     "IMG_3364",
-     "IMG_3366"
+     "IMG_3485"
     ],
     "H": [
-     "IMG_3483",
-     "IMG_3484"
+     "IMG_3484",
+     "IMG_3485",
+     "IMG_3482"
     ]
    },
    "rejects": {
@@ -564,8 +593,13 @@
    ],
    "sides": {
     "A2": "right",
-    "A3": "left"
-   }
+    "A3": "right",
+    "A6": "right",
+    "H": "right"
+   },
+   "notes": [
+    "A3 is the right profile IMG_3356 (was the left IMG_3342). A6 is IMG_3487, the right temple at the hinge: IMG_3364–3366 are close-ups of the left hinge. H is the right three-quarter IMG_3483 (was IMG_3482, near-frontal against the textured tent wall)."
+   ]
   },
   "F08": {
    "group": [
@@ -666,8 +700,13 @@
    "onyxComposites": [],
    "sides": {
     "A2": "left",
-    "A3": "left"
-   }
+    "A3": "left",
+    "A6": "left",
+    "H": "front"
+   },
+   "notes": [
+    "The shoot has no outside view of the right temple: IMG_3623–3632 see the inside of the right temple and IMG_3625 the inside of the left one. Every F08 angle shows the left side or the front, so no GCD shows (00-decisions.md O14)."
+   ]
   },
   "F09": {
    "group": [
@@ -716,11 +755,11 @@
    ],
    "picks": {
     "A1": "IMG_3383",
-    "A2": "IMG_3381",
+    "A2": "IMG_3388",
     "A3": "IMG_3402",
     "A4": "IMG_3376",
     "A5": "IMG_3392",
-    "A6": "IMG_3397",
+    "A6": "IMG_3478",
     "H": "IMG_3477"
    },
    "alternates": {
@@ -729,8 +768,11 @@
      "IMG_3373"
     ],
     "A2": [
-     "IMG_3382",
-     "IMG_3386"
+     "IMG_3386",
+     "IMG_3387",
+     "IMG_3389",
+     "IMG_3381",
+     "IMG_3382"
     ],
     "A3": [
      "IMG_3401",
@@ -747,12 +789,13 @@
      "IMG_3393"
     ],
     "A6": [
+     "IMG_3387",
+     "IMG_3409",
+     "IMG_3397",
      "IMG_3406",
-     "IMG_3408",
-     "IMG_3409"
+     "IMG_3408"
     ],
     "H": [
-     "IMG_3478",
      "IMG_3479",
      "IMG_3480"
     ]
@@ -768,9 +811,14 @@
     "IMG_3478"
    ],
    "sides": {
-    "A2": "left",
-    "A3": "left"
-   }
+    "A2": "right",
+    "A3": "left",
+    "A6": "right",
+    "H": "right"
+   },
+   "notes": [
+    "A2 is the right three-quarter IMG_3388 with the whole temple in frame (was the left IMG_3381). The only right profile, IMG_3407, cuts the front off at the edge, so A3 stays the left profile IMG_3402. A6 frames the right hinge of IMG_3478: IMG_3397 is the inside of the hinge and IMG_3406–3409 lose the hinge at the edge."
+   ]
   }
  }
 }

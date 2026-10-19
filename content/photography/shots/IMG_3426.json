@@ -1,0 +1,16 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 from above (A4): the front at the bottom, the temples open. No old mark shows from up here (the prints are on the temples' outer faces) and the GCD's face (the right wing's front, image left) faces away. The rivet ends behind each wing are hinge hardware and stay.",
+ "shot": "IMG_3426",
+ "frame": "F02",
+ "angle": "A4",
+ "region": [100, 650, 3000, 3700],
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ },
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ }
+}

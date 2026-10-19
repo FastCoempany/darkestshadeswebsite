@@ -1,0 +1,45 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 side (A3) from the wearer's right; the photographer focused on the temple and let the front run off the edge, so the photographer's crop is kept, ending just past the near rim: beyond it the far side is a blur the segmentation can't hold. The right wing is well out of focus: the GCD goes where the pin heads sit (about 39% and 61% across the wing's face, 53% down, as on IMG_3423), seen at about 40 degrees, and is softened to the same blur.",
+ "shot": "IMG_3430",
+ "frame": "F02",
+ "angle": "A3",
+ "region": [0, 1900, 3213, 4400],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2400, 3200], [2350, 2700]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "printed wordmark and old emblem on the near temple",
+   "poly": [[730, 2545], [1085, 2548], [1085, 2629], [730, 2618]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.00875, 2537.9],
+    "bottom": [0.03125, 2595.6]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "gcd": {
+  "view": "yaw40",
+  "relief_mm": 0.15,
+  "center": [1825, 2604],
+  "axis": [0.997, -0.071],
+  "down": [0.0, 1.0],
+  "px_per_mm_along": 27.5,
+  "px_per_mm_down": 35.0,
+  "length_mm": 8.8,
+  "soften_px": 10
+ },
+ "framing": {
+  "box": [0, 1137, 3060, 4962]
+ }
+}
