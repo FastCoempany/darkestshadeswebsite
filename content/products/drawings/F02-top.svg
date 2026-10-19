@@ -1,0 +1,590 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.661 163.823" width="144.66mm" height="163.82mm">
+  <title>F02 top view, 1:1, from technical drawing 03</title>
+  <g fill="none" stroke="currentColor" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round">
+    <path vector-effect="non-scaling-stroke" d="M2.746 135.645L2.913 136.084L3.116 136.558L3.207 136.772"/>
+    <path vector-effect="non-scaling-stroke" d="M1.676 138.779L1.377 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M1.377 138.779L1.387 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M1.859 139.010L1.829 139.085"/>
+    <path vector-effect="non-scaling-stroke" d="M1.023 138.986L1.033 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M2.267 60.645L2.273 60.794L2.276 61.183L2.276 61.398L2.277 62.201L2.277 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M1.387 132.510L1.493 132.510L1.606 132.510L1.686 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M1.860 138.987L1.441 138.986L1.023 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M2.054 63.411L1.952 63.411L1.748 63.411L1.645 63.411L1.543 63.411L1.441 63.411L1.339 63.411L1.242 63.411L1.164 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M2.367 147.319L2.677 146.406"/>
+    <path vector-effect="non-scaling-stroke" d="M1.428 143.762L1.428 143.451"/>
+    <path vector-effect="non-scaling-stroke" d="M3.300 143.762L3.300 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M3.400 141.469L3.400 138.747"/>
+    <path vector-effect="non-scaling-stroke" d="M1.820 141.332L1.825 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M4.872 147.027L4.817 146.968"/>
+    <path vector-effect="non-scaling-stroke" d="M2.791 146.068L2.705 146.321"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 141.332L1.012 140.457L1.015 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M1.845 143.762L1.839 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M1.852 139.232L1.433 139.232L1.015 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M142.393 60.645L142.387 60.456L142.385 60.315L142.383 60.032L142.379 59.609L142.376 59.344L142.357 58.202L142.352 57.974"/>
+    <path vector-effect="non-scaling-stroke" d="M123.464 4.143L123.273 3.523L123.172 2.908L123.129 2.537L123.103 2.107L123.163 1.604L123.305 1.322L123.433 1.189L123.598 1.083L123.787 1.018L123.992 1.000L124.313 1.076L124.758 1.364L125.093 1.674L125.368 1.961L125.809 2.469L126.197 3.056"/>
+    <path vector-effect="non-scaling-stroke" d="M4.735 146.848L4.371 146.723"/>
+    <path vector-effect="non-scaling-stroke" d="M4.154 146.528L4.407 146.615"/>
+    <path vector-effect="non-scaling-stroke" d="M3.774 146.451L4.138 146.576"/>
+    <path vector-effect="non-scaling-stroke" d="M3.614 146.557L3.502 146.590"/>
+    <path vector-effect="non-scaling-stroke" d="M4.087 146.724L4.117 146.637"/>
+    <path vector-effect="non-scaling-stroke" d="M4.341 146.811C4.513 146.860 4.683 146.875 4.735 146.848"/>
+    <path vector-effect="non-scaling-stroke" d="M3.621 146.536C3.606 146.572 3.661 146.635 3.762 146.698L4.173 146.886L4.613 146.989C4.733 147.001 4.814 146.984 4.824 146.947"/>
+    <path vector-effect="non-scaling-stroke" d="M3.224 136.814L3.339 137.100L3.518 137.640L3.570 137.885L3.589 138.111L3.572 138.306L3.514 138.465L3.413 138.591L3.256 138.690L3.065 138.748"/>
+    <path vector-effect="non-scaling-stroke" d="M2.129 137.586L2.383 137.419L2.659 137.366L2.936 137.419L3.190 137.586L3.357 137.840L3.410 138.117L3.357 138.393L3.190 138.648L3.065 138.748"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 141.332L1.429 141.331L1.820 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 152.833L1.414 152.930L1.660 153.026L2.154 153.217L3.142 153.594L4.133 153.964L5.127 154.328L6.110 154.679C8.075 155.376 10.062 156.033 12.060 156.647L13.812 157.173L14.251 157.301"/>
+    <path vector-effect="non-scaling-stroke" d="M63.039 153.878L63.503 153.845"/>
+    <path vector-effect="non-scaling-stroke" d="M61.893 161.484L61.608 161.538L61.313 161.593L61.018 161.648L60.722 161.701L60.128 161.806L58.925 162.003L56.449 162.338L53.880 162.576L51.251 162.722L48.592 162.788L45.917 162.781L43.235 162.710L41.893 162.651L40.551 162.577L39.201 162.486L37.835 162.377L35.122 162.110C33.315 161.909 31.512 161.664 29.717 161.378L24.356 160.400L20.832 159.626L19.050 159.196L17.271 158.741L15.498 158.263L14.615 158.015L14.174 157.889L13.733 157.762L11.976 157.238C9.970 156.626 7.981 155.972 6.001 155.275L5.019 154.926L4.053 154.574L3.088 154.216L2.127 153.852L1.647 153.668L1.408 153.575L1.312 153.538L1.168 153.482"/>
+    <path vector-effect="non-scaling-stroke" d="M64.687 148.639L64.979 148.809"/>
+    <path vector-effect="non-scaling-stroke" d="M69.585 154.844L69.679 154.888L69.903 154.985L70.231 155.111L70.912 155.314L71.615 155.444L72.330 155.490"/>
+    <path vector-effect="non-scaling-stroke" d="M69.585 154.844L69.679 154.888L69.903 154.985L70.231 155.111L70.912 155.314L71.615 155.444L72.330 155.490"/>
+    <path vector-effect="non-scaling-stroke" d="M9.243 146.414L10.420 145.691L11.710 144.997L12.459 144.682L13.337 144.409L14.414 144.207L15.742 144.096L17.324 144.086L19.125 144.168L21.099 144.325L23.193 144.536L27.586 145.034L29.841 145.293L32.116 145.547L36.706 146.026L41.314 146.465L45.883 146.886L48.119 147.104L50.288 147.339L52.346 147.604L54.248 147.906C55.460 148.119 56.550 148.355 57.522 148.609C58.494 148.862 59.349 149.133 60.112 149.415"/>
+    <path vector-effect="non-scaling-stroke" d="M61.910 161.481L62.512 161.383L63.728 161.279L64.963 161.312L65.589 161.392L65.905 161.451L66.063 161.486L66.142 161.505L66.221 161.524L66.303 161.546L66.402 161.573L66.471 161.592"/>
+    <path vector-effect="non-scaling-stroke" d="M16.169 153.440L16.363 153.495"/>
+    <path vector-effect="non-scaling-stroke" d="M68.297 156.991L68.956 155.913L69.585 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 148.204L1.168 148.323L1.168 148.424L1.168 148.565L1.168 148.905L1.168 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M61.015 156.781C61.331 156.866 61.368 157.213 61.430 157.699"/>
+    <path vector-effect="non-scaling-stroke" d="M59.288 150.102L59.210 150.101L59.046 150.079L58.879 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 149.246L1.168 152.833"/>
+    <path vector-effect="non-scaling-stroke" d="M15.865 154.350L12.140 153.218L8.447 151.988L4.790 150.662L2.975 149.964L2.071 149.607L1.619 149.427L1.394 149.336L1.168 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M68.711 154.364L68.449 154.297L67.230 154.037L65.995 153.871L64.750 153.805L64.051 153.815L63.503 153.845"/>
+    <path vector-effect="non-scaling-stroke" d="M64.979 148.809L62.636 148.852"/>
+    <path vector-effect="non-scaling-stroke" d="M62.636 148.852C62.800 149.025 62.931 149.246 63.029 149.528L63.187 150.260L63.223 150.954"/>
+    <path vector-effect="non-scaling-stroke" d="M61.444 157.695L61.576 157.660L61.722 157.622L61.869 157.587L62.016 157.554L62.153 157.528L62.373 157.493L62.731 157.460L62.910 157.448L63.090 157.434L63.452 157.406L64.180 157.374L64.913 157.386L65.652 157.436L66.396 157.530L66.769 157.596L67.144 157.676L67.520 157.770L67.897 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M61.574 156.665L61.729 156.637L61.979 156.597L62.391 156.540L62.596 156.515L62.800 156.491L63.211 156.452L64.041 156.405L64.880 156.405L65.726 156.454L66.579 156.558L66.910 156.616L67.007 156.634L67.438 156.731L67.869 156.852L68.297 156.991"/>
+    <path vector-effect="non-scaling-stroke" d="M16.169 153.440C16.076 153.540 15.990 153.859 15.865 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M61.661 148.440L63.808 148.401"/>
+    <path vector-effect="non-scaling-stroke" d="M18.464 3.056L18.851 2.469L19.292 1.961L19.568 1.674L19.902 1.364L20.347 1.076L20.668 1.000L20.873 1.018L21.062 1.083L21.227 1.189L21.355 1.322L21.497 1.604L21.557 2.107L21.532 2.537L21.488 2.908L21.388 3.523L21.196 4.143"/>
+    <path vector-effect="non-scaling-stroke" d="M19.386 7.984L17.459 12.024L15.603 15.947L14.547 18.142L13.742 19.781L11.809 23.577L10.796 25.497L9.744 27.465L8.650 29.512L7.511 31.676L6.930 32.805"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 137.525L141.867 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M141.483 137.983L141.410 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M141.410 138.251L141.483 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M142.617 138.251L142.632 138.117"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 138.635C141.689 138.595 141.523 138.429 141.483 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 138.708L2.525 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 137.598L2.525 137.525"/>
+    <path vector-effect="non-scaling-stroke" d="M2.141 138.251L2.068 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M2.141 138.251C2.181 138.429 2.347 138.595 2.525 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M6.758 147.539L6.394 147.415"/>
+    <path vector-effect="non-scaling-stroke" d="M140.348 146.895L140.602 146.809"/>
+    <path vector-effect="non-scaling-stroke" d="M140.269 146.662L139.905 146.787"/>
+    <path vector-effect="non-scaling-stroke" d="M137.903 147.539L138.267 147.415"/>
+    <path vector-effect="non-scaling-stroke" d="M9.243 146.414C9.037 146.530 8.800 146.634 8.481 146.705L7.938 146.783L7.613 146.799L7.263 146.798L6.820 146.776L6.341 146.732L5.295 146.584L4.166 146.368L3.366 146.189L2.984 146.097L2.535 145.985L2.082 145.867"/>
+    <path vector-effect="non-scaling-stroke" d="M41.827 157.781C41.863 157.908 41.870 158.244 41.824 158.750"/>
+    <path vector-effect="non-scaling-stroke" d="M2.155 57.898L2.074 57.893L1.982 57.890L1.889 57.886L1.705 57.880L1.613 57.878L1.521 57.875L1.337 57.869L1.249 57.866L1.178 57.865"/>
+    <path vector-effect="non-scaling-stroke" d="M138.324 147.357L138.246 147.354"/>
+    <path vector-effect="non-scaling-stroke" d="M4.117 146.637L3.753 146.512"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 137.983L2.525 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M3.178 138.251L2.793 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M7.011 147.626L6.982 147.714"/>
+    <path vector-effect="non-scaling-stroke" d="M6.394 147.415C6.418 147.469 6.562 147.560 6.728 147.627"/>
+    <path vector-effect="non-scaling-stroke" d="M141.436 136.814L141.322 136.783"/>
+    <path vector-effect="non-scaling-stroke" d="M141.915 135.645L141.747 136.084L141.545 136.558L141.454 136.772"/>
+    <path vector-effect="non-scaling-stroke" d="M143.284 138.779L143.274 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.638 138.986L143.605 139.090"/>
+    <path vector-effect="non-scaling-stroke" d="M141.674 135.807L141.848 135.251L141.993 134.726L142.148 134.088L142.308 133.272L142.362 132.875L142.384 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.635 60.672L143.632 60.745L143.630 60.949L143.629 61.182L143.628 61.894L143.627 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M143.274 132.510L143.168 132.510L143.055 132.510L142.974 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.480 132.510L143.390 132.510L143.280 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M142.607 63.411L142.708 63.411L142.913 63.411L143.016 63.411L143.118 63.411L143.220 63.411L143.322 63.411L143.419 63.411L143.497 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M142.293 147.319L141.984 146.406"/>
+    <path vector-effect="non-scaling-stroke" d="M141.261 141.469L141.261 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M143.232 143.762L143.232 143.451"/>
+    <path vector-effect="non-scaling-stroke" d="M141.361 143.762L141.361 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M141.261 141.469L141.261 138.747"/>
+    <path vector-effect="non-scaling-stroke" d="M139.789 147.027L139.843 146.968"/>
+    <path vector-effect="non-scaling-stroke" d="M143.646 139.232L143.648 140.457L143.650 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M143.650 141.332L143.651 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M143.653 143.762L143.659 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M143.651 141.469L143.651 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M142.379 147.572L136.738 149.497"/>
+    <path vector-effect="non-scaling-stroke" d="M136.738 149.497L136.585 149.487L136.506 149.416"/>
+    <path vector-effect="non-scaling-stroke" d="M142.841 141.332L142.836 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M143.584 141.469L143.467 141.469L143.235 141.469L143.003 141.469L142.882 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M79.681 148.809C79.340 149.028 78.966 149.331 78.573 149.711C78.190 150.083 77.763 150.552 77.339 151.115L76.809 151.881L76.324 152.758L76.045 153.495C75.976 153.743 75.935 153.999 75.943 154.256L75.950 154.364"/>
+    <path vector-effect="non-scaling-stroke" d="M75.950 154.364L75.584 154.580L75.341 154.712L75.212 154.778L75.075 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M75.075 154.844L74.981 154.888L74.758 154.985L74.430 155.111L73.749 155.314L73.046 155.444L72.330 155.490"/>
+    <path vector-effect="non-scaling-stroke" d="M130.369 157.313L129.970 157.427L129.088 157.675L127.320 158.153L125.545 158.608L123.760 159.040L120.230 159.816L114.860 160.796C113.062 161.083 111.256 161.328 109.446 161.529L106.728 161.796L105.359 161.904L104.008 161.995L102.649 162.069L101.291 162.128L98.577 162.198L95.870 162.201L93.179 162.130L90.519 161.977L87.920 161.730L85.415 161.387L84.197 161.185L83.596 161.077L83.296 161.021L82.998 160.966"/>
+    <path vector-effect="non-scaling-stroke" d="M82.998 160.966L82.699 160.913L82.392 160.866L81.783 160.794L80.552 160.739L79.305 160.820L78.676 160.922L78.360 160.994L78.202 161.035L78.122 161.056L78.042 161.078"/>
+    <path vector-effect="non-scaling-stroke" d="M83.086 156.665L83.231 156.692L83.372 156.721L83.511 156.750L83.646 156.781"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 155.490L72.330 157.749"/>
+    <path vector-effect="non-scaling-stroke" d="M83.646 156.781C83.330 156.866 83.292 157.213 83.231 157.699"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 153.517L143.303 153.591L143.062 153.684L142.581 153.870L141.616 154.235L140.648 154.594L139.679 154.947L138.696 155.297C136.718 155.995 134.728 156.650 132.720 157.263L130.961 157.788L130.520 157.916L130.079 158.042L129.195 158.290L127.421 158.769L125.640 159.224L123.855 159.655L120.326 160.431L114.955 161.411C113.156 161.698 111.349 161.944 109.537 162.145L106.817 162.414L105.446 162.523L104.093 162.614L102.747 162.688L101.400 162.747L98.709 162.818L96.023 162.823L93.350 162.757L90.703 162.608L88.110 162.366L85.610 162.026L84.397 161.827L83.798 161.721L83.501 161.666L83.206 161.612L82.910 161.556L82.608 161.501L82.009 161.412L80.798 161.328L79.580 161.380L78.973 161.466L78.669 161.527L78.516 161.563L78.440 161.582L78.363 161.602L78.284 161.623L78.188 161.650L78.012 161.701L77.655 161.802L76.926 161.998L75.429 162.340L73.892 162.573L72.330 162.658"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 149.246L143.493 152.833"/>
+    <path vector-effect="non-scaling-stroke" d="M79.681 148.809L82.024 148.852"/>
+    <path vector-effect="non-scaling-stroke" d="M102.837 158.750L104.468 158.641L105.284 158.585L106.099 158.522L109.360 158.204L112.611 157.789L115.848 157.279L119.067 156.681L122.267 155.999L123.859 155.627L125.445 155.232L128.605 154.403"/>
+    <path vector-effect="non-scaling-stroke" d="M81.158 153.845L83.086 156.665"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 158.761L72.330 162.065"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 146.860L143.493 148.204"/>
+    <path vector-effect="non-scaling-stroke" d="M142.740 138.897L142.740 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M142.640 138.897L142.640 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 162.658L72.330 162.065"/>
+    <path vector-effect="non-scaling-stroke" d="M80.853 148.401L80.650 148.411C80.419 148.438 80.194 148.516 79.974 148.639"/>
+    <path vector-effect="non-scaling-stroke" d="M138.408 147.464L138.514 147.492"/>
+    <path vector-effect="non-scaling-stroke" d="M138.169 147.332L139.952 146.723"/>
+    <path vector-effect="non-scaling-stroke" d="M81.438 150.955L81.459 151.606L81.503 152.221L81.551 152.804L81.622 153.878"/>
+    <path vector-effect="non-scaling-stroke" d="M1.766 138.897L2.714 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M1.827 138.947L1.877 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 152.833L143.493 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M142.045 146.013L140.804 146.313C139.935 146.508 139.095 146.661 138.352 146.744L137.322 146.813L136.863 146.804L136.493 146.769L135.875 146.625L135.418 146.414"/>
+    <path vector-effect="non-scaling-stroke" d="M2.277 132.510L2.299 132.875L2.353 133.272L2.513 134.088L2.668 134.726L2.813 135.251L2.987 135.806"/>
+    <path vector-effect="non-scaling-stroke" d="M142.622 145.860L142.132 145.990"/>
+    <path vector-effect="non-scaling-stroke" d="M1.921 139.264L2.021 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.838 145.220L1.842 145.426L1.847 145.504L1.855 145.573L1.975 145.816L2.132 145.900L2.340 145.951L2.416 145.966L2.568 146.000L2.791 146.068"/>
+    <path vector-effect="non-scaling-stroke" d="M1.015 139.232L1.035 139.117"/>
+    <path vector-effect="non-scaling-stroke" d="M3.499 146.659L3.611 146.772L3.864 146.919L4.195 147.047L4.525 147.124L4.774 147.136L4.846 147.119"/>
+    <path vector-effect="non-scaling-stroke" d="M138.522 147.566L138.410 147.679L138.158 147.826L137.827 147.955L137.497 148.032L137.247 148.043L137.138 147.990"/>
+    <path vector-effect="non-scaling-stroke" d="M137.730 32.805L137.149 31.676L136.011 29.512L134.916 27.465L133.864 25.497L132.852 23.577L130.919 19.781L130.114 18.142L129.058 15.947L127.201 12.024L125.275 7.984"/>
+    <path vector-effect="non-scaling-stroke" d="M139.826 31.786L140.938 34.287L141.178 34.896L141.587 36.043L142.303 38.559L142.474 39.308L142.643 40.137L142.811 41.068C143.210 43.424 143.427 45.921 143.540 48.340L143.657 53.250L143.659 54.779L143.647 57.000L143.640 57.893"/>
+    <path vector-effect="non-scaling-stroke" d="M141.162 146.659L141.049 146.772L140.796 146.919L140.466 147.047L140.136 147.124L139.887 147.136L139.815 147.119"/>
+    <path vector-effect="non-scaling-stroke" d="M4.421 146.575L4.391 146.662"/>
+    <path vector-effect="non-scaling-stroke" d="M4.755 146.786L4.815 146.837"/>
+    <path vector-effect="non-scaling-stroke" d="M3.556 146.727L3.621 146.536"/>
+    <path vector-effect="non-scaling-stroke" d="M4.422 146.572L4.664 146.693L4.752 146.758L4.813 146.832"/>
+    <path vector-effect="non-scaling-stroke" d="M60.118 149.488C60.269 149.200 60.455 148.992 60.633 148.844L61.172 148.532L61.659 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M142.740 139.264L142.640 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M2.038 145.860L2.529 145.990"/>
+    <path vector-effect="non-scaling-stroke" d="M63.223 150.955L63.202 151.606L63.158 152.221L63.109 152.804L63.039 153.878"/>
+    <path vector-effect="non-scaling-stroke" d="M6.930 32.805L6.623 33.414L5.732 35.330L5.595 35.660L4.973 37.347C4.679 38.233 4.425 39.147 4.202 40.081L3.843 41.730L3.496 43.673L3.145 46.127L3.087 46.595L2.788 49.444L2.559 52.385L2.405 55.171L2.336 56.991L2.309 57.974"/>
+    <path vector-effect="non-scaling-stroke" d="M1.067 60.644L1.133 60.644L1.373 60.644L1.509 60.644L1.577 60.644L1.781 60.645L1.849 60.645L1.917 60.645L1.984 60.645L2.157 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M21.196 4.144L21.001 4.609L20.908 4.813L20.698 5.263L20.666 5.333L20.462 5.763L20.309 6.080L20.174 6.361L20.047 6.622L19.928 6.868L19.813 7.105L19.702 7.334L19.593 7.557L19.488 7.774L19.386 7.984"/>
+    <path vector-effect="non-scaling-stroke" d="M16.669 6.662L16.766 6.463L16.866 6.257L16.970 6.045L17.075 5.828L17.185 5.603L17.298 5.370L17.418 5.125L17.547 4.861L17.691 4.567L17.863 4.219L17.948 4.046L18.093 3.756L18.247 3.454L18.360 3.240L18.463 3.057"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 137.598L141.867 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 138.251L141.867 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M141.671 135.916L141.988 135.083L142.271 134.238L142.495 133.375L142.569 132.936L142.600 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 138.635L141.867 138.708"/>
+    <path vector-effect="non-scaling-stroke" d="M2.024 138.117C1.992 138.430 2.347 138.784 2.659 138.752C2.972 138.784 3.327 138.430 3.295 138.117C3.327 137.804 2.972 137.449 2.659 137.481C2.347 137.449 1.992 137.804 2.024 138.117"/>
+    <path vector-effect="non-scaling-stroke" d="M6.778 147.478L6.808 147.390"/>
+    <path vector-effect="non-scaling-stroke" d="M6.394 147.415L6.316 147.418"/>
+    <path vector-effect="non-scaling-stroke" d="M7.465 147.849L7.398 148.045"/>
+    <path vector-effect="non-scaling-stroke" d="M6.262 147.438C6.247 147.475 6.302 147.537 6.403 147.601L6.814 147.789L7.254 147.892C7.373 147.903 7.455 147.887 7.465 147.849"/>
+    <path vector-effect="non-scaling-stroke" d="M7.063 147.473L7.305 147.595L7.393 147.661L7.453 147.734"/>
+    <path vector-effect="non-scaling-stroke" d="M137.933 147.627L137.903 147.539"/>
+    <path vector-effect="non-scaling-stroke" d="M142.834 138.947L142.784 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M137.882 147.478L137.852 147.390"/>
+    <path vector-effect="non-scaling-stroke" d="M142.834 138.947L142.784 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M137.225 147.800L137.285 147.750"/>
+    <path vector-effect="non-scaling-stroke" d="M137.679 147.714C137.507 147.762 137.337 147.778 137.285 147.750"/>
+    <path vector-effect="non-scaling-stroke" d="M137.852 147.390C138.024 147.341 138.194 147.326 138.246 147.354"/>
+    <path vector-effect="non-scaling-stroke" d="M138.399 147.438L138.465 147.634"/>
+    <path vector-effect="non-scaling-stroke" d="M138.399 147.438C138.413 147.475 138.359 147.537 138.257 147.601L137.846 147.789L137.406 147.892C137.287 147.903 137.206 147.887 137.195 147.849"/>
+    <path vector-effect="non-scaling-stroke" d="M137.851 147.387L138.117 147.335L138.227 147.333L138.319 147.354"/>
+    <path vector-effect="non-scaling-stroke" d="M140.239 146.575L140.269 146.662"/>
+    <path vector-effect="non-scaling-stroke" d="M140.290 146.723L140.320 146.811"/>
+    <path vector-effect="non-scaling-stroke" d="M142.895 138.897L141.947 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M141.892 138.897L141.743 138.888L141.595 138.868L141.444 138.830L141.215 138.716L141.072 138.568L140.986 138.380L140.955 138.176L140.962 137.969L140.993 137.765L141.041 137.564L141.097 137.377L141.207 137.068L141.322 136.783"/>
+    <path vector-effect="non-scaling-stroke" d="M140.908 146.512L140.986 146.516"/>
+    <path vector-effect="non-scaling-stroke" d="M141.915 135.645L141.785 135.609"/>
+    <path vector-effect="non-scaling-stroke" d="M140.320 146.811C140.147 146.860 139.977 146.875 139.926 146.848"/>
+    <path vector-effect="non-scaling-stroke" d="M140.492 146.485L140.758 146.433L140.867 146.431L140.960 146.452"/>
+    <path vector-effect="non-scaling-stroke" d="M139.848 146.832L139.908 146.758L139.996 146.693L140.238 146.572"/>
+    <path vector-effect="non-scaling-stroke" d="M141.039 146.536C141.054 146.572 141.000 146.635 140.898 146.698L140.487 146.886L140.047 146.989C139.928 147.001 139.847 146.984 139.836 146.947"/>
+    <path vector-effect="non-scaling-stroke" d="M2.309 57.974L2.304 58.202L2.284 59.344L2.281 59.609L2.277 60.032L2.275 60.315L2.274 60.456L2.267 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M143.659 144.930L143.240 144.930L142.822 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M139.901 147.138L139.838 146.952"/>
+    <path vector-effect="non-scaling-stroke" d="M141.039 146.536L141.105 146.727"/>
+    <path vector-effect="non-scaling-stroke" d="M61.683 148.440L62.205 148.546L62.636 148.852"/>
+    <path vector-effect="non-scaling-stroke" d="M142.740 139.264L142.640 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 152.833L1.168 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M139.905 146.786C139.929 146.733 140.073 146.641 140.239 146.575"/>
+    <path vector-effect="non-scaling-stroke" d="M140.493 146.488C140.665 146.439 140.835 146.424 140.887 146.451"/>
+    <path vector-effect="non-scaling-stroke" d="M16.558 150.445C16.953 150.856 17.536 151.291 18.350 151.743C19.166 152.195 20.162 152.635 21.302 153.052C22.436 153.467 23.681 153.848 24.963 154.187C26.234 154.524 27.588 154.831 28.914 155.093L32.927 155.776L36.986 156.257L41.048 156.539L45.072 156.622L49.077 156.494L51.016 156.343L52.885 156.130C54.095 155.967 55.252 155.756 56.248 155.501L57.604 155.086L58.616 154.618C59.176 154.284 59.451 153.937 59.530 153.598L59.555 153.385"/>
+    <path vector-effect="non-scaling-stroke" d="M140.908 146.512C140.884 146.566 140.739 146.658 140.573 146.724"/>
+    <path vector-effect="non-scaling-stroke" d="M143.661 145.281L143.654 145.809L143.646 145.987L143.634 146.162L143.581 146.553L143.481 146.888C143.399 147.079 143.279 147.216 143.057 147.324L142.938 147.376L142.741 147.449L142.379 147.572"/>
+    <path vector-effect="non-scaling-stroke" d="M3.696 146.455L3.774 146.451"/>
+    <path vector-effect="non-scaling-stroke" d="M143.661 145.281L143.654 145.809L143.646 145.987L143.634 146.162L143.581 146.553L143.481 146.888C143.399 147.079 143.279 147.216 143.057 147.324L142.938 147.376L142.741 147.449L142.379 147.572"/>
+    <path vector-effect="non-scaling-stroke" d="M141.870 146.068L142.093 146.000L142.245 145.966L142.320 145.951L142.528 145.900L142.686 145.816L142.781 145.675L142.818 145.437L142.821 145.336L142.823 145.235"/>
+    <path vector-effect="non-scaling-stroke" d="M139.866 146.898L139.926 146.848"/>
+    <path vector-effect="non-scaling-stroke" d="M142.823 145.045C142.915 145.987 142.589 146.196 141.956 146.321"/>
+    <path vector-effect="non-scaling-stroke" d="M4.794 146.898L4.735 146.848"/>
+    <path vector-effect="non-scaling-stroke" d="M142.896 143.762L143.234 143.762L143.572 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M125.275 7.984L125.173 7.774L125.067 7.557L124.959 7.334L124.848 7.105L124.733 6.868L124.613 6.622L124.487 6.361L124.351 6.080L124.199 5.763L124.013 5.371L123.962 5.263L123.752 4.813L123.659 4.609L123.464 4.144"/>
+    <path vector-effect="non-scaling-stroke" d="M140.523 146.576L140.493 146.488"/>
+    <path vector-effect="non-scaling-stroke" d="M142.352 57.974L142.325 56.991L142.255 55.171L142.101 52.385L141.872 49.444L141.573 46.595L141.516 46.127L141.165 43.673L140.817 41.730L140.458 40.081C140.236 39.147 139.982 38.233 139.687 37.347L139.065 35.660L138.928 35.330L138.037 33.414L137.730 32.805"/>
+    <path vector-effect="non-scaling-stroke" d="M143.593 60.644L143.527 60.644L143.288 60.644L143.152 60.644L143.084 60.644L142.879 60.645L142.811 60.645L142.743 60.645L142.677 60.645L142.504 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M135.418 146.414C135.624 146.530 135.860 146.634 136.180 146.705L136.722 146.783L137.048 146.799L137.397 146.798L137.841 146.776L138.319 146.732L139.366 146.584L140.495 146.368L141.294 146.189L141.676 146.097L142.126 145.985L142.578 145.867L142.766 145.817"/>
+    <path vector-effect="non-scaling-stroke" d="M135.418 146.414C135.624 146.530 135.860 146.634 136.180 146.705L136.722 146.783L137.048 146.799L137.397 146.798L137.841 146.776L138.319 146.732L139.366 146.584L140.495 146.368L141.294 146.189L141.676 146.097L142.126 145.985L142.578 145.867L142.766 145.817"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 143.762L1.010 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M84.542 149.488C84.391 149.200 84.206 148.992 84.028 148.844L83.489 148.532L83.002 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M140.573 146.724L140.544 146.637"/>
+    <path vector-effect="non-scaling-stroke" d="M1.838 145.138C1.754 146.030 2.107 146.185 2.705 146.321"/>
+    <path vector-effect="non-scaling-stroke" d="M84.542 149.488C84.391 149.200 84.206 148.992 84.028 148.844L83.489 148.532L83.002 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M137.207 147.734L137.267 147.661L137.355 147.595L137.597 147.473"/>
+    <path vector-effect="non-scaling-stroke" d="M84.542 149.488L84.637 149.648L84.745 149.788L84.866 149.905L84.998 149.996L85.140 150.060L85.292 150.095L85.372 150.102"/>
+    <path vector-effect="non-scaling-stroke" d="M6.253 147.464L6.147 147.492L6.250 147.679L6.503 147.826L6.834 147.955L7.164 148.032L7.413 148.043L7.523 147.990L7.456 147.875"/>
+    <path vector-effect="non-scaling-stroke" d="M128.102 150.445C127.708 150.856 127.125 151.291 126.310 151.743C125.495 152.195 124.499 152.635 123.359 153.052C122.225 153.467 120.979 153.848 119.698 154.187C118.426 154.524 117.073 154.831 115.746 155.093L111.733 155.776L107.675 156.257L103.613 156.539L99.589 156.622L95.583 156.494L93.645 156.343L91.776 156.130C90.566 155.967 89.409 155.756 88.413 155.501L87.057 155.086L86.045 154.618C85.484 154.284 85.209 153.937 85.130 153.598L85.106 153.385"/>
+    <path vector-effect="non-scaling-stroke" d="M137.262 148.045L137.197 147.854"/>
+    <path vector-effect="non-scaling-stroke" d="M137.264 147.689C137.288 147.635 137.433 147.543 137.599 147.477"/>
+    <path vector-effect="non-scaling-stroke" d="M2.277 63.411L2.277 66.576L2.277 72.570L2.277 76.175L2.277 78.564L2.277 84.558L2.277 90.552L2.277 96.546L2.277 102.540L2.277 108.534L2.277 114.528L2.277 120.522L2.277 126.516L2.277 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M142.622 145.860L142.132 145.990"/>
+    <path vector-effect="non-scaling-stroke" d="M138.267 147.415C138.243 147.469 138.099 147.560 137.933 147.627"/>
+    <path vector-effect="non-scaling-stroke" d="M138.267 147.415L138.345 147.418"/>
+    <path vector-effect="non-scaling-stroke" d="M83.646 156.781L85.295 157.069L86.984 157.323L88.721 157.535L90.502 157.698L94.143 157.892L96.596 157.934L97.836 157.932L99.084 157.915L100.333 157.884L102.834 157.781"/>
+    <path vector-effect="non-scaling-stroke" d="M102.834 157.781L104.447 157.682L105.253 157.626L106.059 157.563L109.280 157.249L112.493 156.839L115.691 156.337L118.873 155.747L122.035 155.075L123.609 154.708L125.176 154.322L128.298 153.495"/>
+    <path vector-effect="non-scaling-stroke" d="M137.649 147.626L137.679 147.714"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 152.833L143.493 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M102.834 157.781C102.798 157.908 102.790 158.244 102.837 158.750"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 157.750L72.330 158.761"/>
+    <path vector-effect="non-scaling-stroke" d="M137.599 147.477L137.628 147.564"/>
+    <path vector-effect="non-scaling-stroke" d="M6.336 147.357L6.414 147.354"/>
+    <path vector-effect="non-scaling-stroke" d="M6.342 147.354L6.434 147.333L6.544 147.335L6.809 147.387"/>
+    <path vector-effect="non-scaling-stroke" d="M128.854 148.853L128.799 149.282C128.710 149.636 128.500 150.030 128.102 150.445"/>
+    <path vector-effect="non-scaling-stroke" d="M6.195 147.634L6.262 147.438"/>
+    <path vector-effect="non-scaling-stroke" d="M92.592 150.232L91.401 150.541L90.144 150.924C89.357 151.185 88.669 151.458 88.066 151.740L87.223 152.168L86.497 152.607L85.896 153.058L85.443 153.523L85.230 153.858"/>
+    <path vector-effect="non-scaling-stroke" d="M80.853 148.401L83.000 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M80.853 148.401L83.000 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M7.396 147.689L7.456 147.739"/>
+    <path vector-effect="non-scaling-stroke" d="M82.978 148.440L82.456 148.546L82.024 148.852"/>
+    <path vector-effect="non-scaling-stroke" d="M142.532 137.586L142.699 137.840L142.739 137.976L142.752 138.117L142.739 138.257L142.699 138.393L142.532 138.648L142.354 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 162.658L72.330 162.065"/>
+    <path vector-effect="non-scaling-stroke" d="M7.435 147.800L7.375 147.750"/>
+    <path vector-effect="non-scaling-stroke" d="M142.354 138.779L142.984 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M7.062 147.477L7.032 147.564"/>
+    <path vector-effect="non-scaling-stroke" d="M143.626 139.117L143.646 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 138.733L142.136 138.733"/>
+    <path vector-effect="non-scaling-stroke" d="M85.106 153.385C85.106 153.119 85.217 152.856 85.403 152.604C85.642 152.281 85.999 151.972 86.448 151.668C86.885 151.371 87.434 151.065 88.032 150.784C89.234 150.219 90.781 149.689 92.783 149.215L96.060 148.560L99.835 148.004L103.792 147.526L107.843 147.076L111.899 146.644L113.905 146.439L115.879 146.250L119.693 145.965C120.903 145.903 121.991 145.885 122.959 145.922C123.926 145.960 124.729 146.051 125.406 146.189L126.322 146.425L127.068 146.714C127.525 146.926 127.882 147.165 128.162 147.428C128.442 147.691 128.639 147.975 128.752 148.284L128.854 148.853"/>
+    <path vector-effect="non-scaling-stroke" d="M141.483 138.251L141.867 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 138.251L142.520 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M76.764 157.876L78.042 161.078"/>
+    <path vector-effect="non-scaling-stroke" d="M141.867 137.983L141.483 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M142.520 137.983L142.136 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M83.217 157.695L82.998 160.966"/>
+    <path vector-effect="non-scaling-stroke" d="M128.795 154.350L132.521 153.218L136.213 151.988L139.871 150.662L141.686 149.964L142.590 149.607L143.042 149.427L143.267 149.336L143.493 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 137.983L142.136 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 138.635L142.136 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M85.008 150.001L85.555 150.022L85.782 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M128.854 148.853L128.854 148.981"/>
+    <path vector-effect="non-scaling-stroke" d="M142.637 138.117C142.669 138.430 142.314 138.784 142.001 138.752C141.689 138.784 141.334 138.430 141.366 138.117C141.334 137.804 141.689 137.449 142.001 137.481C142.314 137.449 142.669 137.804 142.637 138.117"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 148.204L143.493 148.323L143.493 148.424L143.493 148.565L143.493 148.905L143.493 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M16.669 6.662L16.766 6.463L16.866 6.257L16.970 6.045L17.075 5.828L17.185 5.603L17.298 5.370L17.418 5.125L17.547 4.861L17.691 4.567L17.863 4.219L17.948 4.046L18.093 3.756L18.247 3.454L18.360 3.240L18.463 3.057"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 158.761L73.470 158.697L74.597 158.520L74.698 158.500L74.875 158.461L75.151 158.391L75.691 158.220L76.227 158.041L76.764 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M21.196 4.144L21.001 4.609L20.908 4.813L20.698 5.263L20.666 5.333L20.462 5.763L20.309 6.080L20.174 6.361L20.047 6.622L19.928 6.868L19.813 7.105L19.702 7.334L19.593 7.557L19.488 7.774L19.386 7.984"/>
+    <path vector-effect="non-scaling-stroke" d="M1.067 60.644L1.133 60.644L1.373 60.644L1.509 60.644L1.577 60.644L1.781 60.645L1.849 60.645L1.917 60.645L1.984 60.645L2.157 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M135.418 146.414L134.241 145.691L132.951 144.997L132.201 144.682L131.324 144.409L130.246 144.207L128.919 144.096L127.337 144.086L125.535 144.168L123.562 144.325L121.468 144.536L117.074 145.034L114.820 145.293L112.545 145.547L107.955 146.026L103.347 146.465L98.778 146.886L96.542 147.104L94.372 147.339L92.315 147.604L90.412 147.906C89.201 148.119 88.110 148.355 87.138 148.609C86.167 148.862 85.312 149.133 84.549 149.415"/>
+    <path vector-effect="non-scaling-stroke" d="M79.974 148.639L79.681 148.809"/>
+    <path vector-effect="non-scaling-stroke" d="M2.309 57.974L2.304 58.202L2.284 59.344L2.281 59.609L2.277 60.032L2.275 60.315L2.274 60.456L2.267 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M81.622 153.878L81.158 153.845"/>
+    <path vector-effect="non-scaling-stroke" d="M6.930 32.805L6.623 33.414L5.732 35.330L5.595 35.660L4.973 37.347C4.679 38.233 4.425 39.147 4.202 40.081L3.843 41.730L3.496 43.673L3.145 46.127L3.087 46.595L2.788 49.444L2.559 52.385L2.405 55.171L2.336 56.991L2.309 57.974"/>
+    <path vector-effect="non-scaling-stroke" d="M130.369 157.313L128.795 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M52.068 150.232L53.259 150.541L54.516 150.924C55.304 151.185 55.992 151.458 56.594 151.740L57.437 152.168L58.164 152.607L58.765 153.058L59.217 153.523L59.431 153.858"/>
+    <path vector-effect="non-scaling-stroke" d="M143.650 141.332L143.232 141.331L142.841 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 157.750L72.330 158.478"/>
+    <path vector-effect="non-scaling-stroke" d="M142.841 141.469L142.841 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 152.833L1.168 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M2.038 145.860L2.529 145.990"/>
+    <path vector-effect="non-scaling-stroke" d="M60.118 149.488L60.023 149.648L59.915 149.788L59.795 149.905L59.663 149.996L59.520 150.060L59.369 150.095L59.288 150.102"/>
+    <path vector-effect="non-scaling-stroke" d="M60.118 149.488C60.269 149.200 60.455 148.992 60.633 148.844L61.172 148.532L61.659 148.440"/>
+    <path vector-effect="non-scaling-stroke" d="M142.822 144.930L142.816 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M142.809 139.201L142.828 139.117"/>
+    <path vector-effect="non-scaling-stroke" d="M3.701 146.452L3.793 146.431L3.903 146.433L4.168 146.485"/>
+    <path vector-effect="non-scaling-stroke" d="M4.824 146.947L4.759 147.138"/>
+    <path vector-effect="non-scaling-stroke" d="M141.361 143.762L141.261 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M3.753 146.512L3.675 146.516"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 143.762L141.361 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M4.138 146.576L4.167 146.488"/>
+    <path vector-effect="non-scaling-stroke" d="M125.275 7.984L125.173 7.774L125.067 7.557L124.959 7.334L124.848 7.105L124.733 6.868L124.613 6.622L124.487 6.361L124.351 6.080L124.199 5.763L124.013 5.371L123.962 5.263L123.752 4.813L123.659 4.609L123.464 4.144"/>
+    <path vector-effect="non-scaling-stroke" d="M142.822 144.930L142.823 145.034"/>
+    <path vector-effect="non-scaling-stroke" d="M142.505 57.898L142.587 57.893L142.679 57.890L142.772 57.886L142.956 57.880L143.048 57.878L143.139 57.875L143.323 57.869L143.411 57.866L143.482 57.865"/>
+    <path vector-effect="non-scaling-stroke" d="M143.659 144.930L143.661 145.281"/>
+    <path vector-effect="non-scaling-stroke" d="M139.826 31.786L140.938 34.287L141.178 34.896L141.587 36.043L142.303 38.559L142.474 39.308L142.643 40.137L142.811 41.068C143.210 43.424 143.427 45.921 143.540 48.340L143.657 53.250L143.659 54.779L143.647 57.000L143.640 57.893"/>
+    <path vector-effect="non-scaling-stroke" d="M141.345 136.726L141.560 136.199L141.785 135.609"/>
+    <path vector-effect="non-scaling-stroke" d="M143.284 138.856L143.135 138.865L143.062 138.870"/>
+    <path vector-effect="non-scaling-stroke" d="M142.352 57.974L142.325 56.991L142.255 55.171L142.101 52.385L141.872 49.444L141.573 46.595L141.516 46.127L141.165 43.673L140.817 41.730L140.458 40.081C140.236 39.147 139.982 38.233 139.687 37.347L139.065 35.660L138.928 35.330L138.037 33.414L137.730 32.805"/>
+    <path vector-effect="non-scaling-stroke" d="M137.730 32.805L137.149 31.676L136.011 29.512L134.916 27.465L133.864 25.497L132.852 23.577L130.919 19.781L130.114 18.142L129.058 15.947L127.201 12.024L125.275 7.984"/>
+    <path vector-effect="non-scaling-stroke" d="M142.384 63.411L142.384 62.201L142.385 61.398L142.385 61.183L142.388 60.794L142.393 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M143.627 63.411L143.627 66.576L143.627 72.570L143.627 75.120L143.627 78.564L143.627 84.558L143.627 90.552L143.627 96.546L143.627 102.540L143.627 108.534L143.627 114.528L143.627 120.522L143.627 126.516L143.627 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.593 60.644L143.527 60.644L143.288 60.644L143.152 60.644L143.084 60.644L142.879 60.645L142.811 60.645L142.743 60.645L142.677 60.645L142.504 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M1.076 143.762L1.194 143.762L1.368 143.762L1.658 143.762L1.779 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 143.762L1.010 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M143.627 132.510L143.638 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M1.015 139.232L1.035 139.117"/>
+    <path vector-effect="non-scaling-stroke" d="M1.838 145.220L1.842 145.426L1.847 145.504L1.855 145.573L1.975 145.816L2.132 145.900L2.340 145.951L2.416 145.966L2.568 146.000L2.791 146.068"/>
+    <path vector-effect="non-scaling-stroke" d="M141.785 135.609L142.298 134.076L142.498 133.292L142.569 132.894L142.600 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M2.281 147.572L1.920 147.449L1.723 147.376L1.604 147.324C1.382 147.216 1.262 147.079 1.179 146.888L1.055 146.411L1.014 145.987L1.006 145.809L1.000 145.456L1.001 145.107"/>
+    <path vector-effect="non-scaling-stroke" d="M142.984 138.779L143.284 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M142.801 138.947C142.802 138.947 142.802 138.938 142.802 138.928L142.801 138.947"/>
+    <path vector-effect="non-scaling-stroke" d="M1.921 139.264L2.021 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.002 144.930L1.420 144.930L1.839 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M7.396 147.689C7.372 147.635 7.228 147.543 7.062 147.477"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 138.733L2.525 138.733"/>
+    <path vector-effect="non-scaling-stroke" d="M2.277 63.411L2.277 66.576L2.277 72.570L2.277 76.175L2.277 78.564L2.277 84.558L2.277 90.552L2.277 96.546L2.277 102.540L2.277 108.534L2.277 114.528L2.277 120.522L2.277 126.516L2.277 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M2.277 132.510L2.299 132.875L2.353 133.272L2.513 134.088L2.668 134.726L2.813 135.251L2.987 135.806"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 137.983L3.178 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 138.635L2.525 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M2.990 135.916L2.673 135.083L2.390 134.238L2.166 133.375L2.091 132.936L2.061 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M2.987 135.806L3.036 135.950L3.079 136.071L3.161 136.299L3.218 136.460L3.316 136.726"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 146.861L1.168 148.204"/>
+    <path vector-effect="non-scaling-stroke" d="M1.827 138.947L1.877 138.897"/>
+    <path vector-effect="non-scaling-stroke" d="M1.021 57.893L1.013 57.000L1.001 54.779L1.003 53.250L1.120 48.340C1.234 45.921 1.451 43.424 1.849 41.068L2.017 40.137L2.187 39.308L2.358 38.559L3.073 36.043L3.483 34.896L3.722 34.287L4.835 31.786"/>
+    <path vector-effect="non-scaling-stroke" d="M61.015 156.781L59.366 157.069L57.676 157.323L55.940 157.535L54.159 157.698L50.517 157.892L48.064 157.934L46.825 157.932L45.577 157.915L44.327 157.884L41.827 157.781"/>
+    <path vector-effect="non-scaling-stroke" d="M140.507 146.528L140.253 146.615"/>
+    <path vector-effect="non-scaling-stroke" d="M2.769 138.897L2.918 138.888L3.065 138.868L3.217 138.830L3.446 138.716L3.589 138.568L3.674 138.380L3.706 138.176L3.699 137.969L3.668 137.765L3.620 137.564L3.563 137.377L3.453 137.068L3.339 136.783"/>
+    <path vector-effect="non-scaling-stroke" d="M2.746 135.645L2.876 135.609"/>
+    <path vector-effect="non-scaling-stroke" d="M140.544 146.637L140.908 146.512"/>
+    <path vector-effect="non-scaling-stroke" d="M140.811 146.430L141.870 146.068"/>
+    <path vector-effect="non-scaling-stroke" d="M141.047 146.557L141.158 146.590"/>
+    <path vector-effect="non-scaling-stroke" d="M137.628 147.564L137.264 147.689"/>
+    <path vector-effect="non-scaling-stroke" d="M137.264 147.689L137.205 147.739"/>
+    <path vector-effect="non-scaling-stroke" d="M80.853 148.401L80.650 148.411C80.419 148.438 80.194 148.516 79.974 148.639"/>
+    <path vector-effect="non-scaling-stroke" d="M7.467 147.782L7.389 147.756"/>
+    <path vector-effect="non-scaling-stroke" d="M141.956 146.321L142.265 147.233L142.379 147.572"/>
+    <path vector-effect="non-scaling-stroke" d="M142.532 137.586L142.278 137.419L142.001 137.366L141.725 137.419L141.471 137.586L141.303 137.840L141.251 138.117L141.303 138.393L141.471 138.648L141.596 138.748"/>
+    <path vector-effect="non-scaling-stroke" d="M4.835 31.786L5.364 30.632L6.363 28.400L7.298 26.275L8.196 24.233L9.081 22.251L10.874 18.386L11.666 16.741L12.741 14.555L14.680 10.673L16.669 6.662"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 138.635C2.972 138.595 3.138 138.429 3.178 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M3.178 137.983C3.138 137.804 2.972 137.638 2.793 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M141.436 136.814L141.321 137.100L141.143 137.640L141.091 137.885L141.071 138.111L141.089 138.306L141.147 138.465L141.247 138.591L141.405 138.690L141.596 138.748"/>
+    <path vector-effect="non-scaling-stroke" d="M2.043 138.251L2.029 138.117"/>
+    <path vector-effect="non-scaling-stroke" d="M3.251 138.251L3.178 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M143.626 139.117L143.646 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M3.178 137.983L3.251 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.068 137.983L2.141 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 137.525L2.793 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M142.740 138.897L142.740 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M141.483 137.983C141.523 137.804 141.689 137.638 141.867 137.598"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 137.598C142.314 137.638 142.480 137.804 142.520 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 146.860L143.493 148.204"/>
+    <path vector-effect="non-scaling-stroke" d="M142.520 138.251L142.593 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M142.841 143.762L142.841 143.450L142.841 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M142.593 137.983L142.520 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 137.501L141.867 137.501"/>
+    <path vector-effect="non-scaling-stroke" d="M6.187 31.669L6.071 31.617L5.954 31.573L5.722 31.513L5.611 31.496L5.506 31.488L5.406 31.488L5.313 31.495L5.148 31.531L5.013 31.593L4.839 31.777"/>
+    <path vector-effect="non-scaling-stroke" d="M128.298 153.495C128.366 153.602 128.487 153.913 128.605 154.403"/>
+    <path vector-effect="non-scaling-stroke" d="M61.661 148.440L63.808 148.401"/>
+    <path vector-effect="non-scaling-stroke" d="M59.555 153.385C59.555 153.119 59.443 152.856 59.258 152.604C59.019 152.281 58.661 151.972 58.213 151.668C57.775 151.371 57.227 151.065 56.628 150.784C55.427 150.219 53.880 149.689 51.877 149.215L48.600 148.560L44.826 148.004L40.868 147.526L36.817 147.076L32.761 146.644L30.756 146.439L28.781 146.250L24.967 145.965C23.758 145.903 22.670 145.885 21.702 145.922C20.734 145.960 19.932 146.051 19.255 146.189L18.339 146.425L17.593 146.714C17.136 146.926 16.779 147.165 16.499 147.428C16.219 147.691 16.021 147.975 15.909 148.284L15.806 148.853"/>
+    <path vector-effect="non-scaling-stroke" d="M16.363 153.495C16.295 153.602 16.173 153.913 16.056 154.403"/>
+    <path vector-effect="non-scaling-stroke" d="M128.492 153.440C128.584 153.540 128.670 153.859 128.795 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M83.086 156.665L82.932 156.637L82.681 156.597L82.270 156.540L82.065 156.515L81.860 156.491L81.450 156.452L80.620 156.405L79.781 156.405L78.935 156.454L78.082 156.558L77.751 156.616L77.653 156.634L77.223 156.731L76.791 156.852L76.363 156.991"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 148.204L1.398 148.298L1.628 148.391L2.089 148.577L3.011 148.944L4.864 149.661L8.596 151.022L12.365 152.282L16.169 153.440"/>
+    <path vector-effect="non-scaling-stroke" d="M63.503 153.845L61.574 156.665"/>
+    <path vector-effect="non-scaling-stroke" d="M67.897 157.876L66.619 161.078"/>
+    <path vector-effect="non-scaling-stroke" d="M41.824 158.750L40.193 158.641L39.377 158.585L38.561 158.522L35.301 158.204L32.050 157.789L28.813 157.279L25.593 156.681L22.393 155.999L20.801 155.627L19.215 155.232L16.056 154.403"/>
+    <path vector-effect="non-scaling-stroke" d="M61.430 157.699L59.741 157.998L58.010 158.262L56.230 158.482L54.405 158.652L50.673 158.856L48.159 158.902L46.889 158.901L45.624 158.884L44.358 158.853L41.824 158.750"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 148.204L143.263 148.298L143.033 148.391L142.572 148.577L141.649 148.944L139.797 149.661L136.065 151.022L132.296 152.282L128.492 153.440"/>
+    <path vector-effect="non-scaling-stroke" d="M83.217 157.695L83.085 157.660L82.939 157.622L82.792 157.587L82.644 157.554L82.507 157.528L82.288 157.493L81.930 157.460L81.750 157.448L81.570 157.434L81.209 157.406L80.481 157.374L79.747 157.386L79.009 157.436L78.265 157.530L77.891 157.596L77.517 157.676L77.141 157.770L76.764 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M63.113 152.752C63.006 152.504 62.821 152.261 62.580 152.028C62.281 151.738 61.895 151.462 61.434 151.192L59.844 150.411L58.879 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M59.654 150.001L59.105 150.022L58.879 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M83.231 157.699L84.920 157.998L86.651 158.262L88.431 158.482L90.255 158.652L93.987 158.856L96.502 158.902L97.772 158.901L99.037 158.884L100.303 158.853L102.837 158.750"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 162.658L70.769 162.573L69.231 162.340L67.734 161.998L67.006 161.802L66.649 161.701L66.472 161.650L66.377 161.623L66.298 161.602L66.221 161.582L66.144 161.563L65.991 161.527L65.687 161.466L65.081 161.380L63.862 161.328L62.652 161.412L62.053 161.501L61.751 161.556L61.455 161.612L61.159 161.666L60.862 161.721L60.263 161.827L59.051 162.026L56.550 162.366L53.957 162.608L51.311 162.757L48.637 162.823L45.951 162.818L43.260 162.747L41.914 162.688L40.567 162.614L39.214 162.523L37.844 162.414L35.123 162.145C33.312 161.944 31.505 161.698 29.706 161.411L24.335 160.431L20.806 159.655L19.021 159.224L17.240 158.769L15.466 158.290L14.582 158.042L14.140 157.916L13.699 157.788L11.941 157.263C9.933 156.650 7.943 155.995 5.965 155.297L4.982 154.947L4.012 154.594L3.045 154.235L2.080 153.870L1.599 153.684L1.358 153.591L1.168 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 162.658L70.769 162.573L69.231 162.340L67.734 161.998L67.006 161.802L66.649 161.701L66.472 161.650L66.377 161.623L66.298 161.602L66.221 161.582L66.144 161.563L65.991 161.527L65.687 161.466L65.081 161.380L63.862 161.328L62.652 161.412L62.053 161.501L61.751 161.556L61.455 161.612L61.159 161.666L60.862 161.721L60.263 161.827L59.051 162.026L56.550 162.366L53.957 162.608L51.311 162.757L48.637 162.823L45.951 162.818L43.260 162.747L41.914 162.688L40.567 162.614L39.214 162.523L37.844 162.414L35.123 162.145C33.312 161.944 31.505 161.698 29.706 161.411L24.335 160.431L20.806 159.655L19.021 159.224L17.240 158.769L15.466 158.290L14.582 158.042L14.140 157.916L13.699 157.788L11.941 157.263C9.933 156.650 7.943 155.995 5.965 155.297L4.982 154.947L4.012 154.594L3.045 154.235L2.080 153.870L1.599 153.684L1.358 153.591L1.168 153.517"/>
+    <path vector-effect="non-scaling-stroke" d="M82.024 148.852C81.861 149.025 81.730 149.246 81.632 149.528L81.474 150.260L81.438 150.954"/>
+    <path vector-effect="non-scaling-stroke" d="M63.808 148.401L64.010 148.411C64.242 148.438 64.466 148.516 64.687 148.639"/>
+    <path vector-effect="non-scaling-stroke" d="M63.808 148.401L64.010 148.411C64.242 148.438 64.466 148.516 64.687 148.639"/>
+    <path vector-effect="non-scaling-stroke" d="M68.297 156.991C68.310 157.162 68.055 157.399 67.897 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M75.950 154.364L76.212 154.297L77.431 154.037L78.666 153.871L79.911 153.805L80.610 153.815L81.157 153.845"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 148.204L1.168 148.323L1.168 148.424L1.168 148.565L1.168 148.905L1.168 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 157.750L71.299 157.691L70.279 157.530L70.136 157.500L70.027 157.477L69.776 157.419L69.278 157.291L68.785 157.149L68.297 156.991"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 158.761L71.191 158.697L70.064 158.520L69.962 158.500L69.786 158.461L69.510 158.391L68.969 158.220L68.434 158.041L67.897 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M66.619 161.078L66.696 161.099L66.789 161.124L66.959 161.172L67.303 161.267L67.999 161.451L69.419 161.771L70.867 161.987L72.330 162.065"/>
+    <path vector-effect="non-scaling-stroke" d="M61.574 156.665L61.430 156.692L61.288 156.721L61.150 156.750L61.015 156.781"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 149.246L143.493 152.833"/>
+    <path vector-effect="non-scaling-stroke" d="M61.663 160.966L61.961 160.913L62.268 160.866L62.878 160.794L64.109 160.739L65.355 160.820L65.984 160.922L66.300 160.994L66.459 161.035L66.539 161.056L66.619 161.078"/>
+    <path vector-effect="non-scaling-stroke" d="M16.046 154.400L15.865 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M81.547 152.752C81.655 152.504 81.839 152.261 82.081 152.028C82.380 151.738 82.765 151.462 83.227 151.192L84.816 150.411L85.782 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M14.292 157.313L14.691 157.427L15.572 157.675L17.340 158.153L19.115 158.608L20.900 159.040L24.431 159.816L29.801 160.796C31.599 161.083 33.405 161.328 35.215 161.529L37.933 161.796L39.301 161.904L40.653 161.995L42.012 162.069L43.370 162.128L46.084 162.198L48.791 162.201L51.482 162.130L54.141 161.977L56.740 161.730L59.246 161.387L60.464 161.185L61.065 161.077L61.364 161.021L61.663 160.966"/>
+    <path vector-effect="non-scaling-stroke" d="M61.444 157.695L61.663 160.966"/>
+    <path vector-effect="non-scaling-stroke" d="M9.243 146.414L10.420 145.691L11.710 144.997L12.459 144.682L13.337 144.409L14.414 144.207L15.742 144.096L17.324 144.086L19.125 144.168L21.099 144.325L23.193 144.536L27.586 145.034L29.841 145.293L32.116 145.547L36.706 146.026L41.314 146.465L45.883 146.886L48.119 147.104L50.288 147.339L52.346 147.604L54.248 147.906C55.460 148.119 56.550 148.355 57.522 148.609C58.494 148.862 59.349 149.133 60.112 149.415"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 153.517L143.303 153.591L143.062 153.684L142.581 153.870L141.616 154.235L140.648 154.594L139.679 154.947L138.696 155.297C136.718 155.995 134.728 156.650 132.720 157.263L130.961 157.788L130.520 157.916L130.079 158.042L129.195 158.290L127.421 158.769L125.640 159.224L123.855 159.655L120.326 160.431L114.955 161.411C113.156 161.698 111.349 161.944 109.537 162.145L106.817 162.414L105.446 162.523L104.093 162.614L102.747 162.688L101.400 162.747L98.709 162.818L96.023 162.823L93.350 162.757L90.703 162.608L88.110 162.366L85.610 162.026L84.397 161.827L83.798 161.721L83.501 161.666L83.206 161.612L82.910 161.556L82.608 161.501L82.009 161.412L80.798 161.328L79.580 161.380L78.973 161.466L78.669 161.527L78.516 161.563L78.440 161.582L78.363 161.602L78.284 161.623L78.188 161.650L78.012 161.701L77.655 161.802L76.926 161.998L75.429 162.340L73.892 162.573L72.330 162.658"/>
+    <path vector-effect="non-scaling-stroke" d="M85.372 150.102L85.451 150.101L85.615 150.079L85.782 150.031"/>
+    <path vector-effect="non-scaling-stroke" d="M64.687 148.639L64.979 148.809"/>
+    <path vector-effect="non-scaling-stroke" d="M68.711 154.364L69.077 154.580L69.320 154.712L69.449 154.778L69.585 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M68.711 154.364L69.077 154.580L69.320 154.712L69.449 154.778L69.585 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M61.893 161.484L61.608 161.538L61.313 161.593L61.018 161.648L60.722 161.701L60.128 161.806L58.925 162.003L56.449 162.338L53.880 162.576L51.251 162.722L48.592 162.788L45.917 162.781L43.235 162.710L41.893 162.651L40.551 162.577L39.201 162.486L37.835 162.377L35.122 162.110C33.315 161.909 31.512 161.664 29.717 161.378L24.356 160.400L20.832 159.626L19.050 159.196L17.271 158.741L15.498 158.263L14.615 158.015L14.174 157.889L13.733 157.762L11.976 157.238C9.970 156.626 7.981 155.972 6.001 155.275L5.019 154.926L4.053 154.574L3.088 154.216L2.127 153.852L1.647 153.668L1.408 153.575L1.312 153.538L1.168 153.482"/>
+    <path vector-effect="non-scaling-stroke" d="M76.363 156.991C76.350 157.162 76.606 157.399 76.764 157.876"/>
+    <path vector-effect="non-scaling-stroke" d="M64.979 148.809C65.321 149.028 65.695 149.331 66.087 149.711C66.471 150.083 66.897 150.552 67.322 151.115L67.851 151.881L68.337 152.758L68.616 153.495C68.684 153.743 68.726 153.999 68.717 154.256L68.711 154.364"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 148.204L143.493 148.323L143.493 148.424L143.493 148.565L143.493 148.905L143.493 149.246"/>
+    <path vector-effect="non-scaling-stroke" d="M126.197 3.057L126.300 3.240L126.414 3.454L126.567 3.756L126.712 4.046L126.798 4.219L126.970 4.567L127.114 4.861L127.242 5.125L127.362 5.370L127.476 5.603L127.585 5.828L127.691 6.045L127.794 6.257L127.895 6.463L127.970 6.620"/>
+    <path vector-effect="non-scaling-stroke" d="M72.330 157.750L73.362 157.691L74.382 157.530L74.524 157.500L74.634 157.477L74.885 157.419L75.383 157.291L75.876 157.149L76.363 156.991"/>
+    <path vector-effect="non-scaling-stroke" d="M76.363 156.991L75.705 155.913L75.075 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M2.705 146.321L2.395 147.233L2.281 147.572"/>
+    <path vector-effect="non-scaling-stroke" d="M1.832 139.117L1.851 139.201"/>
+    <path vector-effect="non-scaling-stroke" d="M78.042 161.078L77.965 161.099L77.872 161.124L77.701 161.172L77.358 161.267L76.662 161.451L75.242 161.771L73.794 161.987L72.330 162.065"/>
+    <path vector-effect="non-scaling-stroke" d="M128.492 153.440L128.298 153.495"/>
+    <path vector-effect="non-scaling-stroke" d="M128.615 154.400L128.795 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M135.418 146.414L134.241 145.691L132.951 144.997L132.201 144.682L131.324 144.409L130.246 144.207L128.919 144.096L127.337 144.086L125.535 144.168L123.562 144.325L121.468 144.536L117.074 145.034L114.820 145.293L112.545 145.547L107.955 146.026L103.347 146.465L98.778 146.886L96.542 147.104L94.372 147.339L92.315 147.604L90.412 147.906C89.201 148.119 88.110 148.355 87.138 148.609C86.167 148.862 85.312 149.133 84.549 149.415"/>
+    <path vector-effect="non-scaling-stroke" d="M4.167 146.488C3.995 146.439 3.825 146.424 3.774 146.451"/>
+    <path vector-effect="non-scaling-stroke" d="M3.753 146.512C3.777 146.566 3.921 146.658 4.087 146.724"/>
+    <path vector-effect="non-scaling-stroke" d="M4.371 146.723L4.341 146.811"/>
+    <path vector-effect="non-scaling-stroke" d="M75.075 154.844L74.981 154.888L74.758 154.985L74.430 155.111L73.749 155.314L73.046 155.444L72.330 155.490"/>
+    <path vector-effect="non-scaling-stroke" d="M8.520 148.358L8.497 148.424L8.473 148.494L8.433 148.615L8.387 148.750L8.358 148.833L8.335 148.903L8.260 149.123L8.238 149.189"/>
+    <path vector-effect="non-scaling-stroke" d="M8.155 149.416L8.075 149.487L7.922 149.497"/>
+    <path vector-effect="non-scaling-stroke" d="M79.974 148.639L79.681 148.809"/>
+    <path vector-effect="non-scaling-stroke" d="M127.991 6.662L129.980 10.673L131.920 14.555L132.994 16.741L133.786 18.386L135.579 22.251L136.464 24.233L137.363 26.275L138.297 28.400L139.296 30.632L139.820 31.772"/>
+    <path vector-effect="non-scaling-stroke" d="M75.950 154.364L75.584 154.580L75.341 154.712L75.212 154.778L75.075 154.844"/>
+    <path vector-effect="non-scaling-stroke" d="M82.768 161.484L83.053 161.538L83.348 161.593L83.643 161.648L83.938 161.701L84.533 161.806L85.736 162.003L88.211 162.338L90.780 162.576L93.409 162.722L96.069 162.788L98.744 162.781L101.426 162.710L102.768 162.651L104.110 162.577L105.459 162.486L106.826 162.377L109.539 162.110C111.346 161.909 113.149 161.664 114.944 161.378L120.304 160.400L123.828 159.626L125.611 159.196L127.390 158.741L129.162 158.263L130.046 158.015L130.487 157.889L130.927 157.762L132.685 157.238C134.691 156.626 136.680 155.972 138.659 155.275L139.642 154.926L140.608 154.574L141.572 154.216L142.534 153.852L143.013 153.668L143.253 153.575L143.349 153.538L143.493 153.482"/>
+    <path vector-effect="non-scaling-stroke" d="M3.738 146.508L3.660 146.482"/>
+    <path vector-effect="non-scaling-stroke" d="M79.681 148.809C79.340 149.028 78.966 149.331 78.573 149.711C78.190 150.083 77.763 150.552 77.339 151.115L76.809 151.881L76.324 152.758L76.045 153.495C75.976 153.743 75.935 153.999 75.943 154.256L75.950 154.364"/>
+    <path vector-effect="non-scaling-stroke" d="M143.493 152.833L143.246 152.930L143.000 153.026L142.507 153.217L141.518 153.594L140.527 153.964L139.534 154.328L138.551 154.679C136.585 155.376 134.599 156.033 132.600 156.647L130.849 157.173L130.410 157.301"/>
+    <path vector-effect="non-scaling-stroke" d="M136.267 148.108L136.290 148.176L136.314 148.247L136.355 148.368L136.402 148.506L136.432 148.594L136.459 148.676"/>
+    <path vector-effect="non-scaling-stroke" d="M136.521 148.856L136.544 148.923L136.599 149.087L136.628 149.174L136.655 149.251L136.686 149.344"/>
+    <path vector-effect="non-scaling-stroke" d="M142.809 139.232L143.227 139.232L143.646 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M143.640 57.893L143.637 58.243L143.635 58.584L143.633 58.913L143.628 59.930"/>
+    <path vector-effect="non-scaling-stroke" d="M8.393 148.108L8.371 148.176L8.347 148.247L8.306 148.368L8.259 148.506L8.229 148.594L8.201 148.676"/>
+    <path vector-effect="non-scaling-stroke" d="M8.140 148.856L8.117 148.923L8.061 149.087L8.032 149.174L8.006 149.251L7.974 149.344"/>
+    <path vector-effect="non-scaling-stroke" d="M136.141 148.358L136.163 148.424L136.187 148.494L136.228 148.615L136.274 148.750L136.302 148.833L136.326 148.903L136.400 149.123L136.423 149.189"/>
+    <path vector-effect="non-scaling-stroke" d="M136.484 149.372C136.484 149.372 136.484 149.372 136.484 149.372L136.484 149.372"/>
+    <path vector-effect="non-scaling-stroke" d="M141.361 141.469L141.361 138.799"/>
+    <path vector-effect="non-scaling-stroke" d="M1.002 144.930L1.008 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M136.093 148.186L136.113 148.095L136.228 147.994"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 141.469L1.010 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M136.228 147.994L137.313 147.624"/>
+    <path vector-effect="non-scaling-stroke" d="M3.300 143.762L3.400 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.879 143.762L3.300 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M143.651 141.469L143.651 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M142.822 144.930L142.816 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M3.400 141.469L3.400 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.839 144.930L1.838 145.034"/>
+    <path vector-effect="non-scaling-stroke" d="M143.653 143.762L143.659 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M1.002 144.930L1.001 145.107"/>
+    <path vector-effect="non-scaling-stroke" d="M142.809 139.201L142.828 139.117"/>
+    <path vector-effect="non-scaling-stroke" d="M1.181 132.510L1.271 132.510L1.380 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.650 141.332L143.651 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M1.377 138.856L1.526 138.865L1.599 138.870"/>
+    <path vector-effect="non-scaling-stroke" d="M1.033 63.411L1.033 61.894L1.032 61.182L1.031 60.949L1.029 60.745L1.026 60.672"/>
+    <path vector-effect="non-scaling-stroke" d="M143.646 139.232L143.648 140.457L143.650 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M1.033 132.510L1.033 126.516L1.033 120.522L1.033 114.528L1.033 108.534L1.033 102.540L1.033 96.546L1.033 90.552L1.033 84.558L1.033 78.564L1.033 75.120L1.033 72.570L1.033 66.576L1.033 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M141.870 146.068L141.956 146.321"/>
+    <path vector-effect="non-scaling-stroke" d="M137.154 147.928L137.204 147.875"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 141.332L142.776 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M2.876 135.609L2.363 134.076L2.163 133.292L2.092 132.894L2.061 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 141.469L142.781 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M141.261 141.469L141.261 138.747"/>
+    <path vector-effect="non-scaling-stroke" d="M141.361 143.762L141.261 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 143.762L141.361 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.859 138.947C1.859 138.947 1.859 138.938 1.858 138.928L1.859 138.947"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 143.762L142.781 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M141.261 141.469L141.261 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M142.781 141.469L141.361 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M141.361 141.469L141.261 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M142.822 144.930L142.823 145.034"/>
+    <path vector-effect="non-scaling-stroke" d="M143.659 144.930L143.661 145.281"/>
+    <path vector-effect="non-scaling-stroke" d="M143.240 144.930L143.659 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M142.728 60.643L142.798 60.643L142.870 60.643L142.941 60.643L143.012 60.643L143.083 60.643L143.153 60.643L143.294 60.642L143.361 60.643"/>
+    <path vector-effect="non-scaling-stroke" d="M142.801 138.987L143.219 138.986L143.638 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M142.605 132.510L142.716 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.284 138.856L143.284 138.933"/>
+    <path vector-effect="non-scaling-stroke" d="M141.596 138.748L141.715 138.810L141.855 138.851L142.002 138.864L142.148 138.852L142.288 138.810L142.354 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M142.384 63.411L142.384 62.201L142.385 61.398L142.385 61.183L142.388 60.794L142.393 60.645"/>
+    <path vector-effect="non-scaling-stroke" d="M143.635 60.672L143.632 60.745L143.630 60.949L143.629 61.182L143.628 61.894L143.627 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M143.627 63.411L143.627 66.576L143.627 72.570L143.627 75.120L143.627 78.564L143.627 84.558L143.627 90.552L143.627 96.546L143.627 102.540L143.627 108.534L143.627 114.528L143.627 120.522L143.627 126.516L143.627 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M142.384 132.510L142.384 126.516L142.384 120.522L142.384 114.528L142.384 108.534L142.384 102.540L142.384 96.546L142.384 90.552L142.384 84.558L142.384 78.564L142.384 76.175L142.384 72.570L142.384 66.576L142.384 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M142.384 132.510L142.384 126.516L142.384 120.522L142.384 114.528L142.384 108.534L142.384 102.540L142.384 96.546L142.384 90.552L142.384 84.558L142.384 78.564L142.384 76.175L142.384 72.570L142.384 66.576L142.384 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M141.674 135.807L141.848 135.251L141.993 134.726L142.148 134.088L142.308 133.272L142.362 132.875L142.384 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M143.627 132.510L143.638 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M143.638 138.986L143.605 139.090"/>
+    <path vector-effect="non-scaling-stroke" d="M142.942 132.510L142.829 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M142.815 132.510L142.782 132.901L142.706 133.306L142.484 134.099L141.915 135.645"/>
+    <path vector-effect="non-scaling-stroke" d="M142.974 132.510L142.984 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M143.052 138.933L143.219 138.933"/>
+    <path vector-effect="non-scaling-stroke" d="M143.284 138.779L143.284 138.856"/>
+    <path vector-effect="non-scaling-stroke" d="M142.895 138.897L142.939 138.947"/>
+    <path vector-effect="non-scaling-stroke" d="M6.808 147.390C6.636 147.341 6.466 147.326 6.414 147.354"/>
+    <path vector-effect="non-scaling-stroke" d="M6.982 147.714C7.154 147.762 7.324 147.778 7.375 147.750"/>
+    <path vector-effect="non-scaling-stroke" d="M6.728 147.627L6.758 147.539"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 138.635L2.793 138.708"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 138.251L2.141 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M2.141 137.983L2.525 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 138.251L2.793 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M2.793 137.598L2.793 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.987 135.806L3.036 135.950L3.079 136.071L3.161 136.299L3.218 136.460L3.316 136.726"/>
+    <path vector-effect="non-scaling-stroke" d="M2.614 146.012L3.856 146.313C4.725 146.508 5.566 146.661 6.309 146.744L7.338 146.813L7.797 146.804L8.168 146.769L8.786 146.625L9.243 146.414"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 146.861L1.168 148.204"/>
+    <path vector-effect="non-scaling-stroke" d="M7.348 147.624L8.432 147.994"/>
+    <path vector-effect="non-scaling-stroke" d="M140.965 146.455L140.887 146.451"/>
+    <path vector-effect="non-scaling-stroke" d="M137.866 147.430L137.612 147.516"/>
+    <path vector-effect="non-scaling-stroke" d="M6.794 147.430L7.048 147.516"/>
+    <path vector-effect="non-scaling-stroke" d="M1.021 57.893L1.013 57.000L1.001 54.779L1.003 53.250L1.120 48.340C1.234 45.921 1.451 43.424 1.849 41.068L2.017 40.137L2.187 39.308L2.358 38.559L3.073 36.043L3.483 34.896L3.722 34.287L4.835 31.786"/>
+    <path vector-effect="non-scaling-stroke" d="M15.806 148.853L15.861 149.282C15.951 149.636 16.160 150.030 16.558 150.445"/>
+    <path vector-effect="non-scaling-stroke" d="M41.827 157.781L40.214 157.682L39.408 157.626L38.602 157.563L35.381 157.249L32.168 156.839L28.969 156.337L25.788 155.747L22.626 155.075L21.052 154.708L19.484 154.322L16.363 153.495"/>
+    <path vector-effect="non-scaling-stroke" d="M9.243 146.414C9.037 146.530 8.800 146.634 8.481 146.705L7.938 146.783L7.613 146.799L7.263 146.798L6.820 146.776L6.341 146.732L5.295 146.584L4.166 146.368L3.366 146.189L2.984 146.097L2.535 145.985L2.082 145.867"/>
+    <path vector-effect="non-scaling-stroke" d="M6.380 147.411L6.301 147.384"/>
+    <path vector-effect="non-scaling-stroke" d="M139.834 146.880L139.911 146.854"/>
+    <path vector-effect="non-scaling-stroke" d="M140.887 146.451L140.523 146.576"/>
+    <path vector-effect="non-scaling-stroke" d="M140.923 146.508L141.000 146.482"/>
+    <path vector-effect="non-scaling-stroke" d="M139.905 146.786L139.845 146.837"/>
+    <path vector-effect="non-scaling-stroke" d="M139.926 146.848L140.290 146.723"/>
+    <path vector-effect="non-scaling-stroke" d="M137.193 147.782L137.271 147.756"/>
+    <path vector-effect="non-scaling-stroke" d="M138.246 147.354L137.882 147.478"/>
+    <path vector-effect="non-scaling-stroke" d="M138.281 147.411L138.359 147.384"/>
+    <path vector-effect="non-scaling-stroke" d="M137.708 147.798L137.961 147.711"/>
+    <path vector-effect="non-scaling-stroke" d="M137.285 147.750L137.649 147.626"/>
+    <path vector-effect="non-scaling-stroke" d="M6.414 147.354L6.778 147.478"/>
+    <path vector-effect="non-scaling-stroke" d="M7.032 147.564L7.396 147.689"/>
+    <path vector-effect="non-scaling-stroke" d="M7.375 147.750L7.011 147.626"/>
+    <path vector-effect="non-scaling-stroke" d="M6.953 147.798L6.699 147.711"/>
+    <path vector-effect="non-scaling-stroke" d="M4.835 31.786L5.364 30.632L6.363 28.400L7.298 26.275L8.196 24.233L9.081 22.251L10.874 18.386L11.666 16.741L12.741 14.555L14.680 10.673L16.669 6.662"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 137.598C2.347 137.638 2.181 137.804 2.141 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M3.275 137.983L3.275 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M2.029 138.117L2.043 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M2.525 137.501L2.793 137.501"/>
+    <path vector-effect="non-scaling-stroke" d="M142.520 138.251C142.480 138.429 142.314 138.595 142.136 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M141.385 137.983L141.385 138.251"/>
+    <path vector-effect="non-scaling-stroke" d="M142.632 138.117L142.617 137.983"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 137.598L142.136 137.525"/>
+    <path vector-effect="non-scaling-stroke" d="M142.136 138.708L142.136 138.635"/>
+    <path vector-effect="non-scaling-stroke" d="M19.386 7.984L17.459 12.024L15.603 15.947L14.547 18.142L13.742 19.781L11.809 23.577L10.796 25.497L9.744 27.465L8.650 29.512L7.511 31.676L6.930 32.805"/>
+    <path vector-effect="non-scaling-stroke" d="M18.464 3.056L18.851 2.469L19.292 1.961L19.568 1.674L19.902 1.364L20.347 1.076L20.668 1.000L20.873 1.018L21.062 1.083L21.227 1.189L21.355 1.322L21.497 1.604L21.557 2.107L21.532 2.537L21.488 2.908L21.388 3.523L21.196 4.143"/>
+    <path vector-effect="non-scaling-stroke" d="M6.935 32.796L6.972 32.545L6.937 32.402L6.864 32.249L6.812 32.171L6.751 32.093L6.679 32.015L6.597 31.938L6.506 31.864L6.407 31.793L6.187 31.669"/>
+    <path vector-effect="non-scaling-stroke" d="M1.168 149.246L1.168 152.833"/>
+    <path vector-effect="non-scaling-stroke" d="M64.979 148.809C65.321 149.028 65.695 149.331 66.087 149.711C66.471 150.083 66.897 150.552 67.322 151.115L67.851 151.881L68.337 152.758L68.616 153.495C68.684 153.743 68.726 153.999 68.717 154.256L68.711 154.364"/>
+    <path vector-effect="non-scaling-stroke" d="M14.292 157.313L15.865 154.350"/>
+    <path vector-effect="non-scaling-stroke" d="M126.197 3.057L126.300 3.240L126.414 3.454L126.567 3.756L126.712 4.046L126.798 4.219L126.970 4.567L127.114 4.861L127.242 5.125L127.362 5.370L127.476 5.603L127.585 5.828L127.691 6.045L127.794 6.257L127.895 6.463L127.970 6.620"/>
+    <path vector-effect="non-scaling-stroke" d="M7.922 149.497L2.281 147.572"/>
+    <path vector-effect="non-scaling-stroke" d="M1.820 141.469L1.820 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M2.129 137.586L1.961 137.840L1.922 137.976L1.909 138.117L1.922 138.257L1.961 138.393L2.129 138.648L2.307 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M2.307 138.779L1.676 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M1.832 139.117L1.851 139.201"/>
+    <path vector-effect="non-scaling-stroke" d="M2.021 138.897L2.021 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.921 138.897L1.921 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.921 138.897L1.921 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.056 139.090L1.023 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M1.056 139.090L1.023 138.986"/>
+    <path vector-effect="non-scaling-stroke" d="M4.755 146.786C4.731 146.733 4.587 146.641 4.421 146.575"/>
+    <path vector-effect="non-scaling-stroke" d="M4.708 146.723L6.492 147.332"/>
+    <path vector-effect="non-scaling-stroke" d="M127.991 6.662L129.980 10.673L131.920 14.555L132.994 16.741L133.786 18.386L135.579 22.251L136.464 24.233L137.363 26.275L138.297 28.400L139.296 30.632L139.820 31.772"/>
+    <path vector-effect="non-scaling-stroke" d="M4.826 146.880L4.749 146.854"/>
+    <path vector-effect="non-scaling-stroke" d="M4.391 146.662L4.755 146.787"/>
+    <path vector-effect="non-scaling-stroke" d="M4.312 146.895L4.058 146.809"/>
+    <path vector-effect="non-scaling-stroke" d="M123.464 4.143L123.273 3.523L123.172 2.908L123.129 2.537L123.103 2.107L123.163 1.604L123.305 1.322L123.433 1.189L123.598 1.083L123.787 1.018L123.992 1.000L124.313 1.076L124.758 1.364L125.093 1.674L125.368 1.961L125.809 2.469L126.197 3.056"/>
+    <path vector-effect="non-scaling-stroke" d="M143.640 57.893L143.637 58.243L143.635 58.584L143.633 58.913L143.628 59.930"/>
+    <path vector-effect="non-scaling-stroke" d="M142.393 60.645L142.387 60.456L142.385 60.315L142.383 60.032L142.379 59.609L142.376 59.344L142.357 58.202L142.352 57.974"/>
+    <path vector-effect="non-scaling-stroke" d="M8.432 147.994L8.547 148.095L8.568 148.186"/>
+    <path vector-effect="non-scaling-stroke" d="M1.076 141.469L1.194 141.469L1.425 141.469L1.658 141.469L1.779 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M3.300 141.469L3.300 138.799"/>
+    <path vector-effect="non-scaling-stroke" d="M2.791 146.068L3.849 146.430"/>
+    <path vector-effect="non-scaling-stroke" d="M1.002 144.930L1.008 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.845 143.762L1.839 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 141.469L1.010 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M1.010 141.332L1.012 140.457L1.015 139.232"/>
+    <path vector-effect="non-scaling-stroke" d="M1.838 145.034L1.838 145.138"/>
+    <path vector-effect="non-scaling-stroke" d="M1.820 143.762L1.819 143.450L1.820 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M1.880 141.332L1.884 139.264"/>
+    <path vector-effect="non-scaling-stroke" d="M1.879 141.469L1.880 141.332"/>
+    <path vector-effect="non-scaling-stroke" d="M3.400 141.469L3.400 138.747"/>
+    <path vector-effect="non-scaling-stroke" d="M3.300 143.762L3.400 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.879 143.762L3.300 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.879 143.762L1.879 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M3.400 141.469L3.400 143.762"/>
+    <path vector-effect="non-scaling-stroke" d="M1.879 141.469L3.300 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M3.300 141.469L3.400 141.469"/>
+    <path vector-effect="non-scaling-stroke" d="M1.839 144.930L1.838 145.034"/>
+    <path vector-effect="non-scaling-stroke" d="M1.002 144.930L1.001 145.107"/>
+    <path vector-effect="non-scaling-stroke" d="M1.420 144.930L1.002 144.930"/>
+    <path vector-effect="non-scaling-stroke" d="M1.299 60.643L1.367 60.642L1.508 60.643L1.578 60.643L1.649 60.643L1.720 60.643L1.791 60.643L1.862 60.643L1.932 60.643"/>
+    <path vector-effect="non-scaling-stroke" d="M3.316 136.726L3.101 136.199L2.876 135.609"/>
+    <path vector-effect="non-scaling-stroke" d="M2.056 132.510L1.945 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M1.377 138.856L1.377 138.933"/>
+    <path vector-effect="non-scaling-stroke" d="M3.065 138.748L2.946 138.810L2.805 138.851L2.659 138.864L2.513 138.852L2.372 138.810L2.307 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M1.033 63.411L1.033 61.894L1.032 61.182L1.031 60.949L1.029 60.745L1.026 60.672"/>
+    <path vector-effect="non-scaling-stroke" d="M2.267 60.645L2.273 60.794L2.276 61.183L2.276 61.398L2.277 62.201L2.277 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M1.033 132.510L1.033 126.516L1.033 120.522L1.033 114.528L1.033 108.534L1.033 102.540L1.033 96.546L1.033 90.552L1.033 84.558L1.033 78.564L1.033 75.120L1.033 72.570L1.033 66.576L1.033 63.411"/>
+    <path vector-effect="non-scaling-stroke" d="M1.023 138.986L1.033 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M1.859 139.010L1.829 139.085"/>
+    <path vector-effect="non-scaling-stroke" d="M1.719 132.510L1.832 132.510"/>
+    <path vector-effect="non-scaling-stroke" d="M1.846 132.510L1.878 132.901L1.955 133.306L2.177 134.099L2.746 135.645"/>
+    <path vector-effect="non-scaling-stroke" d="M1.686 132.510L1.676 138.779"/>
+    <path vector-effect="non-scaling-stroke" d="M1.609 138.933L1.442 138.933"/>
+    <path vector-effect="non-scaling-stroke" d="M1.377 138.779L1.377 138.856"/>
+    <path vector-effect="non-scaling-stroke" d="M1.766 138.897L1.722 138.947"/>
+    <path vector-effect="non-scaling-stroke" d="M3.224 136.814L3.339 136.783"/>
+  </g>
+</svg>

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Darkest Shades frame",
+  "type": "object",
+  "required": [
+    "id",
+    "handle",
+    "lookNumber",
+    "descriptor",
+    "status",
+    "price",
+    "frame",
+    "lens",
+    "measurementsMm",
+    "sizeNotation",
+    "gcd",
+    "sources"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^F0[1-9]$"
+    },
+    "handle": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "lookNumber": {
+      "type": "string",
+      "pattern": "^0[1-9]$"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "null until the founder names the frame (00-decisions.md O1)"
+    },
+    "descriptor": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "for-sale",
+        "retired"
+      ]
+    },
+    "price": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currencyCode"
+      ],
+      "properties": {
+        "amount": {
+          "type": "string"
+        },
+        "currencyCode": {
+          "const": "USD"
+        }
+      }
+    },
+    "drop": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "drop number this frame is released in, e.g. \"001\""
+    },
+    "measurementsMm": {
+      "type": "object",
+      "properties": {
+        "lensWidth": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "bridge": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "templeLength": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "lensHeight": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "frameHeight": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "frontWidth": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "sizeNotation": {
+      "type": "string"
+    },
+    "gcd": {
+      "type": "object",
+      "required": [
+        "placement",
+        "lengthMm"
+      ]
+    }
+  }
+}

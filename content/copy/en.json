@@ -1,0 +1,234 @@
+{
+  "$comment": "All site copy. Status 'draft' = Claude's draft in the brand voice, awaiting the founder. Never ship strings marked 'placeholder'. After launch these move to Shopify metaobjects (docs/brief/08-copy.md).",
+  "meta": {
+    "brand": "Darkest Shades",
+    "domain": "darkestshades.com",
+    "instagram": "@darkestshades",
+    "hashtag": "#DarkestShades",
+    "tagline": "See Everything. Reveal Nothing.",
+    "titleTemplate": "{page} · Darkest Shades",
+    "defaultDescription": "Sunglasses for people who decide what gets seen. $100. Released in drops."
+  },
+  "entry": {
+    "status": "draft",
+    "notice": {
+      "text": "This opening uses rapidly changing images. If flashing images affect you, skip it.",
+      "continue": "Continue",
+      "skip": "Skip intro",
+      "note": "You can turn the intro off any time on the Accessibility page."
+    },
+    "cards": [
+      "See everything.",
+      "Reveal nothing."
+    ],
+    "skip": "Skip",
+    "textEquivalent": "Opening sequence: black-and-white photographs of the frames and the cast, ending on the Darkest Shades emblem."
+  },
+  "home": {
+    "status": "draft",
+    "manifesto": [
+      "We don't make noise.",
+      "Presence is not a performance.",
+      "See everything. Reveal nothing."
+    ],
+    "detail": "The God Cloud Device. Gold, black onyx inset. One on every pair.",
+    "promisesTitle": "Plainly",
+    "promises": [
+      "$100. One price, every frame.",
+      "Polarized TAC lenses. UV400.",
+      "Premium acetate.",
+      "45-day exchange.",
+      "6-month warranty."
+    ],
+    "castTitle": "The cast"
+  },
+  "manifesto": {
+    "status": "draft",
+    "title": "Manifesto",
+    "paragraphs": [
+      "We make sunglasses for people who decide what gets seen.",
+      "Real power doesn't ask for attention. It controls it.",
+      "No hype. No algorithm. No middlemen. One price: $100.",
+      "Every pair carries one mark worth finding: gold, set with black onyx. Most people won't notice. That's the point.",
+      "Drops are limited, and the numbers we show are the real ones.",
+      "Forty-five days to exchange. Six months of warranty.",
+      "See everything. Reveal nothing."
+    ]
+  },
+  "drop": {
+    "status": "draft",
+    "states": {
+      "announced": "Drop {number}. {date}, {time} {timezone}.",
+      "announcedNoDate": "Drop {number}. Date to be announced.",
+      "live": "Drop {number} is open.",
+      "soldOut": "Drop {number} is sold out.",
+      "ended": "Drop {number} has ended."
+    },
+    "pairsLeft": "{left} of {total} pairs left",
+    "pairsLeftNoTotal": "{left} pairs left",
+    "countdownLabel": {
+      "toStart": "Opens in",
+      "toEnd": "Closes in"
+    },
+    "earlyAccess": "The list gets in {hours} hours before everyone else.",
+    "line": {
+      "live": "Drop {number} · Open · {left} of {total} pairs left",
+      "announced": "Drop {number} · {date}"
+    }
+  },
+  "product": {
+    "status": "draft",
+    "addToBag": "Add to bag",
+    "notify": "Get notified",
+    "soldOut": "Sold out",
+    "nextLook": "Next look",
+    "specsTitle": "Specs",
+    "drawnTitle": "Drawn",
+    "wornByTitle": "Worn by",
+    "specLabels": {
+      "size": "Size",
+      "lensWidth": "Lens width",
+      "bridge": "Bridge",
+      "templeLength": "Temple",
+      "lensHeight": "Lens height",
+      "frontWidth": "Front width",
+      "front": "Front",
+      "temples": "Temples",
+      "lens": "Lens",
+      "protection": "Protection"
+    },
+    "sizeHelp": "Lens width □ bridge, then temple length, in millimetres.",
+    "gcdLine": "The God Cloud Device. Gold, black onyx inset.",
+    "promises": [
+      "45-day exchange",
+      "6-month warranty"
+    ],
+    "imageDisclosure": "Images made with generated models and the real frame."
+  },
+  "list": {
+    "status": "draft",
+    "title": "The list hears first.",
+    "body": "Drop dates and pair counts before anyone else, and {hours} hours of early access before every public drop.",
+    "bodyNoEarlyAccess": "Drop dates and pair counts, before anyone else.",
+    "emailLabel": "Email",
+    "phoneLabel": "Mobile number (optional)",
+    "submit": "Join the list",
+    "dismiss": "Not now",
+    "emailConsent": "Emails from Darkest Shades about drops. Unsubscribe any time. See our Privacy Policy.",
+    "smsConsent": "By checking this box and entering your number, you agree to receive recurring automated marketing text messages (such as drop alerts) from Darkest Shades at the number provided. Consent is not a condition of purchase. Message frequency varies. Message and data rates may apply. Reply HELP for help and STOP to cancel. See our SMS Terms and Privacy Policy.",
+    "success": "You're on the list.",
+    "already": "You're already on the list.",
+    "error": "That didn't go through. Try again.",
+    "invalidEmail": "Enter an email address like name@example.com.",
+    "invalidPhone": "Enter a mobile number with country code.",
+    "consentRequired": "Check the box to get texts, or leave the number empty."
+  },
+  "sms": {
+    "status": "draft",
+    "confirm": "Darkest Shades: reply Y to confirm drop alerts. Msg frequency varies. Msg & data rates may apply. Reply HELP for help, STOP to cancel.",
+    "welcome": "Darkest Shades: you're in. Drop alerts only. Reply STOP to cancel.",
+    "help": "Darkest Shades drop alerts. Questions: {supportEmail}. Msg frequency varies. Msg & data rates may apply. Reply STOP to cancel.",
+    "stop": "Darkest Shades: you're unsubscribed and won't receive more texts. Reply START to rejoin.",
+    "dropLive": "Darkest Shades: Drop {number} is open. {pairs} pairs. {link} Reply STOP to cancel."
+  },
+  "nav": {
+    "drop": "Drop",
+    "frames": "Frames",
+    "manifesto": "Manifesto",
+    "cast": "Cast",
+    "bag": "Bag",
+    "menu": "Menu",
+    "close": "Close",
+    "skipToContent": "Skip to content"
+  },
+  "bag": {
+    "title": "Bag",
+    "empty": "Your bag is empty.",
+    "subtotal": "Subtotal",
+    "checkoutDisabled": "Checkout opens at launch",
+    "remove": "Remove",
+    "limit": "Limit {n} per customer for this drop."
+  },
+  "footer": {
+    "columns": {
+      "shop": "Shop",
+      "house": "House",
+      "help": "Help",
+      "legal": "Legal"
+    },
+    "links": {
+      "questions": "Questions",
+      "care": "Care",
+      "shipping": "Shipping",
+      "exchange": "Exchange",
+      "warranty": "Warranty",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "smsTerms": "SMS terms",
+      "accessibility": "Accessibility"
+    },
+    "copyright": "© {year} Darkest Shades"
+  },
+  "notFound": {
+    "title": "This page doesn't exist.",
+    "link": "Back to Darkest Shades"
+  },
+  "questions": {
+    "status": "draft",
+    "items": [
+      {
+        "q": "Are the lenses polarized?",
+        "a": "Yes. Every lens is polarized TAC (tri-acetate cellulose) with UV400 protection, which blocks 100% of UVA and UVB."
+      },
+      {
+        "q": "Can I get them with my prescription?",
+        "a": "No. Darkest Shades are non-prescription sunglasses."
+      },
+      {
+        "q": "What is the emblem on the temple?",
+        "a": "The God Cloud Device: a gold-tone emblem set with black onyx. It's on every pair."
+      },
+      {
+        "q": "How do drops work?",
+        "a": "Each drop has a date, a set number of pairs and an end. The numbers on the site come straight from inventory. The list hears first."
+      },
+      {
+        "q": "What if they don't fit?",
+        "a": "Exchange them within 45 days. Every frame lists its measurements, so you can compare with a pair you already own."
+      },
+      {
+        "q": "What does the warranty cover?",
+        "a": "Six months against defects and scratches."
+      }
+    ]
+  },
+  "care": {
+    "status": "placeholder",
+    "body": "Care instructions to be confirmed with the factory (lens coating, acetate, onyx setting)."
+  },
+  "accessibility": {
+    "status": "draft",
+    "body": [
+      "We build darkestshades.com to WCAG 2.2 AA.",
+      "The opening sequence is optional. It never plays if your device asks for reduced motion, and you can skip it from its first frame. Its fast sequences are built to stay below the flash thresholds in WCAG 2.3.1.",
+      "If something doesn't work for you, write to {supportEmail}."
+    ],
+    "introToggle": {
+      "label": "Opening sequence",
+      "on": "On",
+      "off": "Off"
+    }
+  },
+  "alt": {
+    "stage": "{descriptor} sunglasses, {angle}, on a light grey background.",
+    "angles": {
+      "A1": "front view",
+      "A2": "three-quarter view",
+      "A3": "side view",
+      "A4": "from above",
+      "A5": "inside view",
+      "A6": "close-up of the gold and onyx emblem on the temple"
+    },
+    "onModel": "{person} wearing the {descriptor} sunglasses."
+  }
+}

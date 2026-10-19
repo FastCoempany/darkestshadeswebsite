@@ -1,0 +1,50 @@
+# 00 · Decisions
+
+What is settled, who settled it, and what is still open. If another doc disagrees with this page, this page wins until the founder changes it.
+
+## Settled
+
+| # | Decision | Source |
+|---|---|---|
+| 1 | **Shopify is the platform.** The site is a custom storefront on Shopify: Hydrogen (React), hosted on Oxygen later. Shopify runs products, inventory, cart and checkout. | Founder, Oct 17 2026 ("Shopify will be the platform. Build in whatever language we need to"); Hydrogen is the build choice |
+| 2 | **This phase is wireframes, UI and components only.** No payments, no live store connection. Data comes from local mock files shaped like the Storefront API. | Founder, Oct 17 2026 |
+| 3 | **Plan here, build in Claude Code with Fable.** This brief is the hand-off. | Founder, Oct 17 2026 |
+| 4 | **Prada is the brand idol. Raf Simons' "philosophy as manifesto before product" is the design lens.** The flagship line stays: **See Everything. Reveal Nothing.** | Founder, Oct 17 2026 |
+| 5 | **Raf stays internal.** No name, likeness, quote, or collaborator's artwork on the site, in metadata, alt text or code comments that ship. | Founder, Oct 19 2026 ("agreed 100%") |
+| 6 | **The three reference videos are the foundation of the entry and the home page**: the black-and-white strobe of editorial stills, the Bloodsport janitor long take, the 1983 Maxell silence-then-blast. Copies live in `reference/videos/` for study only; they never ship. | Founder, Oct 17 2026; see `03-references.md` |
+| 7 | **Eight frames, all for sale.** Eight designs were shot; the ninth (Model 07, the white floral strip on the arm) was dropped. | Founder, Oct 19 2026 |
+| 8 | **Product photos come only from the 317 real lightbox shots.** No reshoot. The 2024 CAD render deck is ignored. Blender, the CAD files and free tools are used to bring the real shots up to standard (hotspots, see-through lenses, consistency). | Founder, Oct 19 2026 |
+| 9 | **Every product image shows the production version:** the old engraved and printed marks are removed and the GCD (gold, black onyx inset) is placed with physical realism. The product customers receive carries the GCD with a real onyx stone. | Founder, Oct 19 2026 |
+| 10 | **Marks:** primary = Anastasiia's logotype (DARKEST SHADES in the brand letters) with her angular brand mark. Secondary insignia = the **God Cloud Device (GCD)**, gold with a black onyx inset (in the way Burberry runs its wordmark plus the Equestrian Knight, or Prada its wordmark plus the triangle). The Eclipse Silhouette is retired. | Founder, Oct 19 2026 |
+| 11 | **Nav and favicon use the primary brand mark** (the angular mark), never the GCD. | Founder, Oct 19 2026 |
+| 12 | **GCD colors come from the latest `darkestshades` commit** (`logo-kit/`, Oct 18 2026): flat gold `#C6A36A`; metallic gradient `#634722 → #B68A4D → #FFF2CD → #EAC999 → #A77C46 → #CDA974 → #86653B → #EDCFA0 → #5A442C`; onyx `#2C2C2D → #111214 → #050607 → #111214 → #000000`. | Founder, Oct 19 2026 |
+| 13 | **Fonts: Owners Wide and Stolzl only**, in the styles Anastasiia's files use (Owners Wide Medium; Stolzl Light, Book, Regular, Medium). They are used in the build environment now; web licensing for the live site is settled later. | Founder, Oct 17 and Oct 19 2026 |
+| 14 | **The palette is extended by Claude acting as brand strategist**, starting from Anastasiia's "Sustainable elegance" swatches and the GCD colors. Graphite `#545454` on black (2.8:1; 2.7:1 on the onyx canvas) is never used for text; text greys start at `#8A8A8A`. | Founder gave liberty and agency, Oct 17 2026; fix asked Oct 19 2026; see `01-brand-system.md` |
+| 15 | **Seven models: three women, three men, one non-binary person**, matching the Brand Story personas. "Prada-esque" describes their features and build. | Founder, Oct 19 2026 |
+| 16 | **People and scenes are generated; the glasses are never generated.** The real frames (cut out from the lightbox shots) are composited onto the generated people. | Founder asked for the best path and its execution, Oct 19 2026; the founder's own AI-photography guide in the zip says the same |
+| 17 | **Patina: Prada's SS90 show** is the reference for the surface feel of the site and its photography. | Founder, Oct 17 and Oct 19 2026 |
+| 18 | **Selling model: drops first.** Scarcity and mystique at launch; the price ($100) is always visible; **countdowns and quantities are always real**; no 10% exit offer; no discount pop-ups. The email pop-up at 60% scroll gives something that is not a discount. SMS sign-up carries standard consent wording. | Founder, Oct 19 2026 |
+| 19 | **Opening experience:** designed sound-off first; built from images, not video; a photosensitivity warning sits in front of the strobe; skippable; never shown on deep links (Instagram, ads, product URLs); returning visitors skip it. | Founder, Oct 19 2026 |
+| 20 | **This repo stays public for now.** Consequences: font files are never committed; raw photo masters, CAD and DAM live outside this repo (`07-photography.md`). | Founder, Oct 19 2026 |
+| 21 | **Components are Darkest Shades' own.** Learning from the digs system is fine; identical components are not. | Founder, Oct 17 and Oct 19 2026 |
+| 22 | **Copy is edited after launch in Shopify admin**, through metaobjects the storefront reads (manifesto, drop copy, pop-up, policies). Product facts stay in product data. | Founder: "whatever's best and most accessible and scalable", Oct 19 2026 |
+| 23 | **Lens and frame claims are treated as tested.** These are non-prescription (vanity) sunglasses. Not every lens is dark (yellow, light blue, gradient), and that is fine. | Founder, Oct 19 2026 |
+| 24 | **No paid tools.** Everything runs on free routes: Blender, CAD and Python libraries, free models from GitHub and Hugging Face, Figma's included AI credits. | Founder, Oct 19 2026 ("pull in whatever other tools we can that do not cost") |
+| 25 | **Typos are fixed in everything we make, not in source paths** (the release folder stays "Lighbox shots"). Instagram is `@darkestshades`, the site is `darkestshades.com`, the hashtag is `#DarkestShades`. | Founder, Oct 17 and Oct 19 2026 |
+| 26 | **Promises from the Brand Story**: $100 direct-to-consumer, 45-day exchange, 6-month warranty, 100% UVA/UVB, polarized TAC lenses, impact and scratch resistant, premium acetate. | Brand Story V1, Mar 25 2025 |
+
+## Open (work proceeds on the default)
+
+| # | Item | Default the site uses | Who decides |
+|---|---|---|---|
+| O1 | **Frame names.** The Oct 19 message said "here are the names:" and the list didn't come through. | Frames are `F01`–`F09` (no `F07`) with plain descriptors ("Blue tortoise, double bridge"). Handles `f01`… are placeholders; a CI check lists every `TBD` name. | Founder |
+| O2 | **Drop plan.** Which frames go in Drop 001, how many pairs, when. | `content/drops/drop-001.json` with `null` dates and quantities; the UI shows "Date to be announced" and never invents a number. | Founder |
+| O3 | **GCD on the metal-temple frames.** F04 and F05 have a 15 mm acetate wing at the hinge, so the GCD sits there. F02's temple is a thin wire with no flat face. | Images place the GCD on the outer face of F02's hinge block (end-piece) at the same scale as F04/F05; flagged for factory sign-off. | Founder with the factory |
+| O4 | **GCD physical spec**: length per frame, stone thickness, how it's set, and the metal (solid gold, plated or gold-tone). | Lengths estimated from the drawings at 0.98 × temple height (`06-products.md`). Product data says "gold tone" and copy says "gold" as a color only, until the metal is confirmed. | Founder with the factory |
+| O5 | **Casting pick.** Round 1 has 14 generated candidates, two per slot, in a Figma file in the founder's drafts (Oct 19 2026). | Pick 7 (3 women, 3 men, 1 non-binary). Until then every people slot is a labelled `MediaSlot`. | Founder |
+| O6 | **Pop-up offer.** Not a discount. | "The list hears first": drop date, pair count, and a 24-hour early window before the public drop. The early window must be real (customer-tag gate) or the line is removed. | Founder |
+| O7 | **SMS provider** (Shopify Messaging, Klaviyo, Postscript, Attentive). | Consent wording is provider-neutral (`08-copy.md`). | Founder |
+| O8 | **Production fonts** for darkestshades.com (Adobe Fonts web project, or self-hosting licenses from MCKL and Inhouse Type). | Build environment loads the fonts from a local, git-ignored folder or an Adobe Fonts kit (`brand/fonts/README.md`). | Founder |
+| O9 | **Drawing numbering.** The 2D drawings number two pairs differently from the photo groups and factory files: drawing 02 is F03, drawing 03 is F02, drawing 04 is F05, drawing 05 is F04. | Frame IDs follow the photo groups (factory numbering). The drawing number is stored per frame. | Founder (confirm with the factory) |
+| O10 | **Four lightbox shots that look misfiled** in the shoot order: IMG_3465 (red tortoise, inside the F04 run), IMG_3476 (looks like F09, inside the F02 run), IMG_3394–3395 (look like F06, inside the F09 run). | Reassigned as noted in `content/photography/lightbox-angle-set.json`, confirmed at full resolution during clean-up. | Claude, at full resolution |
+| O11 | **Production order.** The manufacturing records in the zip are for samples (one pair per model). | Product pages run in drop states (upcoming, live, sold out); no "in stock" promises. | Founder |

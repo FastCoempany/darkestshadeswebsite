@@ -1,0 +1,78 @@
+{
+  "$schema": "./product.schema.json",
+  "id": "F01",
+  "handle": "f01",
+  "lookNumber": "01",
+  "name": null,
+  "nameStatus": "TBD (00-decisions.md O1)",
+  "descriptor": "Blue tortoise, double bridge",
+  "status": "for-sale",
+  "price": {
+    "amount": "100.00",
+    "currencyCode": "USD"
+  },
+  "drop": null,
+  "frame": {
+    "shape": "Soft rectangle with a straight brow bar over a double bridge",
+    "front": "Acetate, blue and black tortoise",
+    "temples": "Acetate, blue and black tortoise",
+    "fit": "Universal fit"
+  },
+  "lens": {
+    "color": "Light blue",
+    "type": "Polarized TAC (tri-acetate cellulose)",
+    "uv": "UV400, 100% UVA/UVB",
+    "impact": "Impact resistant",
+    "scratch": "Scratch resistant"
+  },
+  "measurementsMm": {
+    "lensWidth": 54,
+    "bridge": 11,
+    "templeLength": 145,
+    "lensHeight": 44,
+    "frameHeight": 54,
+    "frontWidth": 150
+  },
+  "sizeNotation": "54□11 145",
+  "measurementNotes": {
+    "default": "From the 1:1 technical drawing; values in mm.",
+    "frameHeight": "dimensioned"
+  },
+  "gcd": {
+    "placement": "Outer face of the acetate temple",
+    "templeFaceHeightMm": 12,
+    "templeFaceHeightSource": "dimensioned (12 mm)",
+    "lengthMm": 11.8,
+    "note": "0.98 × temple face height; centre 0.82 × that height from the hinge, 39% down the face.",
+    "stone": "Black onyx",
+    "metal": "Gold tone"
+  },
+  "sources": {
+    "drawing": "reference/technical-drawings/drawing-01.pdf",
+    "drawingNumber": "01",
+    "lineArt": [
+      "content/products/drawings/F01-front.svg",
+      "content/products/drawings/F01-side.svg",
+      "content/products/drawings/F01-top.svg",
+      "content/products/drawings/F01-iso.svg"
+    ],
+    "lightboxGroup": "IMG_3554–IMG_3581",
+    "lightboxCount": 28,
+    "onyxComposites": [
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3558.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3572.jpg"
+    ]
+  },
+  "photography": {
+    "angleSet": "content/photography/lightbox-angle-set.json#F01",
+    "status": "selected, not yet cleaned"
+  },
+  "copy": {
+    "line": null,
+    "story": null
+  },
+  "promises": [
+    "45-day exchange",
+    "6-month warranty"
+  ]
+}

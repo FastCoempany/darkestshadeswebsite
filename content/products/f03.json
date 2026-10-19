@@ -1,0 +1,79 @@
+{
+  "$schema": "./product.schema.json",
+  "id": "F03",
+  "handle": "f03",
+  "lookNumber": "03",
+  "name": null,
+  "nameStatus": "TBD (00-decisions.md O1)",
+  "descriptor": "Black, yellow lens",
+  "status": "for-sale",
+  "price": {
+    "amount": "100.00",
+    "currencyCode": "USD"
+  },
+  "drop": null,
+  "frame": {
+    "shape": "Rounded square",
+    "front": "Acetate, gloss black",
+    "temples": "Acetate, gloss black",
+    "fit": "Universal fit"
+  },
+  "lens": {
+    "color": "Yellow",
+    "type": "Polarized TAC (tri-acetate cellulose)",
+    "uv": "UV400, 100% UVA/UVB",
+    "impact": "Impact resistant",
+    "scratch": "Scratch resistant"
+  },
+  "measurementsMm": {
+    "lensWidth": 45,
+    "bridge": null,
+    "templeLength": 150,
+    "lensHeight": 38,
+    "frameHeight": 48,
+    "frontWidth": 145
+  },
+  "sizeNotation": "45□— 150",
+  "measurementNotes": {
+    "default": "From the 1:1 technical drawing; values in mm.",
+    "frameHeight": "dimensioned",
+    "bridge": "not dimensioned on the drawing"
+  },
+  "gcd": {
+    "placement": "Outer face of the acetate temple",
+    "templeFaceHeightMm": 9,
+    "templeFaceHeightSource": "dimensioned (9 mm)",
+    "lengthMm": 8.8,
+    "note": "0.98 × temple face height; centre 0.82 × that height from the hinge, 39% down the face.",
+    "stone": "Black onyx",
+    "metal": "Gold tone"
+  },
+  "sources": {
+    "drawing": "reference/technical-drawings/drawing-02.pdf",
+    "drawingNumber": "02",
+    "lineArt": [
+      "content/products/drawings/F03-front.svg",
+      "content/products/drawings/F03-side.svg",
+      "content/products/drawings/F03-top.svg",
+      "content/products/drawings/F03-iso.svg"
+    ],
+    "lightboxGroup": "IMG_3316–IMG_3341, IMG_3492–IMG_3505",
+    "lightboxCount": 40,
+    "onyxComposites": [
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3337.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3498.jpg"
+    ]
+  },
+  "photography": {
+    "angleSet": "content/photography/lightbox-angle-set.json#F03",
+    "status": "selected, not yet cleaned"
+  },
+  "copy": {
+    "line": null,
+    "story": null
+  },
+  "promises": [
+    "45-day exchange",
+    "6-month warranty"
+  ]
+}

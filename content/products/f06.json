@@ -1,0 +1,79 @@
+{
+  "$schema": "./product.schema.json",
+  "id": "F06",
+  "handle": "f06",
+  "lookNumber": "06",
+  "name": null,
+  "nameStatus": "TBD (00-decisions.md O1)",
+  "descriptor": "Black flat-top shield",
+  "status": "for-sale",
+  "price": {
+    "amount": "100.00",
+    "currencyCode": "USD"
+  },
+  "drop": null,
+  "frame": {
+    "shape": "Flat-top shield, one continuous brow",
+    "front": "Acetate, gloss black",
+    "temples": "Acetate, gloss black",
+    "fit": "Universal fit"
+  },
+  "lens": {
+    "color": "Grey gradient",
+    "type": "Polarized TAC (tri-acetate cellulose)",
+    "uv": "UV400, 100% UVA/UVB",
+    "impact": "Impact resistant",
+    "scratch": "Scratch resistant"
+  },
+  "measurementsMm": {
+    "lensWidth": 60,
+    "bridge": 10,
+    "templeLength": 150,
+    "lensHeight": 48,
+    "frameHeight": 54,
+    "frontWidth": 145
+  },
+  "sizeNotation": "60□10 150",
+  "measurementNotes": {
+    "default": "From the 1:1 technical drawing; values in mm.",
+    "frameHeight": "measured from the 1:1 front view",
+    "lensWidth": "per side of the shield, from the top view"
+  },
+  "gcd": {
+    "placement": "Outer face of the acetate temple",
+    "templeFaceHeightMm": 9.5,
+    "templeFaceHeightSource": "measured from the 1:1 side view (about 9.5 mm)",
+    "lengthMm": 9.3,
+    "note": "0.98 × temple face height; centre 0.82 × that height from the hinge, 39% down the face.",
+    "stone": "Black onyx",
+    "metal": "Gold tone"
+  },
+  "sources": {
+    "drawing": "reference/technical-drawings/drawing-06.pdf",
+    "drawingNumber": "06",
+    "lineArt": [
+      "content/products/drawings/F06-front.svg",
+      "content/products/drawings/F06-side.svg",
+      "content/products/drawings/F06-top.svg",
+      "content/products/drawings/F06-iso.svg"
+    ],
+    "lightboxGroup": "IMG_3342–IMG_3371, IMG_3482–IMG_3491",
+    "lightboxCount": 40,
+    "onyxComposites": [
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3371.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3483.jpg"
+    ]
+  },
+  "photography": {
+    "angleSet": "content/photography/lightbox-angle-set.json#F06",
+    "status": "selected, not yet cleaned"
+  },
+  "copy": {
+    "line": null,
+    "story": null
+  },
+  "promises": [
+    "45-day exchange",
+    "6-month warranty"
+  ]
+}

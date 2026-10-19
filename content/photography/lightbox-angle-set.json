@@ -1,0 +1,744 @@
+{
+ "$comment": "First pass, picked from 240 px thumbnails of the 317 lightbox shots (Apr 15 2025). Each pick is confirmed at full resolution when its frame goes through the clean-up (docs/brief/07-photography.md). Angles: A1 front, A2 three-quarter, A3 side, A4 top-down, A5 inside, A6 GCD detail, H landscape hero.",
+ "source": "darkestshades release asset DARKESTSHADES.zip, folder DARKESTSHADES/Lighbox shots/",
+ "frames": {
+  "F01": {
+   "group": [
+    "IMG_3554",
+    "IMG_3555",
+    "IMG_3556",
+    "IMG_3557",
+    "IMG_3558",
+    "IMG_3559",
+    "IMG_3560",
+    "IMG_3561",
+    "IMG_3562",
+    "IMG_3563",
+    "IMG_3564",
+    "IMG_3565",
+    "IMG_3566",
+    "IMG_3567",
+    "IMG_3568",
+    "IMG_3569",
+    "IMG_3570",
+    "IMG_3571",
+    "IMG_3572",
+    "IMG_3573",
+    "IMG_3574",
+    "IMG_3575",
+    "IMG_3576",
+    "IMG_3577",
+    "IMG_3578",
+    "IMG_3579",
+    "IMG_3580",
+    "IMG_3581"
+   ],
+   "picks": {
+    "A1": "IMG_3554",
+    "A2": "IMG_3556",
+    "A3": "IMG_3572",
+    "A4": "IMG_3568",
+    "A5": "IMG_3555",
+    "A6": "IMG_3565",
+    "H": "IMG_3570"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3563",
+     "IMG_3562"
+    ],
+    "A2": [
+     "IMG_3558",
+     "IMG_3575"
+    ],
+    "A3": [
+     "IMG_3573",
+     "IMG_3559"
+    ],
+    "A4": [
+     "IMG_3569"
+    ],
+    "A5": [
+     "IMG_3560"
+    ],
+    "A6": [
+     "IMG_3564",
+     "IMG_3580",
+     "IMG_3581"
+    ],
+    "H": [
+     "IMG_3561"
+    ]
+   },
+   "rejects": {},
+   "gaps": [],
+   "onyxComposites": [
+    "IMG_3558",
+    "IMG_3572"
+   ],
+   "notes": [
+    "No clean 90\u00b0 profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped."
+   ]
+  },
+  "F02": {
+   "group": [
+    "IMG_3410",
+    "IMG_3411",
+    "IMG_3412",
+    "IMG_3413",
+    "IMG_3414",
+    "IMG_3415",
+    "IMG_3416",
+    "IMG_3417",
+    "IMG_3418",
+    "IMG_3419",
+    "IMG_3420",
+    "IMG_3421",
+    "IMG_3422",
+    "IMG_3423",
+    "IMG_3424",
+    "IMG_3425",
+    "IMG_3426",
+    "IMG_3427",
+    "IMG_3428",
+    "IMG_3429",
+    "IMG_3430",
+    "IMG_3431",
+    "IMG_3432",
+    "IMG_3433",
+    "IMG_3434",
+    "IMG_3435",
+    "IMG_3436",
+    "IMG_3437",
+    "IMG_3438",
+    "IMG_3439",
+    "IMG_3440",
+    "IMG_3441",
+    "IMG_3465",
+    "IMG_3466",
+    "IMG_3467",
+    "IMG_3468",
+    "IMG_3469",
+    "IMG_3470",
+    "IMG_3471",
+    "IMG_3472",
+    "IMG_3473",
+    "IMG_3474",
+    "IMG_3475"
+   ],
+   "picks": {
+    "A1": "IMG_3423",
+    "A2": "IMG_3431",
+    "A3": "IMG_3421",
+    "A4": "IMG_3426",
+    "A5": "IMG_3411",
+    "A6": "IMG_3465",
+    "H": "IMG_3467"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3428",
+     "IMG_3472"
+    ],
+    "A2": [
+     "IMG_3429",
+     "IMG_3474"
+    ],
+    "A3": [
+     "IMG_3430"
+    ],
+    "A4": [
+     "IMG_3425",
+     "IMG_3427"
+    ],
+    "A5": [
+     "IMG_3410",
+     "IMG_3424"
+    ],
+    "A6": [
+     "IMG_3440",
+     "IMG_3475"
+    ],
+    "H": [
+     "IMG_3466",
+     "IMG_3468"
+    ]
+   },
+   "rejects": {
+    "IMG_3418": "tent floor edge in frame (crop or skip)",
+    "IMG_3419": "tent floor edge in frame (crop or skip)"
+   },
+   "gaps": [],
+   "reassigned": {
+    "IMG_3465": "shot inside the F04 run; it is the red tortoise frame",
+    "IMG_3476": "shot inside this run; looks like F09 in the tent, moved to F09"
+   },
+   "onyxComposites": []
+  },
+  "F03": {
+   "group": [
+    "IMG_3316",
+    "IMG_3317",
+    "IMG_3318",
+    "IMG_3319",
+    "IMG_3320",
+    "IMG_3321",
+    "IMG_3322",
+    "IMG_3323",
+    "IMG_3324",
+    "IMG_3325",
+    "IMG_3326",
+    "IMG_3327",
+    "IMG_3328",
+    "IMG_3329",
+    "IMG_3330",
+    "IMG_3331",
+    "IMG_3332",
+    "IMG_3333",
+    "IMG_3334",
+    "IMG_3335",
+    "IMG_3336",
+    "IMG_3337",
+    "IMG_3338",
+    "IMG_3339",
+    "IMG_3340",
+    "IMG_3341",
+    "IMG_3492",
+    "IMG_3493",
+    "IMG_3494",
+    "IMG_3495",
+    "IMG_3496",
+    "IMG_3497",
+    "IMG_3498",
+    "IMG_3499",
+    "IMG_3500",
+    "IMG_3501",
+    "IMG_3502",
+    "IMG_3503",
+    "IMG_3504",
+    "IMG_3505"
+   ],
+   "picks": {
+    "A1": "IMG_3316",
+    "A2": "IMG_3330",
+    "A3": "IMG_3323",
+    "A4": "IMG_3320",
+    "A5": "IMG_3327",
+    "A6": "IMG_3503",
+    "H": "IMG_3497"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3317",
+     "IMG_3340"
+    ],
+    "A2": [
+     "IMG_3329",
+     "IMG_3337",
+     "IMG_3494"
+    ],
+    "A3": [
+     "IMG_3322",
+     "IMG_3324"
+    ],
+    "A4": [
+     "IMG_3319",
+     "IMG_3321"
+    ],
+    "A5": [
+     "IMG_3328"
+    ],
+    "A6": [
+     "IMG_3504",
+     "IMG_3502"
+    ],
+    "H": [
+     "IMG_3499",
+     "IMG_3498"
+    ]
+   },
+   "rejects": {
+    "IMG_3341": "tent floor edge in frame"
+   },
+   "gaps": [],
+   "onyxComposites": [
+    "IMG_3337",
+    "IMG_3498"
+   ]
+  },
+  "F04": {
+   "group": [
+    "IMG_3442",
+    "IMG_3443",
+    "IMG_3444",
+    "IMG_3445",
+    "IMG_3446",
+    "IMG_3447",
+    "IMG_3448",
+    "IMG_3449",
+    "IMG_3450",
+    "IMG_3451",
+    "IMG_3452",
+    "IMG_3453",
+    "IMG_3454",
+    "IMG_3455",
+    "IMG_3456",
+    "IMG_3457",
+    "IMG_3458",
+    "IMG_3459",
+    "IMG_3460",
+    "IMG_3461",
+    "IMG_3462",
+    "IMG_3463",
+    "IMG_3464"
+   ],
+   "picks": {
+    "A1": "IMG_3442",
+    "A2": "IMG_3456",
+    "A3": "IMG_3450",
+    "A4": null,
+    "A5": "IMG_3446",
+    "A6": "IMG_3464",
+    "H": null
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3443"
+    ],
+    "A2": [
+     "IMG_3457",
+     "IMG_3462"
+    ],
+    "A3": [
+     "IMG_3451",
+     "IMG_3452"
+    ],
+    "A4": [
+     "IMG_3444",
+     "IMG_3445"
+    ],
+    "A5": [
+     "IMG_3447",
+     "IMG_3448"
+    ],
+    "A6": [
+     "IMG_3453",
+     "IMG_3454",
+     "IMG_3455"
+    ]
+   },
+   "rejects": {
+    "IMG_3458": "tent floor edge in frame",
+    "IMG_3459": "tent floor edge in frame",
+    "IMG_3460": "tent floor edge in frame"
+   },
+   "gaps": [
+    "A4: no straight top-down shot; IMG_3444/3445 (high front, temples open) are the nearest",
+    "H: no landscape shots of this frame; build the hero from A1 on a wider stage"
+   ],
+   "onyxComposites": [],
+   "notes": [
+    "A6 IMG_3464 is a rear three-quarter with the tent floor edge; a hinge close-up may need IMG_3453\u20133455 cropped."
+   ]
+  },
+  "F05": {
+   "group": [
+    "IMG_3506",
+    "IMG_3507",
+    "IMG_3508",
+    "IMG_3509",
+    "IMG_3510",
+    "IMG_3511",
+    "IMG_3512",
+    "IMG_3513",
+    "IMG_3514",
+    "IMG_3515",
+    "IMG_3516",
+    "IMG_3517",
+    "IMG_3518",
+    "IMG_3519",
+    "IMG_3520",
+    "IMG_3521",
+    "IMG_3522",
+    "IMG_3523",
+    "IMG_3524",
+    "IMG_3525",
+    "IMG_3526",
+    "IMG_3527",
+    "IMG_3528",
+    "IMG_3529",
+    "IMG_3530",
+    "IMG_3531",
+    "IMG_3532",
+    "IMG_3533",
+    "IMG_3534",
+    "IMG_3535",
+    "IMG_3536",
+    "IMG_3537",
+    "IMG_3538",
+    "IMG_3539",
+    "IMG_3540",
+    "IMG_3541",
+    "IMG_3542",
+    "IMG_3543",
+    "IMG_3544",
+    "IMG_3545",
+    "IMG_3546",
+    "IMG_3547",
+    "IMG_3548",
+    "IMG_3549",
+    "IMG_3550",
+    "IMG_3551",
+    "IMG_3552",
+    "IMG_3553"
+   ],
+   "picks": {
+    "A1": "IMG_3510",
+    "A2": "IMG_3530",
+    "A3": "IMG_3526",
+    "A4": "IMG_3512",
+    "A5": "IMG_3520",
+    "A6": "IMG_3537",
+    "H": "IMG_3536"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3509",
+     "IMG_3511"
+    ],
+    "A2": [
+     "IMG_3529",
+     "IMG_3531",
+     "IMG_3517"
+    ],
+    "A3": [
+     "IMG_3546",
+     "IMG_3547",
+     "IMG_3548"
+    ],
+    "A4": [
+     "IMG_3513",
+     "IMG_3514",
+     "IMG_3515",
+     "IMG_3516"
+    ],
+    "A5": [
+     "IMG_3521"
+    ],
+    "A6": [
+     "IMG_3545",
+     "IMG_3535"
+    ],
+    "H": [
+     "IMG_3540",
+     "IMG_3541"
+    ]
+   },
+   "rejects": {},
+   "gaps": [],
+   "onyxComposites": [
+    "IMG_3532",
+    "IMG_3534",
+    "IMG_3544",
+    "IMG_3545",
+    "IMG_3551"
+   ]
+  },
+  "F06": {
+   "group": [
+    "IMG_3342",
+    "IMG_3343",
+    "IMG_3344",
+    "IMG_3345",
+    "IMG_3346",
+    "IMG_3347",
+    "IMG_3348",
+    "IMG_3349",
+    "IMG_3350",
+    "IMG_3351",
+    "IMG_3352",
+    "IMG_3353",
+    "IMG_3354",
+    "IMG_3355",
+    "IMG_3356",
+    "IMG_3357",
+    "IMG_3358",
+    "IMG_3359",
+    "IMG_3360",
+    "IMG_3361",
+    "IMG_3362",
+    "IMG_3363",
+    "IMG_3364",
+    "IMG_3365",
+    "IMG_3366",
+    "IMG_3367",
+    "IMG_3368",
+    "IMG_3369",
+    "IMG_3370",
+    "IMG_3371",
+    "IMG_3394",
+    "IMG_3395",
+    "IMG_3482",
+    "IMG_3483",
+    "IMG_3484",
+    "IMG_3485",
+    "IMG_3486",
+    "IMG_3487",
+    "IMG_3488",
+    "IMG_3489",
+    "IMG_3490",
+    "IMG_3491"
+   ],
+   "picks": {
+    "A1": "IMG_3345",
+    "A2": "IMG_3357",
+    "A3": "IMG_3342",
+    "A4": "IMG_3348",
+    "A5": "IMG_3354",
+    "A6": "IMG_3365",
+    "H": "IMG_3482"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3346"
+    ],
+    "A2": [
+     "IMG_3351",
+     "IMG_3355",
+     "IMG_3370",
+     "IMG_3371"
+    ],
+    "A3": [
+     "IMG_3343",
+     "IMG_3344",
+     "IMG_3491"
+    ],
+    "A4": [
+     "IMG_3349"
+    ],
+    "A5": [
+     "IMG_3490",
+     "IMG_3394",
+     "IMG_3395"
+    ],
+    "A6": [
+     "IMG_3364",
+     "IMG_3366"
+    ],
+    "H": [
+     "IMG_3483",
+     "IMG_3484"
+    ]
+   },
+   "rejects": {
+    "IMG_3368": "the room outside the tent is in frame"
+   },
+   "gaps": [],
+   "reassigned": {
+    "IMG_3394": "shot inside the F09 run; looks like the flat-top shield from behind",
+    "IMG_3395": "as IMG_3394"
+   },
+   "onyxComposites": [
+    "IMG_3371",
+    "IMG_3483"
+   ]
+  },
+  "F08": {
+   "group": [
+    "IMG_3582",
+    "IMG_3583",
+    "IMG_3584",
+    "IMG_3585",
+    "IMG_3586",
+    "IMG_3587",
+    "IMG_3588",
+    "IMG_3589",
+    "IMG_3590",
+    "IMG_3591",
+    "IMG_3592",
+    "IMG_3593",
+    "IMG_3594",
+    "IMG_3595",
+    "IMG_3596",
+    "IMG_3597",
+    "IMG_3598",
+    "IMG_3599",
+    "IMG_3600",
+    "IMG_3601",
+    "IMG_3602",
+    "IMG_3603",
+    "IMG_3604",
+    "IMG_3605",
+    "IMG_3606",
+    "IMG_3607",
+    "IMG_3608",
+    "IMG_3609",
+    "IMG_3610",
+    "IMG_3611",
+    "IMG_3612",
+    "IMG_3613",
+    "IMG_3614",
+    "IMG_3615",
+    "IMG_3616",
+    "IMG_3617",
+    "IMG_3618",
+    "IMG_3619",
+    "IMG_3620",
+    "IMG_3621",
+    "IMG_3622",
+    "IMG_3623",
+    "IMG_3624",
+    "IMG_3625",
+    "IMG_3626",
+    "IMG_3627",
+    "IMG_3628",
+    "IMG_3629",
+    "IMG_3630",
+    "IMG_3631",
+    "IMG_3632"
+   ],
+   "picks": {
+    "A1": "IMG_3582",
+    "A2": "IMG_3596",
+    "A3": "IMG_3586",
+    "A4": "IMG_3584",
+    "A5": "IMG_3593",
+    "A6": "IMG_3617",
+    "H": "IMG_3590"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3583",
+     "IMG_3588"
+    ],
+    "A2": [
+     "IMG_3597",
+     "IMG_3600"
+    ],
+    "A3": [
+     "IMG_3587",
+     "IMG_3620"
+    ],
+    "A4": [
+     "IMG_3585"
+    ],
+    "A5": [
+     "IMG_3592",
+     "IMG_3594"
+    ],
+    "A6": [
+     "IMG_3618",
+     "IMG_3610",
+     "IMG_3611"
+    ],
+    "H": [
+     "IMG_3591"
+    ]
+   },
+   "rejects": {
+    "IMG_3595": "tent floor edge in frame"
+   },
+   "gaps": [],
+   "onyxComposites": []
+  },
+  "F09": {
+   "group": [
+    "IMG_3372",
+    "IMG_3373",
+    "IMG_3374",
+    "IMG_3375",
+    "IMG_3376",
+    "IMG_3377",
+    "IMG_3378",
+    "IMG_3379",
+    "IMG_3380",
+    "IMG_3381",
+    "IMG_3382",
+    "IMG_3383",
+    "IMG_3384",
+    "IMG_3385",
+    "IMG_3386",
+    "IMG_3387",
+    "IMG_3388",
+    "IMG_3389",
+    "IMG_3390",
+    "IMG_3391",
+    "IMG_3392",
+    "IMG_3393",
+    "IMG_3396",
+    "IMG_3397",
+    "IMG_3398",
+    "IMG_3399",
+    "IMG_3400",
+    "IMG_3401",
+    "IMG_3402",
+    "IMG_3403",
+    "IMG_3404",
+    "IMG_3405",
+    "IMG_3406",
+    "IMG_3407",
+    "IMG_3408",
+    "IMG_3409",
+    "IMG_3477",
+    "IMG_3478",
+    "IMG_3479",
+    "IMG_3480",
+    "IMG_3481",
+    "IMG_3476"
+   ],
+   "picks": {
+    "A1": "IMG_3383",
+    "A2": "IMG_3381",
+    "A3": "IMG_3402",
+    "A4": "IMG_3376",
+    "A5": "IMG_3392",
+    "A6": "IMG_3397",
+    "H": "IMG_3477"
+   },
+   "alternates": {
+    "A1": [
+     "IMG_3372",
+     "IMG_3373"
+    ],
+    "A2": [
+     "IMG_3382",
+     "IMG_3386"
+    ],
+    "A3": [
+     "IMG_3401",
+     "IMG_3403"
+    ],
+    "A4": [
+     "IMG_3374",
+     "IMG_3375",
+     "IMG_3377",
+     "IMG_3384",
+     "IMG_3385"
+    ],
+    "A5": [
+     "IMG_3393"
+    ],
+    "A6": [
+     "IMG_3406",
+     "IMG_3408",
+     "IMG_3409"
+    ],
+    "H": [
+     "IMG_3478",
+     "IMG_3479",
+     "IMG_3480"
+    ]
+   },
+   "rejects": {
+    "IMG_3481": "inside of the tent and ring light in frame",
+    "IMG_3476": "inside of the tent in frame"
+   },
+   "gaps": [],
+   "onyxComposites": [
+    "IMG_3381",
+    "IMG_3477",
+    "IMG_3478"
+   ]
+  }
+ }
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "./product.schema.json",
+  "id": "F05",
+  "handle": "f05",
+  "lookNumber": "05",
+  "name": null,
+  "nameStatus": "TBD (00-decisions.md O1)",
+  "descriptor": "Black chunky, metal temples",
+  "status": "for-sale",
+  "price": {
+    "amount": "100.00",
+    "currencyCode": "USD"
+  },
+  "drop": null,
+  "frame": {
+    "shape": "Chunky rectangle with soft, pillowed corners",
+    "front": "Acetate, gloss black",
+    "temples": "Metal wire with a triangular end-piece (15 mm)",
+    "fit": "Universal fit"
+  },
+  "lens": {
+    "color": "Dark grey",
+    "type": "Polarized TAC (tri-acetate cellulose)",
+    "uv": "UV400, 100% UVA/UVB",
+    "impact": "Impact resistant",
+    "scratch": "Scratch resistant"
+  },
+  "measurementsMm": {
+    "lensWidth": 47,
+    "bridge": null,
+    "templeLength": 148,
+    "lensHeight": 34,
+    "frameHeight": 49,
+    "frontWidth": 147
+  },
+  "sizeNotation": "47□— 148",
+  "measurementNotes": {
+    "default": "From the 1:1 technical drawing; values in mm.",
+    "frameHeight": "measured from the 1:1 front view (includes nose pads)",
+    "bridge": "not dimensioned on the drawing"
+  },
+  "gcd": {
+    "placement": "Triangular end-piece, centered between hinge and wire joint",
+    "templeFaceHeightMm": 15,
+    "templeFaceHeightSource": "end-piece height at the hinge (15 mm), tapering to the wire",
+    "lengthMm": 8.8,
+    "note": "Sized to the end-piece (0.98 × its 9 mm height at the emblem's centre); confirm with the factory.",
+    "stone": "Black onyx",
+    "metal": "Gold tone"
+  },
+  "sources": {
+    "drawing": "reference/technical-drawings/drawing-04.pdf",
+    "drawingNumber": "04",
+    "lineArt": [
+      "content/products/drawings/F05-front.svg",
+      "content/products/drawings/F05-side.svg",
+      "content/products/drawings/F05-top.svg",
+      "content/products/drawings/F05-iso.svg"
+    ],
+    "lightboxGroup": "IMG_3506–IMG_3553",
+    "lightboxCount": 48,
+    "onyxComposites": [
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3532.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3534.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3544.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3545.jpg",
+      "darkestshades: brand/lightbox/onyx-emblem/IMG_3551.jpg"
+    ]
+  },
+  "photography": {
+    "angleSet": "content/photography/lightbox-angle-set.json#F05",
+    "status": "selected, not yet cleaned"
+  },
+  "copy": {
+    "line": null,
+    "story": null
+  },
+  "promises": [
+    "45-day exchange",
+    "6-month warranty"
+  ]
+}

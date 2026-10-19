@@ -1,0 +1,356 @@
+{
+ "$description": "Darkest Shades non-color tokens. Type uses only Owners Wide and Stolzl. Sizes are fluid between 390px and 1440px viewports.",
+ "font": {
+  "family": {
+   "display": {
+    "$type": "fontFamily",
+    "$value": "'Owners Wide', 'owners-wide', ui-sans-serif, system-ui, sans-serif",
+    "$description": "Owners Wide Medium. Display and headings only, uppercase by style."
+   },
+   "text": {
+    "$type": "fontFamily",
+    "$value": "'Stolzl', 'stolzl', ui-sans-serif, system-ui, sans-serif",
+    "$description": "Stolzl Light/Book/Regular/Medium. Body, UI, labels."
+   }
+  },
+  "weight": {
+   "light": {
+    "$type": "fontWeight",
+    "$value": 300,
+    "$description": "Stolzl Light: 22px and up only."
+   },
+   "book": {
+    "$type": "fontWeight",
+    "$value": 350,
+    "$description": "Stolzl Book: body. The local @font-face maps Book to 350; check an Adobe Fonts kit's weights before relying on it."
+   },
+   "regular": {
+    "$type": "fontWeight",
+    "$value": 400,
+    "$description": "Stolzl Regular: UI, cards."
+   },
+   "medium": {
+    "$type": "fontWeight",
+    "$value": 500,
+    "$description": "Stolzl Medium: buttons, micro labels. Owners Wide Medium: display."
+   }
+  },
+  "size": {
+   "manifesto": {
+    "$type": "dimension",
+    "$value": "clamp(2.5rem, 0.643rem + 7.619vw, 7.5rem)",
+    "$description": "40 -> 120px. Line height 0.95."
+   },
+   "display": {
+    "$type": "dimension",
+    "$value": "clamp(2rem, 1.071rem + 3.810vw, 4.5rem)",
+    "$description": "32 -> 72px."
+   },
+   "h1": {
+    "$type": "dimension",
+    "$value": "clamp(1.75rem, 1.379rem + 1.524vw, 2.75rem)",
+    "$description": "28 -> 44px."
+   },
+   "h2": {
+    "$type": "dimension",
+    "$value": "clamp(1.375rem, 1.189rem + 0.762vw, 1.875rem)",
+    "$description": "22 -> 30px."
+   },
+   "label": {
+    "$type": "dimension",
+    "$value": "clamp(0.8125rem, 0.766rem + 0.190vw, 0.9375rem)",
+    "$description": "13 -> 15px, Owners Wide Medium uppercase."
+   },
+   "body-lg": {
+    "$type": "dimension",
+    "$value": "1.125rem"
+   },
+   "body": {
+    "$type": "dimension",
+    "$value": "1rem"
+   },
+   "ui": {
+    "$type": "dimension",
+    "$value": "0.9375rem"
+   },
+   "small": {
+    "$type": "dimension",
+    "$value": "0.875rem"
+   },
+   "micro": {
+    "$type": "dimension",
+    "$value": "0.75rem",
+    "$description": "Uppercase Stolzl Medium: drop status, look numbers, spec labels."
+   },
+   "card": {
+    "$type": "dimension",
+    "$value": "clamp(0.9375rem, 0.891rem + 0.190vw, 1.0625rem)",
+    "$description": "The strobe's small centered sentence."
+   }
+  },
+  "leading": {
+   "manifesto": {
+    "$type": "number",
+    "$value": 0.95
+   },
+   "display": {
+    "$type": "number",
+    "$value": 1.0
+   },
+   "heading": {
+    "$type": "number",
+    "$value": 1.1
+   },
+   "body": {
+    "$type": "number",
+    "$value": 1.6
+   },
+   "ui": {
+    "$type": "number",
+    "$value": 1.3
+   }
+  },
+  "tracking": {
+   "display": {
+    "$type": "dimension",
+    "$value": "0em"
+   },
+   "heading": {
+    "$type": "dimension",
+    "$value": "0.01em"
+   },
+   "label": {
+    "$type": "dimension",
+    "$value": "0.08em"
+   },
+   "micro": {
+    "$type": "dimension",
+    "$value": "0.12em"
+   },
+   "body": {
+    "$type": "dimension",
+    "$value": "0em"
+   }
+  }
+ },
+ "space": {
+  "0": {
+   "$type": "dimension",
+   "$value": "0"
+  },
+  "1": {
+   "$type": "dimension",
+   "$value": "0.25rem"
+  },
+  "2": {
+   "$type": "dimension",
+   "$value": "0.5rem"
+  },
+  "3": {
+   "$type": "dimension",
+   "$value": "0.75rem"
+  },
+  "4": {
+   "$type": "dimension",
+   "$value": "1rem"
+  },
+  "6": {
+   "$type": "dimension",
+   "$value": "1.5rem"
+  },
+  "8": {
+   "$type": "dimension",
+   "$value": "2rem"
+  },
+  "12": {
+   "$type": "dimension",
+   "$value": "3rem"
+  },
+  "16": {
+   "$type": "dimension",
+   "$value": "4rem"
+  },
+  "24": {
+   "$type": "dimension",
+   "$value": "6rem"
+  },
+  "32": {
+   "$type": "dimension",
+   "$value": "8rem"
+  },
+  "48": {
+   "$type": "dimension",
+   "$value": "12rem"
+  }
+ },
+ "radius": {
+  "none": {
+   "$type": "dimension",
+   "$value": "0",
+   "$description": "Everything is square."
+  },
+  "focus": {
+   "$type": "dimension",
+   "$value": "0"
+  }
+ },
+ "border": {
+  "hairline": {
+   "$type": "dimension",
+   "$value": "1px"
+  },
+  "focus": {
+   "$type": "dimension",
+   "$value": "2px"
+  },
+  "focus-offset": {
+   "$type": "dimension",
+   "$value": "2px"
+  }
+ },
+ "layout": {
+  "max": {
+   "$type": "dimension",
+   "$value": "90rem"
+  },
+  "gutter-390": {
+   "$type": "dimension",
+   "$value": "1rem"
+  },
+  "gutter-768": {
+   "$type": "dimension",
+   "$value": "1.5rem"
+  },
+  "gutter-1024": {
+   "$type": "dimension",
+   "$value": "2.5rem"
+  },
+  "gutter-1440": {
+   "$type": "dimension",
+   "$value": "3.5rem"
+  },
+  "header-sm": {
+   "$type": "dimension",
+   "$value": "3.5rem"
+  },
+  "header-lg": {
+   "$type": "dimension",
+   "$value": "4rem"
+  },
+  "measure": {
+   "$type": "dimension",
+   "$value": "68ch"
+  }
+ },
+ "motion": {
+  "instant": {
+   "$type": "duration",
+   "$value": "0ms"
+  },
+  "quick": {
+   "$type": "duration",
+   "$value": "120ms"
+  },
+  "hold": {
+   "$type": "duration",
+   "$value": "1200ms",
+   "$description": "Entry card hold."
+  },
+  "frame-12": {
+   "$type": "duration",
+   "$value": "83.333ms",
+   "$description": "One burst frame at 12 per second (1/12 s)."
+  },
+  "frame-3": {
+   "$type": "duration",
+   "$value": "333.333ms",
+   "$description": "One full-bleed frame at 3 per second."
+  },
+  "ease": {
+   "$type": "cubicBezier",
+   "$value": [
+    0.2,
+    0,
+    0,
+    1
+   ]
+  },
+  "push": {
+   "$type": "number",
+   "$value": 1.06,
+   "$description": "DetailHold scale at the end of its scroll range."
+  }
+ },
+ "aspect": {
+  "stage": {
+   "$type": "string",
+   "$value": "4 / 5",
+   "$description": "Product angles A1-A5."
+  },
+  "hero-landscape": {
+   "$type": "string",
+   "$value": "3 / 2"
+  },
+  "print": {
+   "$type": "string",
+   "$value": "3 / 4",
+   "$description": "Framed prints in burst 1, cast portraits."
+  },
+  "mobile-hero": {
+   "$type": "string",
+   "$value": "9 / 16"
+  },
+  "desktop-hero": {
+   "$type": "string",
+   "$value": "16 / 9"
+  },
+  "square": {
+   "$type": "string",
+   "$value": "1 / 1"
+  }
+ },
+ "z": {
+  "base": {
+   "$type": "number",
+   "$value": 0
+  },
+  "header": {
+   "$type": "number",
+   "$value": 10
+  },
+  "sheet": {
+   "$type": "number",
+   "$value": 40
+  },
+  "offer": {
+   "$type": "number",
+   "$value": 50
+  },
+  "toast": {
+   "$type": "number",
+   "$value": 60
+  },
+  "entry": {
+   "$type": "number",
+   "$value": 70
+  }
+ },
+ "breakpoint": {
+  "sm": {
+   "$type": "dimension",
+   "$value": "390px"
+  },
+  "md": {
+   "$type": "dimension",
+   "$value": "768px"
+  },
+  "lg": {
+   "$type": "dimension",
+   "$value": "1024px"
+  },
+  "xl": {
+   "$type": "dimension",
+   "$value": "1440px"
+  }
+ }
+}

@@ -1,0 +1,389 @@
+{
+  "primitives": {
+    "black": {
+      "value": "#000000",
+      "source": "anastasiia",
+      "use": "Logo black"
+    },
+    "onyx-950": {
+      "value": "#050607",
+      "source": "logo-kit",
+      "use": "Onyx core (GCD inset gradient)"
+    },
+    "onyx-900": {
+      "value": "#0B0B0C",
+      "source": "extended",
+      "use": "Base surface"
+    },
+    "onyx-850": {
+      "value": "#131416",
+      "source": "extended",
+      "use": "Raised surface"
+    },
+    "onyx-800": {
+      "value": "#1C1D1F",
+      "source": "extended",
+      "use": "Overlay surface"
+    },
+    "onyx-700": {
+      "value": "#2C2C2D",
+      "source": "logo-kit",
+      "use": "Onyx highlight; hairlines"
+    },
+    "graphite-600": {
+      "value": "#3D3D3E",
+      "source": "extended",
+      "use": "Dividers on dark"
+    },
+    "graphite-500": {
+      "value": "#545454",
+      "source": "anastasiia",
+      "use": "Moodboard graphite. Rules on dark; text on light only"
+    },
+    "graphite-400": {
+      "value": "#6B6B6C",
+      "source": "extended",
+      "use": "Control borders on dark (3:1); disabled text"
+    },
+    "ash-400": {
+      "value": "#8A8A8A",
+      "source": "extended",
+      "use": "Smallest text grey allowed on dark"
+    },
+    "ash-300": {
+      "value": "#A6A5A1",
+      "source": "extended",
+      "use": "Secondary text on dark"
+    },
+    "ash-200": {
+      "value": "#CFCBC3",
+      "source": "extended",
+      "use": "Muted text on dark, large type"
+    },
+    "bone-100": {
+      "value": "#E8E4DC",
+      "source": "extended",
+      "use": "Primary text on dark; slide-film white"
+    },
+    "bone-50": {
+      "value": "#F3F0E9",
+      "source": "extended",
+      "use": "Paper surface"
+    },
+    "stage": {
+      "value": "#E4E2DD",
+      "source": "extended",
+      "use": "Product stage (matches cleaned lightbox seamless)"
+    },
+    "gold-300": {
+      "value": "#D9BB82",
+      "source": "logo-kit",
+      "use": "Gold hover / light gold"
+    },
+    "gold-500": {
+      "value": "#C6A36A",
+      "source": "logo-kit",
+      "use": "GCD flat gold"
+    },
+    "gold-700": {
+      "value": "#7A5C2E",
+      "source": "extended",
+      "use": "Gold ink for light surfaces"
+    },
+    "camel-500": {
+      "value": "#BF835F",
+      "source": "anastasiia",
+      "use": "Moodboard camel"
+    },
+    "camel-700": {
+      "value": "#7F5137",
+      "source": "extended",
+      "use": "Camel ink for light surfaces"
+    },
+    "success-300": {
+      "value": "#8DB596",
+      "source": "extended",
+      "use": "Success on dark"
+    },
+    "success-700": {
+      "value": "#2F6B44",
+      "source": "extended",
+      "use": "Success on light"
+    },
+    "error-300": {
+      "value": "#E0796A",
+      "source": "extended",
+      "use": "Error on dark"
+    },
+    "error-700": {
+      "value": "#A3392C",
+      "source": "extended",
+      "use": "Error on light"
+    },
+    "info-300": {
+      "value": "#9DB4D1",
+      "source": "extended",
+      "use": "Info on dark"
+    },
+    "info-700": {
+      "value": "#33557F",
+      "source": "extended",
+      "use": "Info on light"
+    },
+    "white": {
+      "value": "#FFFFFF",
+      "source": "anastasiia",
+      "use": "Logo white"
+    }
+  },
+  "gradients": {
+    "metal": [
+      "#634722",
+      "#B68A4D",
+      "#FFF2CD",
+      "#EAC999",
+      "#A77C46",
+      "#CDA974",
+      "#86653B",
+      "#EDCFA0",
+      "#5A442C"
+    ],
+    "onyx": [
+      "#2C2C2D",
+      "#111214",
+      "#050607",
+      "#111214",
+      "#000000"
+    ]
+  },
+  "roles": {
+    "night": {
+      "surface-canvas": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "surface-base": {
+        "ref": "onyx-900",
+        "value": "#0B0B0C"
+      },
+      "surface-raised": {
+        "ref": "onyx-850",
+        "value": "#131416"
+      },
+      "surface-overlay": {
+        "ref": "onyx-800",
+        "value": "#1C1D1F"
+      },
+      "surface-inverse": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "surface-stage": {
+        "ref": "stage",
+        "value": "#E4E2DD"
+      },
+      "text-primary": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "text-secondary": {
+        "ref": "ash-300",
+        "value": "#A6A5A1"
+      },
+      "text-tertiary": {
+        "ref": "ash-400",
+        "value": "#8A8A8A"
+      },
+      "text-disabled": {
+        "ref": "graphite-400",
+        "value": "#6B6B6C"
+      },
+      "text-inverse": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "text-accent": {
+        "ref": "gold-500",
+        "value": "#C6A36A"
+      },
+      "text-editorial": {
+        "ref": "camel-500",
+        "value": "#BF835F"
+      },
+      "border-hairline": {
+        "ref": "onyx-700",
+        "value": "#2C2C2D"
+      },
+      "border-rule": {
+        "ref": "graphite-500",
+        "value": "#545454"
+      },
+      "border-control": {
+        "ref": "graphite-400",
+        "value": "#6B6B6C"
+      },
+      "focus-ring": {
+        "ref": "gold-500",
+        "value": "#C6A36A"
+      },
+      "action-primary-bg": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "action-primary-text": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "action-primary-bg-hover": {
+        "ref": "white",
+        "value": "#FFFFFF"
+      },
+      "action-secondary-border": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "action-secondary-text": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "action-quiet-text": {
+        "ref": "ash-300",
+        "value": "#A6A5A1"
+      },
+      "action-quiet-text-hover": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "status-success": {
+        "ref": "success-300",
+        "value": "#8DB596"
+      },
+      "status-error": {
+        "ref": "error-300",
+        "value": "#E0796A"
+      },
+      "status-info": {
+        "ref": "info-300",
+        "value": "#9DB4D1"
+      },
+      "status-live": {
+        "ref": "gold-500",
+        "value": "#C6A36A"
+      }
+    },
+    "paper": {
+      "surface-canvas": {
+        "ref": "bone-50",
+        "value": "#F3F0E9"
+      },
+      "surface-base": {
+        "ref": "bone-50",
+        "value": "#F3F0E9"
+      },
+      "surface-raised": {
+        "ref": "white",
+        "value": "#FFFFFF"
+      },
+      "surface-overlay": {
+        "ref": "stage",
+        "value": "#E4E2DD"
+      },
+      "surface-inverse": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "surface-stage": {
+        "ref": "stage",
+        "value": "#E4E2DD"
+      },
+      "text-primary": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "text-secondary": {
+        "ref": "onyx-700",
+        "value": "#2C2C2D"
+      },
+      "text-tertiary": {
+        "ref": "graphite-500",
+        "value": "#545454"
+      },
+      "text-disabled": {
+        "ref": "ash-400",
+        "value": "#8A8A8A"
+      },
+      "text-inverse": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "text-accent": {
+        "ref": "gold-700",
+        "value": "#7A5C2E"
+      },
+      "text-editorial": {
+        "ref": "camel-700",
+        "value": "#7F5137"
+      },
+      "border-hairline": {
+        "ref": "ash-200",
+        "value": "#CFCBC3"
+      },
+      "border-rule": {
+        "ref": "ash-400",
+        "value": "#8A8A8A"
+      },
+      "border-control": {
+        "ref": "graphite-500",
+        "value": "#545454"
+      },
+      "focus-ring": {
+        "ref": "gold-700",
+        "value": "#7A5C2E"
+      },
+      "action-primary-bg": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "action-primary-text": {
+        "ref": "bone-100",
+        "value": "#E8E4DC"
+      },
+      "action-primary-bg-hover": {
+        "ref": "black",
+        "value": "#000000"
+      },
+      "action-secondary-border": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "action-secondary-text": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "action-quiet-text": {
+        "ref": "onyx-700",
+        "value": "#2C2C2D"
+      },
+      "action-quiet-text-hover": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
+      "status-success": {
+        "ref": "success-700",
+        "value": "#2F6B44"
+      },
+      "status-error": {
+        "ref": "error-700",
+        "value": "#A3392C"
+      },
+      "status-info": {
+        "ref": "info-700",
+        "value": "#33557F"
+      },
+      "status-live": {
+        "ref": "gold-700",
+        "value": "#7A5C2E"
+      }
+    }
+  }
+}

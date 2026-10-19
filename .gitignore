@@ -1,0 +1,43 @@
+# Fonts are licensed and this repo is public: never commit font files.
+brand/fonts/private/
+*.otf
+*.ttf
+*.woff
+*.woff2
+
+# Raw and master photography live in the DAM, not here (docs/brief/07-photography.md).
+/raw/
+/masters/
+/work/
+*.tif
+*.tiff
+*.psd
+*.heic
+
+# Blender
+*.blend1
+*.blend@
+
+# Node / app
+node_modules/
+/dist/
+/build/
+app/build/
+app/dist/
+.cache/
+.shopify/
+storybook-static/
+playwright-report/
+test-results/
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db

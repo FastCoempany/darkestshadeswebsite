@@ -1,0 +1,28 @@
+{
+  "$comment": "Drop data. null means not set by the founder; the UI shows nothing for null values (docs/brief/05-components.md, honesty rules).",
+  "number": "001",
+  "state": "announced",
+  "startsAt": null,
+  "endsAt": null,
+  "timezone": "America/Chicago",
+  "frames": [
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "F05",
+    "F06",
+    "F08",
+    "F09"
+  ],
+  "pairsPerFrame": null,
+  "limitPerCustomer": null,
+  "earlyAccess": {
+    "enabled": false,
+    "hoursBeforePublic": 24,
+    "gate": "customer tag 'list'"
+  },
+  "copy": {
+    "statement": null
+  }
+}

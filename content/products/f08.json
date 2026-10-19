@@ -1,0 +1,76 @@
+{
+  "$schema": "./product.schema.json",
+  "id": "F08",
+  "handle": "f08",
+  "lookNumber": "08",
+  "name": null,
+  "nameStatus": "TBD (00-decisions.md O1)",
+  "descriptor": "Black double-bridge aviator",
+  "status": "for-sale",
+  "price": {
+    "amount": "100.00",
+    "currencyCode": "USD"
+  },
+  "drop": null,
+  "frame": {
+    "shape": "Squared aviator with a double bridge",
+    "front": "Acetate, black",
+    "temples": "Acetate, translucent smoke grey",
+    "fit": "Universal fit"
+  },
+  "lens": {
+    "color": "Grey gradient",
+    "type": "Polarized TAC (tri-acetate cellulose)",
+    "uv": "UV400, 100% UVA/UVB",
+    "impact": "Impact resistant",
+    "scratch": "Scratch resistant"
+  },
+  "measurementsMm": {
+    "lensWidth": 56,
+    "bridge": 20,
+    "templeLength": 153,
+    "lensHeight": 44,
+    "frameHeight": 54,
+    "frontWidth": 154
+  },
+  "sizeNotation": "56□20 153",
+  "measurementNotes": {
+    "default": "From the 1:1 technical drawing; values in mm.",
+    "frameHeight": "measured from the 1:1 front view",
+    "bridge": "span of the double bridge opening (20 mm); confirm"
+  },
+  "gcd": {
+    "placement": "Outer face of the acetate temple",
+    "templeFaceHeightMm": 10,
+    "templeFaceHeightSource": "dimensioned (10 mm at the hinge, 13 mm further back)",
+    "lengthMm": 9.8,
+    "note": "0.98 × temple face height; centre 0.82 × that height from the hinge, 39% down the face.",
+    "stone": "Black onyx",
+    "metal": "Gold tone"
+  },
+  "sources": {
+    "drawing": "reference/technical-drawings/drawing-08.pdf",
+    "drawingNumber": "08",
+    "lineArt": [
+      "content/products/drawings/F08-front.svg",
+      "content/products/drawings/F08-side.svg",
+      "content/products/drawings/F08-top.svg",
+      "content/products/drawings/F08-iso.svg"
+    ],
+    "lightboxGroup": "IMG_3582–IMG_3632",
+    "lightboxCount": 51,
+    "onyxComposites": []
+  },
+  "photography": {
+    "angleSet": "content/photography/lightbox-angle-set.json#F08",
+    "status": "selected, not yet cleaned"
+  },
+  "copy": {
+    "line": null,
+    "story": null
+  },
+  "promises": [
+    "45-day exchange",
+    "6-month warranty"
+  ]
+}
