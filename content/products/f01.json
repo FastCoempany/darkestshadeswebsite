@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F01",
-  "handle": "f01",
+  "handle": "lou-went-underground",
   "lookNumber": "01",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Blue tortoise, double bridge",
+  "name": "Lou Went Underground",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Blue navigator",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

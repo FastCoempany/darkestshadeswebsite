@@ -23,7 +23,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 - Sound off by design; built from still images, not video; photosensitivity notice first; skippable from frame 1; never on deep links or for returning visitors; no bursts under `prefers-reduced-motion`. `tools/flashcheck.py` must pass (`03-references.md`).
 
 **Products and copy**
-- Every product fact comes from `content/products/` (from the 1:1 drawings). **Never invent a spec**; `null` hides the row. Names are pending: use look numbers and descriptors.
+- Every product fact comes from `content/products/` (from the 1:1 drawings). **Never invent a spec**; `null` hides the row. Frames carry the founder's names (`06-products.md`); names are never explained or tied to a real person.
 - All copy from `content/copy/en.json`. No lorem ipsum anywhere. `@darkestshades`, `darkestshades.com`, `#DarkestShades`.
 
 **Imagery**

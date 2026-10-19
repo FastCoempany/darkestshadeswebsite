@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F06",
-  "handle": "f06",
+  "handle": "what-anna-thought",
   "lookNumber": "06",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black flat-top shield",
+  "name": "What Anna Thought",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Flat-top shield",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

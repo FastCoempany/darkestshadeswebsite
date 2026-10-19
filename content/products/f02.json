@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F02",
-  "handle": "f02",
+  "handle": "holly-wore-them-to-breakfast",
   "lookNumber": "02",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Red tortoise, metal temples",
+  "name": "Holly Wore Them to Breakfast",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Crimson tortoise, wire temples",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

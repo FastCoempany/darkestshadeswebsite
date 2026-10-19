@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F05",
-  "handle": "f05",
+  "handle": "jackie-gave-them-nothing",
   "lookNumber": "05",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black chunky, metal temples",
+  "name": "Jackie Gave Them Nothing",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Puffy square, wire temples",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

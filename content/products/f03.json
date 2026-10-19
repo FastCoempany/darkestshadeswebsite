@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F03",
-  "handle": "f03",
+  "handle": "roy-forgot-the-clear-ones",
   "lookNumber": "03",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black, yellow lens",
+  "name": "Roy Forgot the Clear Ones",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Black wayfarer, yellow lens",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

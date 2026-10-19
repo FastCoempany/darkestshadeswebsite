@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F04",
-  "handle": "f04",
+  "handle": "k-was-never-here",
   "lookNumber": "04",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black square, metal temples",
+  "name": "K Was Never Here",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Flat-top square, wire temples",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

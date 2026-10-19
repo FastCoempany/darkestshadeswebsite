@@ -6,6 +6,7 @@
     "id",
     "handle",
     "lookNumber",
+    "name",
     "descriptor",
     "status",
     "price",
@@ -30,11 +31,8 @@
       "pattern": "^0[1-9]$"
     },
     "name": {
-      "type": [
-        "string",
-        "null"
-      ],
-      "description": "null until the founder names the frame (00-decisions.md O1)"
+      "type": "string",
+      "description": "The frame's name, set by the founder (Oct 19 2026)."
     },
     "descriptor": {
       "type": "string"

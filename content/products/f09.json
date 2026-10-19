@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F09",
-  "handle": "f09",
+  "handle": "what-stevie-saw",
   "lookNumber": "09",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black chunky acetate",
+  "name": "What Stevie Saw",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "The blackout",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

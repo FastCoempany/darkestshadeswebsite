@@ -4,26 +4,26 @@ Eight frames, $100 each, sold in drops. Product facts live in `content/products/
 
 ## The eight
 
-IDs follow the factory and photo-group numbering. F07 (white floral strip on the arm) was dropped. Names are still to come (`00-decisions.md` O1), so the site uses look numbers and descriptors.
+IDs follow the factory and photo-group numbering. F07 ("Hunter Kept Owl Hours", the engraved navigator with the white floral strip) was dropped. Names and descriptors are the founder's (Oct 19 2026); handles are the names in kebab case. Names are never explained or tied to a real person.
 
-| Look | Descriptor | Front / temples | Lens | Size (lens□bridge temple) | Lens h. | Front w. | Drawing | Lightbox shots |
+| Look | Name · descriptor | Front / temples | Lens | Size (lens□bridge temple) | Lens h. | Front w. | Drawing | Lightbox shots |
 |---|---|---|---|---|---|---|---|---|
-| 01 | Blue tortoise, double bridge | Blue-black tortoise acetate / same | Light blue | 54□11 145 | 44 | 150 | 01 | IMG_3554–3581 (28) |
-| 02 | Red tortoise, metal temples | Red-black tortoise acetate / black metal wire | Dark grey | 45□7 145 | 38 | 142 | 03 | IMG_3410–3441, 3465–3475 (43) |
-| 03 | Black, yellow lens | Gloss black acetate / same | Yellow | 45□— 150 | 38 | 145 | 02 | IMG_3316–3341, 3492–3505 (40) |
-| 04 | Black square, metal temples | Black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□13 148 | 34 | 147 | 05 | IMG_3442–3464 (23) |
-| 05 | Black chunky, metal temples | Gloss black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□— 148 | 34 | 147 | 04 | IMG_3506–3553 (48) |
-| 06 | Black flat-top shield | Gloss black acetate / same | Grey gradient | 60□10 150 | 48 | 145 | 06 | IMG_3342–3371, 3482–3491 (40) |
-| 08 | Black double-bridge aviator | Black acetate / translucent smoke-grey acetate | Grey gradient | 56□20 153 | 44 | 154 | 08 | IMG_3582–3632 (51) |
-| 09 | Black chunky acetate | Gloss black acetate / wide gloss black acetate | Dark grey | 47□— 145 | 34 | 146 | 09 | IMG_3372–3409, 3477–3481 (43) |
+| 01 | **Lou Went Underground** · Blue navigator | Blue-black tortoise acetate / same | Light blue | 54□11 145 | 44 | 150 | 01 | IMG_3554–3581 (28) |
+| 02 | **Holly Wore Them to Breakfast** · Crimson tortoise, wire temples | Red-black tortoise acetate / black metal wire | Dark grey | 45□7 145 | 38 | 142 | 03 | IMG_3410–3441, 3465–3475 (43) |
+| 03 | **Roy Forgot the Clear Ones** · Black wayfarer, yellow lens | Gloss black acetate / same | Yellow | 45□— 150 | 38 | 145 | 02 | IMG_3316–3341, 3492–3505 (40) |
+| 04 | **K Was Never Here** · Flat-top square, wire temples | Black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□13 148 | 34 | 147 | 05 | IMG_3442–3464 (23) |
+| 05 | **Jackie Gave Them Nothing** · Puffy square, wire temples | Gloss black acetate / metal wire with a 15 mm end-piece | Dark grey | 47□— 148 | 34 | 147 | 04 | IMG_3506–3553 (48) |
+| 06 | **What Anna Thought** · Flat-top shield | Gloss black acetate / same | Grey gradient | 60□10 150 | 48 | 145 | 06 | IMG_3342–3371, 3482–3491 (40) |
+| 08 | **What Arnie Hid** · Black octagon navigator | Black acetate / translucent smoke-grey acetate | Grey gradient | 56□20 153 | 44 | 154 | 08 | IMG_3582–3632 (51) |
+| 09 | **What Stevie Saw** · The blackout | Gloss black acetate / wide gloss black acetate | Dark grey | 47□— 145 | 34 | 146 | 09 | IMG_3372–3409, 3477–3481 (43) |
 
 All measurements in mm. "—": not dimensioned on the drawing. Frame heights not dimensioned were measured from the 1:1 front views (`measurementNotes` in each file). F08's bridge is the span of the double-bridge opening; confirm.
 
 ### Telling the three black squares apart
 F04, F05 and F09 are different designs (`00-decisions.md`), and the site has to show it:
-- **F04**: square lens, straight flat brow, thinner rims, metal wire temples with a triangular end-piece.
-- **F05**: soft, pillowed corners and the thickest rims, metal wire temples with a triangular end-piece.
-- **F09**: chunky rounded rectangle, thick rims, wide flat acetate temples.
+- **F04, K Was Never Here** (flat-top square): square lens, straight flat brow, thinner rims, metal wire temples with a triangular end-piece.
+- **F05, Jackie Gave Them Nothing** (puffy square): soft, pillowed corners and the thickest rims, metal wire temples with a triangular end-piece.
+- **F09, What Stevie Saw** (the blackout): chunky rounded rectangle, thick rims, wide flat acetate temples.
 
 Rules: their stage cards never sit side by side in a row of three; the A2 three-quarter angle (which shows the temple) is the hover image for all three; their descriptors always name the temple.
 
@@ -62,7 +62,7 @@ These are estimates for imagery. The factory confirms the production sizes (`00-
 In Shopify this becomes a `drop` metaobject (number, state, start, end, frames, limit) and per-variant inventory; "pairs left" is the live inventory quantity, never a stored number.
 
 ## Shopify mapping (later, for wiring)
-- Product: title (name or descriptor), handle, vendor "Darkest Shades", product type "Sunglasses", tags (`drop-001`, `look-01`).
+- Product: title (the name), handle (kebab-case name), vendor "Darkest Shades", product type "Sunglasses", tags (`drop-001`, `look-01`).
 - One variant per frame (one colorway each). SKU `DS-F01-01` until the factory's codes arrive.
 - Metafields (`ds.*`): `look_number`, `descriptor`, `size_notation`, `measurements` (JSON), `lens_color`, `gcd_length_mm`, `line_art` (file references).
 - Media: the A1–A6 angle set in order, then on-model images, all from the cleaned set (`07-photography.md`).

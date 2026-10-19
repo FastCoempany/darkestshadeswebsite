@@ -1,11 +1,11 @@
 {
   "$schema": "./product.schema.json",
   "id": "F08",
-  "handle": "f08",
+  "handle": "what-arnie-hid",
   "lookNumber": "08",
-  "name": null,
-  "nameStatus": "TBD (00-decisions.md O1)",
-  "descriptor": "Black double-bridge aviator",
+  "name": "What Arnie Hid",
+  "nameStatus": "Set by the founder, Oct 19 2026",
+  "descriptor": "Black octagon navigator",
   "status": "for-sale",
   "price": {
     "amount": "100.00",

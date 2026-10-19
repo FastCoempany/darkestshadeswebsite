@@ -10,7 +10,7 @@ Eight products, so everything is capsule-sized: four top-level destinations, no 
 | `/drop` | Current drop | Redirects to `/drops/{number}` of the live or next drop. |
 | `/drops/{number}` | Drop | Status, date, pair counts, the frames in it. Past drops stay up as an archive ("Ended"). |
 | `/frames` | All frames | The eight frames as numbered looks. Sorted by look number. |
-| `/frames/{handle}` | Frame (product page) | Handles are `f01` … `f09` until names arrive (`00-decisions.md` O1). |
+| `/frames/{handle}` | Frame (product page) | Handles are the frame names in kebab case: `/frames/lou-went-underground`. |
 | `/manifesto` | Manifesto | The full statement; paper theme for reading. |
 | `/cast` | The cast | The seven models and their looks. |
 | `/questions` | Questions | Fit, lenses, drops, shipping, exchange, warranty. |
@@ -42,11 +42,11 @@ See `03-references.md`. Sections: Manifesto → The detail → The drop → The 
 
 ### All frames (`/frames`)
 - A statement line, then the eight frames as stage cards in a grid: 1 column at 390, 2 at 768, 3 at 1024, 4 at 1440.
-- Card: look number (camel, micro), product image on the stage color (A1 front angle, swaps to A2 three-quarter on hover/focus), descriptor, price, availability word ("In Drop 001", "Sold out", "Next drop").
+- Card: look number (camel, micro), product image on the stage color (A1 front angle, swaps to A2 three-quarter on hover/focus), name, descriptor, price, availability word ("In Drop 001", "Sold out", "Next drop").
 
 ### Frame page (`/frames/{handle}`)
 1. **Gallery**: A1 front, A2 three-quarter, A3 side, A4 top, A5 inside, A6 GCD detail, then on-model shots. Mobile: full-width swipe with a numeric index ("3 / 9"); desktop: two-column stack beside a sticky buy panel.
-2. **Buy panel**: look number, name (or descriptor until named), **price $100**, drop status and pairs left, `Add to bag` / `Get notified` / `Sold out`, the two promises in one line each (45-day exchange, 6-month warranty).
+2. **Buy panel**: look number, name, descriptor, **price $100**, drop status and pairs left, `Add to bag` / `Get notified` / `Sold out`, the two promises in one line each (45-day exchange, 6-month warranty).
 3. **The detail**: the held GCD view with one line ("The God Cloud Device. Gold, black onyx inset.").
 4. **Specs**: size in the standard eyewear notation (lens–bridge–temple, e.g. `54□11 145`), lens height, front width, frame and temple material, lens color and type, UV400, polarized. Every value from `content/products/`.
 5. **Drawn**: the technical line drawings (front, side, top) as vector, with the key measurements.
