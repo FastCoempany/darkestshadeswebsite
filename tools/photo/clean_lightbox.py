@@ -183,6 +183,24 @@ def smooth_fill(ch, mask, support, degree=2):
     return out
 
 
+def rows_inpaint(img, mask, scale=4):
+    """Fill `mask` row by row from both ends of each masked run, at low resolution: the tent's
+    structure behind a front view (the horizon where floor meets wall) runs across the picture,
+    so it carries straight on behind the frame and through a light lens."""
+    h, w = mask.shape
+    small = cv2.resize(img, (w // scale, h // scale), interpolation=cv2.INTER_AREA)
+    m = cv2.resize(mask.astype(np.uint8), (w // scale, h // scale), interpolation=cv2.INTER_NEAREST) > 0
+    out = small.copy()
+    xs = np.arange(small.shape[1])
+    for y in range(small.shape[0]):
+        good = ~m[y]
+        if m[y].any() and good.sum() >= 2:
+            out[y, m[y]] = np.interp(xs[m[y]], xs[good], small[y, good])
+    out = np.where(m, cv2.GaussianBlur(out, (0, 0), sigmaX=1.0, sigmaY=2.0), out)
+    up = cv2.resize(out, (w, h), interpolation=cv2.INTER_CUBIC)
+    return np.where(mask, up, img)
+
+
 def lowres_inpaint(img, mask, scale=4, radius=12):
     """Fill `mask` from its surroundings at low resolution (smooth fields: shadow, transmission)."""
     h, w = mask.shape
@@ -212,7 +230,8 @@ def remove_marks(srgb, marks, region_xy):
         strokes = ((hat > mk.get("threshold", 10)) & (area > 0)).astype(np.uint8)
         if mk.get("fill_whole"):
             strokes = area.copy()
-        strokes = cv2.dilate(strokes, np.ones((5, 5), np.uint8), iterations=1)
+        g = 2 * mk.get("grow_px", 2) + 1       # an engraving's soft shoulder goes with its strokes
+        strokes = cv2.dilate(strokes, np.ones((g, g), np.uint8), iterations=1)
         report_mask |= strokes
         if not strokes.any():
             continue
@@ -445,7 +464,8 @@ def main(cfg_path):
     ratio = lum(lin) / lum(B)
     tent = ~(cv2.dilate(obj.astype(np.uint8), np.ones((17, 17), np.uint8)) > 0) & (zone < 0.5)
     if tent.any():
-        C = lowres_inpaint(np.where(tent, np.clip(ratio, 0.3, 3), 1).astype(np.float32), ~tent)
+        fill = rows_inpaint if cfg.get("tent_fill") == "rows" else lowres_inpaint
+        C = fill(np.where(tent, np.clip(ratio, 0.3, 3), 1).astype(np.float32), ~tent)
         B = B * cv2.GaussianBlur(C, (0, 0), 6)[..., None]
     # shadow layer: how much darker than the tent each background pixel is
     ratio = lum(lin) / lum(B)
@@ -527,6 +547,9 @@ def main(cfg_path):
     # views look straight through to where the floor meets the back wall): "flat" gives each lens
     # one tint, "gradient" a smooth fit for gradient lenses, each with the lens's own grain. What
     # sat behind the lens goes too (in a front view, the temples): kept, it came out in fragments.
+    # A light lens (F01's blue, F03's yellow) shows the tent's textured wall through it; with
+    # `keep_behind`, things clearly darker than the lens's own tint (a temple or nose pad behind
+    # it) stay, and only the tent behind is evened out.
     mode = lc.get("smooth")
     if mode:
         deg = 0 if mode == "flat" else 2
@@ -541,6 +564,11 @@ def main(cfg_path):
                 fitimg[..., c] = smooth_fill(Tc[..., c], li, li & ~spots, degree=deg)
             grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[li & ~spots]))
             new = fitimg + rng2.normal(0, grain, Tc.shape).astype(np.float32)
+            if lc.get("keep_behind"):
+                ratio = lum(Tc) / np.maximum(lum(fitimg), 1e-4)
+                lo, hi = lc.get("behind_ratio", [0.5, 0.75])
+                m = cv2.GaussianBlur(np.clip((hi - ratio) / (hi - lo), 0, 1).astype(np.float32), (0, 0), 1.5)
+                new = new * (1 - m[..., None]) + Tc * m[..., None]
             Tc[li] = new[li]
     report["lens"] = {"hole_px": int(holes.sum()), "cleaned_px": int(spots.sum()),
                       "dust_px": int((dust & holes).sum()),
@@ -554,7 +582,8 @@ def main(cfg_path):
     # is mostly frame, whatever the model thinks (defocused rims get soft model alphas). Highlights
     # on the acetate keep the model's alpha.
     T_all = np.clip(lum(lin_clean) / (lum(back) + 1e-5), 0, 1)
-    near = cv2.dilate((alpha_m > 0.05).astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
+    model_zone = cv2.dilate((alpha_m > 0.05).astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
+    near = model_zone.copy()
     dark = (1 - T_all) > 0.4                          # clearly darker than the tent: frame or lens
     lab, n = ndi.label(dark)
     if n:
@@ -563,11 +592,33 @@ def main(cfg_path):
     # Two layers: the opaque frame (F, A) and the see-through filter (Tf, multiplies what's behind)
     t0 = 0.05                                         # darkening within the tent model's noise
     A_phys = np.clip((1 - T_all - t0) / (1 - t0), 0, 1)
+    A_phys = cv2.GaussianBlur(A_phys.astype(np.float32), (0, 0), 1.0)   # per-pixel noise would speckle the edges
     A = np.where(near, np.maximum(alpha_m, A_phys), alpha_m).astype(np.float32)
+    # Parts the model missed altogether (a defocused far temple): the tent is neutral grey, so a
+    # clearly colored pixel is frame too, however light (F01's blue tortoise patches), and black
+    # acetate still reflects a little, so past 0.8 it is solid. Measured per pixel this is noisy;
+    # those edges are soft anyway, so it is smoothed, and given a margin to fade out in.
+    mx, mn = srgb_clean.max(-1), srgb_clean.min(-1)
+    A_sat = np.clip(((mx - mn) / (mx + 1e-4) - 0.12) / 0.2, 0, 1).astype(np.float32)
+    lab, n = ndi.label(dark | (A_sat > 0.5))
+    missed = np.zeros(A.shape, bool)
+    if n:
+        hit = np.unique(lab[(alpha_m > 0.5) & (dark | (A_sat > 0.5))])
+        missed = cv2.dilate(np.isin(lab, hit[hit > 0]).astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
+        missed &= ~model_zone
+        A_pix = np.clip(cv2.GaussianBlur(np.maximum(A_phys, A_sat).astype(np.float32), (0, 0), 1.5) / 0.8, 0, 1)
+        A = np.where(missed, A_pix, A).astype(np.float32)
     A[holes] = 0.0
     rim = solid & ~holes
     A[rim] = np.maximum(A[rim], 0.995)
     F = np.where(A[..., None] > 0.02, (lin_clean - (1 - A[..., None]) * back) / np.maximum(A[..., None], 0.02), 0)
+    if missed.any():
+        # with a measured alpha, unmixing per channel blows small tints up into strong color (a
+        # grey wire that picked up a little red from the rim beside it); unmix the brightness
+        # only and keep the pixel's own color there
+        Fl = np.clip((lum(lin_clean) - (1 - A) * lum(back)) / np.maximum(A, 0.02), 0, 1)
+        Fc = lin_clean * (Fl / np.maximum(lum(lin_clean), 1e-4))[..., None]
+        F = np.where(missed[..., None], Fc, F)
     F = np.clip(F, 0, 1).astype(np.float32)
     Tf = np.ones_like(lin, dtype=np.float32)
     Tf[holes] = Tc[holes]
@@ -582,7 +633,7 @@ def main(cfg_path):
         dbg = out / "debug"
         dbg.mkdir(exist_ok=True)
         for name, m in {"holes": holes, "near": near, "spots": spots, "alpha_opaque": A, "transmission": T,
-                        "shadow": S, "model_alpha": alpha_m}.items():
+                        "shadow": S, "model_alpha": alpha_m, "marks": mark_mask}.items():
             Image.fromarray((np.clip(m.astype(np.float32), 0, 1) * 255).astype(np.uint8)).save(dbg / f"{name}.png")
 
     fr = cfg.get("framing", {})

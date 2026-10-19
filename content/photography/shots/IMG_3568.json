@@ -1,0 +1,34 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 from above (A4): the front at the bottom, the temples open. No old mark shows from up here and the GCD's face (the right temple's outside, image left) is vertical, so it isn't seen.",
+ "shot": "IMG_3568",
+ "frame": "F01",
+ "angle": "A4",
+ "region": [250, 1450, 3000, 4350],
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[850, 3870]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2150, 3870]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.2,
+  "smooth": "flat",
+  "keep_behind": true
+ },
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

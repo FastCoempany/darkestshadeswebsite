@@ -1,0 +1,45 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 side (A3), low, from the wearer's left: the shoot has no clean right profile. The engraved wordmark on the left temple comes off stroke by stroke and nothing goes on (the GCD is on the right only).",
+ "shot": "IMG_3572",
+ "frame": "F01",
+ "angle": "A3",
+ "region": [0, 2200, 2268, 3550],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's left)",
+   "points": [[650, 2850], [600, 2600]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's right)",
+   "points": [[250, 2700], [300, 2900]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near (left) temple (inset from the temple's edges, which the stroke detector would otherwise take for strokes)",
+   "poly": [[1170, 2768], [1530, 2746], [1530, 2876], [1170, 2908]],
+   "kind": "dark",
+   "stroke_px": 15,
+   "threshold": 6,
+   "grow_px": 4,
+   "temple": {
+    "top": [-0.06, 2826.0],
+    "bottom": [-0.09, 3021.5]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.2,
+  "smooth": "flat",
+  "keep_behind": true
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

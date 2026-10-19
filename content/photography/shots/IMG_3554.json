@@ -1,0 +1,31 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 front (A1). No old mark on the front; the GCD is on the right temple's outer face, which a front view doesn't see. The light blue lenses show the temples behind them, and they stay: through a lens this light they are part of the look.",
+ "shot": "IMG_3554",
+ "frame": "F01",
+ "angle": "A1",
+ "region": [0, 2400, 3213, 4500],
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[700, 3600], [1100, 3420]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2400, 3600], [2050, 3420]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.2,
+  "smooth": "flat",
+  "keep_behind": true
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ },
+ "tent_fill": "rows"
+}
