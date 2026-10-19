@@ -7,7 +7,8 @@ then renders with Cycles on a transparent background.
 
     pip install bpy==5.2.2          # Blender as a Python module (Python 3.13)
     python3 tools/blender/gcd_render.py --size 1024 --samples 64            # quick check
-    python3 tools/blender/gcd_render.py --size 4096 --samples 256 --views front,yaw35,yaw60
+    python3 tools/blender/gcd_render.py --size 4096 --samples 160 --views front,yaw35,yaw60
+    python3 tools/blender/gcd_render.py --light lightbox --views yaw72 --anchors --out work/gcd   # for a composite
 
 Real-world scale: the emblem is 0.98 x the temple face height long (about 11-12 mm on most
 frames, see brand/emblems/gcd/README.md). The model is built at 12 mm so bevels and stone
@@ -193,7 +194,7 @@ def vein_texture(path):
     return path
 
 
-def setup_scene(size, samples):
+def setup_scene(size, samples, light="studio"):
     sc = bpy.context.scene
     sc.render.engine = "CYCLES"
     sc.cycles.device = "CPU"
@@ -208,6 +209,9 @@ def setup_scene(size, samples):
     sc.render.image_settings.color_depth = "16"
     sc.view_settings.view_transform = "Standard"
     sc.view_settings.look = "None"
+    if light == "lightbox":
+        lightbox_world(sc)
+        return
     # Studio HDRI that ships with Blender, for believable metal reflections.
     world = bpy.data.worlds.new("studio")
     sc.world = world
@@ -222,6 +226,57 @@ def setup_scene(size, samples):
     clamp.inputs[1].default_value = (1.2, 1.2, 1.2)   # keep the HDRI's soft boxes from blowing out polished faces
     nt.links.new(env.outputs["Color"], clamp.inputs[0])
     nt.links.new(clamp.outputs["Vector"], bg.inputs["Color"])
+
+
+def lightbox_world(sc):
+    """A light tent: bright all round, brightest overhead, a grey floor. Matches the lightbox shots."""
+    world = bpy.data.worlds.new("lightbox")
+    sc.world = world
+    world.use_nodes = True
+    nt = world.node_tree
+    tc = nt.nodes.new("ShaderNodeTexCoord")
+    sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(tc.outputs["Generated"], sep.inputs["Vector"])
+    mr = nt.nodes.new("ShaderNodeMapRange")          # view-direction Z: -1 floor .. +1 overhead -> 0..1
+    mr.inputs["From Min"].default_value = -1.0
+    mr.inputs["From Max"].default_value = 1.0
+    nt.links.new(sep.outputs["Z"], mr.inputs["Value"])
+    ramp = nt.nodes.new("ShaderNodeValToRGB")
+    nt.links.new(mr.outputs["Result"], ramp.inputs["Fac"])
+    els = ramp.color_ramp.elements
+    els[0].position, els[0].color = 0.0, (0.30, 0.30, 0.30, 1)
+    els[1].position, els[1].color = 1.0, (1.15, 1.15, 1.15, 1)
+    mid = els.new(0.5)
+    mid.color = (0.78, 0.78, 0.78, 1)
+    bg = nt.nodes["Background"]
+    bg.inputs["Strength"].default_value = 1.0
+    nt.links.new(ramp.outputs["Color"], bg.inputs["Color"])
+
+
+def anchors(gold, cam):
+    """2D pixel positions of the emblem's bounding-box anchors on its front face (for compositing)."""
+    from bpy_extras.object_utils import world_to_camera_view
+    pts = []
+    for segs in parse_path(re.search(r'id="outer"\s+d="([^"]+)"', GEOM.read_text()).group(1)):
+        for p0, c1, c2, p3 in segs:
+            for t in np.linspace(0, 1, 9):
+                pts.append((1 - t) ** 3 * np.array(p0) + 3 * (1 - t) ** 2 * t * np.array(c1)
+                           + 3 * (1 - t) * t ** 2 * np.array(c2) + t ** 3 * np.array(p3))
+    pts = np.array(pts)
+    (x0, y0), (x1, y1) = pts.min(axis=0), pts.max(axis=0)
+    xm, ym = (x0 + x1) / 2, (y0 + y1) / 2
+    named = {"center": (xm, ym), "left": (x0, ym), "right": (x1, ym), "top": (xm, y0), "bottom": (xm, y1)}
+    bpy.context.view_layer.update()
+    sc = bpy.context.scene
+    W, H = sc.render.resolution_x, sc.render.resolution_y
+    out = {}
+    for k, (x, y) in named.items():
+        local = to_world((x, y)) + Vector((0, 0, GOLD_DEPTH / 2))
+        co = world_to_camera_view(sc, cam, gold.matrix_world @ local)
+        out[k] = [round(co.x * W, 2), round((1 - co.y) * H, 2)]
+    out["bbox_svg"] = [round(float(v), 2) for v in (x0, y0, x1, y1)]
+    out["length_m"] = LENGTH_M
+    return out
 
 
 def look_at(ob, target, up=(0.0, 0.0, 1.0)):
@@ -298,12 +353,47 @@ def main(argv):
     ap.add_argument("--size", type=int, default=1024)
     ap.add_argument("--samples", type=int, default=64)
     ap.add_argument("--views", default="front")
+    ap.add_argument("--light", choices=["studio", "lightbox"], default="studio",
+                    help="studio: dark product table (catalog masters); lightbox: bright tent, for composites on the lightbox shots")
+    ap.add_argument("--out", default=str(OUT), help="output folder (default brand/emblems/gcd/render)")
+    ap.add_argument("--anchors", action="store_true", help="also write <name>.json with the 2D anchors used for compositing")
+    ap.add_argument("--relief", type=float, default=None,
+                    help="mm the gold stands proud of the temple in a composite (default: the full 0.6 mm plate)")
     a = ap.parse_args(argv)
+    global GOLD_DEPTH
+    if a.relief is not None:
+        GOLD_DEPTH = a.relief / 1000.0 + 2 * STONE_RECESS
+    out_dir = pathlib.Path(a.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     for view in a.views.split(","):
         gold, stone = build()
-        setup_scene(a.size, a.samples)
+        setup_scene(a.size, a.samples, a.light)
         stand_up(gold, view)
+        if a.light == "lightbox":
+            # retoucher's choice for catalog images: keep polished onyx reading black under the
+            # tent's bright surround (half the specular, a touch of satin)
+            for m in stone.data.materials:
+                bsdf = m.node_tree.nodes["Principled BSDF"]
+                bsdf.inputs["Specular IOR Level"].default_value = 0.22
+                bsdf.inputs["Roughness"].default_value = 0.12
+                if "Coat Weight" in bsdf.inputs:
+                    bsdf.inputs["Coat Weight"].default_value = 0.0
+            cam = add_camera(view)
+            ring = bpy.data.lights.new("ring", "AREA")   # the ring light around the phone
+            ring.shape = "DISK"
+            ring.size = 0.02
+            ring.energy = 0.25
+            ob = bpy.data.objects.new("ring", ring)
+            ob.location = cam.location
+            bpy.context.scene.collection.objects.link(ob)
+            look_at(ob, (0, 0, 0))
+            name = f"gcd-3d-{view}-lightbox-{a.size}"
+            render_to(out_dir / f"{name}.png")
+            if a.anchors:
+                import json
+                (out_dir / f"{name}.json").write_text(json.dumps(anchors(gold, cam), indent=1))
+            continue
         # Product-table lighting: big soft box overhead and slightly in front (gradient down the
         # gold face). For the straight-on master, a narrow strip on the right for a clean edge
         # line and a dim fill from below-left.
@@ -315,12 +405,19 @@ def main(argv):
         # view gets the same soft gradient on the face instead of a random hot spot.
         t = 2 * yaw_of(view)
         add_area("card", (0.12 * math.sin(t), -0.12 * math.cos(t), 0.035), 0.14, 0.035, size_y=0.06)
-        add_camera(view)
-        out = OUT / f"gcd-3d-{view}-{a.size}.png"
-        bpy.context.scene.render.filepath = str(out)
-        bpy.ops.render.render(write_still=True)
-        print("wrote", out.relative_to(ROOT))
+        cam = add_camera(view)
+        name = f"gcd-3d-{view}-{a.size}"
+        render_to(out_dir / f"{name}.png")
+        if a.anchors:
+            import json
+            (out_dir / f"{name}.json").write_text(json.dumps(anchors(gold, cam), indent=1))
     (OUT / "_veins.png").unlink(missing_ok=True)
+
+
+def render_to(path):
+    bpy.context.scene.render.filepath = str(path)
+    bpy.ops.render.render(write_still=True)
+    print("wrote", path)
 
 
 if __name__ == "__main__":

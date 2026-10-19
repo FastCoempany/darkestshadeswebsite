@@ -38,4 +38,11 @@ python3 tools/drawings.py
 python3 tools/blender/gcd_render.py --size 4096 --samples 160 --views front,yaw35,yaw60
 ```
 
+Lightbox clean-up (old marks out, see-through lenses, the GCD in, re-staged), one shot at a time; `docs/brief/07-photography.md` has the steps:
+```
+pip install --break-system-packages "rembg[cpu]" opencv-contrib-python-headless scipy
+python3 tools/photo/zipget.py --picks content/photography/lightbox-angle-set.json --frames F08
+python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json
+```
+
 Fonts (Owners Wide, Stolzl) are not in this repo: see `brand/fonts/README.md`.

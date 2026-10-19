@@ -44,6 +44,8 @@ python3 tools/build_tokens.py     # design/tokens/build/*.css
 python3 tools/marks.py            # web marks + favicon set from Anastasiia's masters
 python3 tools/drawings.py         # vector line art from the technical drawings (needs pymupdf)
 python3 tools/blender/gcd_render.py --size 4096 --samples 160 --views front,yaw35,yaw60   # needs bpy==5.2.2
+python3 tools/photo/zipget.py --picks content/photography/lightbox-angle-set.json --frames F08   # originals → work/originals/
+python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json   # one shot → work/out/IMG_3596/ (07-photography.md)
 ```
 App commands (`npm run dev`, `npm run storybook`, `npm run test:visual`) are added in phase 0.
 

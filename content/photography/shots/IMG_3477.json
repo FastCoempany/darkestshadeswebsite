@@ -1,0 +1,103 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. Temple edges and hinge from darkestshades/brand/lightbox/onyx-emblem/process/cfgs.py.",
+ "shot": "IMG_3477",
+ "frame": "F09",
+ "angle": "H",
+ "region": [
+  0,
+  0,
+  4032,
+  2268
+ ],
+ "lenses": [
+  {
+   "name": "near lens",
+   "points": [
+    [
+     2782,
+     1008
+    ]
+   ]
+  },
+  {
+   "name": "far lens (defocused, cut by the frame edge)",
+   "points": [
+    [
+     3830,
+     1000
+    ],
+    [
+     3760,
+     860
+    ]
+   ]
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old logo, near temple",
+   "poly": [
+    [
+     1070,
+     870
+    ],
+    [
+     1535,
+     960
+    ],
+    [
+     1535,
+     1150
+    ],
+    [
+     1070,
+     1080
+    ]
+   ],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "top": [
+     0.2375,
+     483.8
+    ],
+    "bottom": [
+     0.3353,
+     779.2
+    ]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "gcd": {
+  "view": "yaw-16",
+  "relief_mm": 0.15,
+  "hinge_top": [
+   1697,
+   905
+  ],
+  "hinge_bottom": [
+   1697,
+   1300
+  ],
+  "temple_mm": 15,
+  "axis": [
+   -0.966,
+   -0.258
+  ],
+  "px_per_mm_along": 25.3,
+  "length_mm": 14.7,
+  "soften_px": 0.9
+ },
+ "framing": {
+  "box": [
+   0,
+   0,
+   4032,
+   2268
+  ]
+ }
+}
