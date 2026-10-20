@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 from straight above (A4); the hinges' metal and the nose pads stay. No old marks show from above. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 from straight above (A4); the hinges' metal and the nose pads stay. The lettering engraved on the front's two ends, seen from above, comes off. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
  "shot": "IMG_3584",
  "frame": "F08",
  "angle": "A4",
@@ -13,5 +13,19 @@
  "shadow_zone": {
   "around": 260,
   "soft": 40
- }
+ },
+ "marks": [
+  {
+   "name": "engraved lettering on the front's left end, seen from above",
+   "kind": "dark",
+   "fill_whole": true,
+   "poly": [[292, 3512], [380, 3520], [380, 3588], [292, 3574]]
+  },
+  {
+   "name": "engraved lettering on the front's right end, seen from above",
+   "kind": "dark",
+   "fill_whole": true,
+   "poly": [[2695, 3566], [2770, 3568], [2770, 3596], [2695, 3594]]
+  }
+ ]
 }

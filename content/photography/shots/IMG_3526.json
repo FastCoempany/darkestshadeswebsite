@@ -3,6 +3,7 @@
  "shot": "IMG_3526",
  "frame": "F05",
  "angle": "A3",
+ "alt": "A3-rear",
  "region": [0, 1900, 3213, 3700],
  "tent_fill": "rows",
  "lenses": [

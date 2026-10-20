@@ -1,8 +1,9 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 side (A3), low, from the wearer's left: the shoot has no clean right profile. The engraved wordmark on the left temple comes off stroke by stroke and nothing goes on (the GCD is on the right only).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 side (A3), low, from the wearer's left: the shoot has no clean right profile. The engraved wordmark on the left temple comes off stroke by stroke, by frequency-selective reconstruction (rows streaked the tortoise), and nothing goes on (the GCD is on the right only). A round print on the far (right) temple's inner face, seen through the far lens, comes off too. The view is a low three-quarter from the left, and its alt text says so.",
  "shot": "IMG_3572",
  "frame": "F01",
  "angle": "A3",
+ "alt": "A3-left",
  "region": [0, 2200, 2268, 3550],
  "tent_fill": "rows",
  "lenses": [
@@ -23,11 +24,22 @@
    "poly": [[1170, 2768], [1530, 2746], [1530, 2876], [1170, 2908]],
    "kind": "dark",
    "stroke_px": 15,
-   "threshold": 6,
+   "threshold": 8,
    "grow_px": 4,
    "temple": {
     "top": [-0.06, 2826.0],
     "bottom": [-0.09, 3021.5]
+   },
+   "fill": "fsr"
+  },
+  {
+   "name": "round print on the right temple's inner face, seen through the far lens",
+   "kind": "light",
+   "fill_whole": true,
+   "poly": [[132, 2588], [232, 2586], [232, 2694], [132, 2696]],
+   "temple": {
+    "top": [-0.02, 2580.8],
+    "bottom": [-0.053, 2715.4]
    }
   }
  ],

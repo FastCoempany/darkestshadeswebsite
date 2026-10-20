@@ -7,6 +7,6 @@
   "A4": {"aspect": [4, 5], "width": 0.84, "center_y": 0.5},
   "A5": {"aspect": [4, 5], "width": 0.84, "bottom": 0.69},
   "A6": {"aspect": [4, 5]},
-  "H": {"aspect": [3, 2], "width": 0.78, "center_y": 0.52}
+  "H": {"aspect": [3, 2], "width": 0.86, "center_y": 0.52}
  }
 }

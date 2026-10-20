@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py, the old print as a ruler: its ends lie 26.1 and 42.5 mm from the hinge (the 3D model on IMG_3556; a side view, IMG_3559, gives 25.2 to 26 and 40 to 41). The hinge line slants across the face as on the side drawing. The first placement, from the print's proportions, drew the GCD a fifth too short and 2 mm too far from the hinge.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke, by frequency-selective reconstruction (rows rebuilt along the temple streaked the tortoise). The GCD is placed with tools/photo/temple_gcd.py, the old print as a ruler: its ends lie 26.1 and 42.5 mm from the hinge (the 3D model on IMG_3556; a side view, IMG_3559, gives 25.2 to 26 and 40 to 41). The hinge line slants across the face as on the side drawing. The first placement, from the print's proportions, drew the GCD a fifth too short and 2 mm too far from the hinge.",
  "shot": "IMG_3558",
  "frame": "F01",
  "angle": "A6",
@@ -23,12 +23,13 @@
    "poly": [[190, 1903], [710, 2028], [710, 2270], [190, 2124]],
    "kind": "dark",
    "stroke_px": 15,
-   "threshold": 6,
+   "threshold": 8,
    "grow_px": 4,
    "temple": {
     "top": [0.2414, 1823.8],
     "bottom": [0.28, 2079.0]
-   }
+   },
+   "fill": "fsr"
   }
  ],
  "lens_cleanup": {

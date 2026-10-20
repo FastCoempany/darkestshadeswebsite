@@ -1,0 +1,26 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 from behind (A5), the wearer's right at image right: the temples come toward the camera and the hinges' metal shows. Re-picked Oct 20 2026: the first pick, IMG_3555, is a high front view (its temples run away from the camera), not a view of the inside. No old mark shows on the inside, and the GCD's face looks away.",
+ "shot": "IMG_3562",
+ "frame": "F01",
+ "angle": "A5",
+ "region": [0, 1850, 2268, 3550],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "left lens (image left)",
+   "points": [[700, 2450], [550, 2350]],
+   "convex": true
+  },
+  {
+   "name": "right lens (image right)",
+   "points": [[1600, 2450], [1750, 2350]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.2,
+  "smooth": "flat",
+  "keep_behind": true
+ }
+}

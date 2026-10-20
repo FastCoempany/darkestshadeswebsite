@@ -118,13 +118,22 @@ def masks_for(cfg_path, cfg):
         # the prompt points are in (or the largest), back to its own edge.
         opened = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
         lab, n = ndi.label(opened)
-        if n > 1:
+        if n >= 1:
+            # also when the opening leaves one piece: a speck it wiped out entirely would still be
+            # in the mask, and the convex hull below would stretch to it across the rim (F01's
+            # inside view and detail had a pale triangle over the rim)
             hits = [lab[int(y - y0), int(x - x0)] for x, y in cfg["lenses"][i]["points"]
                     if 0 <= y - y0 < lab.shape[0] and 0 <= x - x0 < lab.shape[1]]
             hits = [h for h in hits if h > 0]
             keep = hits[0] if hits else 1 + int(np.argmax(ndi.sum(opened, lab, range(1, n + 1))))
             piece = cv2.dilate((lab == keep).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))) > 0
             m = m & piece
+        # parts SAM left out that open onto the rim, so no filling can close them (a dark temple
+        # seen through the top of F06's gradient shield): polygons added by hand
+        for poly in cfg["lenses"][i].get("add", []):
+            extra = np.zeros(m.shape, np.uint8)
+            cv2.fillPoly(extra, [np.array([[x - x0, y - y0] for x, y in poly], np.int32)], 1)
+            m = m | (extra > 0)
         # a lens has no holes and no notches: what SAM leaves out inside it, or bites out of its
         # edge, is something seen through it (a temple behind, a dark reflection)
         m = ndi.binary_fill_holes(m)
@@ -182,12 +191,18 @@ def shadow_zone(obj, reach=600, side=150, soft=40, around=None):
         last = np.where(obj[y], y, last)
         d = y - last
         zone[y] = (d > 0) & (d <= reach)
-    zone = cv2.dilate(zone.astype(np.uint8), np.ones((1, 2 * side + 1), np.uint8)).astype(np.float32)
+    core = zone
+    zone = cv2.dilate(core.astype(np.uint8), np.ones((1, 2 * side + 1), np.uint8)).astype(np.float32)
     if not soft:
         return zone
     # soft at the sides; a little feathered top and bottom too, so its edges never show as a box
     zone = cv2.GaussianBlur(zone, (0, 1), sigmaX=soft, sigmaY=0.1)
-    return cv2.GaussianBlur(zone, (1, 0), sigmaX=0.1, sigmaY=8)
+    under = cv2.GaussianBlur(zone, (1, 0), sigmaX=0.1, sigmaY=8)
+    # beside the frame the zone starts level with the frame's lowest point in the next columns, a
+    # straight line through any shadow there (beside the F08 hero's end-piece): it fades in slowly
+    beside = cv2.GaussianBlur(zone, (1, 0), sigmaX=0.1, sigmaY=40)
+    w = cv2.GaussianBlur((zone > 0.01).astype(np.float32) * (~core).astype(np.float32), (0, 0), 20)
+    return under * (1 - w) + np.minimum(under, beside) * w
 
 
 def smooth_fill(ch, mask, support, degree=2):
@@ -263,7 +278,19 @@ def remove_marks(srgb, marks, region_xy):
         report_mask |= strokes
         if not strokes.any():
             continue
-        if mk.get("temple"):
+        if mk.get("fill") == "fsr":
+            # a patterned face (F01's tortoise): rows rebuilt from their two ends streaked the
+            # pattern; frequency-selective reconstruction (opencv-contrib) carries its blobs through
+            # the strokes instead
+            ys, xs = np.nonzero(strokes)
+            pad = 48
+            ya, yb = max(0, ys.min() - pad), min(out.shape[0], ys.max() + pad + 1)
+            xa, xb = max(0, xs.min() - pad), min(out.shape[1], xs.max() + pad + 1)
+            sub = np.ascontiguousarray(cv2.cvtColor(out[ya:yb, xa:xb], cv2.COLOR_RGB2BGR))
+            dst = sub.copy()
+            cv2.xphoto.inpaint(sub, (1 - strokes[ya:yb, xa:xb]).astype(np.uint8), dst, cv2.xphoto.INPAINT_FSR_BEST)
+            out[ya:yb, xa:xb] = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
+        elif mk.get("temple"):
             out = fill_along_temple(out, strokes, mk["temple"], region_xy, texture_dx=mk.get("texture_dx"),
                                     texture_from=mk.get("texture_from"))
         elif mk.get("axis") is not None:
@@ -659,6 +686,18 @@ def main(cfg_path):
     S = np.clip(ratio / norm, 0, 1.0)
     S = lowres_inpaint(S, cv2.dilate(obj.astype(np.uint8), np.ones((15, 15), np.uint8)) > 0)
     S = cv2.GaussianBlur(S, (0, 0), 3)
+    # the frame's shadow joins the frame: darkening that doesn't (a speck on the tent's fabric, in
+    # the zone where shadow can fall) is not shadow and would sit on the stage as a smudge (F06's
+    # detail). Kept: what can be reached from the frame without crossing lighter tent.
+    from skimage.morphology import reconstruction
+    D = np.clip(1 - S, 0, 1).astype(np.float32)
+    hs, ws = D.shape[0] // 4, D.shape[1] // 4
+    Dq = cv2.resize(D, (ws, hs), interpolation=cv2.INTER_AREA)
+    seed = cv2.resize(cv2.dilate(obj.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (41, 41))),
+                      (ws, hs), interpolation=cv2.INTER_NEAREST) > 0
+    Dr = reconstruction(np.where(seed, Dq, 0), Dq, method="dilation").astype(np.float32)
+    Dr = cv2.resize(Dr, (D.shape[1], D.shape[0]), interpolation=cv2.INTER_LINEAR)
+    S = (1 - np.minimum(D, Dr + 0.004)).astype(np.float32)
     # keep only the frame's own shadow: fade S to 1 between 150 and 450 px from the frame, so the
     # stage is one even color everywhere else (no tent gradient, no seams at the crop edge)
     d = cv2.distanceTransform((1 - obj).astype(np.uint8), cv2.DIST_L2, 5)
@@ -706,10 +745,24 @@ def main(cfg_path):
     # keyhole, the space between brow and far temple). Each is a color filter: transmission per
     # channel = image / tent, so a yellow or blue lens keeps its color on the new stage.
     lens_in = cv2.erode(lens.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0
-    holes = lens_in | (filled & ~solid)
+    # An open gap is see-through only past its soft edge: the edge itself is the frame's, with the
+    # rest of the frame's edges (below). Taken as transmission right up to the solid rim, it was
+    # scaled to the new stage while the rim beside it was not, and the switch between the two ran
+    # ragged along the rim (F08's bridge).
+    holes = lens_in | (filled & ~solid & (alpha_m <= 0.05))
+    # and a lens runs right up to the solid rim: the band its mask was shrunk by would otherwise go
+    # to the model, which calls a light lens tent, so it showed as a pale line of bare stage
+    # between lens and rim (F01's blue)
+    lens_band = lens & ~solid & ~lens_in
+    holes |= lens_band
     back = B * S[..., None]                          # the tent behind, in the frame's shadow
-    Tc = np.clip(lin / (back + 1e-5), 0, 1).astype(np.float32)
-    T = np.clip(lum(lin) / (lum(back) + 1e-5), 0, 1).astype(np.float32)
+    # the old marks come off first, so a print seen through a lens (the inner face of the far
+    # temple, F01) goes from the lens's transmission too
+    srgb_clean, mark_mask = remove_marks(srgb, cfg.get("marks", []), rx)
+    report["marks_px"] = int(mark_mask.sum())
+    lin_clean = srgb_to_lin(srgb_clean)
+    Tc = np.clip(lin_clean / (back + 1e-5), 0, 1).astype(np.float32)
+    T = np.clip(lum(lin_clean) / (lum(back) + 1e-5), 0, 1).astype(np.float32)
     # clean the lenses: ring-light reflections (bright spots) and dust (small dark specks)
     lc = cfg.get("lens_cleanup", {})
     T16 = (T * 65535).astype(np.uint16)
@@ -759,13 +812,14 @@ def main(cfg_path):
         lab, nl = ndi.label(lens_in)
         rng2 = np.random.default_rng(9)
         for i in range(1, nl + 1):
-            li = lab == i
-            if li.sum() < 2000:
+            core = lab == i
+            if core.sum() < 2000:
                 continue
+            li = core | (cv2.dilate(core.astype(np.uint8), np.ones((13, 13), np.uint8)) > 0) & lens_band
             fitimg = Tc.copy()
             for c in range(3):
-                fitimg[..., c] = smooth_fill(Tc[..., c], li, li & ~spots, degree=deg)
-            grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[li & ~spots]))
+                fitimg[..., c] = smooth_fill(Tc[..., c], li, core & ~spots, degree=deg)
+            grain = float(np.std((Tc - cv2.GaussianBlur(Tc, (0, 0), 2))[core & ~spots]))
             new = fitimg + rng2.normal(0, grain, Tc.shape).astype(np.float32)
             if lc.get("keep_behind"):
                 ratio = lum(Tc) / np.maximum(lum(fitimg), 1e-4)
@@ -777,10 +831,7 @@ def main(cfg_path):
                       "dust_px": int((dust & holes).sum()),
                       "transmission_median_rgb": [round(float(np.median(Tc[..., c][holes])), 3) for c in range(3)] if holes.any() else None}
 
-    # remove the old marks, then unmix the opaque parts from the tent behind their soft edges
-    srgb_clean, mark_mask = remove_marks(srgb, cfg.get("marks", []), rx)
-    report["marks_px"] = int(mark_mask.sum())
-    lin_clean = srgb_to_lin(srgb_clean)
+    # unmix the opaque parts from the tent behind their soft edges (the old marks are off, above)
     # Soft edges unmix against the tent right beside them, not against the tent model under the
     # frame: that is filled in from all round (both sides of a thin temple, tent further off), so
     # where the tent darkens towards the frame (the sweep's falloff, a halo round a defocused
@@ -800,6 +851,23 @@ def main(cfg_path):
     stray = cv2.dilate(stray.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (61, 61)))
     ring = ((d_out > 10) & (d_out <= 16) & (lum(lin) > 0.85 * lum(back))).astype(np.float32)
     ring *= np.clip((S - 0.85) / 0.1, 0, 1) * (1 - cv2.GaussianBlur(stray.astype(np.float32), (0, 0), 8))
+    # Inside an open gap (a bridge, the space between a side view's temples) the tent is read on the
+    # gap's own clear part: the model is filled in there from all round and comes out brighter
+    # than the tent really seen through it, which left the gap grey and its edge dark.
+    gaps = holes & ~lens
+    gap_tent = np.zeros(S.shape, bool)
+    if gaps.any():
+        lab_g, n_g = ndi.label(gaps)
+        Lg = lum(lin)
+        for i in range(1, n_g + 1):
+            gi = lab_g == i
+            if gi.sum() < 400:
+                continue
+            p90 = float(np.percentile(Lg[gi], 90))
+            if p90 < 0.5 * float(np.median(lum(back)[gi])):
+                continue                              # a gap that sees only dark things
+            gap_tent |= gi & (Lg > 0.8 * p90)
+        ring = np.maximum(ring, gap_tent.astype(np.float32))
     if ring.max() > 0:
         den = cv2.GaussianBlur(ring, (0, 0), 15)
         back_e = cv2.GaussianBlur(lin * ring[..., None], (0, 0), 15) / np.maximum(den, 1e-6)[..., None]
@@ -826,7 +894,10 @@ def main(cfg_path):
     # the model's soft edges, against the tent beside them (above)
     T_s = np.clip(lum(lin_clean) / (lum(back_s) + 1e-5), 0, 1)
     A_s = cv2.GaussianBlur(np.clip((1 - T_s - t0) / (1 - t0), 0, 1).astype(np.float32), (0, 0), 1.0)
-    A = np.where(near, np.maximum(alpha_m, A_s), alpha_m).astype(np.float32)
+    # the gate fades in over a few px: cut square, its edge showed as a scalloped line along a soft
+    # blurred part (F05's detail, under the far temple)
+    nearw = cv2.GaussianBlur(near.astype(np.float32), (0, 0), 3)
+    A = (alpha_m + (np.maximum(alpha_m, A_s) - alpha_m) * nearw).astype(np.float32)
     # Parts the model missed altogether (a defocused far temple): the tent is neutral grey, so a
     # clearly colored pixel is frame too, however light (F01's blue tortoise patches), and black
     # acetate still reflects a little, so past 0.8 it is solid. Measured per pixel this is noisy;
@@ -844,6 +915,20 @@ def main(cfg_path):
         A_pix = np.clip(cv2.GaussianBlur(np.maximum(A_s, A_sat).astype(np.float32), (0, 0), 1.5) / 0.8, 0, 1)
         g = cv2.GaussianBlur(missed.astype(np.float32), (0, 0), 4) * (missed | ~model_zone)
         A = (A * (1 - g) + A_pix * g).astype(np.float32)
+    # The model sometimes takes the tent seen through an open gap for frame, partly (the nose
+    # bridge of a front view, the space between the temples of a side view): grey patches whose
+    # edge followed the model's guess, not the picture. Over a broad, uncolored area of partial
+    # model opacity well clear of the solid frame, the opacity is the physical one throughout, so
+    # it follows the picture's own shading. Thin lines there (a highlight along a wire) and colored
+    # parts (tortoise) stay with the model.
+    over = (alpha_m > 0.02) & (alpha_m < 0.9) & (A_sat < 0.3)
+    d_solid = cv2.distanceTransform((~solid).astype(np.uint8), cv2.DIST_L2, 5)
+    over = cv2.morphologyEx((over & (d_solid > 8)).astype(np.uint8), cv2.MORPH_OPEN,
+                            cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15))) > 0
+    report["model_overreach_px"] = int(over.sum())
+    if over.any():
+        gw = cv2.GaussianBlur(over.astype(np.float32), (0, 0), 3) * (alpha_m < 0.9)
+        A = (A * (1 - gw) + np.minimum(A, A_s) * gw).astype(np.float32)
     A[holes] = 0.0
     rim = solid & ~holes
     A[rim] = np.maximum(A[rim], 0.995)
@@ -858,6 +943,10 @@ def main(cfg_path):
     F = np.clip(F, 0, 1).astype(np.float32)
     Tf = np.ones_like(lin, dtype=np.float32)
     Tf[holes] = Tc[holes]
+    if gap_tent.any():
+        # a gap shows the stage: the tent seen through it, against the tent read there (above)
+        Tf[gaps] = np.clip(lin / (back_s + 1e-5), 0, 1)[gaps]
+    report["gap_tent_px"] = int(gap_tent.sum())
 
     if cfg.get("gcd"):
         place_gcd(F, A, cfg, rx, report)
@@ -881,7 +970,7 @@ def main(cfg_path):
                         "shadow": S, "model_alpha": alpha_m, "marks": mark_mask, "alpha_physical": A_phys,
                         "darkening": T_all, "shadow_zone": zone, "tent_behind": lum(back_s), "missed": missed,
                         "model_zone": model_zone, "edge_ring": ring, "edge_weight": w[..., 0],
-                        "stray": stray}.items():
+                        "stray": stray, "overreach": over, "gap_tent": gap_tent}.items():
             Image.fromarray((np.clip(m.astype(np.float32), 0, 1) * 255).astype(np.uint8)).save(dbg / f"{name}.png")
 
     # framing (content/photography/framing.json): close-ups and the photographed heroes keep the

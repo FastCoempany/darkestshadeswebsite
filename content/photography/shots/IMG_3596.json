@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. This three-quarter view shows the wearer's left temple, which carries no GCD (one GCD per frame, on the right side; founder Oct 19 2026): the old engraving comes off and nothing goes on. Its lenses are refilled as an even gradient: the nose pad and the far temple seen through them came out patchy.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. This three-quarter view shows the wearer's left temple, which carries no GCD (one GCD per frame, on the right side; founder Oct 19 2026): the old engraving comes off and nothing goes on. So does the lettering engraved along the top of the front's left end (also seen from above, IMG_3584). Its lenses are refilled as an even gradient: the nose pad and the far temple seen through them came out patchy.",
  "shot": "IMG_3596",
  "frame": "F08",
  "angle": "A2",
@@ -28,6 +28,29 @@
     "bottom": [-0.5875, 5419.1]
    },
    "fill_whole": true
+  },
+  {
+   "name": "engraved lettering along the top of the front's left end",
+   "kind": "light",
+   "stroke_px": 15,
+   "threshold": 10,
+   "grow_px": 3,
+   "poly": [
+    [1828, 3413],
+    [1880, 3423],
+    [1930, 3438],
+    [1975, 3463],
+    [2010, 3486],
+    [2045, 3506],
+    [2072, 3520],
+    [2066, 3542],
+    [2040, 3530],
+    [2005, 3510],
+    [1970, 3488],
+    [1925, 3464],
+    [1878, 3449],
+    [1828, 3440]
+   ]
   }
  ],
  "lens_cleanup": {

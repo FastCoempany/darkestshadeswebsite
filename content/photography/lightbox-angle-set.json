@@ -38,7 +38,7 @@
     "A2": "IMG_3556",
     "A3": "IMG_3572",
     "A4": "IMG_3568",
-    "A5": "IMG_3555",
+    "A5": "IMG_3562",
     "A6": "IMG_3558",
     "H": "IMG_3570"
    },
@@ -59,6 +59,7 @@
      "IMG_3569"
     ],
     "A5": [
+     "IMG_3563",
      "IMG_3560"
     ],
     "A6": [
@@ -78,7 +79,8 @@
    ],
    "notes": [
     "No clean 90° profile in this run; A3 uses the low side view IMG_3572 (already has an onyx composite). IMG_3559 is a temple close-up with the front cropped.",
-    "A6 was IMG_3565 (alternate IMG_3564): both show the inside of the left hinge, where no GCD sits. A6 is now IMG_3558, a close three-quarter of the right temple at the hinge."
+    "A6 was IMG_3565 (alternate IMG_3564): both show the inside of the left hinge, where no GCD sits. A6 is now IMG_3558, a close three-quarter of the right temple at the hinge.",
+    "A5 was IMG_3555, which is a high front view: its temples run away from the camera. IMG_3562 is the view from behind (Oct 20 2026, flagged by an independent check of the finals)."
    ],
    "sides": {
     "A2": "right",
