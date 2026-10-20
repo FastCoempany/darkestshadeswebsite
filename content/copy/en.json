@@ -227,7 +227,10 @@
       "A3": "side view",
       "A4": "from above",
       "A5": "inside view",
-      "A6": "close-up of the gold and onyx emblem on the temple"
+      "A6": "close-up of the gold and onyx emblem on the temple",
+      "A6-front": "close-up of the gold and onyx emblem on the corner of the front",
+      "A6-corner": "close-up of the gold and onyx emblem where the temple meets the front",
+      "A6-hinge": "close-up of the hinge"
     },
     "onModel": "{person} wearing the {descriptor} sunglasses."
   }
