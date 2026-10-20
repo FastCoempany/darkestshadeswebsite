@@ -42,7 +42,7 @@ What is settled, who settled it, and what is still open. If another doc disagree
 | 34 | **F08's images show no GCD.** The shoot never sees its right temple from outside; no mirrored image is made to show one (O14 closed). The frame itself carries the GCD like the others. | Founder, Oct 20 2026 ("no on f08 gcd") |
 | 35 | **F02's hero GCD stays as approved**: fitted between the pin heads and the lens bay's bevel, where the wing curves into the lens bay (by the pins it is drawn about a fifth under 8.8 mm and about 1 mm off their centre). | Founder, Oct 20 2026 ("keep it") |
 | 36 | **F06's GCD stays 9.3 mm.** The side drawing measures the temple at 9.65 mm between its edge lines, against about 9.5 measured before; the length waits on the factory (O4). | Founder, Oct 20 2026 ("fine") |
-| 37 | **F04's GCD is centered on the triangle** its end-piece forms with the front's side, from the wire joint to the front's outer corners (the triangle's centroid in the side view). | Founder, Oct 20 2026 |
+| 37 | **F04's and F05's GCD is centered on the triangle** the end-piece forms with the front's side, from the wire joint to the front's outer corners (the triangle's centroid in the side view). | Founder, Oct 20 2026 (F04 asked; F05 the same, "ok") |
 
 ## Open (work proceeds on the default)
 

@@ -40,11 +40,11 @@
     "bridge": "measured on the 1:1 front view between the lens openings (24.9 mm), the distance a size marking uses; not dimensioned on the drawing; confirm with the factory's size marking (00-decisions.md O13)"
   },
   "gcd": {
-    "placement": "Right triangular end-piece, centered between hinge and wire joint (one GCD per frame, on the wearer's right)",
+    "placement": "Right triangular end-piece, centered on the triangle it forms with the front's side, from the wire joint to the front's outer corners (founder, Oct 20 2026; one GCD per frame, on the wearer's right)",
     "templeFaceHeightMm": 15,
     "templeFaceHeightSource": "end-piece height at the hinge (15 mm), tapering to the wire",
     "lengthMm": 8.8,
-    "note": "Sized to the end-piece (0.98 × its 9 mm height at the emblem's centre); confirm with the factory.",
+    "note": "Length sized to the end-piece (0.98 × its 9 mm height near the wire joint), kept when the GCD moved to the triangle's centre; confirm with the factory.",
     "stone": "Black onyx",
     "metal": "Gold tone"
   },

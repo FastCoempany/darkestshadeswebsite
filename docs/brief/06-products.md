@@ -41,7 +41,7 @@ One GCD per frame, on the wearer's right (`00-decisions.md` #31). Length = 0.98 
 | F02 | Right wing of the front, over the pin heads and clear of the lens bay's bevel (founder, Oct 19 2026); the left wing keeps its pins | flat face about 11 × 10 mm (measured) | 8.8 mm, as F04/F05 |
 | F03 | Right acetate temple | 9 mm (dimensioned) | 8.8 mm |
 | F04 | Right triangular end-piece, centered on the triangle it forms with the front's side (founder, Oct 20 2026) | 15 mm at the hinge, tapering to the wire | 8.8 mm (sized to its 9 mm height near the wire joint) |
-| F05 | Right triangular end-piece | as F04 | 8.8 mm |
+| F05 | Right triangular end-piece, centered on its triangle as F04 (founder, Oct 20 2026) | as F04 | 8.8 mm |
 | F06 | Right acetate temple | about 9.5 mm (measured) | 9.3 mm |
 | F08 | Right acetate temple | 10 mm at the hinge (dimensioned) | 9.8 mm |
 | F09 | Right wide acetate temple | 15 mm (dimensioned) | 14.7 mm |
