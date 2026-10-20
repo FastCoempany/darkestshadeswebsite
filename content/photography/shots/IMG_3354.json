@@ -1,0 +1,28 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 from behind (A5). The bright twisted lines inside the temples are the core wires seen through the acetate, not prints: they stay.",
+ "shot": "IMG_3354",
+ "frame": "F06",
+ "angle": "A5",
+ "region": [0, 2300, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "shield lens from behind, wearer's left half (image left)",
+   "points": [[1100, 2800], [900, 2700]]
+  },
+  {
+   "name": "shield lens from behind, wearer's right half (image right)",
+   "points": [[2100, 2800], [2300, 2700]]
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

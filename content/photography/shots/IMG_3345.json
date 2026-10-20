@@ -1,0 +1,28 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 front (A1). Its lens is one shield seen through the front's two openings, a gradient from smoke to clear; each opening is its own lens entry, not convex (the nose arch bites into it). The temples seen through the lens go with the gradient refit.",
+ "shot": "IMG_3345",
+ "frame": "F06",
+ "angle": "A1",
+ "region": [0, 2250, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "shield lens, wearer's right half (image left)",
+   "points": [[1000, 3250], [600, 3250]]
+  },
+  {
+   "name": "shield lens, wearer's left half (image right)",
+   "points": [[2250, 3250], [2650, 3250]]
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

@@ -1,0 +1,62 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 three-quarter (A2) from the wearer's right. The engraved wordmark and the old emblem after it come off the near temple. The GCD is placed with the old print as a ruler (tools/photo/temple_gcd.py): its ends lie 26.3 and 41.4 mm from the hinge, measured in the 3D model on the hero (IMG_3483), where the whole temple height shows and nothing depends on where its lit top face ends. The 3D model here agrees within 2 to 7%, depending on that top face.",
+ "shot": "IMG_3357",
+ "frame": "F06",
+ "angle": "A2",
+ "region": [0, 2650, 3213, 4950],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "shield lens, near half (wearer's right)",
+   "points": [[2500, 3900], [2600, 4250]]
+  },
+  {
+   "name": "shield lens, far half, past the nose arch",
+   "points": [[2905, 3400], [2900, 3700]]
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges)",
+   "poly": [[1430, 3508], [1950, 3497], [1950, 3638], [1430, 3642]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [-0.0298, 3502.8],
+    "bottom": [0.002, 3662.0]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "gcd": {
+  "view": "yaw-30p19",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [2049.9, 3533.1],
+   "left": [1955.8, 3533.0],
+   "right": [2147.8, 3533.2],
+   "top": [2043.7, 3499.8],
+   "bottom": [2056.0, 3566.4]
+  },
+  "length_mm": 9.3,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3357 --cols 1000:2201:20 --band 3350:3800 --face-dark 40 --hinge 2220,3545 2228,3635 --temple-mm 9.65 --face-mm 9.2 --seam-mm 0.97 --length-mm 9.3 --print 1447,3528 1700,3523.1 1700,3566.8 1447,3570 --model ruler --print-mm 26.26,41.42",
+  "measured": {
+   "model": "ruler (print of known size)",
+   "px_per_mm": {
+    "along": 20.62,
+    "down": 21.94
+   },
+   "perspective_per_mm": 0.00446,
+   "print_mm": [26.26, 41.42]
+  }
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

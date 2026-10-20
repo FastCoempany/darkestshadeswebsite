@@ -1,0 +1,54 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 side (A3) from the wearer's right, a little from behind. The lens is seen edge-on here: what shows through the frame is handled as a gap. The engraved wordmark and the old emblem after it come off the near temple. The temple's edges hardly converge, so the GCD is placed with the old print as a ruler: its ends lie 26.3 and 41.4 mm from the hinge (measured in the 3D model on the hero, IMG_3483).",
+ "shot": "IMG_3356",
+ "frame": "F06",
+ "angle": "A3",
+ "region": [0, 2450, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges)",
+   "poly": [[2055, 3030], [2600, 2945], [2600, 3082], [2055, 3162]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [-0.1575, 3314.0],
+    "bottom": [-0.1481, 3484.9]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "gcd": {
+  "view": "yaw-9p17",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [2701.4, 2968.2],
+   "left": [2609.9, 2981.7],
+   "right": [2794.2, 2954.5],
+   "top": [2695.7, 2939.2],
+   "bottom": [2707.0, 2997.2]
+  },
+  "length_mm": 9.3,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3356 --cols 1100:2601:20 --band 2850:3400 --face-dark 40 --hinge 2862,2965 2869,3043 --temple-mm 9.65 --face-mm 9.2 --seam-mm 0.97 --length-mm 9.3 --print 2072,3047.9 2349,3009 2349,3053 2072,3098.9 --print-mm 26.26,41.42",
+  "measured": {
+   "model": "ruler (print of known size)",
+   "px_per_mm": {
+    "along": 20.04,
+    "down": 19.38
+   },
+   "perspective_per_mm": 0.00161,
+   "print_mm": [26.26, 41.42]
+  }
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

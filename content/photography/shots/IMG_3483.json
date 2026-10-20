@@ -1,0 +1,63 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 hero (H), the photographer's landscape crop. The engraved wordmark and the old emblem's bracket come off the near temple. The temple's edges converge well, so the GCD is placed in the 3D model (tools/photo/temple_gcd.py), with the hinge line as measured (it slants across the face, 0.97 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.3 to 41.4 mm from the hinge, the ruler for F06's other temple views. The first placement drew the GCD a third too short: the print's first letters had been missed, so the temple's turn was overestimated.",
+ "shot": "IMG_3483",
+ "frame": "F06",
+ "angle": "H",
+ "region": [0, 0, 4032, 2268],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "shield lens, near half (wearer's right)",
+   "points": [[1750, 1300], [1600, 1600]]
+  },
+  {
+   "name": "shield lens, far half (wearer's left)",
+   "points": [[3050, 1100], [3300, 1300]]
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges); the gloss mirrors the tent's dimpled wall, so the patch takes its fine texture from the clean face 280 px toward the tip",
+   "poly": [[640, 768], [905, 750], [905, 898], [640, 908]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "top": [-0.0937, 792.1],
+    "bottom": [-0.022, 945.2]
+   },
+   "texture_dx": -280
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "gcd": {
+  "view": "yaw-64p1",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [962.8, 789.3],
+   "left": [916.0, 792.3],
+   "right": [1011.2, 786.1],
+   "top": [958.3, 754.3],
+   "bottom": [967.4, 824.2]
+  },
+  "length_mm": 9.3,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3483 --cols 500:1020:20 --band 600:1050 --hinge 1040.6,718 1055.3,898 --temple-mm 9.65 --face-mm 9.65 --seam-mm 0.97 --length-mm 9.3 --print 654,786.4 786,779.7 786,827.1 654,830.7",
+  "measured": {
+   "model": "3d",
+   "print_check": {
+    "length_mm": 15.16,
+    "height_mm": 2.21,
+    "ratio": 6.86,
+    "from_hinge_mm": 26.0,
+    "ends_mm": [26.26, 41.42]
+   }
+  }
+ },
+ "framing": {
+  "box": [0, 0, 4032, 2268]
+ }
+}

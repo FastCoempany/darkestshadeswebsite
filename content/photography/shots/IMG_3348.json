@@ -1,0 +1,22 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 from straight above (A4): the brow bar hides the lens; the hinges' metal stays. No old marks show from above.",
+ "shot": "IMG_3348",
+ "frame": "F06",
+ "angle": "A4",
+ "region": [0, 600, 3213, 3450],
+ "lenses": [],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}
