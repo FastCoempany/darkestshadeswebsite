@@ -762,6 +762,7 @@ def main(cfg_path):
     report["marks_px"] = int(mark_mask.sum())
     lin_clean = srgb_to_lin(srgb_clean)
     Tc = np.clip(lin_clean / (back + 1e-5), 0, 1).astype(np.float32)
+    Tc0 = Tc.copy()                                 # as measured, before the clean-up below
     T = np.clip(lum(lin_clean) / (lum(back) + 1e-5), 0, 1).astype(np.float32)
     # clean the lenses: ring-light reflections (bright spots) and dust (small dark specks)
     lc = cfg.get("lens_cleanup", {})
@@ -866,7 +867,7 @@ def main(cfg_path):
             p90 = float(np.percentile(Lg[gi], 90))
             if p90 < 0.5 * float(np.median(lum(back)[gi])):
                 continue                              # a gap that sees only dark things
-            gap_tent |= gi & (Lg > 0.8 * p90)
+            gap_tent |= gi & (Lg > 0.55 * p90)          # all of the tent seen there, not a temple behind
         ring = np.maximum(ring, gap_tent.astype(np.float32))
     if ring.max() > 0:
         den = cv2.GaussianBlur(ring, (0, 0), 15)
@@ -932,7 +933,22 @@ def main(cfg_path):
     A[holes] = 0.0
     rim = solid & ~holes
     A[rim] = np.maximum(A[rim], 0.995)
-    F = np.where(A[..., None] > 0.02, (lin_clean - (1 - A[..., None]) * back_s) / np.maximum(A[..., None], 0.02), 0)
+    # The rim's inner soft edge lies over the lens, not the stage: its partly covered pixels are
+    # unmixed against the tent as the lens shows it, and put back over the lens as cleaned. Over
+    # bare stage they made a pale line round a light lens (the F03 hero's yellow, F01's blue).
+    lens_h = (lens_in | lens_band).astype(np.float32)
+    den = cv2.GaussianBlur(lens_h, (0, 0), 4)
+    lens_ring = (den > 0.002) & ~holes & (A < 0.995)
+    Tb = np.ones_like(Tc)
+    Tfr = np.ones_like(Tc)
+    if lens_ring.any():
+        wr = np.clip(den / 0.25, 0, 1)[..., None]
+        ext0 = cv2.GaussianBlur(Tc0 * lens_h[..., None], (0, 0), 4) / np.maximum(den, 1e-6)[..., None]
+        ext1 = cv2.GaussianBlur(Tc * lens_h[..., None], (0, 0), 4) / np.maximum(den, 1e-6)[..., None]
+        Tb = np.where(lens_ring[..., None], 1 + (np.clip(ext0, 0, 1) - 1) * wr, 1).astype(np.float32)
+        Tfr = np.where(lens_ring[..., None], 1 + (np.clip(ext1, 0, 1) - 1) * wr, 1).astype(np.float32)
+    report["lens_ring_px"] = int(lens_ring.sum())
+    F = np.where(A[..., None] > 0.02, (lin_clean - (1 - A[..., None]) * back_s * Tb) / np.maximum(A[..., None], 0.02), 0)
     if missed.any():
         # with a measured alpha, unmixing per channel blows small tints up into strong color (a
         # grey wire that picked up a little red from the rim beside it); unmix the brightness
@@ -941,7 +957,7 @@ def main(cfg_path):
         Fc = lin_clean * (Fl / np.maximum(lum(lin_clean), 1e-4))[..., None]
         F = np.where(missed[..., None], Fc, F)
     F = np.clip(F, 0, 1).astype(np.float32)
-    Tf = np.ones_like(lin, dtype=np.float32)
+    Tf = Tfr.copy()
     Tf[holes] = Tc[holes]
     if gap_tent.any():
         # a gap shows the stage: the tent seen through it, against the tent read there (above)
