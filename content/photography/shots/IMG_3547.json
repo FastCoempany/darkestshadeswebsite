@@ -1,0 +1,64 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 three-quarter (A2) from the wearer's right. The old wordmark printed in light ink on the near metal temple comes off, rebuilt along the temple. The textured tent wall at the far left is cropped out by the 4:5 framing. The GCD sits on the right end-piece, placed from the 1:1 drawing (tools/photo/temple_gcd.py): the end-piece and the front's side form one flat face from the front's corner to the hinge, so its four corners in the side view (mm) and in the picture fix its perspective; the GCD is centered where the flat face is 9 mm tall.",
+ "shot": "IMG_3547",
+ "frame": "F05",
+ "angle": "A2",
+ "region": [300, 300, 4032, 2268],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2300, 1300], [2100, 1100]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[3250, 1000], [3150, 850]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "old wordmark printed on the near metal temple (inset from its edges)",
+   "poly": [[1085, 1133], [1365, 1205], [1365, 1255], [1085, 1179]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.259, 845.75],
+    "bottom": [0.2727, 888.88]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.56
+ },
+ "gcd": {
+  "view": "yaw-50p12",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1636.5, 1302.3],
+   "left": [1582.3, 1294.6],
+   "right": [1690.0, 1309.8],
+   "top": [1634.1, 1276.7],
+   "bottom": [1639.0, 1328.8]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3547 --face-mm 27.4,20.6 27.4,23.7 2.75,14.4 8.3,31.1 --center-mm 20.6,22.9 --length-mm 8.8 --face-px 1551,1250 1553,1305 1817,1194 1816,1487",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 12.38,
+    "down": 18.35,
+    "square_on": 18.73
+   }
+  }
+ }
+}

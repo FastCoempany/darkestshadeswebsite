@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 front (A1). No old mark shows from the front.",
+ "shot": "IMG_3510",
+ "frame": "F05",
+ "angle": "A1",
+ "region": [0, 2350, 3213, 4400],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[900, 3150], [650, 3000]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2300, 3150], [2550, 3000]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

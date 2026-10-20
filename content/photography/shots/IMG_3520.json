@@ -1,0 +1,32 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 from behind (A5), the wearer's right at image right. The nose pads and hinge rivets are hardware and stay; the specks along the inside of the temples are reflections on the wire's edge and stay. Seen from behind, the puffy rims are as dark as the lenses: SAM is told where the rims are (exclude) so the lenses stay inside them.",
+ "shot": "IMG_3520",
+ "frame": "F05",
+ "angle": "A5",
+ "region": [0, 2350, 3213, 4500],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "left lens (image left)",
+   "points": [[1150, 2870], [950, 2750]],
+   "exclude": [[700, 2870], [1150, 2610], [1150, 3125], [1590, 2700]],
+   "convex": true
+  },
+  {
+   "name": "right lens (image right)",
+   "points": [[2030, 2870], [2230, 2750]],
+   "exclude": [[2480, 2870], [2030, 2610], [2030, 3125], [1590, 2700]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

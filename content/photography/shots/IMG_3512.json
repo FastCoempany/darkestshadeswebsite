@@ -1,0 +1,33 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 from high in front (A4), the temples open; the GCD's face is not seen. The bright specks along the brow are the ring light in its bevel and stay.",
+ "shot": "IMG_3512",
+ "frame": "F05",
+ "angle": "A4",
+ "region": [0, 2000, 3213, 4300],
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[900, 3750], [700, 3700]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2250, 3750], [2450, 3700]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

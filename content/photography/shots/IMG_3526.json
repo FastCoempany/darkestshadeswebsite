@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 side (A3) from the wearer's left, low: the shoot has no right side view (every right-side shot is a three-quarter). No old mark shows on this temple; no GCD on the left side.",
+ "shot": "IMG_3526",
+ "frame": "F05",
+ "angle": "A3",
+ "region": [0, 1900, 3213, 3700],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's left)",
+   "points": [[700, 2750], [550, 2600]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's right)",
+   "points": [[1300, 2550], [1250, 2400]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

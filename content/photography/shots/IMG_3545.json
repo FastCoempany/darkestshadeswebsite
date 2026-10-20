@@ -1,0 +1,56 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 GCD detail (A6): the right end-piece up close from the front right, framed on the end-piece. The old wordmark printed on the metal temple comes off. The GCD is placed from the 1:1 drawing as on IMG_3547.",
+ "shot": "IMG_3545",
+ "frame": "F05",
+ "angle": "A6",
+ "region": [0, 600, 4032, 2268],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2700, 1400], [2500, 1200]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "old wordmark printed on the metal temple (inset from its edges)",
+   "poly": [[575, 1144], [1210, 1203], [1210, 1287], [575, 1219]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.0931, 1082.5],
+    "bottom": [0.106, 1166.4]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "box": [300, 600, 3300, 2268]
+ },
+ "gcd": {
+  "view": "yaw-32p10",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1751.3, 1308.1],
+   "left": [1632.2, 1304.8],
+   "right": [1868.4, 1311.4],
+   "top": [1747.8, 1264.4],
+   "bottom": [1754.8, 1353.1]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3545 --face-mm 27.4,20.6 27.4,23.7 2.75,14.4 8.3,31.1 --center-mm 20.6,22.9 --length-mm 8.8 --face-px 1565,1233 1567,1328 2162,1086 2122,1585",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 26.89,
+    "down": 31.14,
+    "square_on": 31.6
+   }
+  }
+ }
+}

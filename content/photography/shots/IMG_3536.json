@@ -1,0 +1,28 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 hero (H), front on and close, landscape: the photographer's crop is kept, the frame's ends running off the edges. The temples seen through the bridge gap stay.",
+ "shot": "IMG_3536",
+ "frame": "F05",
+ "angle": "H",
+ "region": [0, 0, 4032, 2268],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[1200, 800], [800, 700]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[3100, 950], [3400, 800]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "box": [0, 0, 4032, 2268]
+ }
+}
