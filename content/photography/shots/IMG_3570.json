@@ -21,8 +21,7 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "framing": {
   "box": [0, 0, 4032, 2268]

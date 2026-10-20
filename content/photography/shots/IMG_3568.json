@@ -3,7 +3,7 @@
  "shot": "IMG_3568",
  "frame": "F01",
  "angle": "A4",
- "region": [250, 1450, 3000, 4350],
+ "region": [250, 1450, 3000, 4800],
  "lenses": [
   {
    "name": "right lens (image left)",

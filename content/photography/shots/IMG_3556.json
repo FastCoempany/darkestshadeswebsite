@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge, so the photographer's crop is kept. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD is placed on the right temple with tools/photo/temple_gcd.py (gcd.measured_with): the temple's edges converge well here, so its face is modelled in 3D, and the model gets the old print's proportions right.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge, so the photographer's crop is kept. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD is placed on the right temple with tools/photo/temple_gcd.py (gcd.measured_with): the temple's edges converge well here, so its face is modelled in 3D, from the hinge line as measured (it slants across the face, 1.9 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.1 to 42.5 mm from the hinge, the ruler for F01's other temple views.",
  "shot": "IMG_3556",
  "frame": "F01",
  "angle": "A2",
@@ -35,29 +35,29 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "gcd": {
-  "view": "yaw-56p7",
+  "view": "yaw-56p8",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [751.3, 2962.6],
-   "left": [668.2, 2947.9],
-   "right": [838.9, 2978.2],
-   "top": [751.2, 2914.3],
-   "bottom": [751.5, 3010.8]
+   "center": [753.1, 2963.2],
+   "left": [668.6, 2948.2],
+   "right": [842.1, 2978.9],
+   "top": [751.8, 2914.6],
+   "bottom": [754.4, 3011.5]
   },
   "length_mm": 11.8,
   "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3556 --cols 100:880:60 --band 2600:3300 --face-dark 40 --hinge-x 900 --temple-mm 12 --face-mm 11.5 --length-mm 11.8 --print 331.7,2875 535,2905 525,2958.3 333.3,2926.7",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3556 --cols 100:880:60 --band 2600:3300 --face-dark 40 --hinge 910,2914 899,3058 --temple-mm 12 --face-mm 11.5 --seam-mm 1.90 --length-mm 11.8 --print 331.7,2875 535,2905 525,2958.3 333.3,2926.7",
   "measured": {
    "model": "3d",
    "print_check": {
-    "length_mm": 16.75,
-    "height_mm": 2.44,
-    "ratio": 6.87,
-    "from_hinge_mm": 25.8
+    "length_mm": 16.43,
+    "height_mm": 2.41,
+    "ratio": 6.82,
+    "from_hinge_mm": 25.8,
+    "ends_mm": [26.07, 42.5]
    }
   }
  },

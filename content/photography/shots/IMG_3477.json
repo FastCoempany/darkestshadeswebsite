@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 hero (H). Temple edges first from darkestshades/brand/lightbox/onyx-emblem/process/cfgs.py. The GCD was re-measured on Oct 19 2026 with tools/photo/temple_gcd.py, which models the temple's face in 3D from its converging edges and checks the model against the old print's proportions. The first placement drew the GCD about 40% too long for the angle at which the temple is seen.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 hero (H). Temple edges first from darkestshades/brand/lightbox/onyx-emblem/process/cfgs.py. The GCD is measured with tools/photo/temple_gcd.py, the old print as a ruler: on F09 it lies 24.1 to 39.9 mm from the hinge, read square on in the left profile (IMG_3402, where the temple's height is the same along its length); this shot's own 3D model agrees within 2 to 5% (it depends on how the hinge line's slant is taken). The hinge line slants across the face (3.2 mm along the temple from its top to its bottom on the side drawing; 11 degrees in the left profile). The first placement drew the GCD about 40% too long for the angle at which the temple is seen.",
  "shot": "IMG_3477",
  "frame": "F09",
  "angle": "H",
@@ -31,26 +31,26 @@
   "threshold": 0.05
  },
  "gcd": {
-  "view": "yaw-58p10",
+  "view": "yaw-61p14",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [1495.4, 1023.0],
-   "left": [1384.3, 993.5],
-   "right": [1613.4, 1054.3],
-   "top": [1494.9, 953.5],
-   "bottom": [1495.9, 1092.2]
+   "center": [1494.6, 1012.1],
+   "left": [1382.5, 977.4],
+   "right": [1613.1, 1048.9],
+   "top": [1487.1, 940.8],
+   "bottom": [1502.0, 1083.8]
   },
   "length_mm": 14.7,
   "soften_px": 0.9,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3477 --cols 1000:1700:50 --band 500:1600 --face-dark 70 --hinge-x 1697 --temple-mm 15 --face-mm 14.5 --length-mm 14.7 --print 1102,898 1320,952 1316,1017 1103,955",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3477 --cols 1000:1700:50 --band 500:1600 --face-dark 70 --hinge 1698,925 1695.5,1225 --temple-mm 15 --face-mm 14.5 --seam-mm 3.19 --length-mm 14.7 --print 1102,898 1320,952 1316,1017 1103,955 --model ruler --print-mm 24.05,39.9",
   "measured": {
-   "model": "3d",
-   "print_check": {
-    "length_mm": 16.18,
-    "height_mm": 2.32,
-    "ratio": 6.97,
-    "from_hinge_mm": 24.1
-   }
+   "model": "ruler (print of known size)",
+   "px_per_mm": {
+    "along": 16.25,
+    "down": 28.62
+   },
+   "perspective_per_mm": 0.00396,
+   "print_mm": [24.05, 39.9]
   }
  },
  "framing": {

@@ -1,8 +1,0 @@
-{
- "$comment": "Each frame's lens transmission per color channel (linear light, 0..1), measured once by tools/photo/clean_lightbox.py looking straight through the lens on the front view (A1): the median of image / tent behind it. Shots with \"lens_cleanup\": {\"smooth\": \"flat\", \"tint\": \"frame\"} use it, so the same lens looks the same in every view; measured shot by shot it drifts with the reflections on the lens and the tent seen through it (F03's green channel read 0.61 to 0.91). Gradient lenses (F06, F08) are measured per shot.",
- "frames": {
-  "F01": {"tint_rgb": [0.305, 0.478, 0.73], "from": "IMG_3554", "lens": "light blue"},
-  "F02": {"tint_rgb": [0.032, 0.033, 0.043], "from": "IMG_3423", "lens": "dark grey"},
-  "F03": {"tint_rgb": [0.945, 0.669, 0.065], "from": "IMG_3316", "lens": "yellow"}
- }
-}

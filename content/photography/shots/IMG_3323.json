@@ -3,7 +3,7 @@
  "shot": "IMG_3323",
  "frame": "F03",
  "angle": "A3",
- "region": [0, 1550, 2268, 2650],
+ "region": [0, 1550, 2268, 3100],
  "tent_fill": "rows",
  "framing": {
   "aspect": [4, 5],

@@ -35,8 +35,7 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "framing": {
   "aspect": [4, 5],

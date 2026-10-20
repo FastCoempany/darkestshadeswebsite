@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py: the temple's edges are nearly parallel in this view, so the old print's proportions give how much the temple is foreshortened along its length.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 GCD detail (A6): the right temple at the hinge, close, from the front right. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py, the old print as a ruler: its ends lie 26.1 and 42.5 mm from the hinge (the 3D model on IMG_3556; a side view, IMG_3559, gives 25.2 to 26 and 40 to 41). The hinge line slants across the face as on the side drawing. The first placement, from the print's proportions, drew the GCD a fifth too short and 2 mm too far from the hinge.",
  "shot": "IMG_3558",
  "frame": "F01",
  "angle": "A6",
@@ -35,28 +35,29 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "gcd": {
-  "view": "yaw-54p11",
+  "view": "yaw-50p18",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [766.8, 2126.3],
-   "left": [684.0, 2104.7],
-   "right": [849.7, 2147.9],
-   "top": [766.8, 2080.9],
-   "bottom": [766.8, 2171.7]
+   "center": [738.2, 2117.7],
+   "left": [641.0, 2091.8],
+   "right": [836.7, 2144.0],
+   "top": [734.6, 2071.9],
+   "bottom": [741.8, 2163.7]
   },
   "length_mm": 11.8,
   "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3558 --cols 150:880:60 --band 1700:2500 --face-dark 40 --hinge-x 905 --temple-mm 12 --face-mm 11.5 --length-mm 11.8 --print 214,1984 462,2044 456,2102 222,2040",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3558 --cols 150:880:60 --band 1700:2500 --face-dark 40 --hinge 906,2075 901,2225 --temple-mm 12 --face-mm 11.5 --seam-mm 1.90 --length-mm 11.8 --print 214,1983.2 473,2045.9 473,2089.9 214,2027.2 --model ruler --print-mm 26.07,42.5",
   "measured": {
-   "model": "affine (print)",
+   "model": "ruler (print of known size)",
    "px_per_mm": {
-    "along": 14.51,
-    "down": 23.47
-   }
+    "along": 17.14,
+    "down": 23.03
+   },
+   "perspective_per_mm": 0.00108,
+   "print_mm": [26.07, 42.5]
   }
  },
  "framing": {

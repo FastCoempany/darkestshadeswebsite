@@ -37,6 +37,8 @@ What is settled, who settled it, and what is still open. If another doc disagree
 | 29 | **The look of the cleaned lightbox set is approved**: the stage color, the frame's own shadow, the GCD's size and finish, see-through lenses that keep their tint, gloss highlights on the acetate kept as shot. | Founder, Oct 19 2026, on F08 and F09 |
 | 30 | **The cast: W1A, W2A, W3A, M1A, M2B, M3A, NBA** from casting round 1, picked by Claude; reasons and model bibles in `reference/casting/model-bibles.md`. | Founder delegated the pick, Oct 19 2026 ("you choose the 7") |
 | 31 | **One GCD per frame, on the wearer's right side**: the right temple, the right end-piece on F04 and F05, the right wing on F02. Shots of the left side show the old marks removed and nothing in their place. The GCD sits clear of the lens bay's bevel inlay. | Founder, Oct 19 2026 |
+| 32 | **Lenses stay as each photograph shows them**: every shot keeps its own measured tint (F03's yellow, F01's blue, the greys and gradients), never set, evened out across a frame or carried over from another angle. | Founder, Oct 19 2026 ("The frames with yellow tint stay true to what they are") |
+| 33 | **The GCD is placed physically**: its size, position and angle are measured in each picture's perspective (the temple's edges, the hinge seam, the side drawing, the old print as a ruler; `07-photography.md` step 8), never judged by eye. | Founder, Oct 19 2026 ("make sure the GCD is physically accurate") |
 
 ## Open (work proceeds on the default)
 

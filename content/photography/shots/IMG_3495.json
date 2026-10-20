@@ -1,9 +1,9 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 three-quarter (A2) from the wearer's right, the whole temple in frame. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed on the right temple with tools/photo/temple_gcd.py: the temple's face modelled in 3D from its converging edges, checked against the old print's proportions.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 three-quarter (A2) from the wearer's right, the whole temple in frame. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed on the right temple with tools/photo/temple_gcd.py: the temple's face modelled in 3D from its converging edges, from the hinge line as measured. The model puts the old print 23.7 to 38.4 mm from the hinge, the ruler for F03's other temple views.",
  "shot": "IMG_3495",
  "frame": "F03",
  "angle": "A2",
- "region": [150, 300, 4032, 2000],
+ "region": [150, 300, 4032, 2268],
  "tent_fill": "rows",
  "lenses": [
   {
@@ -35,29 +35,29 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "gcd": {
-  "view": "yaw-51p7",
+  "view": "yaw-51p6",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [1481.8, 1064.4],
-   "left": [1412.3, 1053.5],
-   "right": [1553.4, 1075.7],
-   "top": [1481.7, 1027.9],
-   "bottom": [1481.9, 1100.9]
+   "center": [1475.6, 1063.3],
+   "left": [1406.8, 1052.5],
+   "right": [1546.4, 1074.5],
+   "top": [1476.6, 1027.0],
+   "bottom": [1474.6, 1099.6]
   },
   "length_mm": 8.8,
   "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --face-dark 40 --hinge-x 1603 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1025,982 1228,1013 1232,1060 1030,1028",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --face-dark 40 --hinge 1597,1032 1596,1065 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1025,982 1228,1013 1232,1060 1030,1028",
   "measured": {
    "model": "3d",
    "print_check": {
-    "length_mm": 14.66,
-    "height_mm": 1.97,
-    "ratio": 7.43,
-    "from_hinge_mm": 23.8
+    "length_mm": 14.77,
+    "height_mm": 1.99,
+    "ratio": 7.41,
+    "from_hinge_mm": 23.5,
+    "ends_mm": [23.66, 38.43]
    }
   }
  },

@@ -71,10 +71,16 @@ def _region_rgb(cfg):
     return full[y0:y1, x0:x1]
 
 
+def out_dir(cfg):
+    """work/out/<shot>/, or work/out/<shot>-<variant>/ for a second image made from the same shot
+    (F04's hero is its front shot on a wider stage)."""
+    return ROOT / "work" / "out" / (cfg["shot"] + (f"-{cfg['variant']}" if cfg.get("variant") else ""))
+
+
 def mask_job(cfg_path, kind, index=None):
     from rembg import new_session, remove
     cfg = json.loads(pathlib.Path(cfg_path).read_text())
-    masks = ROOT / "work" / "out" / cfg["shot"] / "masks"
+    masks = out_dir(cfg) / "masks"
     masks.mkdir(parents=True, exist_ok=True)
     img = Image.fromarray((_region_rgb(cfg) * 255).astype(np.uint8))
     if kind == "isnet":
@@ -82,14 +88,17 @@ def mask_job(cfg_path, kind, index=None):
         m.save(masks / "alpha.png")
     else:  # SAM, point prompts for one lens
         x0, y0 = cfg["region"][:2]
-        pts = [{"type": "point", "data": [x - x0, y - y0], "label": 1} for x, y in cfg["lenses"][index]["points"]]
+        lens = cfg["lenses"][index]
+        pts = [{"type": "point", "data": [x - x0, y - y0], "label": 1} for x, y in lens["points"]]
+        # points that are not lens (the rims around it, seen from behind as dark as the lens)
+        pts += [{"type": "point", "data": [x - x0, y - y0], "label": 0} for x, y in lens.get("exclude", [])]
         m = remove(img, session=new_session("sam"), only_mask=True, sam_prompt=pts)
         m.save(masks / f"lens-{index}.png")
 
 
 def masks_for(cfg_path, cfg):
     import subprocess
-    masks = ROOT / "work" / "out" / cfg["shot"] / "masks"
+    masks = out_dir(cfg) / "masks"
     jobs = [("isnet", None, masks / "alpha.png")]
     jobs += [("sam", i, masks / f"lens-{i}.png") for i in range(len(cfg.get("lenses", [])))]
     for kind, i, path in jobs:
@@ -100,10 +109,24 @@ def masks_for(cfg_path, cfg):
     from scipy import ndimage as ndi
     lens = np.zeros(alpha.shape, bool)
     round_k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31))
+    x0, y0 = cfg["region"][:2]
     for i in range(len(cfg.get("lenses", []))):
+        m = np.asarray(Image.open(masks / f"lens-{i}.png")) > 128
+        # a lens is one piece: SAM sometimes adds specks along a temple or across the other lens,
+        # which the convex hull below would join into one slab. Cut thin links, keep the piece
+        # the prompt points are in (or the largest), back to its own edge.
+        opened = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
+        lab, n = ndi.label(opened)
+        if n > 1:
+            hits = [lab[int(y - y0), int(x - x0)] for x, y in cfg["lenses"][i]["points"]
+                    if 0 <= y - y0 < lab.shape[0] and 0 <= x - x0 < lab.shape[1]]
+            hits = [h for h in hits if h > 0]
+            keep = hits[0] if hits else 1 + int(np.argmax(ndi.sum(opened, lab, range(1, n + 1))))
+            piece = cv2.dilate((lab == keep).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (17, 17))) > 0
+            m = m & piece
         # a lens has no holes and no notches: what SAM leaves out inside it, or bites out of its
         # edge, is something seen through it (a temple behind, a dark reflection)
-        m = ndi.binary_fill_holes(np.asarray(Image.open(masks / f"lens-{i}.png")) > 128)
+        m = ndi.binary_fill_holes(m)
         m = cv2.morphologyEx(m.astype(np.uint8), cv2.MORPH_CLOSE, round_k) > 0
         if cfg["lenses"][i].get("convex"):
             # a lens with no concave edge (round, square, octagon; not F06's shield): bigger bites go too
@@ -159,7 +182,11 @@ def shadow_zone(obj, reach=600, side=150, soft=40, around=None):
         d = y - last
         zone[y] = (d > 0) & (d <= reach)
     zone = cv2.dilate(zone.astype(np.uint8), np.ones((1, 2 * side + 1), np.uint8)).astype(np.float32)
-    return cv2.GaussianBlur(zone, (0, 1), sigmaX=soft, sigmaY=0.1) if soft else zone
+    if not soft:
+        return zone
+    # soft at the sides; a little feathered top and bottom too, so its edges never show as a box
+    zone = cv2.GaussianBlur(zone, (0, 1), sigmaX=soft, sigmaY=0.1)
+    return cv2.GaussianBlur(zone, (1, 0), sigmaX=0.1, sigmaY=8)
 
 
 def smooth_fill(ch, mask, support, degree=2):
@@ -236,7 +263,8 @@ def remove_marks(srgb, marks, region_xy):
         if not strokes.any():
             continue
         if mk.get("temple"):
-            out = fill_along_temple(out, strokes, mk["temple"], region_xy)
+            out = fill_along_temple(out, strokes, mk["temple"], region_xy, texture_dx=mk.get("texture_dx"),
+                                    texture_from=mk.get("texture_from"))
         elif mk.get("axis") is not None:
             out = inpaint_along(out, strokes, mk["axis"])
         else:
@@ -248,24 +276,61 @@ def remove_marks(srgb, marks, region_xy):
     return out.astype(np.float32) / 255.0, report_mask
 
 
-def fill_along_temple(img, mask, temple, region_xy, grain=1.4, seed=11):
-    """Rebuild a patch of temple face line by line. The face is rectified between its measured top
-    and bottom edges (y = a*x + b, original-image coordinates), so every row follows the acetate,
-    core wire and bevel stripes exactly; masked runs are interpolated from both ends of the row."""
+def fill_along_temple(img, mask, temple, region_xy, grain=1.4, seed=11, texture_dx=None, texture_from=None):
+    """Rebuild a patch of temple face line by line. The face is rectified between guide lines along
+    it, so every row follows the acetate, core wire and bevel stripes exactly; masked runs are
+    interpolated from both ends of the row. The guides are the temple's measured top and bottom
+    edges, y = a*x + b in original-image coordinates (`top`, `bottom`), or, where the stripes are
+    not parallel to each other (a core wire running at a slant inside clear acetate), every stripe's
+    edge from top to bottom (`guides`); a third coefficient, y = a*x + b + c*x*x, follows a line
+    that bends in the picture.
+    On a textured face (gloss acetate that mirrors the tent's dimpled wall, a grained metal core
+    seen through clear acetate), rows interpolated from their two ends come out as streaks: then the
+    rebuilt rows give only the face's smooth shading, and its fine texture comes from the same rows
+    where the face is clean, `texture_dx` px along the picture, or by `texture_from`: segments
+    [x0, x1, s0, s1] in the picture's x, columns x0..x1 taking columns s0..s1 (s1 < s0 mirrors
+    them), for a patch longer than the clean face beside it."""
     ox, oy = region_xy
-    (at, bt), (ab, bb) = temple["top"], temple["bottom"]
+    curves = temple.get("guides") or [temple["top"], temple["bottom"]]
+
+    def guide(coef, x):
+        return coef[0] * x + coef[1] + (coef[2] * x * x if len(coef) > 2 else 0)
+
     ys, xs = np.nonzero(mask)
     pad = 60
-    xa, xb = max(0, xs.min() - pad), min(img.shape[1] - 1, xs.max() + pad)
+    xa, xb = xs.min() - pad, xs.max() + pad
+    segs = []                                                      # (u0, u1, s0, s1), region x
+    if texture_dx:
+        segs.append((xs.min(), xs.max(), xs.min() + texture_dx, xs.max() + texture_dx))
+    for x0_, x1_, s0, s1 in texture_from or []:
+        segs.append((x0_ - ox, x1_ - ox, s0 - ox, s1 - ox))
+    for _, _, s0, s1 in segs:
+        xa, xb = min(xa, int(min(s0, s1)) - pad), max(xb, int(max(s0, s1)) + pad)
+    xa, xb = max(0, xa), min(img.shape[1] - 1, xb)
     U = np.arange(xa, xb + 1, dtype=np.float32)
-    top = at * (U + ox) + bt - oy
-    bot = ab * (U + ox) + bb - oy
-    nv = int(np.ceil((bot - top).max())) + 1
-    V = np.linspace(0, 1, nv, dtype=np.float32)
+    G = [guide(c, U + ox) - oy for c in curves]
+    nb = len(G) - 1                                                # bands between the guides
+    n = [int(np.ceil((G[k + 1] - G[k]).max())) + 1 for k in range(nb)]
+    start = np.cumsum([0] + n[:-1])                                # each band's first row
+    scale = np.array([n[k] if k < nb - 1 else n[k] - 1 for k in range(nb)], np.float32)
+    bands = []
+    for k in range(nb):                                            # the last band ends on its guide
+        V = np.linspace(0, 1, n[k], endpoint=k == nb - 1, dtype=np.float32)
+        bands.append(G[k][None, :] + V[:, None] * (G[k + 1] - G[k])[None, :])
+    map_y = np.concatenate(bands, 0).astype(np.float32)
+    nv = map_y.shape[0]
     map_x = np.repeat(U[None, :], nv, 0).astype(np.float32)
-    map_y = (top[None, :] + V[:, None] * (bot - top)[None, :]).astype(np.float32)
     R = cv2.remap(img.astype(np.float32), map_x, map_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
     Rm = cv2.remap(mask.astype(np.float32), map_x, map_y, cv2.INTER_LINEAR) > 0.3
+    R0 = R.copy()
+    ends = R0
+    if segs:
+        # A textured face: each row runs between the face's local average at either end, not single
+        # pixels, whose grain would streak it; the texture is laid on top below.
+        ok = (~Rm).astype(np.float32)
+        num = cv2.GaussianBlur(R0 * ok[..., None], (49, 1), 8)
+        den = cv2.GaussianBlur(ok, (49, 1), 8)[..., None]
+        ends = np.where(den > 1e-3, num / np.maximum(den, 1e-3), R0)
     for r in range(nv):
         row = Rm[r]
         if not row.any() or (~row).sum() < 2:
@@ -273,16 +338,44 @@ def fill_along_temple(img, mask, temple, region_xy, grain=1.4, seed=11):
         good = np.nonzero(~row)[0]
         bad = np.nonzero(row)[0]
         for ch in range(R.shape[2]):
-            R[r, bad, ch] = np.interp(bad, good, R[r, good, ch])
-    R += np.random.default_rng(seed).normal(0, grain, R.shape).astype(np.float32)
+            R[r, bad, ch] = np.interp(bad, good, ends[r, good, ch])
+    if segs:
+        base = cv2.GaussianBlur(R, (0, 0), 5)                      # the face's smooth shading
+        hp = R0 - cv2.GaussianBlur(R0, (0, 0), 5)                  # its fine texture
+        # Segments that overlap cross-fade (keeping the texture's strength); a lone one is used as is.
+        acc = np.zeros_like(hp)
+        wsum = np.zeros(U.shape, np.float32)
+        sy = np.repeat(np.arange(nv, dtype=np.float32)[:, None], len(U), 1)
+        for u0, u1, s0, s1 in segs:
+            sel = (U >= u0) & (U <= u1)
+            if not sel.any():
+                continue
+            src = s0 + (U - u0) * (s1 - s0) / max(u1 - u0, 1)   # column u takes column src[u]
+            w = np.where(sel, np.clip(np.minimum(U - u0, u1 - U) / 20.0, 1e-3, 1), 0).astype(np.float32)
+            sx = np.repeat((src - xa)[None, :], nv, 0).astype(np.float32)
+            acc += cv2.remap(hp, sx, sy, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT) * w[None, :, None]
+            wsum += w * w
+        tex = acc / np.sqrt(np.maximum(wsum, 1e-12))[None, :, None]
+        # and the patch fades in from the clean face at both ends of every row, over 12 px
+        idx = np.arange(len(U))[None, :].repeat(nv, 0)
+        left = np.maximum.accumulate(np.where(~Rm, idx, -10 ** 6), axis=1)
+        right = np.minimum.accumulate(np.where(~Rm, idx, 10 ** 6)[:, ::-1], axis=1)[:, ::-1]
+        ws = np.clip(np.minimum(idx - left, right - idx) / 12.0, 0, 1)[..., None]
+        R = np.where(Rm[..., None], R0 * (1 - ws) + (base + tex) * ws, R)
+    else:
+        R += np.random.default_rng(seed).normal(0, grain, R.shape).astype(np.float32)
     # back to image space, only inside the mask (feathered)
     yy, xx = np.mgrid[0:img.shape[0], xa:xb + 1].astype(np.float32)
-    t = at * (xx + ox) + bt - oy
-    b_ = ab * (xx + ox) + bb - oy
-    v = ((yy - t) / np.maximum(b_ - t, 1) * (nv - 1)).astype(np.float32)
+    Gs = np.stack(G, 0)                                            # guides per column, region y
+    k = np.zeros(yy.shape, np.int32)                               # each pixel's band
+    for j in range(1, nb):
+        k += yy >= Gs[j][None, :]
+    col = np.broadcast_to(np.arange(yy.shape[1])[None, :], yy.shape)
+    gk, gk1 = Gs[k, col], Gs[k + 1, col]
+    v = (start[k] + (yy - gk) / np.maximum(gk1 - gk, 1) * scale[k]).astype(np.float32)
     u = (xx - xa).astype(np.float32)
     back = cv2.remap(R, u, v, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
-    mm = cv2.GaussianBlur(mask[:, xa:xb + 1].astype(np.float32), (0, 0), 1.2)[..., None]
+    mm = cv2.GaussianBlur(mask[:, xa:xb + 1].astype(np.float32), (0, 0), 3.0 if segs else 1.2)[..., None]
     seg = img[:, xa:xb + 1].astype(np.float32)
     img[:, xa:xb + 1] = np.clip(seg * (1 - mm) + back * mm, 0, 255).astype(np.uint8)
     return img
@@ -435,7 +528,7 @@ def main(cfg_path):
     cfg_path = pathlib.Path(cfg_path).resolve()
     cfg = json.loads(pathlib.Path(cfg_path).read_text())
     shot = cfg["shot"]
-    out = ROOT / "work" / "out" / shot
+    out = out_dir(cfg)
     out.mkdir(parents=True, exist_ok=True)
     report = {"shot": shot, "frame": cfg["frame"], "angle": cfg["angle"]}
 
@@ -492,7 +585,9 @@ def main(cfg_path):
         if open_side[side]:
             edge = np.minimum(edge, dist.astype(np.float32))
     w = w * np.clip(edge / 120.0, 0, 1)
-    S = 1 - (1 - S) * w
+    # darkening within the tent model's error (about 2%) is not shadow: it would show as faint
+    # patches on the even stage
+    S = 1 - np.clip((1 - S) - 0.02, 0, 1) / 0.98 * w
     # Whatever is seen through a lens or a gap stays in its transmission (below), so the shadow
     # layer is 1 there; the frame itself hides the rest of the inpainted shadow.
     see = cv2.dilate((lens | (filled & ~solid)).astype(np.uint8), np.ones((7, 7), np.uint8)) > 0
@@ -550,15 +645,9 @@ def main(cfg_path):
     # A light lens (F01's blue, F03's yellow) shows the tent's textured wall through it; with
     # `keep_behind`, things clearly darker than the lens's own tint (a temple or nose pad behind
     # it) stay, and only the tent behind is evened out.
-    # The same lens looks the same in every view: with "tint": "frame", a flat lens takes the
-    # transmission measured once for the frame, looking straight through it on the front view
-    # (content/photography/lens-tints.json); what the lens sees keeps its structure, scaled alike.
-    # Measured per shot it drifts with the reflections on the lens and the tent behind it.
+    # Each lens keeps the tint its own photograph measured: a lens seen at an angle, with the tent's
+    # light on it, looks as it did in that shot (founder, Oct 19 2026).
     mode = lc.get("smooth")
-    tint = None
-    if mode == "flat" and lc.get("tint") == "frame":
-        tints = json.loads((ROOT / "content" / "photography" / "lens-tints.json").read_text())
-        tint = np.array(tints["frames"][cfg["frame"]]["tint_rgb"], np.float32)
     if mode:
         deg = 0 if mode == "flat" else 2
         lab, nl = ndi.label(lens_in)
@@ -577,9 +666,6 @@ def main(cfg_path):
                 lo, hi = lc.get("behind_ratio", [0.5, 0.75])
                 m = cv2.GaussianBlur(np.clip((hi - ratio) / (hi - lo), 0, 1).astype(np.float32), (0, 0), 1.5)
                 new = new * (1 - m[..., None]) + Tc * m[..., None]
-            if tint is not None:
-                level = np.array([float(np.median(fitimg[..., c][li])) for c in range(3)], np.float32)
-                new = new * (tint / np.maximum(level, 1e-4))
             Tc[li] = np.clip(new[li], 0, 1)
     report["lens"] = {"hole_px": int(holes.sum()), "cleaned_px": int(spots.sum()),
                       "dust_px": int((dust & holes).sum()),
@@ -589,6 +675,33 @@ def main(cfg_path):
     srgb_clean, mark_mask = remove_marks(srgb, cfg.get("marks", []), rx)
     report["marks_px"] = int(mark_mask.sum())
     lin_clean = srgb_to_lin(srgb_clean)
+    # Soft edges unmix against the tent right beside them, not against the tent model under the
+    # frame: that is filled in from all round (both sides of a thin temple, tent further off), so
+    # where the tent darkens towards the frame (the sweep's falloff, a halo round a defocused
+    # temple) it is brighter than what is really behind the edge, and the edge got a grey halo, or
+    # began with a step, ragged where the gates below cut it (IMG_3487's far temple). The tent is
+    # read on a ring 10 to 16 px outside the frame, only where it is tent: out of the frame's own
+    # shadow (unmixed against it, an edge would no longer match the shadow layer it is put back
+    # over), and away from anything more than 10 px outside the model's frame that is clearly dark
+    # or colored (a defocused far temple the model missed, F01's blue tortoise, F02's red; nearer
+    # in, it is the edge's own blur): its blur would pass for tent and make the part beside it
+    # see-through. Each pixel takes the local average of that ring, weighted by how much of it is
+    # near, so the handover back to the model is smooth. It sets the soft edges' opacity and
+    # color; the gates that decide what is frame (`dark` below) keep the tent model.
+    d_out = cv2.distanceTransform((1 - obj).astype(np.uint8), cv2.DIST_L2, 5)
+    mx, mn = srgb_clean.max(-1), srgb_clean.min(-1)
+    stray = ((lum(lin_clean) < 0.6 * lum(back)) | ((mx - mn) / (mx + 1e-4) > 0.22)) & (d_out > 10)
+    stray = cv2.dilate(stray.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (61, 61)))
+    ring = ((d_out > 10) & (d_out <= 16) & (lum(lin) > 0.85 * lum(back))).astype(np.float32)
+    ring *= np.clip((S - 0.85) / 0.1, 0, 1) * (1 - cv2.GaussianBlur(stray.astype(np.float32), (0, 0), 8))
+    if ring.max() > 0:
+        den = cv2.GaussianBlur(ring, (0, 0), 15)
+        back_e = cv2.GaussianBlur(lin * ring[..., None], (0, 0), 15) / np.maximum(den, 1e-6)[..., None]
+        w = np.clip(den / 0.05, 0, 1)[..., None]
+        back_s = (back * (1 - w) + back_e * w).astype(np.float32)
+    else:
+        w = np.zeros(S.shape + (1,), np.float32)
+        back_s = back
     # Opacity from physics as well as from the model: a pixel much darker than the tent behind it
     # is mostly frame, whatever the model thinks (defocused rims get soft model alphas). Highlights
     # on the acetate keep the model's alpha.
@@ -604,12 +717,14 @@ def main(cfg_path):
     t0 = 0.05                                         # darkening within the tent model's noise
     A_phys = np.clip((1 - T_all - t0) / (1 - t0), 0, 1)
     A_phys = cv2.GaussianBlur(A_phys.astype(np.float32), (0, 0), 1.0)   # per-pixel noise would speckle the edges
-    A = np.where(near, np.maximum(alpha_m, A_phys), alpha_m).astype(np.float32)
+    # the model's soft edges, against the tent beside them (above)
+    T_s = np.clip(lum(lin_clean) / (lum(back_s) + 1e-5), 0, 1)
+    A_s = cv2.GaussianBlur(np.clip((1 - T_s - t0) / (1 - t0), 0, 1).astype(np.float32), (0, 0), 1.0)
+    A = np.where(near, np.maximum(alpha_m, A_s), alpha_m).astype(np.float32)
     # Parts the model missed altogether (a defocused far temple): the tent is neutral grey, so a
     # clearly colored pixel is frame too, however light (F01's blue tortoise patches), and black
     # acetate still reflects a little, so past 0.8 it is solid. Measured per pixel this is noisy;
     # those edges are soft anyway, so it is smoothed, and given a margin to fade out in.
-    mx, mn = srgb_clean.max(-1), srgb_clean.min(-1)
     A_sat = np.clip(((mx - mn) / (mx + 1e-4) - 0.12) / 0.2, 0, 1).astype(np.float32)
     lab, n = ndi.label(dark | (A_sat > 0.5))
     missed = np.zeros(A.shape, bool)
@@ -617,12 +732,16 @@ def main(cfg_path):
         hit = np.unique(lab[(alpha_m > 0.5) & (dark | (A_sat > 0.5))])
         missed = cv2.dilate(np.isin(lab, hit[hit > 0]).astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
         missed &= ~model_zone
-        A_pix = np.clip(cv2.GaussianBlur(np.maximum(A_phys, A_sat).astype(np.float32), (0, 0), 1.5) / 0.8, 0, 1)
-        A = np.where(missed, A_pix, A).astype(np.float32)
+        # against the tent beside the frame where that was read (the outer blur of a defocused edge
+        # lies here, past the model's zone); the gate fades in over a few px, as a square-cut edge
+        # would show in a soft shadow or a blur
+        A_pix = np.clip(cv2.GaussianBlur(np.maximum(A_s, A_sat).astype(np.float32), (0, 0), 1.5) / 0.8, 0, 1)
+        g = cv2.GaussianBlur(missed.astype(np.float32), (0, 0), 4) * (missed | ~model_zone)
+        A = (A * (1 - g) + A_pix * g).astype(np.float32)
     A[holes] = 0.0
     rim = solid & ~holes
     A[rim] = np.maximum(A[rim], 0.995)
-    F = np.where(A[..., None] > 0.02, (lin_clean - (1 - A[..., None]) * back) / np.maximum(A[..., None], 0.02), 0)
+    F = np.where(A[..., None] > 0.02, (lin_clean - (1 - A[..., None]) * back_s) / np.maximum(A[..., None], 0.02), 0)
     if missed.any():
         # with a measured alpha, unmixing per channel blows small tints up into strong color (a
         # grey wire that picked up a little red from the rim beside it); unmix the brightness
@@ -644,7 +763,10 @@ def main(cfg_path):
         dbg = out / "debug"
         dbg.mkdir(exist_ok=True)
         for name, m in {"holes": holes, "near": near, "spots": spots, "alpha_opaque": A, "transmission": T,
-                        "shadow": S, "model_alpha": alpha_m, "marks": mark_mask}.items():
+                        "shadow": S, "model_alpha": alpha_m, "marks": mark_mask, "alpha_physical": A_phys,
+                        "darkening": T_all, "shadow_zone": zone, "tent_behind": lum(back_s), "missed": missed,
+                        "model_zone": model_zone, "edge_ring": ring, "edge_weight": w[..., 0],
+                        "stray": stray}.items():
             Image.fromarray((np.clip(m.astype(np.float32), 0, 1) * 255).astype(np.uint8)).save(dbg / f"{name}.png")
 
     fr = cfg.get("framing", {})
@@ -653,6 +775,23 @@ def main(cfg_path):
         left, top, W, H = bx0 - x0, by0 - y0, bx1 - bx0, by1 - by0
     else:
         left, top, W, H = frame_crop(A, fr.get("aspect", [4, 5]), fr.get("fill", 0.86), fr.get("center_y", 0.56))
+        # Where the frame runs off the photograph (a temple past the picture's edge), the canvas
+        # ends at that edge too: the temple runs off the image instead of stopping in mid-air.
+        fh, fw = full.shape[:2]
+        hh, ww = A.shape
+        touch = {"left": A[:, :3].max() > 0.15 and x0 == 0, "right": A[:, -3:].max() > 0.15 and x1 == fw,
+                 "top": A[:3, :].max() > 0.15 and y0 == 0, "bottom": A[-3:, :].max() > 0.15 and y1 == fh}
+        if touch["left"] and left < 0:
+            left = 0
+        if touch["right"] and left + W > ww:
+            left = ww - W
+        if touch["top"] and top < 0:
+            top = 0
+        if touch["bottom"] and top + H > hh:
+            top = hh - H
+        if touch["left"] and touch["right"] or touch["top"] and touch["bottom"]:
+            report["framing_note"] = "the frame runs off both sides of the photograph; the canvas keeps the photographer's width"
+        report["runs_off"] = [k for k, v in touch.items() if v]
     comp_c = paste_canvas(comp, left, top, W, H, stage)
     stage_srgb = lin_to_srgb(comp_c)
     ow = 2000

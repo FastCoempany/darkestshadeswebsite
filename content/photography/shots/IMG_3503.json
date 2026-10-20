@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 GCD detail (A6): the right temple at the hinge, close and from above, framed on the hinge. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py: seen from above, the temple's edges are nearly parallel, so the old print's proportions give the foreshortening along it; the render is tilted to the face's angle for its shading.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 GCD detail (A6): the right temple at the hinge, close and from above, framed on the hinge. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed with tools/photo/temple_gcd.py, the old print as a ruler (its ends 23.7 and 38.4 mm from the hinge, from the 3D model on IMG_3495); the render is tilted to the face's angle for its shading. The temple starts at the faint seam about 7 mm short of the front's corner, below the hinge screw: the first placement had taken the corner for the hinge and drawn the GCD a quarter too short, from the print's proportions.",
  "shot": "IMG_3503",
  "frame": "F03",
  "angle": "A6",
@@ -29,28 +29,29 @@
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true,
-  "tint": "frame"
+  "keep_behind": true
  },
  "gcd": {
-  "view": "yaw-57p31",
+  "view": "yaw-49p45",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [2102.4, 1452.2],
-   "left": [2044.3, 1406.4],
-   "right": [2160.6, 1498.0],
-   "top": [2102.4, 1422.0],
-   "bottom": [2102.4, 1482.4]
+   "center": [1955.6, 1332.8],
+   "left": [1875.6, 1268.6],
+   "right": [2039.1, 1399.9],
+   "top": [1955.3, 1303.8],
+   "bottom": [1955.9, 1361.9]
   },
   "length_mm": 8.8,
   "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3503 --cols 1400:2000:50 --band 600:1700 --face-light 22 --hinge-x 2200 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1458.3,911.3 1671.8,1095.5 1671.8,1143.0 1458.3,958.9",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3503 --cols 1400:2000:50 --band 600:1700 --face-light 22 --hinge 2097,1380 2099,1560 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1456,917.8 1676,1093.8 1676,1141.8 1456,965.8 --model ruler --print-mm 23.66,38.43",
   "measured": {
-   "model": "affine (print)",
+   "model": "ruler (print of known size)",
    "px_per_mm": {
-    "along": 16.82,
-    "down": 20.9
-   }
+    "along": 23.62,
+    "down": 20.12
+   },
+   "perspective_per_mm": 0.00513,
+   "print_mm": [23.66, 38.43]
   }
  },
  "framing": {
