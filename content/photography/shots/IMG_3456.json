@@ -1,0 +1,64 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 three-quarter (A2) from the wearer's right. The old wordmark printed in light ink on the near metal temple comes off, rebuilt along the temple. The GCD sits on the right end-piece, placed from the 1:1 drawing: four of the end-piece's corners (the wire's top and bottom where it joins, the two front corners) in the side view's millimetres and in the picture (tools/photo/temple_gcd.py), the GCD centered where the end-piece is 9 mm tall (06-products.md), on its midline.",
+ "shot": "IMG_3456",
+ "frame": "F04",
+ "angle": "A2",
+ "region": [0, 2050, 3213, 3700],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2050, 2900], [1900, 2650]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[2750, 2550], [2700, 2300]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "old wordmark printed on the near metal temple (inset from its edges)",
+   "poly": [[612, 2583], [965, 2625], [965, 2682], [612, 2635]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.1198, 2497.2],
+    "bottom": [0.1346, 2556.3]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.56
+ },
+ "gcd": {
+  "view": "yaw-42p5",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1357.5, 2704.8],
+   "left": [1279.9, 2701.5],
+   "right": [1434.9, 2708.1],
+   "top": [1356.1, 2671.1],
+   "bottom": [1358.9, 2738.8]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3456 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 17.8,11.1 --length-mm 8.8 --face-px 1229,2648 1231,2717 1617,2535 1620,2887",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 17.63,
+    "down": 23.52,
+    "square_on": 23.63
+   }
+  }
+ }
+}

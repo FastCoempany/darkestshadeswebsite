@@ -1,0 +1,47 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 side (A3) from the wearer's right. The old wordmark printed on the near metal temple comes off. The GCD sits on the right end-piece, placed from the 1:1 drawing as on IMG_3456. The lenses are edge-on and stay as shot.",
+ "shot": "IMG_3450",
+ "frame": "F04",
+ "angle": "A3",
+ "region": [0, 2150, 3213, 3800],
+ "tent_fill": "rows",
+ "marks": [
+  {
+   "name": "old wordmark printed on the near metal temple (inset from its edges)",
+   "poly": [[1888, 2555], [2345, 2528], [2345, 2571], [1888, 2592]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [-0.0585, 2661.2],
+    "bottom": [-0.0472, 2684.3]
+   }
+  }
+ ],
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ },
+ "gcd": {
+  "view": "yaw-23p-7",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [2773.0, 2530.3],
+   "left": [2699.2, 2536.0],
+   "right": [2849.2, 2524.4],
+   "top": [2772.3, 2503.6],
+   "bottom": [2773.6, 2556.8]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3450 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 17.8,11.1 --length-mm 8.8 --face-px 2652,2500 2654,2553 3054,2351 3031,2649",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 17.03,
+    "down": 18.4,
+    "square_on": 18.54
+   }
+  }
+ }
+}

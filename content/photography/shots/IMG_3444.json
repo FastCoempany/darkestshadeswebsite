@@ -1,0 +1,29 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 from high in front (A4): the shoot has no straight top-down shot of this frame, so the high front view with the temples open stands in (lightbox-angle-set.json, gaps). The rows of bright specks along the lower rims are the ring light in the lenses' bevels and stay; the GCD's face is not seen.",
+ "shot": "IMG_3444",
+ "frame": "F04",
+ "angle": "A4",
+ "region": [0, 1800, 3213, 4200],
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[1080, 3250], [900, 3150]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2230, 3280], [2400, 3200]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

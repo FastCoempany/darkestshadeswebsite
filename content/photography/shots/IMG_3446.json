@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 from behind (A5), the wearer's right at image right. The nose pads and hinge rivets are hardware and stay; no old mark shows on the inside.",
+ "shot": "IMG_3446",
+ "frame": "F04",
+ "angle": "A5",
+ "region": [0, 2250, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "left lens (image left)",
+   "points": [[1150, 2740], [950, 2650]],
+   "convex": true
+  },
+  {
+   "name": "right lens (image right)",
+   "points": [[2035, 2740], [2250, 2650]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

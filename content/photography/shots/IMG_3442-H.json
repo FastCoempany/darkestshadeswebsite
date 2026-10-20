@@ -1,0 +1,31 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 hero (H): the shoot has no landscape shot of this frame, so the hero is the front shot on a wider stage (lightbox-angle-set.json, gaps).",
+ "shot": "IMG_3442",
+ "variant": "H",
+ "frame": "F04",
+ "angle": "H",
+ "region": [0, 2400, 3213, 4200],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[900, 3250], [700, 3000]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2250, 3250], [2450, 3000]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [3, 2],
+  "fill": 0.78,
+  "center_y": 0.52
+ }
+}

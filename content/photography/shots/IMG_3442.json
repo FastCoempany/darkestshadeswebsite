@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 front (A1). No old mark shows from the front; the end-pieces' outer faces, where the GCD sits on the right one, face away.",
+ "shot": "IMG_3442",
+ "frame": "F04",
+ "angle": "A1",
+ "region": [0, 2400, 3213, 4200],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "right lens (image left)",
+   "points": [[900, 3250], [700, 3000]],
+   "convex": true
+  },
+  {
+   "name": "left lens (image right)",
+   "points": [[2250, 3250], [2450, 3000]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

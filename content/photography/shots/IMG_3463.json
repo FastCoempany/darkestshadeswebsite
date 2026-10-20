@@ -1,0 +1,61 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 GCD detail (A6): the right end-piece up close from the front right; the dark tent edge at the bottom of the picture is framed out. The old wordmark printed on the metal temple comes off. The GCD is placed from the 1:1 drawing as on IMG_3456.",
+ "shot": "IMG_3463",
+ "frame": "F04",
+ "angle": "A6",
+ "region": [0, 1500, 3213, 4300],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2200, 2800], [2100, 2400]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[2800, 2900]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "old wordmark printed on the metal temple (inset from its edges)",
+   "poly": [[238, 2497], [712, 2380], [712, 2481], [238, 2587]],
+   "kind": "light",
+   "fill_whole": true,
+   "temple": {
+    "top": [-0.2478, 2552.8],
+    "bottom": [-0.2251, 2643.6]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "flat"
+ },
+ "framing": {
+  "box": [0, 300, 3213, 4300]
+ },
+ "gcd": {
+  "view": "yaw-38p-12",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1319.1, 2314.1],
+   "left": [1225.7, 2333.7],
+   "right": [1424.4, 2292.0],
+   "top": [1317.4, 2274.5],
+   "bottom": [1320.9, 2354.0]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3463 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 17.8,11.1 --length-mm 8.8 --face-px 1170,2290 1172,2364 1734.5,1958 1741,2481",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 22.68,
+    "down": 27.66,
+    "square_on": 28.3
+   }
+  }
+ }
+}
