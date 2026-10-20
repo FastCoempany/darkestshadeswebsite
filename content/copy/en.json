@@ -220,7 +220,18 @@
     }
   },
   "alt": {
-    "stage": "{descriptor} sunglasses, {angle}, on a light grey background.",
+    "stage": "{subject}, {angle}, on a light grey background.",
+    "subjects": {
+      "$comment": "Each frame as a screen reader hears it, from its product facts (descriptor, front, temples, lens); the first letter is capitalized where the phrase starts the sentence.",
+      "F01": "blue tortoise navigator sunglasses with light blue lenses",
+      "F02": "crimson tortoise sunglasses with wire temples",
+      "F03": "black wayfarer sunglasses with yellow lenses",
+      "F04": "black flat-top square sunglasses with wire temples",
+      "F05": "black puffy square sunglasses with wire temples",
+      "F06": "black flat-top shield sunglasses",
+      "F08": "black octagon navigator sunglasses with smoke grey temples",
+      "F09": "chunky black sunglasses with thick rims"
+    },
     "angles": {
       "A1": "front view",
       "A2": "three-quarter view",
@@ -232,6 +243,6 @@
       "A6-corner": "close-up of the gold and onyx emblem where the temple meets the front",
       "A6-hinge": "close-up of the hinge"
     },
-    "onModel": "{person} wearing the {descriptor} sunglasses."
+    "onModel": "{person} wearing {subject}."
   }
 }

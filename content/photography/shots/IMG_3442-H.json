@@ -2,6 +2,7 @@
  "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 hero (H): the shoot has no landscape shot of this frame, so the hero is the front shot on a wider stage (lightbox-angle-set.json, gaps).",
  "shot": "IMG_3442",
  "variant": "H",
+ "alt": "A1",
  "frame": "F04",
  "angle": "H",
  "region": [0, 2400, 3213, 4200],

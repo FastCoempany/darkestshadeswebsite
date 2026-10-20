@@ -4,13 +4,14 @@
     python3 tools/photo/export_web.py              # every final -> assets/photography/ + MANIFEST.csv
     python3 tools/photo/export_web.py F02 F05      # some frames only (the manifest is rewritten whole)
     python3 tools/photo/export_web.py --masters DIR   # also copy the masters, named for the DAM, to DIR
+    python3 tools/photo/export_web.py --manifest      # rewrite MANIFEST.csv only (after a copy change)
 
 Reads work/out/<shot>/stage-full.png (16-bit, from tools/photo/clean_lightbox.py) for each shot in
 content/photography/shots/: one final per frame and angle, the hero (H) included. Writes
 ds-<frame>-<angle>-<width>.avif / .webp / .jpg at the widths below that the master reaches (never
 upscaled; a close-up cropped smaller than 2048 also gets its own full width), downsized in linear
 light, and assets/photography/MANIFEST.csv, one row per final, with the alt text built from
-content/copy/en.json (alt.stage, alt.angles) and the product's descriptor.
+content/copy/en.json (alt.stage, alt.subjects, alt.angles).
 
 The masters (the 16-bit cut-out, cutout.png, and the 16-bit stage version) stay out of this public
 repo; they belong in the DAM (07-photography.md, "Where files live").
@@ -53,11 +54,12 @@ def finals():
     return sorted(rows, key=lambda r: (r["frame"], ANGLES.index(r["angle"])))
 
 
-def alt_text(copy, product, alt_key):
-    angles = copy["alt"]["angles"]
-    if alt_key not in angles:
-        sys.exit(f"no alt text for {alt_key!r} in content/copy/en.json (alt.angles)")
-    return copy["alt"]["stage"].format(descriptor=product["descriptor"], angle=angles[alt_key])
+def alt_text(copy, frame, alt_key):
+    angles, subjects = copy["alt"]["angles"], copy["alt"]["subjects"]
+    if alt_key not in angles or frame not in subjects:
+        sys.exit(f"no alt text for {frame} {alt_key!r} in content/copy/en.json (alt.subjects, alt.angles)")
+    text = copy["alt"]["stage"].format(subject=subjects[frame], angle=angles[alt_key])
+    return text[0].upper() + text[1:]
 
 
 def downsize(lin, width):
@@ -86,12 +88,9 @@ def main(argv):
         i = argv.index("--masters")
         masters = pathlib.Path(argv[i + 1])
         argv = argv[:i] + argv[i + 2:]
-    only = {a.upper() for a in argv}
+    images = "--manifest" not in argv
+    only = {a.upper() for a in argv if not a.startswith("--")}
     copy = json.loads((ROOT / "content" / "copy" / "en.json").read_text())
-    products = {}
-    for p in (ROOT / "content" / "products").glob("f*.json"):
-        d = json.loads(p.read_text())
-        products[d["id"]] = d
     OUT.mkdir(parents=True, exist_ok=True)
     manifest = OUT / "MANIFEST.csv"
     old = {}
@@ -107,22 +106,24 @@ def main(argv):
                 rows.append(old[fid])
             continue
         rep = json.loads((src / "report.json").read_text())
-        st = cv2.imread(str(src / "stage-full.png"), cv2.IMREAD_UNCHANGED)
-        if st is None or st.dtype != np.uint16:
-            sys.exit(f"{src}/stage-full.png: missing or not 16-bit; run tools/photo/clean_lightbox.py first")
-        H, W = st.shape[:2]
-        lin = srgb_to_lin(cv2.cvtColor(st, cv2.COLOR_BGR2RGB).astype(np.float32) / 65535).astype(np.float32)
-        del st
+        with Image.open(src / "stage-full.png") as probe:
+            W, H = probe.size
         widths = [w for w in WIDTHS if w <= W]
         if W < WIDTHS[-1] and W > 1.15 * widths[-1]:
             widths.append(W)                         # a close-up cropped small: its own full width on top
-        for old_file in OUT.glob(f"{fid}-*.*"):
-            old_file.unlink()
-        for w in widths:
-            im = downsize(lin, w)
-            for fmt in ("avif", "webp", "jpg"):
-                save(im, OUT / f"{fid}-{w}.{fmt}", fmt)
-        del lin
+        if images:
+            st = cv2.imread(str(src / "stage-full.png"), cv2.IMREAD_UNCHANGED)
+            if st is None or st.dtype != np.uint16:
+                sys.exit(f"{src}/stage-full.png: missing or not 16-bit; run tools/photo/clean_lightbox.py first")
+            lin = srgb_to_lin(cv2.cvtColor(st, cv2.COLOR_BGR2RGB).astype(np.float32) / 65535).astype(np.float32)
+            del st
+            for old_file in OUT.glob(f"{fid}-*.*"):
+                old_file.unlink()
+            for w in widths:
+                im = downsize(lin, w)
+                for fmt in ("avif", "webp", "jpg"):
+                    save(im, OUT / f"{fid}-{w}.{fmt}", fmt)
+            del lin
         master = f"DS-{r['frame']}-{r['angle']}-{VERSION}-master.png"
         if masters:
             masters.mkdir(parents=True, exist_ok=True)
@@ -136,7 +137,7 @@ def main(argv):
             "width": W, "height": H, "widths": " ".join(map(str, widths)), "formats": "avif webp jpg",
             "tool_chain": "; ".join(tools), "master": master,
             "master_location": "DAM masters/ (to upload; regenerate with tools/photo/clean_lightbox.py)",
-            "status": "final", "alt": alt_text(copy, products[r["frame"]], r["alt"]),
+            "status": "final", "alt": alt_text(copy, r["frame"], r["alt"]),
             "crop": " ".join(map(str, rep["crop"])),
         })
         print(fid, r["key"], f"{W}x{H}", widths)

@@ -67,7 +67,7 @@
   },
   "photography": {
     "angleSet": "content/photography/lightbox-angle-set.json#F02",
-    "status": "seven angles cleaned (content/photography/shots/); GCD on the right wing, over the pin heads"
+    "status": "seven angles cleaned and framed (content/photography/shots/, framing.json); web images in assets/photography/ (ds-f02-*, MANIFEST.csv); GCD on the right wing, over the pin heads"
   },
   "copy": {
     "line": null,

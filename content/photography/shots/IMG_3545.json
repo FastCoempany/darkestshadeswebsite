@@ -3,6 +3,7 @@
  "shot": "IMG_3545",
  "frame": "F05",
  "angle": "A6",
+ "alt": "A6-corner",
  "region": [0, 600, 4032, 2268],
  "lenses": [
   {

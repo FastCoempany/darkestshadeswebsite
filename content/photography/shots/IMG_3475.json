@@ -3,6 +3,7 @@
  "shot": "IMG_3475",
  "frame": "F02",
  "angle": "A6",
+ "alt": "A6-front",
  "region": [0, 700, 2268, 3100],
  "lenses": [
   {

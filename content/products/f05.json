@@ -69,7 +69,7 @@
   },
   "photography": {
     "angleSet": "content/photography/lightbox-angle-set.json#F05",
-    "status": "seven angles cleaned (content/photography/shots/); GCD on the right end-piece, placed from the drawing (O3)"
+    "status": "seven angles cleaned and framed (content/photography/shots/, framing.json); web images in assets/photography/ (ds-f05-*, MANIFEST.csv); GCD on the right end-piece, placed from the drawing (O3)"
   },
   "copy": {
     "line": null,
