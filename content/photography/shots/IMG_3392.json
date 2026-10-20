@@ -1,0 +1,29 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 from behind (A5); the hinges' metal stays.",
+ "shot": "IMG_3392",
+ "frame": "F09",
+ "angle": "A5",
+ "region": [0, 1700, 3213, 3700],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "wearer's left lens from behind (image left)",
+   "points": [[1150, 2300]],
+   "convex": true
+  },
+  {
+   "name": "wearer's right lens from behind (image right)",
+   "points": [[2050, 2300]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

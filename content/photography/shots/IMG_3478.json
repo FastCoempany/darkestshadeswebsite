@@ -1,0 +1,56 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 GCD detail (A6): the right temple and hinge from the front right, a 4:5 crop of the landscape shot on the hinge. The engraved wordmark and the old emblem come off the temple; the GCD is placed with the old print as a ruler (24.1 to 39.9 mm from the hinge, from the left profile, IMG_3402). The temple's lit outer face starts below its top face and a dark bevel; those two lines were measured by hand (temple_gcd.py --edges).",
+ "shot": "IMG_3478",
+ "frame": "F09",
+ "angle": "A6",
+ "region": [150, 300, 2400, 2268],
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[1700, 1100], [1600, 1400]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges)",
+   "poly": [[740, 898], [1028, 1008], [1028, 1160], [740, 1035]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.4257, 461.3],
+    "bottom": [0.532, 696.7]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "gcd": {
+  "view": "yaw-65p18",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1011.7, 1059.2],
+   "left": [942.7, 1023.1],
+   "right": [1081.9, 1096.0],
+   "top": [1006.8, 1010.9],
+   "bottom": [1016.5, 1107.6]
+  },
+  "length_mm": 14.7,
+  "soften_px": 0.9,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3478 --edges 0.49,470 0.532,696.7 --hinge 1130,1050 1130,1250 --temple-mm 15 --face-mm 14.2 --seam-mm 3.19 --length-mm 14.7 --print 759,915.2 902,982.3 902,1029.7 759,960.3 --model ruler --print-mm 24.05,39.9",
+  "measured": {
+   "model": "ruler (print of known size)",
+   "px_per_mm": {
+    "along": 10.64,
+    "down": 19.01
+   },
+   "perspective_per_mm": 0.00127,
+   "print_mm": [24.05, 39.9]
+  }
+ },
+ "framing": {
+  "box": [250, 0, 2064, 2268]
+ }
+}

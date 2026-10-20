@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 side (A3): the left profile, the only side view with the whole frame (the one right profile, IMG_3407, cuts the front off). The left temple's engraved wordmark and old emblem come off; no GCD on the left side. The temple shows square on here, so it also gives where the old print lies on F09 (24.1 to 39.9 mm from the hinge) and the hinge line's slant (11 degrees; 12 on the drawing).",
+ "shot": "IMG_3402",
+ "frame": "F09",
+ "angle": "A3",
+ "region": [0, 2400, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near (left) temple (inset from the temple's edges)",
+   "poly": [[470, 3348], [1110, 3368], [1110, 3502], [470, 3482]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.0315, 3225.2],
+    "bottom": [0.0326, 3540.1]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

@@ -1,0 +1,64 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 three-quarter (A2) from the wearer's right, the whole temple in frame. The engraved wordmark and the old emblem after it come off the near temple. The GCD is placed with tools/photo/temple_gcd.py, the old print as a ruler: on F09 it lies 24.1 to 39.9 mm from the hinge, read square on in the left profile (IMG_3402).",
+ "shot": "IMG_3388",
+ "frame": "F09",
+ "angle": "A2",
+ "region": [0, 2200, 3213, 4300],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's right)",
+   "points": [[2200, 3200], [2100, 3450]],
+   "convex": true
+  },
+  {
+   "name": "far lens (wearer's left)",
+   "points": [[2950, 2900], [2900, 3100]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges)",
+   "poly": [[925, 3089], [1405, 3146], [1405, 3298], [925, 3230]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "top": [0.0987, 2892.7],
+    "bottom": [0.1636, 3160.7]
+   }
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "gcd": {
+  "view": "yaw-48p13",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [1402.1, 3168.1],
+   "left": [1277.4, 3150.0],
+   "right": [1530.2, 3186.7],
+   "top": [1396.2, 3109.2],
+   "bottom": [1408.0, 3227.2]
+  },
+  "length_mm": 14.7,
+  "soften_px": 0.9,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3388 --cols 660:1381:40 --band 2850:3500 --face-dark 40 --hinge 1621,3150 1612,3330 --temple-mm 15 --face-mm 14.5 --seam-mm 3.19 --length-mm 14.7 --print 949,3109.4 1203,3140.7 1203,3193.0 949,3159.3 --model ruler --print-mm 24.05,39.9",
+  "measured": {
+   "model": "ruler (print of known size)",
+   "px_per_mm": {
+    "along": 17.35,
+    "down": 23.96
+   },
+   "perspective_per_mm": 0.00189,
+   "print_mm": [24.05, 39.9]
+  }
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

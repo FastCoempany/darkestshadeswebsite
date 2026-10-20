@@ -1,0 +1,29 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 front (A1). The temples seen through the dark lenses stay as shot.",
+ "shot": "IMG_3383",
+ "frame": "F09",
+ "angle": "A1",
+ "region": [0, 2000, 3213, 3800],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "wearer's right lens (image left)",
+   "points": [[900, 2800], [600, 2700]],
+   "convex": true
+  },
+  {
+   "name": "wearer's left lens (image right)",
+   "points": [[2350, 2800], [2650, 2700]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

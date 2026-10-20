@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F09 from straight above (A4): the hinges' metal stays; no old marks show from above.",
+ "shot": "IMG_3376",
+ "frame": "F09",
+ "angle": "A4",
+ "region": [0, 1500, 3213, 4250],
+ "lenses": [
+  {
+   "name": "wearer's right lens (image left), from above",
+   "points": [[975, 3800]]
+  },
+  {
+   "name": "wearer's left lens (image right), from above",
+   "points": [[2025, 3800]]
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05
+ },
+ "shadow_zone": {
+  "around": 260,
+  "soft": 40
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}
