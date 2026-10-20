@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 three-quarter (A2) from the wearer's right. The engraved wordmark and the old emblem after it come off the near temple. The GCD is placed with the old print as a ruler (tools/photo/temple_gcd.py): its ends lie 26.3 and 41.4 mm from the hinge, measured in the 3D model on the hero (IMG_3483), where the whole temple height shows and nothing depends on where its lit top face ends. The 3D model here agrees within 2 to 7%, depending on that top face.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 three-quarter (A2) from the wearer's right. The engraved wordmark and the old emblem after it come off the near temple. The GCD is placed with the old print as a ruler (tools/photo/temple_gcd.py): its ends lie 26.3 and 41.4 mm from the hinge, measured in the 3D model on the hero (IMG_3483), where the whole temple height shows and nothing depends on where its lit top face ends. The 3D model here agrees within 2 to 7%, depending on that top face. The near half of the shield is seen at a steep angle and kept as photographed (lens_cleanup.as_shot): measured against the tent it came out lighter than the frame round it, with a ragged step along the bottom of SAM's mask.",
  "shot": "IMG_3357",
  "frame": "F06",
  "angle": "A2",
@@ -29,7 +29,8 @@
  ],
  "lens_cleanup": {
   "tophat_px": 31,
-  "threshold": 0.05
+  "threshold": 0.05,
+  "as_shot": true
  },
  "gcd": {
   "view": "yaw-30p19",
