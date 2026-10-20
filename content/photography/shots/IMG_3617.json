@@ -1,0 +1,33 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 detail (A6): the left temple at the hinge, the photographer's landscape crop; the front's edge runs off the left of the picture and the temple off the right. The engraved wordmark, mostly over the core wire seen through the grey acetate, comes off. The core runs at a slant to the temple's edges, so the patch is rebuilt between four measured guide curves (the temple's top edge, the core's two edges, the temple's bottom edge; each fitted within 2 px on both sides of the print), and the core's grain comes from further along the same temple. With the temple's straight edges alone a dark shelf showed under the core. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md O14).",
+ "shot": "IMG_3617",
+ "frame": "F08",
+ "angle": "A6",
+ "region": [0, 0, 4032, 2268],
+ "lenses": [],
+ "marks": [
+  {
+   "name": "engraved wordmark over the core wire, left temple (inset from the temple's edges)",
+   "poly": [[1330, 898], [1750, 920], [1750, 1043], [1330, 1025]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "guides": [
+     [0.02481, 740.21, 6.7463e-06],
+     [-0.02951, 902.29, 1.3881e-05],
+     [-0.051111, 1042.36, 1.98e-05],
+     [-0.10264, 1165.37, 4.2614e-05]
+    ]
+   },
+   "texture_dx": 480
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "framing": {
+  "box": [0, 0, 4032, 2268]
+ }
+}

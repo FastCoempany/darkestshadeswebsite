@@ -1,0 +1,30 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 front (A1). Its gradient lenses are refilled as even gradients from their own tint: the temples seen through the clear lower part would come out in fragments, as on the approved IMG_3596. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md O14).",
+ "shot": "IMG_3582",
+ "frame": "F08",
+ "angle": "A1",
+ "region": [0, 2750, 3213, 4600],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "wearer's right lens (image left)",
+   "points": [[900, 3700], [700, 3500]],
+   "convex": true
+  },
+  {
+   "name": "wearer's left lens (image right)",
+   "points": [[2400, 3700], [2600, 3500]],
+   "convex": true
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}

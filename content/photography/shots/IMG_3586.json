@@ -1,0 +1,43 @@
+{
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 side (A3): the left profile, the front running off the left edge. The left temple's engraved wordmark and old emblem come off. The temple is clear grey acetate with a grained metal core seen through it, and the core runs at a slant to the temple's edges and bends a little in the picture, so the patch is rebuilt between five measured guide curves (the temple's top edge, the top bevel's lower edge, the core's two edges, the temple's bottom edge; each fitted within 2 px on both sides of the print), and the core's grain comes from the clean core further along (two overlapping stretches, cross-faded). With the temple's straight edges alone the core came out doubled and streaked. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md O14).",
+ "shot": "IMG_3586",
+ "frame": "F08",
+ "angle": "A3",
+ "region": [0, 1400, 2268, 3500],
+ "tent_fill": "rows",
+ "lenses": [
+  {
+   "name": "near lens (wearer's left)",
+   "points": [[350, 2700], [450, 2950]],
+   "convex": true
+  }
+ ],
+ "marks": [
+  {
+   "name": "engraved wordmark and old emblem, near (left) temple (inset from the temple's edges)",
+   "poly": [[1005, 2470], [1365, 2350], [1365, 2525], [1005, 2640]],
+   "kind": "dark",
+   "fill_whole": true,
+   "temple": {
+    "guides": [
+     [-0.159431, 2639.28, -6.1575e-05],
+     [-0.182747, 2705.96, -5.501e-05],
+     [-0.225261, 2793.27, -5.4283e-05],
+     [-0.279126, 2922.69, -3.8588e-05],
+     [-0.512566, 3126.36, 6.3428e-05]
+    ]
+   },
+   "texture_from": [[995, 1205, 1430, 1640], [1165, 1375, 1375, 1585]]
+  }
+ ],
+ "lens_cleanup": {
+  "tophat_px": 31,
+  "threshold": 0.05,
+  "smooth": "gradient"
+ },
+ "framing": {
+  "aspect": [4, 5],
+  "fill": 0.86,
+  "center_y": 0.5
+ }
+}
