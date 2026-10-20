@@ -718,6 +718,29 @@ def paste_canvas(img, left, top, W, H, fill_value):
     return canvas
 
 
+def along_outline(v, d_s, half=6, sig=3.0):
+    """`v` smoothed along the lens's outline: over about +-`sig` px along the iso-lines of the signed
+    distance `d_s` from it, so each pixel is averaged with others at its own distance from the edge."""
+    ds = cv2.GaussianBlur(d_s.astype(np.float32), (0, 0), 1.5)
+    gx = cv2.Sobel(ds, cv2.CV_32F, 1, 0, ksize=3)
+    gy = cv2.Sobel(ds, cv2.CV_32F, 0, 1, ksize=3)
+    g = np.maximum(np.hypot(gx, gy), 1e-6)
+    tx, ty = -gy / g, gx / g
+    del gx, gy, g, ds
+    h, w = v.shape
+    xx = np.broadcast_to(np.arange(w, dtype=np.float32)[None, :], (h, w))
+    yy = np.broadcast_to(np.arange(h, dtype=np.float32)[:, None], (h, w))
+    v = v.astype(np.float32)
+    acc = np.zeros((h, w), np.float32)
+    total = 0.0
+    for o in range(-half, half + 1):
+        wo = float(np.exp(-0.5 * (o / sig) ** 2))
+        acc += wo * cv2.remap(v, (xx + o * tx).astype(np.float32), (yy + o * ty).astype(np.float32),
+                              cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+        total += wo
+    return acc / total
+
+
 def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=None):
     """The lens meets the frame along a line the masks draw in whole pixels: the lens's hole is cut
     by its SAM mask (shrunk a little), the rim by the model's alpha, which calls a dark lens solid.
@@ -732,7 +755,9 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     mask: a dark lens's last few pixels are "solid") at a time, in its own box; A, F and Tf change
     in place. `lin_clean` is the picture with the lenses' reflections and dust already out (a lens's
     bright corner, taken for glare, left the edge beside it unread, its rim's soft edge over bare
-    stage: the F03 hero). Returns how many pixels were read."""
+    stage: the F03 hero), the lens's own edge kept as photographed. Nothing is read where the band
+    the lens's color comes from is not the lens (SAM's mask run into a dark rim), or where clear tent
+    lies nearer than the lens. Returns how many pixels were read."""
     from scipy import ndimage as ndi
     ys_, xs_ = np.nonzero(lm)
     pad = 24
@@ -758,7 +783,14 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     mx_, mn_ = lin_clean[sl].max(-1), lin_clean[sl].min(-1)
     tentlike = (np.abs(Lp / np.maximum(Lb, 1e-5) - 1) < 0.12) & ((mx_ - mn_) / np.maximum(mx_, 1e-4) < 0.15)
     del Lb, Lp, mx_, mn_
-    zone = (ly & (d_in <= 4.5)) | (~hz & (d_out <= reach) & ((Az > 0.05) | ~tentlike))
+    # but not where clear tent lies nearer than the lens: the frame's soft edge there lies over the
+    # tent, not the lens, and read against the lens it would keep the tent's old grey in the new
+    # stage. Faded out over 3 px.
+    clear = ~ly & ~hz & (Az < 0.05) & tentlike
+    by_lens = (np.clip((ndi.distance_transform_edt(~clear) - d_out + 2) / 3, 0, 1).astype(np.float32)
+               if clear.any() else np.ones(ly.shape, np.float32))
+    del clear
+    zone = (ly & (d_in <= 4.5)) | (~hz & (d_out <= reach) & ((Az > 0.05) | ~tentlike) & (by_lens > 0))
     if not (inner.any() and outer.any() and zone.any()):
         return 0
     d_i, idx_i = ndi.distance_transform_edt(~inner, return_indices=True)
@@ -766,7 +798,6 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     del d_i
     d_o, idx_o = ndi.distance_transform_edt(~outer, return_indices=True)
     zone &= d_o <= 12
-    del d_o
 
     def spread(v, m, idx):
         # each pixel takes the value at the nearest pixel of `m`, smoothed along `m` first and after
@@ -779,6 +810,26 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     Lc = lin_clean[sl].astype(np.float32)
     Lv, Tz = spread(Lc, inner, idx_i), np.clip(spread(Tf[sl], inner, idx_i), 0, 1)
     del idx_i
+    # SAM's mask can reach several pixels past the lens into a dark rim (F05's detail, F08's
+    # three-quarter, the F03 front's yellow lens bottom): the band the lens's color is read from is
+    # then partly rim, and read against it, the rim came out as lens, lit in blocks by the lens's
+    # change. Where that band differs from the lens 12 to 30 px in by more than about half, the lens
+    # is read from there instead. And the reading reaches 12 px in, to take the rim back out of the
+    # mask: there only what reads as rim, joined to the edge, changes; the lens stays as cleaned.
+    deep = ly & hz & (d_in > 12) & (d_in <= 30)
+    trust = np.ones(ly.shape, np.float32)
+    if deep.any():
+        _, idx_d = ndi.distance_transform_edt(~deep, return_indices=True)
+        Ld, Td = spread(Lc, deep, idx_d), np.clip(spread(Tf[sl], deep, idx_d), 0, 1)
+        del idx_d
+        r = lum(Lv) / np.maximum(lum(Ld), 1e-6)
+        trust = (np.clip((r - 0.45) / 0.15, 0, 1) * np.clip((2.2 - r) / 0.4, 0, 1)).astype(np.float32)
+        tw = trust[..., None]
+        Lv, Tz = (tw * Lv + (1 - tw) * Ld).astype(np.float32), (tw * Tz + (1 - tw) * Td).astype(np.float32)
+        del Ld, Td, tw, r
+    deeper = ly & hz & ~zone & (d_in <= 12) & (d_o <= 26)
+    base = zone & ly
+    del deep, d_o
     lp, ll = lum(Lc), lum(Lv)
     # the frame's own color: the larger of the band's two halves, darker and lighter than its local
     # average, not the average itself: a thin highlight along a black rim's inner edge, averaged
@@ -793,8 +844,12 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     m_all, _ = local_mean(outer)
     m_lo, c_lo = local_mean(outer & (lo_ <= m_all))
     m_hi, c_hi = local_mean(outer & (lo_ > m_all))
-    lr = cv2.GaussianBlur(np.where(c_lo >= c_hi, m_lo, m_hi)[idx_o[0], idx_o[1]].astype(np.float32), (0, 0), 2.5)
-    del idx_o, m_all, m_lo, c_lo, m_hi, c_hi, lo_
+    # weighted towards the larger half, not switched to it: switched where the two halves were about
+    # as large, the frame's color jumped, and the edge's reading with it, in blocks (F05's and F04's
+    # details)
+    w_lo = np.clip(0.5 + 2.5 * (c_lo - c_hi) / np.maximum(c_lo + c_hi, 1e-6), 0, 1)
+    lr = cv2.GaussianBlur((w_lo * m_lo + (1 - w_lo) * m_hi)[idx_o[0], idx_o[1]].astype(np.float32), (0, 0), 2.5)
+    del idx_o, m_all, m_lo, c_lo, m_hi, c_hi, lo_, w_lo
     # the picture's noise on the lens: a difference within it counts for nothing. It is about even
     # in the picture's encoded terms, so in linear light it is much smaller on a dark lens than on a
     # light one: measured once, scaled to each pixel's level (one figure for all levels gave the
@@ -806,15 +861,47 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     t = (lp - ll) * np.sign(lr - ll)                # towards the frame's color (+) or away (-)
     A_to = np.clip((t - n) / np.maximum(gap - n, 1e-6), 0, 1)
     A_away = np.clip((-t - n) / (0.3 * ll + 2 * n + 1e-6), 0, 1)
-    A_e = cv2.GaussianBlur(np.maximum(A_to, A_away).astype(np.float32), (0, 0), 0.6)
+    # one pixel's reading against its neighbors': a lone outlier (noise on a dark lens by a dark
+    # rim) showed as a dark fleck along the edge (F02's detail)
+    A_e = cv2.GaussianBlur(cv2.medianBlur(np.maximum(A_to, A_away).astype(np.float32), 3), (0, 0), 0.7)
+    # and against the pixels beside it along the edge: read one by one, a dark line along a lens's
+    # edge came and went with the picture's noise, in dashes, much darker than it looked in the
+    # picture once the lens was on the new stage (F02's and F04's details)
+    A_e = along_outline(A_e, np.where(ly, d_in, -d_out))
     k = (np.clip((gap - 3 * n) / (3 * n + 1e-6), 0, 1) *
          np.clip((gap / np.maximum(np.maximum(ll, lr), 1e-6) - 0.2) / 0.2, 0, 1)).astype(np.float32)
-    A_z = (A_e * k + cv2.GaussianBlur(Az, (0, 0), 0.7) * (1 - k)).astype(np.float32)
+    # Where the reading can't tell lens from frame pixel by pixel (a dark lens's darkest stretch
+    # beside a black rim, the difference within the picture's noise), it reads the picture smoothed
+    # over a few pixels, where the noise is a third as large; only where that can't tell either does
+    # the edge stay as the masks drew it. Falling back to the masks straight away, the rim inside the
+    # lens's mask took the lens's clean tint in blocks wherever the reading lapsed (F05's
+    # three-quarter and detail, F04's). The two readings' trust is smoothed too, so they hand over
+    # gradually.
+    n2 = n / 3
+    t2 = (cv2.GaussianBlur(lp, (0, 0), 2.0) - ll) * np.sign(lr - ll)
+    A_e2 = np.maximum(np.clip((t2 - n2) / np.maximum(gap - n2, 1e-6), 0, 1),
+                      np.clip((-t2 - n2) / (0.3 * ll + 2 * n2 + 1e-6), 0, 1)).astype(np.float32)
+    k2 = (np.clip((gap - 3 * n2) / (3 * n2 + 1e-6), 0, 1) *
+          np.clip((gap / np.maximum(np.maximum(ll, lr), 1e-6) - 0.2) / 0.2, 0, 1)).astype(np.float32)
+    k, k2 = cv2.GaussianBlur(k, (0, 0), 2.0), cv2.GaussianBlur(k2, (0, 0), 2.0)
+    A_fb = A_e2 * k2 + cv2.GaussianBlur(Az, (0, 0), 0.7) * (1 - k2)
+    A_z = (A_e * k + A_fb * (1 - k)).astype(np.float32)
+    del t2, A_e2, k2, A_fb
+    # the rim taken back out of the lens's mask, 4.5 to 12 px in: what reads as rim there and is
+    # joined to the edge through more of it (a dark speck further in stays lens)
+    carve = ndi.binary_propagation(base, mask=base | (deeper & (A_z > 0.15))) & deeper
+    # a band along the edge, not a thin line running into it (a reflection inside F02's lens, left
+    # as a spike where it met the rim)
+    carve &= cv2.morphologyEx((carve | base).astype(np.uint8), cv2.MORPH_OPEN,
+                              cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))) > 0
+    zone |= carve
+    del base, deeper
     F_z = np.clip((Lc - (1 - A_z[..., None]) * Lv) / np.maximum(A_z[..., None], 0.02), 0, 1)
     # on the frame's side the reading fades out over its last 3 px, back to the frame as it was:
     # cut off square, it left a step across a soft bevel (F06's shield). Blended as the picture is
     # made (frame over, lens times stage), so the layers stay one picture.
-    wz = np.where(ly, 1.0, np.clip((reach - d_out) / 3, 0, 1)).astype(np.float32)
+    wz = np.where(ly, 1.0, np.clip((reach - d_out) / 3, 0, 1) * by_lens).astype(np.float32)
+    wz = np.where(carve, np.clip((A_z - 0.15) / 0.3, 0, 1), wz).astype(np.float32)
     Ab = wz * A_z + (1 - wz) * Az
     P = wz[..., None] * F_z * A_z[..., None] + (1 - wz[..., None]) * F[sl] * Az[..., None]
     Q = wz[..., None] * (1 - A_z[..., None]) * Tz + (1 - wz[..., None]) * (1 - Az[..., None]) * Tf[sl]
@@ -826,7 +913,8 @@ def read_lens_edge(lm, holes, A, F, Tf, lin_clean, srgb_clean, back_s, debug=Non
     Tf[sl] = np.where(zone[..., None], Tb, Tf[sl])
     if debug is not None:
         np.savez_compressed(debug / f"lens_edge_{by0}_{bx0}.npz", zone=zone, A_read=A_e, k=k, noise=n,
-                            lens=ll, frame=lr, pixel=lp, A_edge=A_z, weight=wz, before=Az)
+                            lens=ll, frame=lr, pixel=lp, A_edge=A_z, weight=wz, before=Az, trust=trust,
+                            by_lens=by_lens, carve=carve)
     return int(zone.sum())
 
 
@@ -971,6 +1059,27 @@ def main(cfg_path):
     for poly in lc.get("keep", []):
         cv2.fillPoly(keep, [np.array([[x - x0, y - y0] for x, y in poly], np.int32)], 1)
     spots &= keep == 0
+    # The lens's own edge is not dust: the rim's dark inner edge, a few pixels inside the hole,
+    # passes for a dark speck; and on a lens seen at a steep angle (`as_shot`, below) the bright
+    # facet along its edge passes for a reflection. Filled from the lens beside them, such edges
+    # came back flat, cut square along the mask's steps, with a dark block or a notch where a
+    # filled stretch ended (F08's and F05's three-quarter views, F06's three-quarter and detail).
+    # What reaches to within 4 px of the lens's outline stays as photographed in the picture the
+    # lens's edge is read from (`seen`, below); specks and lint on the lens's face still go, and a
+    # clean lens's fit still leaves all of them out.
+    near_rim = ~(cv2.erode(lens.astype(np.uint8), np.ones((9, 9), np.uint8)) > 0)
+
+    def reaching_rim(m):
+        lab_r, _ = ndi.label(m, structure=np.ones((3, 3), bool))
+        hit = np.unique(lab_r[m & near_rim])
+        return np.isin(lab_r, hit[hit > 0])
+
+    rim_sp = reaching_rim(dust & holes)
+    if lc.get("as_shot"):
+        rim_sp |= reaching_rim((glare | dust) & holes)
+    rim_sp = (cv2.dilate(rim_sp.astype(np.uint8), np.ones((5, 5), np.uint8)) > 0) & spots
+    report["rim_spots_kept_px"] = int(rim_sp.sum())
+    del near_rim
     glare_sp = spots & (cv2.dilate((glare & holes).astype(np.uint8), np.ones((5, 5), np.uint8)) > 0)
     if spots.any():
         for c in range(3):
@@ -1031,8 +1140,10 @@ def main(cfg_path):
                 m = cv2.GaussianBlur(m * lf, (0, 0), 1.5) / np.maximum(cv2.GaussianBlur(lf, (0, 0), 1.5), 1e-6)
                 new = new * (1 - m[..., None]) + Tc * m[..., None]
             Tc[li] = np.clip(new[li], 0, 1)
-    # the picture with the lenses' reflections and dust taken out, as the tent lit it
-    seen = np.where(spots[..., None], Tc * back, lin_clean).astype(np.float32)
+    # the picture with the lenses' reflections and dust taken out, as the tent lit it (the lens's
+    # own edge kept, above)
+    seen = np.where((spots & ~(rim_sp & ~paint))[..., None], Tc * back, lin_clean).astype(np.float32)
+    del rim_sp
     if lc.get("as_shot"):
         # A lens seen at a steep angle shows mostly its own edge and reflections, not the tent behind
         # it: it keeps its look as photographed, its transmission taken against the stage color (on
@@ -1144,6 +1255,17 @@ def main(cfg_path):
     if over.any():
         gw = cv2.GaussianBlur(over.astype(np.float32), (0, 0), 3) * (alpha_m < 0.9)
         A = (A * (1 - gw) + np.minimum(A, A_s) * gw).astype(np.float32)
+    # The model is unsure of a defocused part well inside the frame (F06's far hinge, round and
+    # out of focus: 0.85 to 0.9) and only 0.9 counts as solid, so it showed as a lighter patch with a
+    # hard edge. Well clear of anything open (the tent, a gap, a lens), what the model calls nearly
+    # solid is solid; faded in with the distance, so soft edges keep their opacity.
+    # Not where the tent seen through a gap was taken for frame (`over`, above).
+    d_open = cv2.distanceTransform((~((alpha_m < 0.5) | holes)).astype(np.uint8), cv2.DIST_L2, 5)
+    lift = (np.clip((alpha_m - 0.75) / 0.15, 0, 1) * np.clip((d_open - 4) / 4, 0, 1) *
+            (1 - np.clip(2 * cv2.GaussianBlur(over.astype(np.float32), (0, 0), 3), 0, 1))).astype(np.float32)
+    A = (A + (np.maximum(A, 0.995) - A) * lift).astype(np.float32)
+    report["lifted_px"] = int(((lift > 0.5) & ~solid & ~holes).sum())
+    del d_open, lift
     A[holes] = 0.0
     rim = solid & ~holes
     A[rim] = np.maximum(A[rim], 0.995)
@@ -1185,7 +1307,10 @@ def main(cfg_path):
     dbg_dir = out / "debug" if "--debug" in sys.argv else None
     if dbg_dir is not None:
         dbg_dir.mkdir(exist_ok=True)
-    for i in range(1, n_l + 1):
+    # (not on a lens kept as shot: it is the photograph up to its edge already, and past it the
+    # reading took the frame's soft edge over the tent for frame over lens, a notch of the tent's
+    # old grey where F06's shield meets its far temple)
+    for i in range(1, n_l + 1 if not lc.get("as_shot") else 1):
         lm = lab_l == i
         if lm.sum() >= 2000:
             report["lens_edge_px"] += read_lens_edge(lm, holes, A, F, Tf, seen, srgb_clean, back_s, dbg_dir)
