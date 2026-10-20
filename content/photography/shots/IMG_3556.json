@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge, so the photographer's crop is kept. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD is placed on the right temple with tools/photo/temple_gcd.py (gcd.measured_with): the temple's edges converge well here, so its face is modelled in 3D, from the hinge line as measured (it slants across the face, 1.9 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.1 to 42.5 mm from the hinge, the ruler for F01's other temple views.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 three-quarter (A2) from the wearer's right; the near temple runs off the left edge. The engraved wordmark and old emblem on the blue tortoise temple come off stroke by stroke (rebuilding the whole patch would smear the tortoise). The GCD is placed on the right temple with tools/photo/temple_gcd.py (gcd.measured_with): the temple's edges converge well here, so its face is modelled in 3D, from the hinge line as measured (it slants across the face, 1.9 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.1 to 42.5 mm from the hinge, the ruler for F01's other temple views.",
  "shot": "IMG_3556",
  "frame": "F01",
  "angle": "A2",
@@ -60,8 +60,5 @@
     "ends_mm": [26.07, 42.5]
    }
   }
- },
- "framing": {
-  "box": [0, 1042, 3213, 5058]
  }
 }

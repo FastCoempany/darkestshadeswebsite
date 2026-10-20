@@ -20,10 +20,5 @@
   "tophat_px": 31,
   "threshold": 0.05,
   "smooth": "flat"
- },
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
  }
 }

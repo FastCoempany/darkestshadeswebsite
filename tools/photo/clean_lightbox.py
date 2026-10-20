@@ -4,9 +4,10 @@
     python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json [--debug]
 
 Reads the original from work/originals/ (tools/photo/zipget.py), writes work/out/<shot>/:
-    stage.jpg            the frame on the uniform stage color, 4:5 (or the shot's own box), 2000 wide
+    stage.jpg            the frame on the uniform stage color, framed by its angle's rule
+                         (content/photography/framing.json) or the shot's own box, 2000 wide
     stage-full.png       same, at the shot's working resolution (16-bit)
-    cutout.png           one-file RGBA: rims and temples opaque, lenses see-through
+    cutout.png           one-file RGBA (16-bit): rims and temples opaque, lenses see-through
     layers/frame.png     exact layers for compositing on anything (people, other stages):
     layers/lens.png        multiply the background by shadow.png and lens.png (the lenses'
     layers/shadow.png      measured color transmission), then frame.png on top
@@ -502,17 +503,108 @@ def place_gcd(F, A, cfg, region_xy, report):
 
 
 # ---------- framing ----------
-def frame_crop(alpha, aspect, fill, center_y):
-    ys, xs = np.nonzero(alpha > 0.15)
-    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
-    bw = x1 - x0
-    W = int(bw / fill)
-    Hh = int(W * aspect[1] / aspect[0])
-    cx = (x0 + x1) / 2
-    cy = (y0 + y1) / 2
-    left = int(round(cx - W / 2))
-    top = int(round(cy - center_y * Hh))
-    return left, top, W, Hh
+FRAMING = ROOT / "content" / "photography" / "framing.json"
+
+
+def framing_rule(cfg):
+    """The shot's framing: its angle's rule (content/photography/framing.json), then the shot's
+    own keys over it ("fill" is the older name for "width")."""
+    rule = dict(json.loads(FRAMING.read_text())["angles"].get(cfg["angle"], {}))
+    own = dict(cfg.get("framing", {}))
+    if "fill" in own:
+        own["width"] = own.pop("fill")
+    if "bottom" in own or "center_y" in own:
+        rule.pop("bottom", None)
+        rule.pop("center_y", None)
+    rule.update(own)
+    return rule
+
+
+def picture_bounds(rule, photo_hw):
+    """The picture's edges in photograph pixels (x0, y0, x1, y1): the photograph's own, or where
+    the shot's framing 'cut' ends it sooner (a side beyond which the frame can't be held)."""
+    ph, pw = photo_hw
+    b = {"left": 0, "top": 0, "right": pw, "bottom": ph}
+    b.update(rule.get("cut", {}))
+    return b["left"], b["top"], b["right"], b["bottom"]
+
+
+def photo_edges(alpha, region, bounds, min_run=5):
+    """The sides where the frame meets the picture's edge (a temple running out of the picture,
+    or a tip touching it): there the canvas ends at that edge too, so the frame runs off the
+    picture instead of stopping in mid-air."""
+    x0, y0 = region[:2]
+    bx0, by0, bx1, by1 = bounds
+    a = alpha > 0.15
+    hh, ww = a.shape
+    cl, ct, cr, cb = bx0 - x0, by0 - y0, bx1 - x0, by1 - y0      # the edges in region pixels
+    touch = {"left": 0 <= cl < ww - 3 and a[:, cl:cl + 3].any(1).sum() >= min_run,
+             "right": 3 < cr <= ww and a[:, cr - 3:cr].any(1).sum() >= min_run,
+             "top": 0 <= ct < hh - 3 and a[ct:ct + 3, :].any(0).sum() >= min_run,
+             "bottom": 3 < cb <= hh and a[cb - 3:cb, :].any(0).sum() >= min_run}
+    return [s for s in ("left", "right", "top", "bottom") if touch[s]]
+
+
+def frame_extent(alpha, min_area=100):
+    """The frame's extent in the region (x0, y0, x1, y1, ends exclusive): everything the alpha holds
+    above 0.15, lenses included, less specks."""
+    n, _, st, _ = cv2.connectedComponentsWithStats((alpha > 0.15).astype(np.uint8), connectivity=8)
+    keep = [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= min_area]
+    x0 = min(st[i, 0] for i in keep)
+    y0 = min(st[i, 1] for i in keep)
+    x1 = max(st[i, 0] + st[i, 2] for i in keep)
+    y1 = max(st[i, 1] + st[i, 3] for i in keep)
+    return int(x0), int(y0), int(x1), int(y1)
+
+
+def canvas_for(rule, ext, runs, region, bounds):
+    """The canvas (left, top, W, H in region pixels) that frames the frame by its angle's rule, so
+    an angle sits at the same size and height in every frame's set.
+
+    width: the frame's share of the canvas width. Where a temple runs off a side of the picture,
+    the visible width is not the frame's, so the frame's height sets the scale instead (height:
+    its share of the canvas height), as long as the frame then fills at least min_width of the
+    canvas (otherwise the width rule), and at most what leaves the open side the margin a centred
+    frame has. The side it runs off stays the picture's edge (bounds, photograph pixels). bottom:
+    where the frame's lowest point sits (share of the canvas height from the top), or center_y:
+    where its middle sits."""
+    rx0, ry0 = region[:2]
+    bx0, by0, bx1, by1 = bounds
+    x0, y0, x1, y1 = ext
+    bw, bh = x1 - x0, y1 - y0
+    ax, ay = rule["aspect"]
+    width = rule["width"]
+    off = [s for s in ("left", "right") if s in runs]
+    how = "width"
+    if len(off) == 2:
+        Wc = bx1 - bx0
+        how = "picture's width"
+    else:
+        Wc = bw / width
+        if off and rule.get("height"):
+            Wh = bh / rule["height"] * ax / ay
+            if bw / Wh >= rule.get("min_width", 0.75):
+                Wc = max(Wh, bw / (1 - (1 - width) / 2))
+                how = "height"
+    # whole multiples of the aspect, so every picture is exactly 4:5 (or 3:2); a canvas held by
+    # the picture's edges on both sides stays inside them
+    k = max(1, int(Wc // ax) if len(off) == 2 else int(round(Wc / ax)))
+    W, H = ax * k, ay * k
+    if "left" in runs:
+        left = bx0 - rx0
+    elif "right" in runs:
+        left = bx1 - rx0 - W
+    else:
+        left = int(round((x0 + x1) / 2 - W / 2))
+    if "bottom" in rule:
+        top = int(round(y1 - rule["bottom"] * H))
+    else:
+        top = int(round((y0 + y1) / 2 - rule.get("center_y", 0.5) * H))
+    if "top" in runs:
+        top = by0 - ry0
+    elif "bottom" in runs:
+        top = by1 - ry0 - H
+    return int(left), int(top), int(W), int(H), how
 
 
 def paste_canvas(img, left, top, W, H, fill_value):
@@ -570,29 +662,43 @@ def main(cfg_path):
     # keep only the frame's own shadow: fade S to 1 between 150 and 450 px from the frame, so the
     # stage is one even color everywhere else (no tent gradient, no seams at the crop edge)
     d = cv2.distanceTransform((1 - obj).astype(np.uint8), cv2.DIST_L2, 5)
-    w = np.clip((450 - d) / 300, 0, 1) * zone
+    fade = np.clip((450 - d) / 300, 0, 1) * zone
     hh, ww = S.shape
     yy, xx = np.mgrid[0:hh, 0:ww]
-    # and to 1 at the region's border where the picture is padded beyond it: no seam with the
-    # padding. A border that is also the picture's edge (a close-up kept in the photographer's
-    # crop, the frame running off it) keeps its shadow right up to the edge.
-    box = cfg.get("framing", {}).get("box")
-    sides = {"left": xx, "top": yy, "right": ww - 1 - xx, "bottom": hh - 1 - yy}
-    open_side = {"left": box is None or box[0] < x0, "top": box is None or box[1] < y0,
-                 "right": box is None or box[2] > x1, "bottom": box is None or box[3] > y1}
-    edge = np.full((hh, ww), 1e9, np.float32)
-    for side, dist in sides.items():
-        if open_side[side]:
-            edge = np.minimum(edge, dist.astype(np.float32))
-    w = w * np.clip(edge / 120.0, 0, 1)
-    # darkening within the tent model's error (about 2%) is not shadow: it would show as faint
-    # patches on the even stage
-    S = 1 - np.clip((1 - S) - 0.02, 0, 1) / 0.98 * w
     # Whatever is seen through a lens or a gap stays in its transmission (below), so the shadow
     # layer is 1 there; the frame itself hides the rest of the inpainted shadow.
     see = cv2.dilate((lens | (filled & ~solid)).astype(np.uint8), np.ones((7, 7), np.uint8)) > 0
-    S = np.where(see, 1.0, S).astype(np.float32)
-    S = np.where(see | solid, cv2.GaussianBlur(S, (0, 0), 2), S).astype(np.float32)
+    S_measured = S
+
+    def finish_shadow(open_side):
+        # and to 1 at the region's border where the picture is padded beyond it: no seam with the
+        # padding. A border that is also the picture's edge (a close-up kept in the photographer's
+        # crop, the frame running off it) keeps its shadow right up to the edge.
+        sides = {"left": xx, "top": yy, "right": ww - 1 - xx, "bottom": hh - 1 - yy}
+        edge = np.full((hh, ww), 1e9, np.float32)
+        for side, dist in sides.items():
+            if open_side[side]:
+                edge = np.minimum(edge, dist.astype(np.float32))
+        wt = fade * np.clip(edge / 120.0, 0, 1)
+        # darkening within the tent model's error (about 2%) is not shadow: it would show as
+        # faint patches on the even stage
+        Sf = 1 - np.clip((1 - S_measured) - 0.02, 0, 1) / 0.98 * wt
+        Sf = np.where(see, 1.0, Sf).astype(np.float32)
+        return np.where(see | solid, cv2.GaussianBlur(Sf, (0, 0), 2), Sf).astype(np.float32)
+
+    rule = framing_rule(cfg)
+    box = rule.get("box")
+    bounds = picture_bounds(rule, full.shape[:2])
+
+    def open_sides(runs):
+        if box is None:
+            return {s: s not in runs for s in ("left", "top", "right", "bottom")}
+        return {"left": box[0] < x0, "top": box[1] < y0, "right": box[2] > x1, "bottom": box[3] > y1}
+
+    # where the frame meets the picture's edge: first from the model's alpha, measured again on the
+    # finished alpha below (a blurred tip the model misses)
+    runs0 = photo_edges(alpha_m, cfg["region"], bounds)
+    S = finish_shadow(open_sides(runs0))
     B = B * norm
     report["background_norm"] = round(norm, 3)
 
@@ -756,6 +862,15 @@ def main(cfg_path):
     if cfg.get("gcd"):
         place_gcd(F, A, cfg, rx, report)
 
+    # Where the frame, lenses included, meets the picture's edge, the canvas ends there too
+    # (framing, below) and the shadow is kept right up to it. The finished alpha also holds what
+    # the model missed: a blurred tip just touching the edge (F01's side view), a front the
+    # model lost at the edge (F05's).
+    held = A + (1 - A) * (1 - Tf.min(-1))
+    runs = photo_edges(held, cfg["region"], bounds)
+    if open_sides(runs) != open_sides(runs0):
+        S = finish_shadow(open_sides(runs))
+
     # re-stage on the uniform stage color, keeping the frame's own contact shadow
     stage = hex_lin(STAGE_HEX)
     comp = F * A[..., None] + stage * S[..., None] * Tf * (1 - A[..., None])
@@ -769,29 +884,28 @@ def main(cfg_path):
                         "stray": stray}.items():
             Image.fromarray((np.clip(m.astype(np.float32), 0, 1) * 255).astype(np.uint8)).save(dbg / f"{name}.png")
 
-    fr = cfg.get("framing", {})
-    if fr.get("box"):                                # close-ups keep the photographer's crop
-        bx0, by0, bx1, by1 = fr["box"]
+    # framing (content/photography/framing.json): close-ups and the photographed heroes keep the
+    # photographer's crop (a box); every other angle is cut around the frame by its angle's rule
+    report["runs_off"] = runs
+    ax, ay = rule["aspect"]
+    if box:
+        bx0, by0, bx1, by1 = box
         left, top, W, H = bx0 - x0, by0 - y0, bx1 - bx0, by1 - by0
+        report["framing"] = {"box": box}
     else:
-        left, top, W, H = frame_crop(A, fr.get("aspect", [4, 5]), fr.get("fill", 0.86), fr.get("center_y", 0.56))
-        # Where the frame runs off the photograph (a temple past the picture's edge), the canvas
-        # ends at that edge too: the temple runs off the image instead of stopping in mid-air.
-        fh, fw = full.shape[:2]
-        hh, ww = A.shape
-        touch = {"left": A[:, :3].max() > 0.15 and x0 == 0, "right": A[:, -3:].max() > 0.15 and x1 == fw,
-                 "top": A[:3, :].max() > 0.15 and y0 == 0, "bottom": A[-3:, :].max() > 0.15 and y1 == fh}
-        if touch["left"] and left < 0:
-            left = 0
-        if touch["right"] and left + W > ww:
-            left = ww - W
-        if touch["top"] and top < 0:
-            top = 0
-        if touch["bottom"] and top + H > hh:
-            top = hh - H
-        if touch["left"] and touch["right"] or touch["top"] and touch["bottom"]:
-            report["framing_note"] = "the frame runs off both sides of the photograph; the canvas keeps the photographer's width"
-        report["runs_off"] = [k for k, v in touch.items() if v]
+        bx0, by0, bx1, by1 = bounds
+        inb = np.zeros(held.shape, bool)
+        inb[max(0, by0 - y0):max(0, by1 - y0), max(0, bx0 - x0):max(0, bx1 - x0)] = True
+        ext = frame_extent(np.where(inb, held, 0))
+        left, top, W, H, how = canvas_for(rule, ext, runs, cfg["region"], bounds)
+        ex0, ey0, ex1, ey1 = ext
+        report["framing"] = {"scale": how, "fill_width": round((ex1 - ex0) / W, 3),
+                             "fill_height": round((ey1 - ey0) / H, 3)}
+        inside = {"left": ex0 >= left, "right": ex1 <= left + W, "top": ey0 >= top, "bottom": ey1 <= top + H}
+        if not all(inside[s] or s in runs for s in inside):
+            report["framing_note"] = "the canvas cuts the frame: " + ", ".join(s for s in inside if not inside[s] and s not in runs)
+    if abs(W * ay / (H * ax) - 1) > 0.002:
+        report["framing_note"] = f"the canvas is {W}x{H}, not {ax}:{ay}"
     comp_c = paste_canvas(comp, left, top, W, H, stage)
     stage_srgb = lin_to_srgb(comp_c)
     ow = 2000
@@ -817,7 +931,8 @@ def main(cfg_path):
     P_cut = F * A[..., None] + (1 - A[..., None]) * stage * (Tf - Tmin[..., None])
     F_cut = np.where(A_cut[..., None] > 1e-4, P_cut / np.maximum(A_cut[..., None], 1e-4), 0)
     cut = paste_canvas(np.dstack([lin_to_srgb(F_cut), A_cut]), left, top, W, H, 0)
-    Image.fromarray((cut * 255 + 0.5).astype(np.uint8), "RGBA").save(out / "cutout.png", optimize=True)
+    # 16-bit: the master that goes to the DAM (07-photography.md, step 11)
+    cv2.imwrite(str(out / "cutout.png"), cv2.cvtColor((np.clip(cut, 0, 1) * 65535 + 0.5).astype(np.uint16), cv2.COLOR_RGBA2BGRA))
 
     # review sheet: original crop vs result, same framing
     orig_c = paste_canvas(before, left, top, W, H, before[0, 0])

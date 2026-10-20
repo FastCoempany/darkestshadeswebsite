@@ -1,0 +1,12 @@
+{
+ "$comment": "How each angle sits on the stage (docs/brief/07-photography.md, step 10), read by tools/photo/clean_lightbox.py. The canvas is cut around the frame's own extent (lenses included), so an angle is the same size and at the same height in every frame's set. aspect: width:height of the picture. width: the frame's share of the canvas width. height: its share of the canvas height, used instead of width where a temple runs off a side of the photograph (the visible width is then not the frame's), as long as the frame still fills min_width of the canvas; otherwise the width rule. A side the frame runs off, or touches, stays the photograph's edge. bottom: where the frame's lowest point sits, as a share of the canvas height from the top (its contact shadow falls below); center_y: where the frame's middle sits instead. A shot's own 'framing' keys override its angle's. A 'box' (photograph pixels, x0 y0 x1 y1; it may reach past the photograph, padded with the stage color) keeps the photographer's crop instead: the A6 close-ups and the photographed landscape heroes. H without a box is a hero made from a front view.",
+ "angles": {
+  "A1": {"aspect": [4, 5], "width": 0.78, "bottom": 0.62},
+  "A2": {"aspect": [4, 5], "width": 0.84, "height": 0.29, "min_width": 0.75, "bottom": 0.68},
+  "A3": {"aspect": [4, 5], "width": 0.84, "height": 0.27, "min_width": 0.75, "bottom": 0.65},
+  "A4": {"aspect": [4, 5], "width": 0.84, "center_y": 0.5},
+  "A5": {"aspect": [4, 5], "width": 0.84, "bottom": 0.69},
+  "A6": {"aspect": [4, 5]},
+  "H": {"aspect": [3, 2], "width": 0.78, "center_y": 0.52}
+ }
+}

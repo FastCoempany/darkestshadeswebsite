@@ -13,10 +13,5 @@
  "shadow_zone": {
   "around": 260,
   "soft": 40
- },
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
  }
 }

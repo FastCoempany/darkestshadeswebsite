@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 side (A3) from the wearer's right; the photographer focused on the temple and let the front run off the edge, so the photographer's crop is kept, ending just past the near rim: beyond it the far side is a blur the segmentation can't hold. The right wing is well out of focus: the GCD goes where the pin heads sit (about 39% and 61% across the wing's face, 53% down, as on IMG_3423), seen at about 40 degrees, and is softened to the same blur.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 side (A3) from the wearer's right; the photographer focused on the temple and let the front run off the edge, and the picture ends just past the near rim (framing.cut): beyond it the far side is a blur the segmentation can't hold. The right wing is well out of focus: the GCD goes where the pin heads sit (about 39% and 61% across the wing's face, 53% down, as on IMG_3423), seen at about 40 degrees, and is softened to the same blur.",
  "shot": "IMG_3430",
  "frame": "F02",
  "angle": "A3",
@@ -40,6 +40,8 @@
   "soften_px": 10
  },
  "framing": {
-  "box": [0, 1137, 3060, 4962]
+  "cut": {
+   "right": 3060
+  }
  }
 }

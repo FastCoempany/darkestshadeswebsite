@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 hero (H), front on and close, landscape: the photographer's crop is kept. The right temple's outer face shows end-on at the far left: its old print comes off (rebuilt along the face, which converges hard toward the back) and the GCD goes on as the temple's angle shows it, a narrow sliver near the hinge. It is placed with the old print as a ruler (its ends 23.7 and 38.4 mm from the hinge, from the 3D model on IMG_3495). The temple starts where its face meets the end-piece's narrow side, about 7 mm short of the front's edge: the first placement had taken that edge for the hinge and put the GCD on the end-piece. The striped light panel mirrored in the right lens goes; the far temple seen through the left lens stays.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 hero (H), front on and close, landscape: the photographer's width is kept, at 3:2. The right temple's outer face shows end-on at the far left: its old print comes off (rebuilt along the face, which converges hard toward the back) and the GCD goes on as the temple's angle shows it, a narrow sliver near the hinge. It is placed with the old print as a ruler (its ends 23.7 and 38.4 mm from the hinge, from the 3D model on IMG_3495). The temple starts where its face meets the end-piece's narrow side, about 7 mm short of the front's edge: the first placement had taken that edge for the hinge and put the GCD on the end-piece. The striped light panel mirrored in the right lens goes; the far temple seen through the left lens stays.",
  "shot": "IMG_3497",
  "frame": "F03",
  "angle": "H",
@@ -61,6 +61,6 @@
   }
  },
  "framing": {
-  "box": [0, 0, 4032, 2268]
+  "box": [0, -210, 4032, 2478]
  }
 }

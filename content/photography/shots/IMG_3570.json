@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 hero (H), front on, landscape: the photographer's crop is kept. No old mark on the front; the temples seen through the light lenses stay.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 hero (H), front on, landscape: the photographer's width is kept, at 3:2. No old mark on the front; the temples seen through the light lenses stay.",
  "shot": "IMG_3570",
  "frame": "F01",
  "angle": "H",
@@ -24,6 +24,6 @@
   "keep_behind": true
  },
  "framing": {
-  "box": [0, 0, 4032, 2268]
+  "box": [0, -210, 4032, 2478]
  }
 }

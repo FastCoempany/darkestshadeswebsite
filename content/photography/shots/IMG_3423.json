@@ -40,10 +40,5 @@
   "px_per_mm_down": 20.8,
   "length_mm": 8.8,
   "soften_px": 0.7
- },
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
  }
 }

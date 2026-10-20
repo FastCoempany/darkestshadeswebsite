@@ -45,10 +45,5 @@
    "perspective_per_mm": 0.00161,
    "print_mm": [26.26, 41.42]
   }
- },
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
  }
 }

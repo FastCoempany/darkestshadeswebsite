@@ -4,10 +4,5 @@
  "frame": "F03",
  "angle": "A3",
  "region": [0, 1550, 2268, 3100],
- "tent_fill": "rows",
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
- }
+ "tent_fill": "rows"
 }

@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 GCD detail (A6): the right end-piece up close from the front right, framed on the end-piece. The old wordmark printed on the metal temple comes off. The GCD is placed from the 1:1 drawing as on IMG_3547.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 GCD detail (A6): the right end-piece up close from the front right, a 4:5 crop of the landscape shot on the end-piece. The old wordmark printed on the metal temple comes off. The GCD is placed from the 1:1 drawing as on IMG_3547.",
  "shot": "IMG_3545",
  "frame": "F05",
  "angle": "A6",
@@ -51,6 +51,6 @@
   }
  },
  "framing": {
-  "box": [300, 600, 3300, 2268]
+  "box": [1259, 600, 2593, 2268]
  }
 }

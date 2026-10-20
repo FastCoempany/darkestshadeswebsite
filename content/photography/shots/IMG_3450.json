@@ -38,10 +38,5 @@
     "square_on": 19.17
    }
   }
- },
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
  }
 }

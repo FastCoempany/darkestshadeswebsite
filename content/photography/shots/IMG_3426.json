@@ -4,11 +4,6 @@
  "frame": "F02",
  "angle": "A4",
  "region": [100, 650, 3000, 3700],
- "framing": {
-  "aspect": [4, 5],
-  "fill": 0.86,
-  "center_y": 0.5
- },
  "shadow_zone": {
   "around": 260,
   "soft": 40

@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 hero (H), the photographer's landscape crop. The engraved wordmark and the old emblem's bracket come off the near temple. The temple's edges converge well, so the GCD is placed in the 3D model (tools/photo/temple_gcd.py), with the hinge line as measured (it slants across the face, 0.97 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.3 to 41.4 mm from the hinge, the ruler for F06's other temple views. The first placement drew the GCD a third too short: the print's first letters had been missed, so the temple's turn was overestimated.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 hero (H), the photographer's landscape width, at 3:2. The engraved wordmark and the old emblem's bracket come off the near temple. The temple's edges converge well, so the GCD is placed in the 3D model (tools/photo/temple_gcd.py), with the hinge line as measured (it slants across the face, 0.97 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.3 to 41.4 mm from the hinge, the ruler for F06's other temple views. The first placement drew the GCD a third too short: the print's first letters had been missed, so the temple's turn was overestimated.",
  "shot": "IMG_3483",
  "frame": "F06",
  "angle": "H",
@@ -58,6 +58,6 @@
   }
  },
  "framing": {
-  "box": [0, 0, 4032, 2268]
+  "box": [0, -210, 4032, 2478]
  }
 }

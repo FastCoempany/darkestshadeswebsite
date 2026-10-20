@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 hero (H), front on, the photographer's landscape crop. The gradient lenses are refilled from their own tint, as on the front view. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 hero (H), front on, the photographer's landscape width, at 3:2. The gradient lenses are refilled from their own tint, as on the front view. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
  "shot": "IMG_3590",
  "frame": "F08",
  "angle": "H",
@@ -23,6 +23,6 @@
   "smooth": "gradient"
  },
  "framing": {
-  "box": [0, 0, 4032, 2268]
+  "box": [0, -210, 4032, 2478]
  }
 }
