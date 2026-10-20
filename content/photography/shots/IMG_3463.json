@@ -33,29 +33,29 @@
   "threshold": 0.05,
   "smooth": "flat"
  },
- "framing": {
-  "box": [0, 300, 3213, 4300]
- },
  "gcd": {
-  "view": "yaw-38p-12",
+  "view": "yaw-31p-15",
   "relief_mm": 0.15,
   "anchors_px": {
-   "center": [1319.1, 2314.1],
-   "left": [1225.7, 2333.7],
-   "right": [1424.4, 2292.0],
-   "top": [1317.4, 2274.5],
-   "bottom": [1320.9, 2354.0]
+   "center": [1473.9, 2266.2],
+   "left": [1363.0, 2290.4],
+   "right": [1600.2, 2238.6],
+   "top": [1471.2, 2223.2],
+   "bottom": [1476.7, 2309.5]
   },
   "length_mm": 8.8,
   "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3463 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 17.8,11.1 --length-mm 8.8 --face-px 1170,2290 1172,2364 1734.5,1958 1741,2481",
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3463 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 11.47,10.59 --length-mm 8.8 --face-px 1170,2290 1172,2364 1734.5,1958 1741,2481",
   "measured": {
    "model": "face from the drawing (perspective)",
    "px_per_mm": {
-    "along": 22.68,
-    "down": 27.66,
-    "square_on": 28.3
+    "along": 27.07,
+    "down": 30.05,
+    "square_on": 31.11
    }
   }
+ },
+ "framing": {
+  "box": [0, 300, 3213, 4300]
  }
 }

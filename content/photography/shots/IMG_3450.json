@@ -17,31 +17,31 @@
    }
   }
  ],
+ "gcd": {
+  "view": "yaw-21p-10",
+  "relief_mm": 0.15,
+  "anchors_px": {
+   "center": [2883.4, 2512.0],
+   "left": [2805.9, 2518.2],
+   "right": [2963.6, 2505.6],
+   "top": [2883.0, 2484.6],
+   "bottom": [2883.8, 2539.3]
+  },
+  "length_mm": 8.8,
+  "soften_px": 0.8,
+  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3450 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 11.47,10.59 --length-mm 8.8 --face-px 2652,2500 2654,2553 3054,2351 3031,2649",
+  "measured": {
+   "model": "face from the drawing (perspective)",
+   "px_per_mm": {
+    "along": 17.91,
+    "down": 18.91,
+    "square_on": 19.17
+   }
+  }
+ },
  "framing": {
   "aspect": [4, 5],
   "fill": 0.86,
   "center_y": 0.5
- },
- "gcd": {
-  "view": "yaw-23p-7",
-  "relief_mm": 0.15,
-  "anchors_px": {
-   "center": [2773.0, 2530.3],
-   "left": [2699.2, 2536.0],
-   "right": [2849.2, 2524.4],
-   "top": [2772.3, 2503.6],
-   "bottom": [2773.6, 2556.8]
-  },
-  "length_mm": 8.8,
-  "soften_px": 0.8,
-  "measured_with": "python3 tools/photo/temple_gcd.py IMG_3450 --face-mm 25.0,8.9 25.0,11.85 2.3,3.2 3.5,18.3 --center-mm 17.8,11.1 --length-mm 8.8 --face-px 2652,2500 2654,2553 3054,2351 3031,2649",
-  "measured": {
-   "model": "face from the drawing (perspective)",
-   "px_per_mm": {
-    "along": 17.03,
-    "down": 18.4,
-    "square_on": 18.54
-   }
-  }
  }
 }

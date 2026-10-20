@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 from straight above (A4); the hinges' metal and the nose pads stay. No old marks show from above. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md O14).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 from straight above (A4); the hinges' metal and the nose pads stay. No old marks show from above. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
  "shot": "IMG_3584",
  "frame": "F08",
  "angle": "A4",
