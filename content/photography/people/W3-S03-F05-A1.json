@@ -1,0 +1,46 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "id": "DS-CAST-W3-S03-F05-v01",
+ "cast": "W3",
+ "scene": "S03",
+ "frame": "F05",
+ "angle": "A1",
+ "wardrobe": "coat",
+ "format": "9:16",
+ "status": "draft",
+ "portrait": "work/people/raw/W3-S03-n34-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "34:2",
+  "size": [
+   864,
+   1536
+  ],
+  "generated": "2026-10-21",
+  "prompt": "A bare concrete stairwell with worn steps and a plain metal handrail. One hard shaft of daylight from a high window above falls across the landing; the rest is in deep shadow. The model stands on the landing in the shaft of light, facing the camera, framed from the waist up, the whole head and shoulders in the light, the stairs rising behind. 50 mm lens, eye level.\nA 40-year-old Italian woman, lean, with a long neck. Olive skin with fine natural lines, no retouching. Very dark brown hair parted in the center and pulled back tightly into a low bun at the nape; ears visible. Long angular face, high cheekbones, a long straight nose, thin lips, a defined jaw. No makeup, no jewelry. Severe and calm, mouth closed.\nWardrobe: a navy wool coat over a grey crew-neck sweater, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3510",
+ "pd_mm": 62,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "surround": 0.35,
+  "key_from_deg": 270,
+  "level": 1.0
+ },
+ "shadow": {
+  "strength": 0.55,
+  "offset_mm": 2.0,
+  "blur_mm": 1.0
+ },
+ "reflection": {
+  "strength": 0.02,
+  "haze": 0.01
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}

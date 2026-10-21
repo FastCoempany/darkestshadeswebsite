@@ -18,6 +18,10 @@ The masters, the 16-bit cut-out (cutout.png) and the 16-bit stage version (stage
 of every web file), go to the DAM in this repo, dam/product/ (dam/README.md; founder, Oct 21 2026),
 named DS-<frame>-<angle>-<version>-master.png and -stage.png, losslessly recompressed; a master newer
 than its source is left as it is.
+
+On-model finals (content/photography/people/<id>.json with "status": "final", composited by
+tools/photo/wear.py into work/people/<id>/composite.png) go the same way: ds-cast-<cast>-<scene>-<frame>
+web files, a manifest row (alt.onModel), and the master to dam/people/.
 """
 import csv
 import json
@@ -34,6 +38,8 @@ from clean_lightbox import lin_to_srgb, srgb_to_lin  # noqa: E402
 
 OUT = ROOT / "assets" / "photography"
 DAM = ROOT / "dam" / "product"
+DAM_PEOPLE = ROOT / "dam" / "people"
+PEOPLE = ROOT / "content" / "photography" / "people"
 WIDTHS = [640, 960, 1440, 2048]
 VERSION = "v01"
 QUALITY = {"jpg": 84, "webp": 82, "avif": 62}
@@ -63,6 +69,32 @@ def alt_text(copy, frame, alt_key):
         sys.exit(f"no alt text for {frame} {alt_key!r} in content/copy/en.json (alt.subjects, alt.angles)")
     text = copy["alt"]["stage"].format(subject=subjects[frame], angle=angles[alt_key])
     return text[0].upper() + text[1:]
+
+
+def people_finals():
+    """The on-model finals: settings files marked final."""
+    out = []
+    for p in sorted(PEOPLE.glob("*.json")):
+        c = json.loads(p.read_text())
+        if c.get("status") == "final":
+            out.append(c)
+    return out
+
+
+def on_model_alt(copy, c):
+    a = copy["alt"]
+    for group, key in (("people", c["cast"]), ("wardrobe", c["wardrobe"]), ("scenes", c["scene"]), ("subjects", c["frame"])):
+        if key not in a[group]:
+            sys.exit(f"no alt text for {c['id']}: alt.{group}.{key} in content/copy/en.json")
+    return a["onModel"].format(person=a["people"][c["cast"]], wardrobe=a["wardrobe"][c["wardrobe"]],
+                               subject=a["subjects"][c["frame"]], scene=a["scenes"][c["scene"]])
+
+
+def widths_for(W):
+    widths = [w for w in WIDTHS if w <= W]
+    if W < WIDTHS[-1] and W > 1.15 * widths[-1]:
+        widths.append(W)                             # cropped small: its own full width on top
+    return widths
 
 
 def downsize(lin, width):
@@ -107,9 +139,7 @@ def main(argv):
         rep = json.loads((src / "report.json").read_text())
         with Image.open(src / "stage-full.png") as probe:
             W, H = probe.size
-        widths = [w for w in WIDTHS if w <= W]
-        if W < WIDTHS[-1] and W > 1.15 * widths[-1]:
-            widths.append(W)                         # a close-up cropped small: its own full width on top
+        widths = widths_for(W)
         if images:
             st = cv2.imread(str(src / "stage-full.png"), cv2.IMREAD_UNCHANGED)
             if st is None or st.dtype != np.uint16:
@@ -144,9 +174,50 @@ def main(argv):
             "crop": " ".join(map(str, rep["crop"])),
         })
         print(fid, r["key"], f"{W}x{H}", widths)
+    for c in people_finals():
+        fid = c["id"].rsplit("-v", 1)[0].lower()
+        src = ROOT / "work" / "people" / c["id"] / "composite.png"
+        if only and c["frame"] not in only:
+            if fid in old:
+                rows.append(old[fid])
+            continue
+        rep = json.loads((src.parent / "report.json").read_text())
+        with Image.open(src) as probe:
+            W, H = probe.size
+        widths = widths_for(W)
+        if images:
+            st = cv2.imread(str(src), cv2.IMREAD_UNCHANGED)
+            if st is None or st.dtype != np.uint16:
+                sys.exit(f"{src}: missing or not 16-bit; run tools/photo/wear.py first")
+            lin = srgb_to_lin(cv2.cvtColor(st, cv2.COLOR_BGR2RGB).astype(np.float32) / 65535).astype(np.float32)
+            del st
+            for old_file in OUT.glob(f"{fid}-*.*"):
+                old_file.unlink()
+            for w in widths:
+                im = downsize(lin, w)
+                for fmt in ("avif", "webp", "jpg"):
+                    save(im, OUT / f"{fid}-{w}.{fmt}", fmt)
+            del lin
+        master = f"{c['id']}-master.png"
+        if masters:
+            DAM_PEOPLE.mkdir(parents=True, exist_ok=True)
+            dst = DAM_PEOPLE / master
+            if not (dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime):
+                cv2.imwrite(str(dst), cv2.imread(str(src), cv2.IMREAD_UNCHANGED), [cv2.IMWRITE_PNG_COMPRESSION, 9])
+        ps = c["portrait_source"]
+        rows.append({
+            "id": fid, "source": f"figma {ps['figma_file']} node {ps['node']} + {c['product_shot']}",
+            "frame": c["frame"], "angle": c.get("angle", "A1"), "version": c["id"].rsplit("-", 1)[1],
+            "width": W, "height": H, "widths": " ".join(map(str, widths)), "formats": "avif webp jpg",
+            "tool_chain": f"Figma generate_image ({ps['model']}); {rep.get('upscale', 'none')} (upscaled); tools/photo/wear.py",
+            "master": master, "master_location": "dam/people/", "status": "final",
+            "alt": on_model_alt(copy, c), "crop": " ".join(map(str, rep.get("crop", []))),
+        })
+        print(fid, c["portrait"], f"{W}x{H}", widths)
     cols = ["id", "source", "frame", "angle", "version", "width", "height", "widths", "formats", "tool_chain",
             "master", "master_location", "status", "alt", "crop"]
-    rows.sort(key=lambda r: (r["frame"], ANGLES.index(r["angle"])))
+    rows.sort(key=lambda r: (r["id"].startswith("ds-cast"), r["id"] if r["id"].startswith("ds-cast")
+                             else (r["frame"], ANGLES.index(r["angle"]))))
     with manifest.open("w", newline="") as f:
         wr = csv.DictWriter(f, fieldnames=cols, lineterminator="\n")
         wr.writeheader()

@@ -1,0 +1,51 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "id": "DS-CAST-NB-S06-F06-v01",
+ "cast": "NB",
+ "scene": "S06",
+ "frame": "F06",
+ "angle": "A1",
+ "wardrobe": "shirt",
+ "format": "4:5",
+ "status": "draft",
+ "portrait": "work/people/raw/NB-S06-n23-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "23:2",
+  "size": [
+   960,
+   1280
+  ],
+  "generated": "2026-10-21",
+  "prompt": "Studio portrait against a black backdrop. Head and shoulders, the head centered in the upper half of the frame. One hard key light from the front, a little to the camera's left and a little above eye level, no fill: the far side of the face falls into shadow. 85 mm lens, eye level.\nA 27-year-old Mexican Indigenous non-binary person, slim. Warm light-brown skin, smooth. Straight black hair parted in the center, falling to the jaw and just past it, tucked behind the left ear on one side. Broad high cheekbones, a strong straight nose, full lips, a defined jaw; neither feminine nor masculine in styling. No makeup, no jewelry. Still and direct, mouth closed.\nWardrobe: a crisp white cotton shirt buttoned to the collar, no tie, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3345",
+ "pd_mm": 63,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "surround": 0.15,
+  "key_from_deg": 215,
+  "level": 1.0
+ },
+ "shadow": {
+  "strength": 0.6,
+  "offset_mm": 1.5,
+  "blur_mm": 0.8
+ },
+ "reflection": {
+  "strength": 0.03,
+  "at": [
+   0.25,
+   0.25
+  ],
+  "mirror": false,
+  "haze": 0.01
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}

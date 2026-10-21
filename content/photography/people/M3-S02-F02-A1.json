@@ -1,0 +1,46 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "id": "DS-CAST-M3-S02-F02-v01",
+ "cast": "M3",
+ "scene": "S02",
+ "frame": "F02",
+ "angle": "A1",
+ "wardrobe": "suit",
+ "format": "4:5",
+ "status": "draft",
+ "portrait": "work/people/raw/M3-S02-n33-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "33:2",
+  "size": [
+   960,
+   1280
+  ],
+  "generated": "2026-10-21",
+  "prompt": "Photograph against a mid-grey seamless paper backdrop that curves into the floor. Flat, soft overhead light, even on the face, a soft shadow at the feet. The model stands still, centered, facing the camera, framed from mid-thigh up. 85 mm lens, eye level.\nA 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed.\nWardrobe: a grey wool suit jacket over a white shirt buttoned to the collar, no tie, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3423",
+ "pd_mm": 64,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "surround": 0.6,
+  "key_from_deg": 270,
+  "level": 1.0
+ },
+ "shadow": {
+  "strength": 0.35,
+  "offset_mm": 1.5,
+  "blur_mm": 1.6
+ },
+ "reflection": {
+  "strength": 0.02,
+  "haze": 0.01
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}

@@ -1,0 +1,46 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "id": "DS-CAST-M2-S02-F08-v01",
+ "cast": "M2",
+ "scene": "S02",
+ "frame": "F08",
+ "angle": "A1",
+ "wardrobe": "suit",
+ "format": "16:9",
+ "status": "draft",
+ "portrait": "work/people/raw/M2-S02-n35-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "35:2",
+  "size": [
+   1536,
+   864
+  ],
+  "generated": "2026-10-21",
+  "prompt": "Photograph against a mid-grey seamless paper backdrop that curves into the floor. Flat, soft overhead light, even on the face, a soft shadow at the feet. The model stands still, centered, facing the camera, framed from mid-thigh up. 85 mm lens, eye level.\nA 34-year-old Nigerian man, lean and long-limbed. Deep dark brown skin with a soft sheen. Cleanly shaved head; ears visible. Long lean face, high cheekbones, a strong jaw, a broad nose, full lips. Clean-shaven. Calm and intent, mouth closed.\nWardrobe: a grey wool suit jacket over a white shirt buttoned to the collar, no tie, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3582",
+ "pd_mm": 64,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "surround": 0.6,
+  "key_from_deg": 270,
+  "level": 1.0
+ },
+ "shadow": {
+  "strength": 0.35,
+  "offset_mm": 1.5,
+  "blur_mm": 1.6
+ },
+ "reflection": {
+  "strength": 0.02,
+  "haze": 0.01
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}

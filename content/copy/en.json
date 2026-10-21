@@ -246,6 +246,32 @@
       "A6-corner": "close-up of the gold and onyx emblem where the temple meets the front",
       "A6-hinge": "close-up of the hinge"
     },
-    "onModel": "{person} wearing {subject}."
+    "onModel": "{person} {wardrobe}, wearing {subject}, {scene}.",
+    "people": {
+      "$comment": "Each cast member as a screen reader hears them: what is seen, never who they are (docs/brief/07-photography.md, track 2).",
+      "W1": "A woman with a blunt black bob and a heavy fringe",
+      "W2": "A woman with close-cropped hair",
+      "W3": "A woman with dark hair pulled tightly back",
+      "M1": "A man with short ash-blond hair",
+      "M2": "A man with a shaved head",
+      "M3": "A man with black hair swept back and close stubble",
+      "NB": "A person with straight black hair to the jaw"
+    },
+    "wardrobe": {
+      "nylon": "in a black nylon jacket",
+      "shirt": "in a white shirt buttoned to the collar",
+      "merino": "in a black crew-neck sweater",
+      "coat": "in a navy coat over a grey sweater",
+      "suit": "in a grey suit jacket and a white shirt"
+    },
+    "scenes": {
+      "S01": "on a runway",
+      "S02": "against a grey backdrop",
+      "S03": "in a concrete stairwell",
+      "S04": "in a long corridor",
+      "S05": "in a wedge of light in a dark room",
+      "S06": "against a black backdrop",
+      "S07": "against a white backdrop"
+    }
   }
 }

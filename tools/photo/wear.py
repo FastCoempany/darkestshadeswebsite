@@ -2,22 +2,31 @@
 """Put a real, cleaned frame on a generated person (docs/brief/07-photography.md, track 2).
 
     python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json
+    python3 tools/photo/wear.py --all          # every settings file in content/photography/people/
 
-The person is generated without glasses (reference/casting/model-bibles.md). The frame comes from
-the cleaned lightbox shot of the matching angle (work/out/<shot>/layers, from clean_lightbox.py).
+The person is generated without glasses (reference/casting/prompt-pack.md). The frame comes from the
+cleaned lightbox shot of the matching angle (work/out/<shot>/layers, from clean_lightbox.py).
 Nothing about the frame is generated: its pixels are the photograph, its size is the 1:1 drawing.
 
-Steps: face landmarks and head pose (InsightFace, models from GitHub releases) -> scale from the
-pupils (an assumed pupillary distance) -> fit the photographed lens openings onto the drawing's
-lens openings at that scale and pose (a homography from eight points) -> lens layer: each lens's
-measured tint, flat, over the eyes (nothing that sat behind the lens in the product shot) ->
-the frame's contact shadow on the skin -> the frame lit like the scene (white balance and level
-of the scene's backdrop against the tent's) -> one soft reflection per lens -> the SS90 grade
-(lifted blacks, warm whites, low saturation, halation, grain) over the whole picture.
+Steps: the portrait at twice its size (EDSR super-resolution; the generator returns about 1.2 MP) ->
+face landmarks and head pose (InsightFace) -> scale from the pupils (the person's pupillary
+distance) -> fit the photographed lens openings onto the drawing's lens openings at that scale and
+pose (a homography from eight points) -> in a dark scene, the frame's photographed highlights kept
+where they face the key light and dimmed elsewhere (never added) -> only the front is worn: the
+drawing's front outline, fitted to the photographed front, cuts temples and what the product camera
+saw past the front -> lens layer: each lens's measured tint, flat, over the eyes, running on under
+the rim to its solid part (nothing that sat behind the lens in the product shot) -> the frame's
+contact shadow on the skin, cast away from the scene's key light -> the frame lit like the scene (the
+scene light's color from a neutral patch, its level from the backdrop against the tent's, or set) ->
+the lens's front surface: a faint sheen of the room and one soft reflection of the key -> the SS90
+grade (lifted blacks, warm whites, low saturation, halation, grain) over the whole picture -> the
+crop (3:4 to the gallery's 4:5).
 
-Writes work/people/<id>/: composite.png (16-bit), composite.jpg, compare.jpg, report.json.
+Coordinates in the settings (boxes, polygons, crop) are in the generated portrait's own pixels.
+Writes work/people/<id>/: composite.png (16-bit, the crop), composite.jpg, compare.jpg (before and
+after), zoom.jpg (the frame at 1:1), report.json; with --debug also debug.npz (the layers round the
+frame).
 """
-import io
 import json
 import pathlib
 import re
@@ -25,19 +34,24 @@ import sys
 
 import cv2
 import numpy as np
-from PIL import Image, ImageOps
+from PIL import Image
+from scipy import ndimage as ndi
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from clean_lightbox import hex_lin, lin_to_srgb, load_srgb, lum, srgb_to_lin  # noqa: E402
+from clean_lightbox import lin_to_srgb, load_srgb, lum, srgb_to_lin  # noqa: E402
+
+PEOPLE = ROOT / "content" / "photography" / "people"
+DEBUG = "--debug" in sys.argv
 
 
 # ---------- the frame's true geometry, from the 1:1 drawing ----------
-def drawing_lens_points(frame_id, px_per_mm=20):
-    """Extreme points (left, right, top, bottom) of both lens openings in the front view, in mm,
-    origin midway between the two lens-box centres, y down. Image left = the wearer's right."""
+def drawing_front(frame_id, px_per_mm=20):
+    """From the 1:1 front-view drawing: the extreme points (left, right, top, bottom) of both lens
+    openings in mm, origin midway between the two lens-box centres, y down (image left = the wearer's
+    right); and the front's silhouette (everything inside its outline, lens openings included) as a
+    mask at `px_per_mm`, with that origin in its pixels."""
     import cairosvg
-    from scipy import ndimage as ndi
     svg = (ROOT / "content" / "products" / "drawings" / f"{frame_id}-front.svg").read_text()
     svg = svg.replace("currentColor", "#000").replace('stroke-width="0.25"', 'stroke-width="0.06"')
     svg = svg.replace('vector-effect="non-scaling-stroke"', "")
@@ -53,7 +67,8 @@ def drawing_lens_points(frame_id, px_per_mm=20):
     lenses = sorted([np.argwhere(lab == i)[:, ::-1] / px_per_mm for _, i in best], key=lambda p: p[:, 0].mean())
     centres = [((p[:, 0].min() + p[:, 0].max()) / 2, (p[:, 1].min() + p[:, 1].max()) / 2) for p in lenses]
     origin = np.mean(centres, axis=0)
-    return [extremes(p) - origin for p in lenses]
+    silhouette = ~np.isin(lab, [v for v in border if v != 0])      # all but the outside: lines and what they enclose
+    return [extremes(p) - origin for p in lenses], silhouette, origin * px_per_mm
 
 
 def extremes(pts):
@@ -79,32 +94,148 @@ def face_of(img_bgr):
     return faces[0]
 
 
+def upscaled(path, factor=2):
+    """The generated portrait at `factor` times its size, by EDSR super-resolution (OpenCV contrib's
+    dnn_superres; the model, EDSR_x2.pb, from github.com/Saafke/EDSR_Tensorflow, in work/models/),
+    in overlapping tiles so it fits this workspace's memory; cached beside the portrait. Only the
+    generated person is upscaled, never the frame, which is drawn from its 12 MP photograph at the
+    upscaled size. On a face, EDSR came closest of the free models to the original (a portrait
+    halved and brought back: EDSR +1.3 dB over bicubic, FSRCNN +0.5, ESPCN +0.3, LapSRN 0)."""
+    path = pathlib.Path(path)
+    out = path.with_name(f"{path.stem}-x{factor}.png")
+    if out.exists() and out.stat().st_mtime >= path.stat().st_mtime:
+        return load_srgb(out)
+    sr = cv2.dnn_superres.DnnSuperResImpl_create()
+    sr.readModel(str(ROOT / "work" / "models" / f"EDSR_x{factor}.pb"))
+    sr.setModel("edsr", factor)
+    im = cv2.imread(str(path), cv2.IMREAD_COLOR)
+    h, w = im.shape[:2]
+    tile, pad = 192, 16
+    up = np.zeros((h * factor, w * factor, 3), np.uint8)
+    for y in range(0, h, tile):
+        for x in range(0, w, tile):
+            y0, x0 = max(0, y - pad), max(0, x - pad)
+            y1, x1 = min(h, y + tile + pad), min(w, x + tile + pad)
+            t = sr.upsample(np.ascontiguousarray(im[y0:y1, x0:x1]))
+            oy, ox = (y - y0) * factor, (x - x0) * factor
+            hh, ww = min(tile, h - y) * factor, min(tile, w - x) * factor
+            up[y * factor:y * factor + hh, x * factor:x * factor + ww] = t[oy:oy + hh, ox:ox + ww]
+    cv2.imwrite(str(out), up)
+    return load_srgb(out)
+
+
 # ---------- the grade ----------
-def ss90(srgb, seed=1):
-    """Lifted blacks, warm paper whites, low saturation, faint halation, fine grain (01-brand-system.md)."""
+def ss90(srgb, seed=1, size=1.0):
+    """Lifted blacks, warm paper whites, low saturation, faint halation, fine grain (01-brand-system.md).
+    `size` scales the halation and grain with the picture (1 = 1280 px tall)."""
     x = srgb.astype(np.float32)
     y = (0.2126 * x[..., 0] + 0.7152 * x[..., 1] + 0.0722 * x[..., 2])[..., None]
     x = y + (x - y) * 0.85                                        # low saturation
     hi = np.clip((y - 0.55) / 0.45, 0, 1)
     x = x * (1 + hi * np.array([0.012, 0.0, -0.03], np.float32))  # warm whites
-    glow = cv2.GaussianBlur(np.clip(y[..., 0] - 0.82, 0, 1), (0, 0), 7)[..., None]
+    glow = cv2.GaussianBlur(np.clip(y[..., 0] - 0.82, 0, 1), (0, 0), 7 * size)[..., None]
     x = x + glow * np.array([0.55, 0.22, 0.12], np.float32) * 0.35  # halation on the brightest whites
     x = 0.043 + (1 - 0.043) * np.clip(x, 0, 1)                    # blacks lifted to about #0B0B0C
     g = np.random.default_rng(seed).normal(0, 1, x.shape[:2]).astype(np.float32)
-    g = cv2.GaussianBlur(g, (0, 0), 0.7) * 0.022 * (1 - 0.5 * y[..., 0])
+    g = cv2.GaussianBlur(g, (0, 0), 0.7 * size) * 0.022 * size * (1 - 0.5 * y[..., 0])   # same grain at any size
     return np.clip(x + g[..., None], 0, 1)
+
+
+def box_median(lin, box, k):
+    x0, y0, x1, y1 = [int(round(v * k)) for v in box]
+    return np.median(lin[y0:y1, x0:x1].reshape(-1, 3), axis=0)
+
+
+def polygon_mask(shape, polys, k, feather):
+    m = np.zeros(shape, np.uint8)
+    for p in polys:
+        cv2.fillPoly(m, [np.round(np.asarray(p, np.float32) * k).astype(np.int32)], 1)
+    m = m.astype(np.float32)
+    return cv2.GaussianBlur(m, (0, 0), feather) if feather else m
+
+
+def relight(F, A, surround, key_from_deg=None, rim_px=40.0, sharp=2.0):
+    """The frame's own photographed highlights, kept where the surface faces the scene's key light and
+    dimmed to `surround` (how bright the scene round the frame is against the tent it was shot in)
+    where it faces anything else. A highlight is never added or moved, only kept or dimmed.
+
+    In the tent every face of the gloss acetate mirrored bright fabric; in a dark scene only the faces
+    turned to the light would. The highlights are the frame's neutral part (a gloss reflection has the
+    light's color), so the acetate's own colors (the tortoise, the gold) stay as photographed. Which
+    way a face turns is read from the frame's outline: a rim is rounded, flat at its crest and turning
+    away towards each edge (`rim_px`, about half a rim's width), towards the nearest edge."""
+    mn = F.min(-1)
+    solid = A > 0.5
+    base = float(np.percentile(mn[solid], 5))
+    spec = np.clip(mn - base, 0, None)
+    diffuse = F - spec[..., None]
+    w = np.zeros_like(spec)
+    if key_from_deg is not None:
+        d = cv2.distanceTransform(solid.astype(np.uint8), cv2.DIST_L2, 5)
+        gy, gx = np.gradient(cv2.GaussianBlur(d, (0, 0), 3))
+        mag = np.hypot(gx, gy) + 1e-6
+        nx, ny = -gx / mag, -gy / mag                  # the way the surface turns: towards the nearest edge
+        tilt = np.clip(1 - d / rim_px, 0, 1)            # 0 on a rim's crest, 1 at its edge
+        a = np.radians(key_from_deg)                    # image coordinates, y down: 270 = from above
+        w = np.clip(nx * np.cos(a) + ny * np.sin(a), 0, 1) ** sharp * tilt
+    keep = surround + (1 - surround) * w
+    return diffuse + spec[..., None] * keep[..., None], {"spec_base": round(base, 4), "surround": surround,
+                                                        "key_from_deg": key_from_deg,
+                                                        "spec_kept": round(float((spec * keep)[solid].sum() / max(spec[solid].sum(), 1e-6)), 3)}
+
+
+def fit_outline(sil, Aw, s):
+    """The drawing's front outline (on the face, placed by the lens openings) moved onto the
+    photographed front: an affine ECC fit of the two filled shapes, blurred by a millimetre, in a box
+    round the frame at half size, leaving out what the photograph shows more than 3 mm past the outline
+    (temples). Kept only if it is a small correction (under 4 mm at the frame's middle, under 12% of
+    scale or shear); otherwise the outline stays where the lens openings put it."""
+    ys, xs = np.nonzero(Aw > 0.5)
+    m = int(12 * s)
+    y0, y1, x0, x1 = max(0, ys.min() - m), min(Aw.shape[0], ys.max() + m), max(0, xs.min() - m), min(Aw.shape[1], xs.max() + m)
+    f = 0.5
+    filled = ndi.binary_fill_holes(Aw[y0:y1, x0:x1] > 0.5)          # the outline holds the lens openings too
+    near = cv2.dilate((sil[y0:y1, x0:x1] > 0.5).astype(np.uint8),       # not what lies far past it (temples)
+                      cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(6 * s) | 1,) * 2)) > 0
+    a = cv2.resize((filled & near).astype(np.float32), None, fx=f, fy=f, interpolation=cv2.INTER_AREA)
+    b = cv2.resize(sil[y0:y1, x0:x1], None, fx=f, fy=f, interpolation=cv2.INTER_AREA)
+    a, b = cv2.GaussianBlur(a, (0, 0), s * f), cv2.GaussianBlur(b, (0, 0), s * f)
+    M = np.eye(2, 3, dtype=np.float32)
+    try:
+        cc, M = cv2.findTransformECC(a, b, M, cv2.MOTION_AFFINE,
+                                     (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6), None, 5)
+    except cv2.error:
+        return sil, {"kept": False, "why": "no fit"}
+    cy, cx = [float(v.mean()) for v in np.nonzero(a > 0.5)]
+    shift_mm = float(np.hypot(*((M[:, :2] - np.eye(2)) @ [cx, cy] + M[:, 2]))) / f / s   # at the frame's middle
+    lin_dev = float(np.abs(M[:, :2] - np.eye(2)).max())
+    info = {"shift_mm": round(shift_mm, 2), "linear_dev": round(lin_dev, 4), "cc": round(float(cc), 4)}
+    if shift_mm > 4 or lin_dev > 0.12:
+        return sil, dict(info, kept=False)
+    # M maps the photograph's box (half size) into the outline's: undo it on the outline, at full size
+    T = np.array([[1, 0, -x0], [0, 1, -y0], [0, 0, 1]], np.float64)
+    S = np.diag([f, f, 1.0])
+    Mf = np.linalg.inv(S) @ np.vstack([M, [0, 0, 1]]) @ S
+    full = np.linalg.inv(T) @ Mf @ T
+    out = cv2.warpAffine(sil, full[:2].astype(np.float32), (sil.shape[1], sil.shape[0]),
+                         flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
+    return out, dict(info, kept=True)
 
 
 def main(cfg_path):
     cfg = json.loads(pathlib.Path(cfg_path).read_text())
     out = ROOT / "work" / "people" / cfg["id"]
     out.mkdir(parents=True, exist_ok=True)
-    report = {"id": cfg["id"], "cast": cfg["cast"], "scene": cfg["scene"], "frame": cfg["frame"], "product_shot": cfg["product_shot"]}
+    report = {"id": cfg["id"], "cast": cfg["cast"], "scene": cfg["scene"], "frame": cfg["frame"],
+              "product_shot": cfg["product_shot"]}
 
-    # the person
-    person = load_srgb(ROOT / cfg["portrait"])
+    # the person, at twice the generated size
+    k = int(cfg.get("upscale", 1))
+    person = upscaled(ROOT / cfg["portrait"], k) if k > 1 else load_srgb(ROOT / cfg["portrait"])
     lin = srgb_to_lin(person)
     H, W = lin.shape[:2]
+    report["size"] = [W, H]
+    report["upscale"] = f"EDSR x{k}" if k > 1 else "none"
     face = face_of(cv2.cvtColor((person * 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
     eyes = np.array(sorted(face.kps[:2].tolist()), np.float32)      # image left eye first
     mid = eyes.mean(0)
@@ -113,8 +244,9 @@ def main(cfg_path):
     roll = float(np.arctan2(eyes[1][1] - eyes[0][1], eyes[1][0] - eyes[0][0]))
     dx = float(face.kps[2][0] - mid[0])                               # nose tip right of the eye midpoint: turned to image right
     yaw = np.radians(abs(float(face.pose[1]))) * (1 if dx >= 0 else -1)
-    report["face"] = {"ipd_px": round(ipd, 1), "px_per_mm": round(s, 3), "roll_deg": round(np.degrees(roll), 2),
-                      "yaw_deg": round(np.degrees(yaw), 2), "pitch_deg": round(float(face.pose[0]), 2)}
+    report["face"] = {"ipd_px": round(ipd, 1), "pd_mm": cfg.get("pd_mm", 62.0), "px_per_mm": round(s, 3),
+                      "roll_deg": round(np.degrees(roll), 2), "yaw_deg": round(np.degrees(yaw), 2),
+                      "pitch_deg": round(float(face.pose[0]), 2)}
 
     # the frame: cleaned layers and the lens masks of its product shot
     shot = cfg["product_shot"]
@@ -126,10 +258,8 @@ def main(cfg_path):
     fr = np.asarray(Image.open(po / "layers" / "frame.png"), np.float32) / 255
     F, A = srgb_to_lin(fr[..., :3]), fr[..., 3]
     T = srgb_to_lin(np.asarray(Image.open(po / "layers" / "lens.png"), np.float32) / 255)
-    masks = sorted(po.glob("masks/lens-*.png"))
     lens_src = []
-    from scipy import ndimage as ndi
-    for mp in masks:
+    for mp in sorted(po.glob("masks/lens-*.png")):
         m = ndi.binary_fill_holes(np.asarray(Image.open(mp)) > 128)   # a lens has no holes
         full = np.zeros(A.shape, bool)                                # region coords -> layer coords
         ys, xs = np.nonzero(m)
@@ -141,7 +271,9 @@ def main(cfg_path):
     src = np.concatenate([extremes(np.argwhere(m)[:, ::-1].astype(np.float32)) for m in lens_src])
 
     # where those points go on the face: the drawing's lens openings, at the face's scale and pose
-    dst_mm = np.concatenate(drawing_lens_points(cfg["frame"]))
+    ppm = 20
+    lens_mm, silhouette, origin_px = drawing_front(cfg["frame"], ppm)
+    dst_mm = np.concatenate(lens_mm)
     drop = cfg.get("lens_drop_mm", 3.0)
     vertex = cfg.get("vertex_mm", 12.0)
     c, sn = np.cos(roll), np.sin(roll)
@@ -161,75 +293,180 @@ def main(cfg_path):
     Hs = Hm @ np.linalg.inv(Dn)
     warp = lambda a, border=0: cv2.warpPerspective(small(a), Hs, (W, H), flags=cv2.INTER_LINEAR,
                                                    borderMode=cv2.BORDER_CONSTANT, borderValue=border)
+    light = cfg.get("light", {})
+    surround = float(light.get("surround", 1.0))
+    key_from = light.get("key_from_deg")
+    if surround < 1 or key_from is not None:
+        F, report["relight"] = relight(F, A, surround, key_from, rim_px=light.get("rim_mm", 2.0) * s / scale)
     PA = warp(np.dstack([F * A[..., None], A]).astype(np.float32))
-    if cfg.get("soften_px", 0.6):
-        PA = cv2.GaussianBlur(PA, (0, 0), cfg.get("soften_px", 0.6))
+    soften = cfg.get("soften_px", 0.6) * (k if k > 1 else 1)
+    if soften:
+        PA = cv2.GaussianBlur(PA, (0, 0), soften)
     Aw = np.clip(PA[..., 3], 0, 1)
     Fw = np.where(Aw[..., None] > 1e-4, PA[..., :3] / np.maximum(Aw[..., None], 1e-4), 0)
+    src_px_per_mm = s / scale
+
+    # only the front is worn: the drawing's front outline cuts what the product shot shows past it
+    # (F03's temples, opened and seen from above, stood up over the brows like horns; the tent seen soft
+    # beside an end piece, or under the bridge, lay over the skin as a grey film). The outline is placed
+    # as the lens openings are, then fitted to the photographed front (an affine fit of the two shapes:
+    # the product shot sees a rim's top face from a little above, so its outline sits up to 2 mm higher
+    # than the drawing's round the same lens openings, and cut there, the rim lost its top edge), and
+    # given a millimetre of slack, so the photograph's own edge stays.
+    D = np.diag([np.cos(yaw) * s / ppm, s / ppm]).astype(np.float32)
+    Ma = np.hstack([Rm @ D, (Rm @ (-D @ origin_px + np.array([0, drop * s], np.float32)) + anchor)[:, None]])
+    sil = cv2.warpAffine(silhouette.astype(np.float32), Ma.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR)
+    sil, report["outline_fit"] = fit_outline(sil, Aw, s)
+    sil = sil > 0.5
+    slack = cfg.get("outline_slack_mm", 1.0) * s
+    sil = cv2.dilate(sil.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(slack) + 1,) * 2))
+    sil = np.clip(cv2.GaussianBlur(sil.astype(np.float32), (0, 0), 0.35 * s), 0, 1)
+    report["outside_outline"] = round(float((Aw * (1 - sil)).sum() / max(Aw.sum(), 1)), 4)
+    Aw = Aw * sil
     report["frame_width_px"] = round(float(np.ptp(np.nonzero(Aw > 0.5)[1])), 1)
 
-    # lens layer on the face: each lens's own tint, flat, nothing that was behind it in the product shot
+    # what stays in front of the frame (a strand of hair across an end piece), from the settings
+    front = polygon_mask((H, W), cfg["in_front"], k, 1.0 * k) if cfg.get("in_front") else np.zeros((H, W), np.float32)
+    Aw = Aw * (1 - front)
+
+    # lens layer on the face: each lens's own tint, flat, nothing that was behind it in the product shot.
+    # The lens runs on under the rim, its edge set in the rim's groove. SAM's mask stops a few pixels
+    # short of the rim's solid part, and the face showed there untinted, a light ring inside the rim;
+    # so a lens covers what the cleaned shot's lens layer covers (clean_lightbox runs the lens up to the
+    # solid rim: under a partly see-through rim edge it is lens, not tent), grows on through the rim's
+    # soft inner edge (some frame, not yet solid) up to the solid rim, never out past the frame, then on
+    # under the solid rim, as far as the frame's softening on the face reaches (3 px under it, the
+    # softened rim still let 5% of the bare face through: a hairline inside the rim) and no further than
+    # the solid rim goes.
     Tface = np.ones_like(lin)
-    tints, lens_on_face = [], []
+    tints, lens_on_face, grown = [], [], []
+    reach = max(2, int(round(cfg.get("lens_under_rim_mm", 1.5) * src_px_per_mm)))
+    soft_edge = (A > 0.02) & (A < 0.9)
+    solid = A >= 0.9
+    fill = cfg.get("eye_fill", 0.35)              # share of the light that reaches the eyes around the frame
+    under = int(np.ceil(max(3.0, (3 * soften + 2) / scale)))
+    report["lens_under_solid_px"] = under
+    lab_t, _ = ndi.label((lum(T) < 0.995) | np.any(lens_src, axis=0))
     for m in lens_src:
         er = cv2.erode(m.astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
         vals = T[er]
         keep = lum(vals) > 0.5 * np.median(lum(vals))
         tint = np.median(vals[keep], axis=0)
         tints.append([round(float(v), 4) for v in tint])
-        mw = np.clip(warp(cv2.GaussianBlur(m.astype(np.float32), (0, 0), 1.0)), 0, 1)
+        ids = np.unique(lab_t[m])
+        g = np.isin(lab_t, ids[ids > 0]) | m
+        g = ndi.binary_dilation(g, iterations=reach, mask=g | soft_edge)
+        g = ndi.binary_dilation(g, iterations=under, mask=g | solid)
+        grown.append(int(g.sum() - m.sum()))
+        mw = np.clip(warp(cv2.GaussianBlur(g.astype(np.float32), (0, 0), 1.0)), 0, 1) * (1 - front)
         lens_on_face.append(mw)
-        fill = cfg.get("eye_fill", 0.35)              # share of the light that reaches the eyes around the frame
         eff = tint * (fill + (1 - fill) * tint)
         Tface = Tface * (1 - mw[..., None] * (1 - eff))
     report["lens_tint_rgb"] = tints
+    report["lens_grown_px"] = grown
 
-    # the frame lit like the scene: backdrop against the tent it was shot in
+    # the frame lit like the scene. Color: the scene light's, from a patch that is neutral in the
+    # scene (the backdrop, a white shirt, grey concrete), against the tent's. Level: the backdrop's
+    # against the tent's where the backdrop is lit like the face, else set in the settings.
     full = load_srgb(ROOT / "work" / "originals" / f"{shot}.jpg")
     alpha = np.asarray(Image.open(po / "masks" / "alpha.png"), np.float32) / 255
     rg = srgb_to_lin(full[scfg["region"][1]:scfg["region"][3], scfg["region"][0]:scfg["region"][2]])
     far = cv2.distanceTransform((alpha < 0.02).astype(np.uint8), cv2.DIST_L2, 5) > 200
     tent = np.median(rg[far], axis=0)
-    bd = cfg.get("backdrop_box")                                      # [x0, y0, x1, y1] of clean backdrop in the portrait
-    back = np.median(lin[bd[1]:bd[3], bd[0]:bd[2]].reshape(-1, 3), axis=0)
-    gain = back / tent
-    g_l = float(lum(gain[None])[0])
-    gain = gain / g_l * float(np.clip(g_l, 0.85, 1.25)) * cfg.get("light_gain", 1.0)
+    del full, rg
+    neutral_box = light.get("neutral_box", cfg.get("backdrop_box"))
+    neutral = box_median(lin, neutral_box, k) if neutral_box else tent
+    light_lum = float(lum(neutral[None])[0])                       # a neutral surface in the scene's light
+    color = (neutral / light_lum) / (tent / float(lum(tent[None])[0]))
+    level_box = light.get("level_box", cfg.get("backdrop_box"))
+    if "level" in light:
+        level = float(light["level"])
+    elif level_box:
+        back = box_median(lin, level_box, k)
+        level = float(np.clip(lum(back[None])[0] / lum(tent[None])[0], 0.85, 1.25))
+    else:
+        level = 1.0
+    gain = color * level * cfg.get("light_gain", 1.0)
     Fw = Fw * gain
-    report["light"] = {"tent_lin": [round(float(v), 3) for v in tent], "backdrop_lin": [round(float(v), 3) for v in back],
-                       "gain": [round(float(v), 3) for v in gain]}
+    env = float(light.get("env", surround * light_lum))            # how bright the room in front of the face is
+    report["light"] = {"tent_lin": [round(float(v), 3) for v in tent], "neutral_lin": [round(float(v), 3) for v in neutral],
+                       "level": round(level, 3), "gain": [round(float(v), 3) for v in gain], "env": round(env, 3)}
 
-    # the frame's contact shadow on the skin (flash a little above the lens: the shadow drops a little)
+    # the frame's contact shadow on the skin, cast away from the key light (90 degrees: straight down)
     sh = cfg.get("shadow", {})
-    dy = sh.get("offset_mm", 1.2) * s
-    Ms = np.float32([[1, 0, 0], [0, 1, dy]])
+    ang = np.radians(sh.get("dir_deg", 90.0 if key_from is None else key_from + 180.0))
+    off = sh.get("offset_mm", 1.2) * s
+    Ms = np.float32([[1, 0, off * np.cos(ang)], [0, 1, off * np.sin(ang)]])
     shadow = cv2.GaussianBlur(cv2.warpAffine(Aw, Ms, (W, H)), (0, 0), sh.get("blur_mm", 1.0) * s)
     face_lin = lin * (1 - sh.get("strength", 0.45) * shadow[..., None])
 
-    # one soft reflection per lens: the flash, high on the lens, towards the outer side
+    # the lens's front surface: a faint sheen of the room in front (lighter at the top), and one soft
+    # reflection of the key per lens, where the settings put it on the lens (fractions of its box;
+    # mirrored on the other lens when the light is on the camera's axis)
+    rf = cfg.get("reflection", {})
     refl = np.zeros((H, W), np.float32)
-    k = cfg.get("reflection", {}).get("strength", 0.02)
-    if k:
-        yy, xx = np.mgrid[0:H, 0:W]
-        for m, mw in zip(lens_src, lens_on_face):
-            ys, xs = np.nonzero(m)
-            cx, cy = xs.mean(), ys.min() + 0.3 * np.ptp(ys)
-            cx += (0.18 if cx > A.shape[1] / 2 else -0.18) * np.ptp(xs)
-            p = cv2.perspectiveTransform(np.float32([[[cx, cy]]]), Hm)[0, 0]
-            rad = 0.10 * np.ptp(xs) * scale
-            refl += mw * np.exp(-(((xx - p[0]) / (1.6 * rad)) ** 2 + ((yy - p[1]) / rad) ** 2))
-        refl = refl * k
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    kk = rf.get("strength", 0.02)
+    haze = rf.get("haze", 0.0)
+    at = rf.get("at", [0.32, 0.3])
+    for i, (m, mw) in enumerate(zip(lens_src, lens_on_face)):
+        ys, xs = np.nonzero(m)
+        fx = at[0] if (i == 0 or not rf.get("mirror", True)) else 1 - at[0]
+        cx, cy = xs.min() + fx * np.ptp(xs), ys.min() + at[1] * np.ptp(ys)
+        p = cv2.perspectiveTransform(np.float32([[[cx, cy]]]), Hm)[0, 0]
+        rad = rf.get("size", 0.10) * np.ptp(xs) * scale
+        if kk:
+            refl += kk * light_lum * mw * np.exp(-(((xx - p[0]) / (1.6 * rad)) ** 2 + ((yy - p[1]) / rad) ** 2))
+        if haze:
+            top = cv2.perspectiveTransform(np.float32([[[xs.mean(), ys.min()]], [[xs.mean(), ys.max()]]]), Hm)[:, 0, 1]
+            v = np.clip((yy - top[0]) / max(top[1] - top[0], 1), 0, 1)
+            refl += haze * env * mw * (1 - 0.7 * v)
+    sheen = refl[..., None] * (neutral / light_lum)
 
-    comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * (face_lin * Tface + refl[..., None] * back)
-    final = ss90(lin_to_srgb(comp)) if cfg.get("grade", True) else lin_to_srgb(comp)
-    cv2.imwrite(str(out / "composite.png"), cv2.cvtColor((final * 65535).astype(np.uint16), cv2.COLOR_RGB2BGR))
+    comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * (face_lin * Tface + sheen)
+    if DEBUG:
+        ys, xs = np.nonzero(Aw > 0.02)
+        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        np.savez_compressed(out / "debug.npz", origin=np.array([x0, y0]), Aw=Aw[y0:y1, x0:x1], Fw=Fw[y0:y1, x0:x1],
+                            Tface=Tface[y0:y1, x0:x1], lens=np.sum(lens_on_face, 0)[y0:y1, x0:x1],
+                            face=face_lin[y0:y1, x0:x1], comp=comp[y0:y1, x0:x1], sil=sil[y0:y1, x0:x1],
+                            Aw_full=np.clip(PA[..., 3], 0, 1)[y0:y1, x0:x1])
+    grade = cfg.get("grade", True)
+    size = H / 1280
+    final = ss90(lin_to_srgb(comp), size=size) if grade else lin_to_srgb(comp)
+    before = ss90(person, size=size) if grade else person
+
+    # the crop, in the generated portrait's pixels: a 3:4 portrait is cut to the gallery's 4:5, a quarter of
+    # what goes from the top and the rest from the bottom (the head sits in the upper half)
+    crop = cfg.get("crop")
+    if not crop and cfg.get("format") == "4:5":
+        w0, h0 = W // k, H // k
+        if h0 > round(w0 * 5 / 4):
+            th = round(w0 * 5 / 4)
+            top = round(0.25 * (h0 - th))
+            crop = [0, top, w0, top + th]
+    if crop:
+        x0, y0, x1, y1 = [int(round(v * k)) for v in crop]
+        final, before = final[y0:y1, x0:x1], before[y0:y1, x0:x1]
+        report["crop"] = [x0, y0, x1, y1]
+    cv2.imwrite(str(out / "composite.png"), cv2.cvtColor((final * 65535 + 0.5).astype(np.uint16), cv2.COLOR_RGB2BGR))
     Image.fromarray((final * 255 + 0.5).astype(np.uint8)).save(out / "composite.jpg", quality=94)
-    before = ss90(person) if cfg.get("grade", True) else person
-    sheet = np.hstack([before, np.ones((H, 16, 3), np.float32), final])
+    hh = 1280
+    ww = int(round(final.shape[1] * hh / final.shape[0]))
+    sheet = np.hstack([cv2.resize(before, (ww, hh), interpolation=cv2.INTER_AREA), np.ones((hh, 16, 3), np.float32),
+                       cv2.resize(final, (ww, hh), interpolation=cv2.INTER_AREA)])
     Image.fromarray((sheet * 255 + 0.5).astype(np.uint8)).save(out / "compare.jpg", quality=90)
+    # the frame at 1:1, with a margin
+    ys, xs = np.nonzero(Aw > 0.05)
+    oy, ox = report.get("crop", [0, 0])[1], report.get("crop", [0, 0])[0]
+    pad = int(0.25 * np.ptp(xs))
+    z = final[max(0, ys.min() - pad - oy):ys.max() + pad - oy, max(0, xs.min() - pad - ox):xs.max() + pad - ox]
+    Image.fromarray((z * 255 + 0.5).astype(np.uint8)).save(out / "zoom.jpg", quality=94)
     (out / "report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps(report))
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    args = [a for a in sys.argv[1:] if a != "--debug"]
+    for p in (sorted(PEOPLE.glob("*.json")) if args == ["--all"] else args):
+        main(p)

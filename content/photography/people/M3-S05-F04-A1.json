@@ -1,0 +1,45 @@
+{
+ "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "id": "DS-CAST-M3-S05-F04-v01",
+ "cast": "M3",
+ "scene": "S05",
+ "frame": "F04",
+ "angle": "A1",
+ "wardrobe": "merino",
+ "format": "4:5",
+ "status": "draft",
+ "portrait": "work/people/raw/M3-S05-n27-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "27:2",
+  "size": [
+   960,
+   1280
+  ],
+  "generated": "2026-10-21",
+  "prompt": "A dark room with a dark floor. One hard key light comes through an open doorway behind the camera and falls on the model as a sharp wedge of light; everything outside the wedge falls to near black. The model stands in the light at the threshold, facing the camera, framed from the waist up, the whole head and shoulders in the light. 85 mm lens, eye level.\nA 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed.\nWardrobe: a fine black merino crew-neck sweater, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3442",
+ "pd_mm": 64,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "surround": 0.15,
+  "level": 1.0
+ },
+ "shadow": {
+  "strength": 0.55,
+  "offset_mm": 1.2,
+  "blur_mm": 0.8
+ },
+ "reflection": {
+  "strength": 0.02,
+  "haze": 0.01
+ },
+ "eye_fill": 0.35,
+ "soften_px": 0.6,
+ "grade": true
+}
