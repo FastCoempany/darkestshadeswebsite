@@ -28,15 +28,21 @@
  "vertex_mm": 12,
  "light": {},
  "shadow": {
-  "strength": 0.55,
-  "offset_mm": 1.5,
-  "blur_mm": 1.0
+  "offset_mm": 0.8,
+  "blur_mm": 0.3,
+  "strength": 0.5,
+  "contact": 0.2,
+  "contact_mm": 0.8
  },
  "reflection": {
-  "strength": 0.02,
-  "haze": 0.01
+  "front_env": 0.3
  },
- "eye_fill": 0.35,
  "soften_px": 0.6,
- "grade": true
+ "grade": true,
+ "backdrop_box": [
+  20,
+  20,
+  200,
+  200
+ ]
 }

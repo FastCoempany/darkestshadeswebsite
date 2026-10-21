@@ -25,7 +25,7 @@ crop (3:4 to the gallery's 4:5).
 Coordinates in the settings (boxes, polygons, crop) are in the generated portrait's own pixels.
 Writes work/people/<id>/: composite.png (16-bit, the crop), composite.jpg, compare.jpg (before and
 after), zoom.jpg (the frame at 1:1), report.json; with --debug also debug.npz (the layers round the
-frame).
+frame); --fast composites at the generated size, into work/people/<id>-fast/, for a quick look.
 """
 import json
 import pathlib
@@ -43,6 +43,7 @@ from clean_lightbox import lin_to_srgb, load_srgb, lum, srgb_to_lin  # noqa: E40
 
 PEOPLE = ROOT / "content" / "photography" / "people"
 DEBUG = "--debug" in sys.argv
+FAST = "--fast" in sys.argv
 
 
 # ---------- the frame's true geometry, from the 1:1 drawing ----------
@@ -94,32 +95,46 @@ def face_of(img_bgr):
     return faces[0]
 
 
-def upscaled(path, factor=2):
-    """The generated portrait at `factor` times its size, by EDSR super-resolution (OpenCV contrib's
-    dnn_superres; the model, EDSR_x2.pb, from github.com/Saafke/EDSR_Tensorflow, in work/models/),
-    in overlapping tiles so it fits this workspace's memory; cached beside the portrait. Only the
-    generated person is upscaled, never the frame, which is drawn from its 12 MP photograph at the
-    upscaled size. On a face, EDSR came closest of the free models to the original (a portrait
-    halved and brought back: EDSR +1.3 dB over bicubic, FSRCNN +0.5, ESPCN +0.3, LapSRN 0)."""
+def upscaled(path, factor=2, region=None):
+    """The generated portrait at `factor` times its size, cached beside it: FSRCNN over the whole picture
+    and EDSR, the slower and better model, over `region` (the head, where the frame goes), blended in
+    softly; both are OpenCV contrib dnn_superres models from GitHub (Saafke), in work/models/. EDSR runs in
+    overlapping tiles so it fits this workspace's memory. Only the generated person is upscaled, never
+    the frame, which is drawn from its 12 MP photograph at the upscaled size. On a face, EDSR came
+    closest of the free models to the original (a portrait halved and brought back: EDSR +1.3 dB over
+    bicubic, FSRCNN +0.5, ESPCN +0.3, LapSRN 0); over a whole portrait it took 10 to 20 minutes here,
+    where a backdrop or a coat gains nothing from it."""
     path = pathlib.Path(path)
     out = path.with_name(f"{path.stem}-x{factor}.png")
     if out.exists() and out.stat().st_mtime >= path.stat().st_mtime:
         return load_srgb(out)
-    sr = cv2.dnn_superres.DnnSuperResImpl_create()
-    sr.readModel(str(ROOT / "work" / "models" / f"EDSR_x{factor}.pb"))
-    sr.setModel("edsr", factor)
     im = cv2.imread(str(path), cv2.IMREAD_COLOR)
     h, w = im.shape[:2]
-    tile, pad = 192, 16
-    up = np.zeros((h * factor, w * factor, 3), np.uint8)
-    for y in range(0, h, tile):
-        for x in range(0, w, tile):
-            y0, x0 = max(0, y - pad), max(0, x - pad)
-            y1, x1 = min(h, y + tile + pad), min(w, x + tile + pad)
-            t = sr.upsample(np.ascontiguousarray(im[y0:y1, x0:x1]))
-            oy, ox = (y - y0) * factor, (x - x0) * factor
-            hh, ww = min(tile, h - y) * factor, min(tile, w - x) * factor
-            up[y * factor:y * factor + hh, x * factor:x * factor + ww] = t[oy:oy + hh, ox:ox + ww]
+    fast = cv2.dnn_superres.DnnSuperResImpl_create()
+    fast.readModel(str(ROOT / "work" / "models" / f"FSRCNN_x{factor}.pb"))
+    fast.setModel("fsrcnn", factor)
+    up = fast.upsample(im)
+    if region is not None:
+        sr = cv2.dnn_superres.DnnSuperResImpl_create()
+        sr.readModel(str(ROOT / "work" / "models" / f"EDSR_x{factor}.pb"))
+        sr.setModel("edsr", factor)
+        rx0, ry0, rx1, ry1 = [int(v) for v in region]
+        rx0, ry0, rx1, ry1 = max(0, rx0), max(0, ry0), min(w, rx1), min(h, ry1)
+        best = np.zeros((h * factor, w * factor, 3), np.uint8)
+        tile, pad = 192, 16
+        for y in range(ry0, ry1, tile):
+            for x in range(rx0, rx1, tile):
+                y0, x0 = max(0, y - pad), max(0, x - pad)
+                y1, x1 = min(h, y + tile + pad), min(w, x + tile + pad)
+                t = sr.upsample(np.ascontiguousarray(im[y0:y1, x0:x1]))
+                oy, ox = (y - y0) * factor, (x - x0) * factor
+                hh, ww = min(tile, ry1 - y) * factor, min(tile, rx1 - x) * factor
+                best[y * factor:y * factor + hh, x * factor:x * factor + ww] = t[oy:oy + hh, ox:ox + ww]
+        m = np.zeros((h * factor, w * factor), np.float32)
+        e = 24 * factor
+        m[ry0 * factor + e:ry1 * factor - e, rx0 * factor + e:rx1 * factor - e] = 1
+        m = cv2.GaussianBlur(m, (0, 0), e / 2)[..., None]
+        up = np.clip(best * m + up * (1 - m) + 0.5, 0, 255).astype(np.uint8)
     cv2.imwrite(str(out), up)
     return load_srgb(out)
 
@@ -154,34 +169,67 @@ def polygon_mask(shape, polys, k, feather):
     return cv2.GaussianBlur(m, (0, 0), feather) if feather else m
 
 
-def relight(F, A, surround, key_from_deg=None, rim_px=40.0, sharp=2.0):
-    """The frame's own photographed highlights, kept where the surface faces the scene's key light and
-    dimmed to `surround` (how bright the scene round the frame is against the tent it was shot in)
-    where it faces anything else. A highlight is never added or moved, only kept or dimmed.
+def relight(F, A, surround, key_from_deg=None, rim_px=40.0, sharp=2.0, gloss=1.0, key_front=0.0, key_spec=None):
+    """The frame lit like the scene, from its photograph in the tent.
 
+    Its own photographed highlights are kept where the surface faces the scene's key light and dimmed to
+    `surround` (how bright the scene round the frame is against the tent) where it faces anything else.
     In the tent every face of the gloss acetate mirrored bright fabric; in a dark scene only the faces
     turned to the light would. The highlights are the frame's neutral part (a gloss reflection has the
-    light's color), so the acetate's own colors (the tortoise, the gold) stay as photographed. Which
-    way a face turns is read from the frame's outline: a rim is rounded, flat at its crest and turning
-    away towards each edge (`rim_px`, about half a rim's width), towards the nearest edge."""
+    light's color), so the acetate's own colors (the tortoise, the gold) stay as photographed.
+
+    Which way a face turns is read from the frame's outline: a rim is flat in front and rounds over at
+    each edge, a bevel about `rim_px` wide, its normal turning towards the nearest edge. `key_spec`
+    adds the scene key's own reflection on those bevels (Blinn-Phong: where the bevel's normal halves the
+    angle between the camera and the light, a thin line along the rim, as hard as the light is small):
+    a key the tent didn't have leaves its line on gloss acetate, and without it a black frame in a dark
+    scene was a flat black shape."""
     mn = F.min(-1)
     solid = A > 0.5
     base = float(np.percentile(mn[solid], 5))
     spec = np.clip(mn - base, 0, None)
     diffuse = F - spec[..., None]
     w = np.zeros_like(spec)
-    if key_from_deg is not None:
+    info = {"spec_base": round(base, 4), "surround": surround, "key_from_deg": key_from_deg, "gloss": gloss,
+            "key_front": key_front}
+    if key_from_deg is not None or key_front or key_spec:
         d = cv2.distanceTransform(solid.astype(np.uint8), cv2.DIST_L2, 5)
         gy, gx = np.gradient(cv2.GaussianBlur(d, (0, 0), 3))
         mag = np.hypot(gx, gy) + 1e-6
         nx, ny = -gx / mag, -gy / mag                  # the way the surface turns: towards the nearest edge
-        tilt = np.clip(1 - d / rim_px, 0, 1)            # 0 on a rim's crest, 1 at its edge
-        a = np.radians(key_from_deg)                    # image coordinates, y down: 270 = from above
-        w = np.clip(nx * np.cos(a) + ny * np.sin(a), 0, 1) ** sharp * tilt
+        tilt = np.clip(1 - d / rim_px, 0, 1)            # 0 where the front is flat, 1 at its edge
+        if key_from_deg is not None:
+            a = np.radians(key_from_deg)                # image coordinates, y down: 270 = from above
+            w = np.clip(nx * np.cos(a) + ny * np.sin(a), 0, 1) ** sharp * tilt
+        # a light from the camera's side (a flash, a doorway behind the camera) is mirrored by the faces
+        # turned to the camera: there the photographed highlights (the ring light's, on the camera's axis
+        # too) stay. Dimmed with the rest, black frames came out flat black shapes.
+        w = np.maximum(w, key_front * (1 - tilt) ** 2)
     keep = surround + (1 - surround) * w
-    return diffuse + spec[..., None] * keep[..., None], {"spec_base": round(base, 4), "surround": surround,
-                                                        "key_from_deg": key_from_deg,
-                                                        "spec_kept": round(float((spec * keep)[solid].sum() / max(spec[solid].sum(), 1e-6)), 3)}
+    out = diffuse + spec[..., None] * keep[..., None]
+    if gloss != 1:
+        # a brighter scene than the tent's soft box: the photographed sheen stands out more; only what
+        # stands above the acetate's own dark (its 60th percentile) is raised, so black stays black
+        t = float(np.percentile(spec[solid], 60))
+        out = out + (gloss - 1) * (np.clip(spec - t, 0, None) * keep)[..., None]
+    if key_spec:
+        al = np.arcsin(tilt)                            # a round bevel: the normal's angle from the camera axis
+        n = np.stack([np.sin(al) * nx, np.sin(al) * ny, np.cos(al)], -1)
+        th, ph = np.radians(key_spec.get("off_axis_deg", 20)), np.radians(key_spec.get("from_deg", 270))
+        L = np.array([np.sin(th) * np.cos(ph), np.sin(th) * np.sin(ph), np.cos(th)])
+        Hv = L + np.array([0, 0, 1.0])
+        Hv /= np.linalg.norm(Hv)
+        hl = np.clip(n @ Hv, 0, 1) ** key_spec.get("power", 60) * key_spec.get("strength", 0.5)
+        hl *= (tilt > 0) * cv2.GaussianBlur(solid.astype(np.float32), (0, 0), 2)
+        if key_spec.get("follow_photo", True):
+            # where the photograph shows gloss on that bevel, and as much: the line breaks and varies as the
+            # acetate's own reflections do (drawn even all round, it read as an embossed outline)
+            g = cv2.GaussianBlur(spec, (0, 0), 0.5 * rim_px)
+            hl *= np.clip(g / max(float(np.percentile(g[solid], 97)), 1e-4), 0, 1)
+        out = out + hl[..., None]
+        info["key_spec"] = key_spec
+    info["spec_kept"] = round(float((spec * keep)[solid].sum() / max(spec[solid].sum(), 1e-6)), 3)
+    return out, info
 
 
 def fit_outline(sil, Aw, s):
@@ -205,13 +253,13 @@ def fit_outline(sil, Aw, s):
         cc, M = cv2.findTransformECC(a, b, M, cv2.MOTION_AFFINE,
                                      (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6), None, 5)
     except cv2.error:
-        return sil, {"kept": False, "why": "no fit"}
+        return sil, np.eye(3), {"kept": False, "why": "no fit"}
     cy, cx = [float(v.mean()) for v in np.nonzero(a > 0.5)]
     shift_mm = float(np.hypot(*((M[:, :2] - np.eye(2)) @ [cx, cy] + M[:, 2]))) / f / s   # at the frame's middle
     lin_dev = float(np.abs(M[:, :2] - np.eye(2)).max())
     info = {"shift_mm": round(shift_mm, 2), "linear_dev": round(lin_dev, 4), "cc": round(float(cc), 4)}
     if shift_mm > 4 or lin_dev > 0.12:
-        return sil, dict(info, kept=False)
+        return sil, np.eye(3), dict(info, kept=False)
     # M maps the photograph's box (half size) into the outline's: undo it on the outline, at full size
     T = np.array([[1, 0, -x0], [0, 1, -y0], [0, 0, 1]], np.float64)
     S = np.diag([f, f, 1.0])
@@ -219,11 +267,13 @@ def fit_outline(sil, Aw, s):
     full = np.linalg.inv(T) @ Mf @ T
     out = cv2.warpAffine(sil, full[:2].astype(np.float32), (sil.shape[1], sil.shape[0]),
                          flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
-    return out, dict(info, kept=True)
+    return out, full, dict(info, kept=True)
 
 
 def main(cfg_path):
     cfg = json.loads(pathlib.Path(cfg_path).read_text())
+    if FAST:                                        # a quick look at the generated size, beside the real one
+        cfg["upscale"], cfg["id"] = 1, cfg["id"] + "-fast"
     out = ROOT / "work" / "people" / cfg["id"]
     out.mkdir(parents=True, exist_ok=True)
     report = {"id": cfg["id"], "cast": cfg["cast"], "scene": cfg["scene"], "frame": cfg["frame"],
@@ -231,11 +281,18 @@ def main(cfg_path):
 
     # the person, at twice the generated size
     k = int(cfg.get("upscale", 1))
-    person = upscaled(ROOT / cfg["portrait"], k) if k > 1 else load_srgb(ROOT / cfg["portrait"])
+    if k > 1:
+        raw = cv2.imread(str(ROOT / cfg["portrait"]), cv2.IMREAD_COLOR)
+        fb = face_of(raw).bbox                     # the head, and room round it for the frame and the hair
+        cx, cy, fw_, fh_ = (fb[0] + fb[2]) / 2, (fb[1] + fb[3]) / 2, fb[2] - fb[0], fb[3] - fb[1]
+        region = [cx - 1.1 * fw_, cy - 1.0 * fh_, cx + 1.1 * fw_, cy + 0.9 * fh_]
+        person = upscaled(ROOT / cfg["portrait"], k, region)
+    else:
+        person = load_srgb(ROOT / cfg["portrait"])
     lin = srgb_to_lin(person)
     H, W = lin.shape[:2]
     report["size"] = [W, H]
-    report["upscale"] = f"EDSR x{k}" if k > 1 else "none"
+    report["upscale"] = f"FSRCNN x{k}, EDSR x{k} on the head" if k > 1 else "none"
     face = face_of(cv2.cvtColor((person * 255).astype(np.uint8), cv2.COLOR_RGB2BGR))
     eyes = np.array(sorted(face.kps[:2].tolist()), np.float32)      # image left eye first
     mid = eyes.mean(0)
@@ -296,8 +353,10 @@ def main(cfg_path):
     light = cfg.get("light", {})
     surround = float(light.get("surround", 1.0))
     key_from = light.get("key_from_deg")
-    if surround < 1 or key_from is not None:
-        F, report["relight"] = relight(F, A, surround, key_from, rim_px=light.get("rim_mm", 2.0) * s / scale)
+    gloss = float(light.get("gloss", 1.0))
+    if surround < 1 or key_from is not None or gloss != 1 or light.get("key_spec"):
+        F, report["relight"] = relight(F, A, surround, key_from, rim_px=light.get("rim_mm", 2.0) * s / scale, gloss=gloss,
+                                       key_front=float(light.get("key_front", 0.0)), key_spec=light.get("key_spec"))
     PA = warp(np.dstack([F * A[..., None], A]).astype(np.float32))
     soften = cfg.get("soften_px", 0.6) * (k if k > 1 else 1)
     if soften:
@@ -316,25 +375,41 @@ def main(cfg_path):
     D = np.diag([np.cos(yaw) * s / ppm, s / ppm]).astype(np.float32)
     Ma = np.hstack([Rm @ D, (Rm @ (-D @ origin_px + np.array([0, drop * s], np.float32)) + anchor)[:, None]])
     sil = cv2.warpAffine(silhouette.astype(np.float32), Ma.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR)
-    sil, report["outline_fit"] = fit_outline(sil, Aw, s)
-    sil = sil > 0.5
-    slack = cfg.get("outline_slack_mm", 1.0) * s
-    inner = sil
-    sil = cv2.dilate(sil.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(slack) + 1,) * 2)) > 0
+    sil, fit, report["outline_fit"] = fit_outline(sil, Aw, s)
+    # the cut itself is drawn at four times the size in a box round the frame and brought down by area,
+    # so its edge is as smooth as the photograph's (drawn at the face's size and thresholded, it left a
+    # stepped edge where the frame is small, a runway shot's 1.3 px to the mm)
+    ys, xs = np.nonzero(Aw > 0.02)
+    mg = int(4 * s) + 2
+    y0r, y1r, x0r, x1r = max(0, ys.min() - mg), min(H, ys.max() + mg), max(0, xs.min() - mg), min(W, xs.max() + mg)
+    SS = 4
+    to_face = np.diag([1 / SS, 1 / SS, 1.0]); to_face[:2, 2] = [x0r, y0r]   # box pixel at 4x -> face pixel
+    M3 = np.vstack([Ma, [0, 0, 1]])
+    to_draw = np.linalg.inv(M3) @ fit @ to_face                               # box pixel at 4x -> drawing pixel
+    hi = cv2.warpAffine(silhouette.astype(np.float32), to_draw[:2].astype(np.float32), ((x1r - x0r) * SS, (y1r - y0r) * SS),
+                        flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP) > 0.5
+    slack = cfg.get("outline_slack_mm", 1.0) * s * SS
+    inner_hi = hi
+    hi = cv2.dilate(hi.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(slack) + 1,) * 2)) > 0
     # where the product camera saw an end piece's side face (the shot's settings say so: wear.side_face,
     # in mm from the front's outer edge), what is pale and uncolored along that edge is the side face,
     # not the front (the outline's fit takes it in, and it stayed as a pale line along F03's end piece);
     # elsewhere the edge keeps everything, gloss highlights included
     side = scfg.get("wear", {}).get("side_face")
     if side:
-        front_lum = float(np.median(lum(Fw[(Aw > 0.9) & inner])))
-        grey = (Fw.max(-1) - Fw.min(-1)) < 0.35 * Fw.max(-1)
-        filled = ndi.binary_fill_holes(Aw > 0.5)
-        edge = cv2.distanceTransform(filled.astype(np.uint8), cv2.DIST_L2, 5) < float(side) * s
-        pale = edge & (lum(Fw) >= max(0.06, 3 * front_lum)) & grey & (Aw > 0.02)
-        sil &= ~cv2.dilate(pale.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
-        report["side_face_px"] = int(pale.sum())
-    sil = np.clip(cv2.GaussianBlur(sil.astype(np.float32), (0, 0), 0.35 * s), 0, 1)
+        up = lambda a: cv2.resize(a[y0r:y1r, x0r:x1r], ((x1r - x0r) * SS, (y1r - y0r) * SS), interpolation=cv2.INTER_LINEAR)
+        Fh, Ah = up(Fw), up(Aw)
+        front_lum = float(np.median(lum(Fh[(Ah > 0.9) & inner_hi])))
+        grey = (Fh.max(-1) - Fh.min(-1)) < 0.35 * Fh.max(-1)
+        filled = ndi.binary_fill_holes(Ah > 0.5)
+        edge = cv2.distanceTransform(filled.astype(np.uint8), cv2.DIST_L2, 5) < float(side) * s * SS
+        pale = edge & (lum(Fh) >= max(0.06, 3 * front_lum)) & grey & (Ah > 0.02)
+        hi &= ~cv2.dilate(pale.astype(np.uint8), np.ones((3 * SS, 3 * SS), np.uint8)).astype(bool)
+        report["side_face_px"] = int(pale.sum() / SS ** 2)
+        del Fh, Ah
+    sil = np.zeros((H, W), np.float32)
+    sil[y0r:y1r, x0r:x1r] = cv2.resize(hi.astype(np.float32), (x1r - x0r, y1r - y0r), interpolation=cv2.INTER_AREA)
+    sil = np.clip(cv2.GaussianBlur(sil, (0, 0), 0.15 * s), 0, 1)
     report["outside_outline"] = round(float((Aw * (1 - sil)).sum() / max(Aw.sum(), 1)), 4)
     Aw = Aw * sil
     report["frame_width_px"] = round(float(np.ptp(np.nonzero(Aw > 0.5)[1])), 1)
@@ -353,11 +428,15 @@ def main(cfg_path):
     # softened rim still let 5% of the bare face through: a hairline inside the rim) and no further than
     # the solid rim goes.
     Tface = np.ones_like(lin)
+    Tface_single = np.ones_like(lin)                 # one pass through the lens: what its shadow lets by
     tints, lens_on_face, grown = [], [], []
     reach = max(2, int(round(cfg.get("lens_under_rim_mm", 1.5) * src_px_per_mm)))
     soft_edge = (A > 0.02) & (A < 0.9)
     solid = A >= 0.9
-    fill = cfg.get("eye_fill", 0.35)              # share of the light that reaches the eyes around the frame
+    # share of the light on the eyes that comes round the frame rather than through the lens: little,
+    # with a big front close to the face and the light in front (at 0.35 the eyes showed through a 4%
+    # lens like a grey film; through real dark lenses they are all but gone)
+    fill = cfg.get("eye_fill", 0.1)
     under = int(np.ceil(max(3.0, (3 * soften + 2) / scale)))
     report["lens_under_solid_px"] = under
     lab_t, _ = ndi.label((lum(T) < 0.995) | np.any(lens_src, axis=0))
@@ -376,6 +455,7 @@ def main(cfg_path):
         lens_on_face.append(mw)
         eff = tint * (fill + (1 - fill) * tint)
         Tface = Tface * (1 - mw[..., None] * (1 - eff))
+        Tface_single = Tface_single * (1 - mw[..., None] * (1 - tint))
     report["lens_tint_rgb"] = tints
     report["lens_grown_px"] = grown
 
@@ -402,40 +482,52 @@ def main(cfg_path):
         level = 1.0
     gain = color * level * cfg.get("light_gain", 1.0)
     Fw = Fw * gain
-    env = float(light.get("env", surround * light_lum))            # how bright the room in front of the face is
     report["light"] = {"tent_lin": [round(float(v), 3) for v in tent], "neutral_lin": [round(float(v), 3) for v in neutral],
-                       "level": round(level, 3), "gain": [round(float(v), 3) for v in gain], "env": round(env, 3)}
+                       "level": round(level, 3), "gain": [round(float(v), 3) for v in gain]}
 
-    # the frame's contact shadow on the skin, cast away from the key light (90 degrees: straight down)
+    # the frame's shadow on the skin. What casts it: the frame, and each lens as far as it stops light.
+    # Cast: away from the key light (90 degrees: straight down), as sharp as the light is small (a
+    # flash's shadow is a thin hard line just under the rim; blurred wide, it read as a drop shadow).
+    # Contact: a little darkening of the skin hugging the frame where it sits close (bridge, end
+    # pieces). Not behind the lens itself, whose shading is in the lens layer.
+    lens_cov = np.clip(np.sum(lens_on_face, 0), 0, 1)
+    stop = 1 - lum(Tface_single)
+    caster = Aw + (1 - Aw) * lens_cov * stop
     sh = cfg.get("shadow", {})
     ang = np.radians(sh.get("dir_deg", 90.0 if key_from is None else key_from + 180.0))
-    off = sh.get("offset_mm", 1.2) * s
+    off = sh.get("offset_mm", 1.0) * s
     Ms = np.float32([[1, 0, off * np.cos(ang)], [0, 1, off * np.sin(ang)]])
-    shadow = cv2.GaussianBlur(cv2.warpAffine(Aw, Ms, (W, H)), (0, 0), sh.get("blur_mm", 1.0) * s)
-    face_lin = lin * (1 - sh.get("strength", 0.45) * shadow[..., None])
+    cast = cv2.GaussianBlur(cv2.warpAffine(caster, Ms, (W, H)), (0, 0), max(sh.get("blur_mm", 0.4) * s, 0.5))
+    contact = cv2.GaussianBlur(caster, (0, 0), sh.get("contact_mm", 0.8) * s)
+    shade = 1 - (1 - sh.get("strength", 0.5) * cast) * (1 - sh.get("contact", 0.2) * contact)
+    face_lin = lin * (1 - shade * (1 - lens_cov))[..., None]
 
-    # the lens's front surface: a faint sheen of the room in front (lighter at the top), and one soft
-    # reflection of the key per lens, where the settings put it on the lens (fractions of its box;
-    # mirrored on the other lens when the light is on the camera's axis)
+    # the lens's front surface mirrors what is in front of the face, as glass does (about 4.5% at
+    # normal incidence): the room, lighter at the top than at the bottom. Through a dark lens this
+    # reflection, not the eye, is what the camera sees. A reflection of the key itself can be set
+    # (`reflection.key`: where on the lens, how big, how bright), but none is drawn by default: a
+    # drawn catchlight, a soft glow or a soft band all read as painted on.
     rf = cfg.get("reflection", {})
+    F0 = rf.get("reflectance", 0.045)
+    front_env = rf.get("front_env", 0.3) * light_lum                # the room in front of the face
     refl = np.zeros((H, W), np.float32)
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
-    kk = rf.get("strength", 0.02)
-    haze = rf.get("haze", 0.0)
-    at = rf.get("at", [0.32, 0.3])
+    key = rf.get("key")                     # none by default: drawn catchlights and glows read as painted on
     for i, (m, mw) in enumerate(zip(lens_src, lens_on_face)):
         ys, xs = np.nonzero(m)
-        fx = at[0] if (i == 0 or not rf.get("mirror", True)) else 1 - at[0]
-        cx, cy = xs.min() + fx * np.ptp(xs), ys.min() + at[1] * np.ptp(ys)
-        p = cv2.perspectiveTransform(np.float32([[[cx, cy]]]), Hm)[0, 0]
-        rad = rf.get("size", 0.10) * np.ptp(xs) * scale
-        if kk:
-            refl += kk * light_lum * mw * np.exp(-(((xx - p[0]) / (1.6 * rad)) ** 2 + ((yy - p[1]) / rad) ** 2))
-        if haze:
-            top = cv2.perspectiveTransform(np.float32([[[xs.mean(), ys.min()]], [[xs.mean(), ys.max()]]]), Hm)[:, 0, 1]
-            v = np.clip((yy - top[0]) / max(top[1] - top[0], 1), 0, 1)
-            refl += haze * env * mw * (1 - 0.7 * v)
+        top = cv2.perspectiveTransform(np.float32([[[xs.mean(), ys.min()]], [[xs.mean(), ys.max()]]]), Hm)[:, 0, 1]
+        v = np.clip((yy - top[0]) / max(top[1] - top[0], 1), 0, 1)
+        refl += F0 * front_env * mw * (1 - rf.get("gradient", 0.65) * v)
+        if key:
+            at = key.get("at", [0.5, 0.3])
+            fx = at[0] if (i == 0 or not key.get("mirror", True)) else 1 - at[0]
+            cx, cy = xs.min() + fx * np.ptp(xs), ys.min() + at[1] * np.ptp(ys)
+            p = cv2.perspectiveTransform(np.float32([[[cx, cy]]]), Hm)[0, 0]
+            rad = max(key.get("size", 0.05) * np.ptp(xs) * scale, 1.0)
+            spot = np.exp(-(((xx - p[0]) / (key.get("aspect", 1.3) * rad)) ** 2 + ((yy - p[1]) / rad) ** 2) ** key.get("hardness", 1.0))
+            refl += key.get("peak", 1.0) * light_lum * mw * spot
     sheen = refl[..., None] * (neutral / light_lum)
+    report["lens_reflection"] = {"F0": F0, "front_env": round(front_env, 3), "key": key}
 
     comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * (face_lin * Tface + sheen)
     if DEBUG:
@@ -463,6 +555,9 @@ def main(cfg_path):
         x0, y0, x1, y1 = [int(round(v * k)) for v in crop]
         final, before = final[y0:y1, x0:x1], before[y0:y1, x0:x1]
         report["crop"] = [x0, y0, x1, y1]
+    fy, fx = np.nonzero(Aw > 0.5)
+    ox, oy = report.get("crop", [0, 0])[:2]
+    report["frame_box"] = [int(fx.min() - ox), int(fy.min() - oy), int(fx.max() - ox), int(fy.max() - oy)]
     cv2.imwrite(str(out / "composite.png"), cv2.cvtColor((final * 65535 + 0.5).astype(np.uint16), cv2.COLOR_RGB2BGR))
     Image.fromarray((final * 255 + 0.5).astype(np.uint8)).save(out / "composite.jpg", quality=94)
     hh = 1280
@@ -481,6 +576,6 @@ def main(cfg_path):
 
 
 if __name__ == "__main__":
-    args = [a for a in sys.argv[1:] if a != "--debug"]
+    args = [a for a in sys.argv[1:] if a not in ("--debug", "--fast")]
     for p in (sorted(PEOPLE.glob("*.json")) if args == ["--all"] else args):
         main(p)

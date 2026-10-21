@@ -29,18 +29,25 @@
  "light": {
   "surround": 0.35,
   "key_from_deg": 270,
-  "level": 1.0
+  "key_front": 0.4,
+  "level": 1.0,
+  "key_spec": {
+   "from_deg": 270,
+   "off_axis_deg": 45,
+   "power": 40,
+   "strength": 0.4
+  }
  },
  "shadow": {
-  "strength": 0.55,
   "offset_mm": 2.0,
-  "blur_mm": 1.0
+  "blur_mm": 0.6,
+  "strength": 0.55,
+  "contact": 0.2,
+  "contact_mm": 0.8
  },
  "reflection": {
-  "strength": 0.02,
-  "haze": 0.01
+  "front_env": 0.15
  },
- "eye_fill": 0.35,
  "soften_px": 0.6,
  "grade": true
 }

@@ -8,18 +8,28 @@
  "wardrobe": "coat",
  "format": "9:16",
  "status": "draft",
- "portrait": "work/people/raw/W3-S03-n34-2.png",
+ "portrait": "work/people/raw/W3-S03-n38-2.png",
  "portrait_source": {
   "tool": "Figma generate_image",
   "model": "gpt-image-2.5-sunburst",
   "figma_file": "0aADcg6X248iXssGmxZ2jj",
-  "node": "34:2",
+  "node": "38:2",
   "size": [
    864,
    1536
   ],
   "generated": "2026-10-21",
-  "prompt": "A bare concrete stairwell with worn steps and a plain metal handrail. One hard shaft of daylight from a high window above falls across the landing; the rest is in deep shadow. The model stands on the landing in the shaft of light, facing the camera, framed from the waist up, the whole head and shoulders in the light, the stairs rising behind. 50 mm lens, eye level.\nA 40-year-old Italian woman, lean, with a long neck. Olive skin with fine natural lines, no retouching. Very dark brown hair parted in the center and pulled back tightly into a low bun at the nape; ears visible. Long angular face, high cheekbones, a long straight nose, thin lips, a defined jaw. No makeup, no jewelry. Severe and calm, mouth closed.\nWardrobe: a navy wool coat over a grey crew-neck sweater, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+  "prompt": "A bare concrete stairwell with worn steps and a plain metal handrail. One hard shaft of daylight from a high window above falls across the landing; the rest is in deep shadow. The model stands on the landing in the shaft of light, facing the camera, framed from the waist up, the whole head and shoulders in the light, the stairs rising behind. 50 mm lens, eye level.\nA 40-year-old Italian woman, lean, with a long neck. Olive skin with fine natural lines, no retouching. Very dark brown hair parted in the center and pulled back tightly into a low bun at the nape; ears visible. Long angular face, high cheekbones, a long straight nose, thin lips, a defined jaw. No makeup, no jewelry. Severe and calm, mouth closed.\nWardrobe: a navy wool coat over a grey crew-neck sweater, no logos.\nHead square to the camera, the face turned neither left nor right, nose pointing straight at the lens, chin level, eyes open, looking straight into the lens.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos.",
+  "rejected": [
+   {
+    "node": "34:2",
+    "why": "head turned about 15-20 degrees (the cut-outs are front views)"
+   },
+   {
+    "node": "36:2",
+    "why": "head turned about 15-20 degrees (the cut-outs are front views)"
+   }
+  ]
  },
  "product_shot": "IMG_3510",
  "pd_mm": 62,
@@ -29,18 +39,25 @@
  "light": {
   "surround": 0.35,
   "key_from_deg": 270,
-  "level": 1.0
+  "key_front": 0.4,
+  "level": 1.0,
+  "key_spec": {
+   "from_deg": 270,
+   "off_axis_deg": 45,
+   "power": 40,
+   "strength": 0.4
+  }
  },
  "shadow": {
-  "strength": 0.55,
   "offset_mm": 2.0,
-  "blur_mm": 1.0
+  "blur_mm": 0.6,
+  "strength": 0.55,
+  "contact": 0.2,
+  "contact_mm": 0.8
  },
  "reflection": {
-  "strength": 0.02,
-  "haze": 0.01
+  "front_env": 0.15
  },
- "eye_fill": 0.35,
  "soften_px": 0.6,
  "grade": true
 }

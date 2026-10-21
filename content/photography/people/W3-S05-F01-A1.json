@@ -8,18 +8,28 @@
  "wardrobe": "shirt",
  "format": "4:5",
  "status": "draft",
- "portrait": "work/people/raw/W3-S05-n26-2.png",
+ "portrait": "work/people/raw/W3-S05-n39-2.png",
  "portrait_source": {
   "tool": "Figma generate_image",
   "model": "gpt-image-2.5-sunburst",
   "figma_file": "0aADcg6X248iXssGmxZ2jj",
-  "node": "26:2",
+  "node": "39:2",
   "size": [
    960,
    1280
   ],
   "generated": "2026-10-21",
-  "prompt": "A dark room with a dark floor. One hard key light comes through an open doorway behind the camera and falls on the model as a sharp wedge of light; everything outside the wedge falls to near black. The model stands in the light at the threshold, facing the camera, framed from the waist up, the whole head and shoulders in the light. 85 mm lens, eye level.\nA 40-year-old Italian woman, lean, with a long neck. Olive skin with fine natural lines, no retouching. Very dark brown hair parted in the center and pulled back tightly into a low bun at the nape; ears visible. Long angular face, high cheekbones, a long straight nose, thin lips, a defined jaw. No makeup, no jewelry. Severe and calm, mouth closed.\nWardrobe: a crisp white cotton shirt buttoned to the collar, no tie, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+  "prompt": "A dark room with a dark floor. One hard key light comes through an open doorway behind the camera and falls on the model as a sharp wedge of light; everything outside the wedge falls to near black. The model stands in the light at the threshold, facing the camera, framed from the waist up, the whole head and shoulders in the light. 85 mm lens, eye level.\nA 40-year-old Italian woman, lean, with a long neck. Olive skin with fine natural lines, no retouching. Very dark brown hair parted in the center and pulled back tightly into a low bun at the nape; ears visible. Long angular face, high cheekbones, a long straight nose, thin lips, a defined jaw. No makeup, no jewelry. Severe and calm, mouth closed.\nWardrobe: a crisp white cotton shirt buttoned to the collar, no tie, no logos.\nHead square to the camera, the face turned neither left nor right, nose pointing straight at the lens, chin level, eyes open, looking straight into the lens.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos.",
+  "rejected": [
+   {
+    "node": "26:2",
+    "why": "head turned about 15-20 degrees (the cut-outs are front views)"
+   },
+   {
+    "node": "37:2",
+    "why": "head turned about 15-20 degrees (the cut-outs are front views)"
+   }
+  ]
  },
  "product_shot": "IMG_3554",
  "pd_mm": 62,
@@ -27,19 +37,20 @@
  "lens_drop_mm": 3,
  "vertex_mm": 12,
  "light": {
-  "surround": 0.15,
+  "surround": 0.2,
+  "key_front": 1.0,
   "level": 1.0
  },
  "shadow": {
+  "offset_mm": 1.0,
+  "blur_mm": 0.4,
   "strength": 0.55,
-  "offset_mm": 1.2,
-  "blur_mm": 0.8
+  "contact": 0.2,
+  "contact_mm": 0.8
  },
  "reflection": {
-  "strength": 0.02,
-  "haze": 0.01
+  "front_env": 0.06
  },
- "eye_fill": 0.35,
  "soften_px": 0.6,
  "grade": true
 }
