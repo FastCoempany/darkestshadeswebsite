@@ -172,6 +172,9 @@ def key_light(target, k, power):
     li.energy = power
     ob = bpy.data.objects.new("key", li)
     bpy.context.scene.collection.objects.link(ob)
+    # `glossy: false`: the lamp lights and shades but its own tiny, blinding image is left out of the
+    # gloss, where a soft card in its place (a glint) draws a broader highlight from the same side
+    ob.visible_glossy = k.get("glossy", True)
     ob.location = Vector(target) + d * k["dist"]
     ob.rotation_euler = (-d).to_track_quat("-Z", "Y").to_euler()
     return ob, np.array(d)
@@ -463,6 +466,10 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     P, D_eyes = camera_space(L, H, W, f_px, s)
     ax = head_frame(P)
     report = {"id": cfg["id"], "px_per_mm": round(s, 3), "distance_mm": round(D_eyes, 1)}
+    if cfg.get("despecular"):
+        sh_ = sheen(lin, L, s) * cfg["despecular"]
+        np.save(out / "layers" / "sheen.npy", sh_.astype(np.float16))
+        lin = lin * (1 - sh_)[..., None]
     D, box, fit = head3d.depth_map(img, face, s, f_px)
     report["depth_fit"] = fit
     sc_ = head3d.light_scores(lin, face, D, box, f_px, H, W)
@@ -665,24 +672,26 @@ def window_card(target, kdir, light_mm, wn):
     black.use_nodes = True
     black.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1)
     black.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 1.0
-    big = 1500.0
+    big = wn.get("flag_mm", 180.0)                       # how far each flag runs beyond the window
     obs = []
     for which, gd in (("rows", wn.get("dist_mm", 250.0)), ("sides", wn.get("side_dist_mm", wn.get("dist_mm", 250.0)))):
         k = (light_mm - gd) / light_mm                   # the light's cone, flag to face
         w2, h2 = wn["width_mm"] / 2 * k, wn["height_mm"] / 2 * k
         ox, oy = [o * k for o in wn.get("offset_mm", (0.0, 0.0))]
         c = np.asarray(target, np.float64) + d * gd + u * ox + v * oy
-        rects = ((-big, big, h2, big), (-big, big, -big, -h2)) if which == "rows" else \
-            ((-big, -w2, -big, big), (w2, big, -big, big))
+        rects = ((-w2 - big, w2 + big, h2, h2 + big), (-w2 - big, w2 + big, -h2 - big, -h2)) if which == "rows" else \
+            ((-w2 - big, -w2, -h2 - big, h2 + big), (w2, w2 + big, -h2 - big, h2 + big))
         for (x0, x1, y0, y1) in rects:
             V = np.array([c + u * x0 + v * y0, c + u * x1 + v * y0, c + u * x1 + v * y1, c + u * x0 + v * y1])
             ob = mesh_object("card", V, np.array([[0, 1, 2, 3]]))
             ob.data.materials.append(black)
-            # they only cut the key: in a studio the flags stand by the lamp, out of the gloss's view
+            # they cut the key; with `in_gloss` they also hide the lamp (and a card standing in for it)
+            # in the frame's gloss wherever the window's light does not reach (kept small, so they hide
+            # nothing else); without it they stand out of the gloss's view, by the lamp
             ob.visible_camera = False
-            ob.visible_glossy = False
             ob.visible_diffuse = False
             ob.visible_transmission = False
+            ob.visible_glossy = bool(wn.get("in_gloss", False))
             obs.append(ob)
     return obs
 
@@ -717,6 +726,21 @@ def crease_point(px, h, ax, o, H, W, f_px, back_mm):
     r = np.array([(px[0] - head3d.cx_(W)) / f_px, (head3d.cy_(H) - px[1]) / f_px, -1.0])
     e_w = r * (-hw[2] + back_mm)
     return tuple(ax.T @ (e_w - o))
+
+
+def sheen(lin, L, s):
+    """The portrait's own soft-light sheen on the nose's tip (relit by a hard light it would be a small
+    crisp highlight or none): what stands above the skin's local floor there, as a fraction of the
+    pixel, within 10 mm of the tip, feathered."""
+    H, W = lin.shape[:2]
+    y = lum(lin).astype(np.float32)
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (31, 31))
+    floor_ = cv2.GaussianBlur(cv2.morphologyEx(y, cv2.MORPH_OPEN, k), (0, 0), 4)
+    frac = np.clip((y - floor_) / np.maximum(y, 1e-4), 0, 1)
+    m = np.zeros((H, W), np.float32)
+    cv2.circle(m, (int(L[30, 0]), int(L[30, 1])), int(10 * s), 1.0, -1)
+    m = cv2.GaussianBlur(m, (0, 0), 3 * s)
+    return (frac * m).astype(np.float32)
 
 
 def face_mask(L, s, H, W):
@@ -764,6 +788,8 @@ def noise_level(img):
 
 def composite(cfg, out, img, lin, H, W, report):
     ratio = np.load(out / "layers" / "ratio.npy").astype(np.float32)
+    if cfg.get("despecular") and (out / "layers" / "sheen.npy").exists():
+        lin = lin * (1 - np.load(out / "layers" / "sheen.npy").astype(np.float32))[..., None]
     fr = read_exr(out / "layers" / "front.exr")
     tp = read_exr(out / "layers" / "temples.exr")
     look = cfg.get("look3d", {})
@@ -813,7 +839,8 @@ def composite(cfg, out, img, lin, H, W, report):
     if look.get("grain_add"):
         # a film's grain is in the shadows too (the grade's is in proportion to the light): one even
         # pass of fine monochrome grain, which also dithers the dark gradients against banding
-        final = np.clip(final + rng.normal(0, look["grain_add"], final.shape[:2]).astype(np.float32)[..., None], 0, 1)
+        final = final + rng.normal(0, look["grain_add"], final.shape[:2]).astype(np.float32)[..., None]
+        final = np.clip(final + rng.normal(0, 0.35 * look["grain_add"], final.shape).astype(np.float32), 0, 1)
     before = ss90(lin_to_srgb(np.clip(lin, 0, 1)), size=H / 1280, **gk) if g else lin_to_srgb(lin)
     # the crop: a 3:4 portrait cut to the gallery's 4:5, a quarter of what goes from the top and the rest
     # from the bottom (the head sits in the upper half), as tools/photo/wear.py does
