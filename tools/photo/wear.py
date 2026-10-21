@@ -551,14 +551,27 @@ def main(cfg_path):
     # the eyes), plus the reflection above; mixed with the lens as photographed in the product shot,
     # the bright stage seen through it (`lens.photo`, 0 to 1), whose look is a real lens's
     ln = cfg.get("lens", {})
-    soft = cv2.GaussianBlur(face_lin, (0, 0), ln.get("face_blur_mm", 1.0) * s)
+    fb_mm = ln.get("face_blur_mm", 1.0)
+    soft = cv2.GaussianBlur(face_lin, (0, 0), fb_mm * s) if fb_mm > 0 else face_lin
     seen = face_lin * (1 - lens_cov[..., None]) + soft * lens_cov[..., None]
     photo = float(ln.get("photo", 0.0))
     stage_rgb = hex_lin(STAGE_HEX) * gain * surround
-    inside = (1 - photo) * seen * Tface + photo * (Tw * stage_rgb)
+    if ln.get("mode") == "behind":
+        # the eyes behind the lens as photographed (founder, Oct 21 2026): the lens is as bright, as tinted
+        # and as grainy over the face as it is over the lightbox's tent in the original photograph, and
+        # what is behind it, the face, darkens it where the face is darker (the eyes, as a temple behind it
+        # does in the photograph): the tent's place is taken by the face, measured against the face's own
+        # skin under the lens (`behind_level` scales that light)
+        ref = float(np.median(lum(soft[lens_cov > 0.9])))
+        behind = float(lum(tent[None])[0]) if ln.get("behind_ref", "tent") == "tent" else float(lum(stage_rgb[None])[0])
+        g_b = behind * float(ln.get("behind_level", 1.0)) / max(ref, 1e-4)
+        inside = Tw * seen * g_b
+        report["lens"] = {"mode": "behind", "face_ref_lin": round(ref, 4), "gain": round(g_b, 3)}
+    else:
+        inside = (1 - photo) * seen * Tface + photo * (Tw * stage_rgb)
+        report["lens"] = {"photo": photo, "face_blur_mm": ln.get("face_blur_mm", 1.0), "fill": fill}
     under = face_lin * (1 - lens_cov[..., None]) + inside * lens_cov[..., None] + sheen
     comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * under
-    report["lens"] = {"photo": photo, "face_blur_mm": ln.get("face_blur_mm", 1.0), "fill": fill}
     if DEBUG:
         ys, xs = np.nonzero(Aw > 0.02)
         y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
