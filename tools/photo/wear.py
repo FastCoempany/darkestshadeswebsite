@@ -140,19 +140,21 @@ def upscaled(path, factor=2, region=None):
 
 
 # ---------- the grade ----------
-def ss90(srgb, seed=1, size=1.0):
+def ss90(srgb, seed=1, size=1.0, lift=0.043, sat=0.85, halation=0.35, grain=0.022):
     """Lifted blacks, warm paper whites, low saturation, faint halation, fine grain (01-brand-system.md).
-    `size` scales the halation and grain with the picture (1 = 1280 px tall)."""
+    `size` scales the halation and grain with the picture (1 = 1280 px tall). The strengths are set per
+    picture (`grade` in the settings); at the full strength the frames' gloss black went grey and pasty
+    next to the product photographs (founder, Oct 21 2026)."""
     x = srgb.astype(np.float32)
     y = (0.2126 * x[..., 0] + 0.7152 * x[..., 1] + 0.0722 * x[..., 2])[..., None]
-    x = y + (x - y) * 0.85                                        # low saturation
+    x = y + (x - y) * sat                                         # low saturation
     hi = np.clip((y - 0.55) / 0.45, 0, 1)
     x = x * (1 + hi * np.array([0.012, 0.0, -0.03], np.float32))  # warm whites
     glow = cv2.GaussianBlur(np.clip(y[..., 0] - 0.82, 0, 1), (0, 0), 7 * size)[..., None]
-    x = x + glow * np.array([0.55, 0.22, 0.12], np.float32) * 0.35  # halation on the brightest whites
-    x = 0.043 + (1 - 0.043) * np.clip(x, 0, 1)                    # blacks lifted to about #0B0B0C
+    x = x + glow * np.array([0.55, 0.22, 0.12], np.float32) * halation   # halation on the brightest whites
+    x = lift + (1 - lift) * np.clip(x, 0, 1)                      # blacks lifted (0.043: about #0B0B0C)
     g = np.random.default_rng(seed).normal(0, 1, x.shape[:2]).astype(np.float32)
-    g = cv2.GaussianBlur(g, (0, 0), 0.7 * size) * 0.022 * size * (1 - 0.5 * y[..., 0])   # same grain at any size
+    g = cv2.GaussianBlur(g, (0, 0), 0.7 * size) * grain * size * (1 - 0.5 * y[..., 0])   # same grain at any size
     return np.clip(x + g[..., None], 0, 1)
 
 
@@ -566,8 +568,9 @@ def main(cfg_path):
                             Aw_full=np.clip(PA[..., 3], 0, 1)[y0:y1, x0:x1])
     grade = cfg.get("grade", True)
     size = H / 1280
-    final = ss90(lin_to_srgb(comp), size=size) if grade else lin_to_srgb(comp)
-    before = ss90(person, size=size) if grade else person
+    gk = grade if isinstance(grade, dict) else {}
+    final = ss90(lin_to_srgb(comp), size=size, **gk) if grade else lin_to_srgb(comp)
+    before = ss90(person, size=size, **gk) if grade else person
 
     # the crop, in the generated portrait's pixels: a 3:4 portrait is cut to the gallery's 4:5, a quarter of
     # what goes from the top and the rest from the bottom (the head sits in the upper half)

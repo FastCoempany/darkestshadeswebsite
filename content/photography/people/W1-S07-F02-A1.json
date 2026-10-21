@@ -39,10 +39,19 @@
   "contact_mm": 0.8
  },
  "reflection": {
-  "front_env": 0.3
+  "front_env": 0.25
  },
- "soften_px": 0.6,
- "grade": true,
+ "soften_px": 0.35,
+ "grade": {
+  "lift": 0.012,
+  "sat": 0.95,
+  "halation": 0.15,
+  "grain": 0.012
+ },
  "upscale": 2,
- "light": {}
+ "light": {},
+ "lens": {
+  "photo": 0.0,
+  "face_blur_mm": 0.3
+ }
 }

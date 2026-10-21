@@ -27,16 +27,7 @@
  "lens_drop_mm": 3,
  "vertex_mm": 12,
  "light": {
-  "surround": 0.15,
-  "key_from_deg": 215,
-  "key_front": 0.6,
-  "level": 1.0,
-  "key_spec": {
-   "from_deg": 215,
-   "off_axis_deg": 35,
-   "power": 80,
-   "strength": 0.6
-  }
+  "level": 1.0
  },
  "shadow": {
   "offset_mm": 2.0,
@@ -48,7 +39,16 @@
  "reflection": {
   "front_env": 0.04
  },
- "soften_px": 0.6,
- "grade": true,
- "eye_fill": 0.05
+ "soften_px": 0.35,
+ "grade": {
+  "lift": 0.012,
+  "sat": 0.95,
+  "halation": 0.15,
+  "grain": 0.012
+ },
+ "eye_fill": 0.05,
+ "lens": {
+  "photo": 0.0,
+  "face_blur_mm": 0.3
+ }
 }
