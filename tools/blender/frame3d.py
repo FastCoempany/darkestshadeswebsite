@@ -318,7 +318,7 @@ def ellipsoid(name, centre, radii, material=None, rot_deg=(0, 0, 0)):
     return ob
 
 
-def build(frame, materials):
+def build(frame, materials, tilt=None):
     """The frame's front (with its lenses, nose pads and end pieces), as worn: wrapped, tilted. Returns
     the parts and the shapes, plus the two hinge points (mm, the parts' coordinates) where the temples
     start (temples() makes those, once the ears are known)."""
@@ -363,7 +363,7 @@ def build(frame, materials):
             rings = [r[::-1] for r in rings]
         parts.append(loft(f"{frame} end {side}", rings, materials["acetate"]))
         hinges.append((hx, hy, hz))
-    R = Matrix.Rotation(np.radians(-cfg["tilt"]), 4, "X")
+    R = Matrix.Rotation(np.radians(-(cfg["tilt"] if tilt is None else tilt)), 4, "X")
     for p in parts:
         p.matrix_world = R @ p.matrix_world
     Rn = np.asarray(R.to_3x3())
@@ -371,10 +371,12 @@ def build(frame, materials):
     return parts, sh, hinges
 
 
-def temples(frame, hinges, materials, ears=None):
+def temples(frame, hinges, materials, ears=None, split=False):
     """The temples, from each hinge (mm) back to the ear and curving down behind it. `ears`: the point
     on each side where the temple rests on the ear's root, in the same coordinates; without them, the
-    drawing's: straight back from the hinge."""
+    drawing's: straight back from the hinge. With `split`, each temple is two objects, the run from the
+    hinge to the ear and the part behind the ear (named "... back"), so a front view can leave the
+    second out: from the front it is always behind the ear."""
     cfg = FRAMES[frame]
     t = cfg["temple"]
     obs = []
@@ -389,27 +391,29 @@ def temples(frame, hinges, materials, ears=None):
         down = np.array([0.0, -1.0, 0.0])
         back = d * 0.35 + np.array([0.0, 0.0, -1.0]) * 0.65
         back /= np.linalg.norm(back)
-        path = [h, h + d * 12, e - d * 10, e, e + back * 14 + down * 6, e + back * 26 + down * 20,
-                e + back * 30 + down * t["drop"]]
-        cu = bpy.data.curves.new(f"{frame} temple {k}", "CURVE")
-        cu.dimensions = "3D"
-        cu.bevel_depth = t["radius"] * MM
-        cu.bevel_resolution = 4
-        cu.use_fill_caps = True
-        sp = cu.splines.new("NURBS")
-        sp.points.add(len(path) - 1)
-        for j, p in enumerate(path):
-            sp.points[j].co = (p[0] * MM, p[1] * MM, p[2] * MM, 1.0)
-        sp.use_endpoint_u = True
-        sp.order_u = 3
-        sp.resolution_u = 24
-        tob = bpy.data.objects.new(cu.name, cu)
-        bpy.context.scene.collection.objects.link(tob)
-        tob = to_mesh(tob)
-        tob.data.materials.append(materials["metal"])
-        for pl in tob.data.polygons:
-            pl.use_smooth = True
-        obs.append(tob)
+        tail = [e + back * 14 + down * 6, e + back * 26 + down * 20, e + back * 30 + down * t["drop"]]
+        runs = [(f"{frame} temple {k}", [h, h + d * 12, e - d * 10, e]), (f"{frame} temple {k} back", [e] + tail)] \
+            if split else [(f"{frame} temple {k}", [h, h + d * 12, e - d * 10, e] + tail)]
+        for name, path in runs:
+            cu = bpy.data.curves.new(name, "CURVE")
+            cu.dimensions = "3D"
+            cu.bevel_depth = t["radius"] * MM
+            cu.bevel_resolution = 4
+            cu.use_fill_caps = True
+            sp = cu.splines.new("NURBS")
+            sp.points.add(len(path) - 1)
+            for j, p in enumerate(path):
+                sp.points[j].co = (p[0] * MM, p[1] * MM, p[2] * MM, 1.0)
+            sp.use_endpoint_u = True
+            sp.order_u = 3
+            sp.resolution_u = 24
+            tob = bpy.data.objects.new(cu.name, cu)
+            bpy.context.scene.collection.objects.link(tob)
+            tob = to_mesh(tob)
+            tob.data.materials.append(materials["metal"])
+            for pl in tob.data.polygons:
+                pl.use_smooth = True
+            obs.append(tob)
     return obs
 
 

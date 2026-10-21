@@ -177,6 +177,59 @@ def key_light(target, k, power):
     return ob, np.array(d)
 
 
+def card_value(sc, light_ob, ldir, eye_mid, ax, white, H, W, f_px, s, path):
+    """What a white card at the eyes, square to this light, reads at 1 W (everything else hidden)."""
+    c = eye_mid + ax[:, 2] * 25
+    a1 = np.cross(ldir, [0, 1, 0])
+    a1 /= np.linalg.norm(a1)
+    a2 = np.cross(ldir, a1)
+    card = mesh_object("card", np.array([c + 20 * (sx * a1 + sy * a2) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]),
+                       np.array([[0, 1, 2, 3]]))
+    card.data.materials.append(white)
+    light_ob.data.energy = 1.0
+    keep = sc.cycles.samples
+    sc.cycles.samples = 16
+    u, v, _ = project(c[None], H, W, f_px)
+    bw = 12 * s
+    sc.render.border_min_x, sc.render.border_max_x = (u[0] - bw) / W, (u[0] + bw) / W
+    sc.render.border_min_y, sc.render.border_max_y = 1 - (v[0] + bw) / H, 1 - (v[0] - bw) / H
+    cim = render(sc, path)
+    sc.cycles.samples = keep
+    bpy.data.objects.remove(card)
+    return float(np.median(cim[int(v[0] - bw / 2):int(v[0] + bw / 2), int(u[0] - bw / 2):int(u[0] + bw / 2), :3]))
+
+
+def glint(target, g, white):
+    """A strip of light only reflections see (a narrow strip box near the camera, too small and too far
+    to light the skin, bright enough to show in a glossy lens and along the frame's edges): `width` x
+    `height` m, `dist` m from the face at (az, el) as the key is placed, its brightness `radiance`
+    times a lit white card's."""
+    az, el = math.radians(g["az"]), math.radians(g["el"])
+    d = np.array([math.sin(az) * math.cos(el), math.sin(el), math.cos(az) * math.cos(el)])
+    c = np.asarray(target, np.float64) + d * g["dist"] * 1000
+    u = np.cross([0.0, 1.0, 0.0], d)
+    u /= np.linalg.norm(u)
+    v = np.cross(d, u)
+    w2, h2 = g["width"] * 500, g["height"] * 500
+    ob = mesh_object("glint", np.array([c - u * w2 - v * h2, c + u * w2 - v * h2, c + u * w2 + v * h2, c - u * w2 + v * h2]),
+                     np.array([[0, 1, 2, 3]]))
+    m = bpy.data.materials.new("glint")
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != "OUTPUT_MATERIAL":
+            nt.nodes.remove(n)
+    em = nt.nodes.new("ShaderNodeEmission")
+    em.inputs["Strength"].default_value = g["radiance"] * white
+    nt.links.new(em.outputs[0], [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0].inputs["Surface"])
+    ob.data.materials.append(m)
+    ob.visible_camera = False
+    ob.visible_diffuse = False
+    ob.visible_shadow = False
+    ob.visible_transmission = False
+    return ob
+
+
 def read_exr(path):
     """A render, linear RGBA, top row first (Blender reads it; this OpenCV has no EXR)."""
     im = bpy.data.images.load(str(path), check_existing=False)
@@ -405,9 +458,16 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     tint = cfg.get("lens_tint") or lens_tint(cfg)
     report["lens_tint"] = [round(float(v), 4) for v in tint]
     mats = frame3d.materials_for(cfg["frame"], tint)
-    parts, sh, hinges = frame3d.build(cfg["frame"], mats)
+    parts, sh, hinges = frame3d.build(cfg["frame"], mats, tilt=cfg.get("tilt"))
     o = place(parts, P, ax, face.kps, s, D, box, H, W, f_px, cfg, report)
-    tmpl = frame3d.temples(cfg["frame"], hinges, mats, ears=ears_local(P, ax, o, hinges, cfg))
+    ears = ears_local(P, ax, o, hinges, cfg)
+    creases = ear_creases(L, s, cfg)
+    for k_, h in enumerate(hinges):
+        side = "left" if h[0] < 0 else "right"           # as the camera sees it
+        if creases.get(side) is not None:
+            ears[k_] = crease_point(creases[side], h, ax, o, H, W, f_px, cfg.get("ear_depth_mm", 85.0))
+    report["ear_creases"] = {k_: (None if v is None else [round(float(c), 1) for c in v]) for k_, v in creases.items()}
+    tmpl = frame3d.temples(cfg["frame"], hinges, mats, ears=ears, split=True)
     rig = bpy.data.objects.new("glasses", None)
     sc.collection.objects.link(rig)
     for p in parts + tmpl:
@@ -425,22 +485,9 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     eye_mid = (P[36:42].mean(0) + P[42:48].mean(0)) / 2
     key, kdir = key_light(eye_mid * MM, spec["key"], 1.0)
     room(sc, 0.0, spec["room"]["top"], spec["room"]["bottom"])
-    c = eye_mid + ax[:, 2] * 25
-    a1 = np.cross(kdir, [0, 1, 0])
-    a1 /= np.linalg.norm(a1)
-    a2 = np.cross(kdir, a1)
-    card = mesh_object("card", np.array([c + 20 * (sx * a1 + sy * a2) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]),
-                       np.array([[0, 1, 2, 3]]))
-    card.data.materials.append(white)
     for p in front_objs + tmpl + [head]:
         p.hide_render = True
-    sc.cycles.samples = 16
-    u, v, _ = project(c[None], H, W, f_px)
-    bw = 12 * s
-    sc.render.border_min_x, sc.render.border_max_x = (u[0] - bw) / W, (u[0] + bw) / W
-    sc.render.border_min_y, sc.render.border_max_y = 1 - (v[0] + bw) / H, 1 - (v[0] - bw) / H
-    cim = render(sc, out / "layers" / "card.exr")
-    card_val = float(np.median(cim[int(v[0] - bw / 2):int(v[0] + bw / 2), int(u[0] - bw / 2):int(u[0] + bw / 2), :3]))
+    card_val = card_value(sc, key, kdir, eye_mid, ax, white, H, W, f_px, s, out / "layers" / "card.exr")
     eu, ev = eye_mid_px(eye_mid, H, W, f_px)
     skin_box = lin[int(ev - 40 * s):int(ev + 40 * s), int(eu - 60 * s):int(eu + 60 * s)]
     skin = float(np.percentile(lum(skin_box), 90))
@@ -451,7 +498,6 @@ def render_layers(cfg, out, img, lin, H, W, samples):
          spec["room"].get("camera_side", 0.0) * target)
     report["light"] = {"card_at_1W": round(card_val, 6), "skin_lin": round(skin, 3), "key_W": round(power, 1),
                        "room": round(spec["fill"] * target, 4)}
-    bpy.data.objects.remove(card)
 
     # a window: the key only through a hole in a black card between it and the face (a band of light
     # across the eyes, a patch on one side), everything else falling to `dark` of what it was. Its
@@ -470,19 +516,62 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         for g in cards:
             g.hide_render = False
         k_win = render(sc, out / "layers" / "key_window.exr")
+        dark = wn.get("dark", 0.06)
         lit_ = lum(k_open[..., :3]) > 1e-4
-        win_light = np.zeros((H, W), np.float32)
-        win_light[lit_] = np.clip(lum(k_win[..., :3])[lit_] / lum(k_open[..., :3])[lit_], 0, 1)
+        win_frac = np.zeros((H, W), np.float32)            # how much of the key gets through, 0..1
+        win_frac[lit_] = np.clip(lum(k_win[..., :3])[lit_] / lum(k_open[..., :3])[lit_], 0, 1)
+        win_factor = win_frac + dark * (1 - win_frac)
+        off = dark
+        if wn.get("relight"):
+            # the portrait relit: its own light divided out (the head under the portrait's light: the
+            # scene's key and room, calibrated on the same white card as the new key) and the new light
+            # multiplied in: the hard key through the window, and outside it only the room's dim, flat
+            # light (`ambient`, against a lit white card), not the old light turned down
+            base = SCENES[cfg["scene"]]
+            soft, sdir = key_light(eye_mid * MM, base["key"], 1.0)
+            key.hide_render = True
+            head.hide_render = True
+            for g in cards:
+                g.hide_render = True
+            soft.data.energy = target / max(card_value(sc, soft, sdir, eye_mid, ax, white, H, W, f_px, s,
+                                                       out / "layers" / "card_portrait.exr"), 1e-9)
+            room(sc, base["fill"] * target, base["room"]["top"], base["room"]["bottom"],
+                 base["room"].get("camera_side", 0.0) * target)
+            head.hide_render = False
+            set_region(sc, cam, [head], 0.0, H, W)
+            e_old = lum(render(sc, out / "layers" / "portrait_light.exr")[..., :3])
+            bpy.data.objects.remove(soft)
+            key.hide_render = False
+            for g in cards:
+                g.hide_render = False
+            e_ = np.maximum(e_old, 0.06 * target)          # never lift the portrait's own shadows
+            # the new key's shading only on the lit face; elsewhere (the far ear, the hair) the depth
+            # map's head lets in light the portrait shows never reached: there, the key as it falls
+            # through the window on the portrait's own shading. Outside the window, `dark` of the
+            # portrait as it was (dividing its old light out there, by the depth map's estimate of it,
+            # printed that estimate's errors on the face as blotches)
+            w_key = face_mask(L, s, H, W) * lit_weight(lin, s, skin)
+            key_part = w_key * lum(k_win[..., :3]) / e_ + (1 - w_key) * win_frac
+            win_factor = np.where(e_old > 1e-4, np.clip(key_part + dark * (1 - win_frac), 0, 1.6), dark)
         # where the head's mesh has gaps (it leaves out the steps in depth at the ears' and hair's edges),
         # the light carries on from round them, so the window's edge does not cut there
         cov = k_open[..., 3] > 0.5
         near = cv2.dilate(cov.astype(np.uint8), np.ones((31, 31), np.uint8)) > 0
         gaps = (near & ~cov).astype(np.uint8)
-        win_light = cv2.inpaint((win_light * 255).astype(np.uint8), gaps, 7, cv2.INPAINT_TELEA).astype(np.float32) / 255
-        win_light = cv2.GaussianBlur(win_light, (0, 0), 1.5)
+        scale = max(float(win_factor.max()), 1e-6)
+        win_factor = cv2.inpaint(np.clip(win_factor / scale * 255, 0, 255).astype(np.uint8), gaps, 7,
+                                 cv2.INPAINT_TELEA).astype(np.float32) / 255 * scale
+        win_factor[~near] = off
+        win_light = cv2.GaussianBlur(win_factor, (0, 0), 1.5)
+        win_key = cv2.GaussianBlur(win_frac, (0, 0), 1.5)
         room(sc, spec["fill"] * target, spec["room"]["top"], spec["room"]["bottom"],
              spec["room"].get("camera_side", 0.0) * target)
         report["window"] = wn
+
+    for g_ in ([spec["glint"]] if spec.get("glint") else []) + spec.get("glints", []):
+        glint(eye_mid, g_, target)
+    if spec.get("glint") or spec.get("glints"):
+        report["glints"] = ([spec["glint"]] if spec.get("glint") else []) + spec.get("glints", [])
 
     # 1, 2: the head alone, white; and with the frame casting its shadows (not seen itself)
     head.hide_render = False
@@ -501,11 +590,10 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     ratio = np.ones((H, W, 3), np.float32)
     lit = lum(bare[..., :3]) > 1e-5
     ratio[lit] = np.clip(shaded[..., :3][lit] / np.maximum(bare[..., :3][lit], 1e-7), 0, 1.0)
-    w = shadow_weight(lin, L, s, skin) * edge
+    w = shadow_weight(lin, L, s, skin, win_key if win_light is not None else None) * edge
     ratio = 1 - w[..., None] * (1 - ratio)
     if win_light is not None:
-        dark = spec["window"].get("dark", 0.06)
-        ratio = ratio * (win_light + dark * (1 - win_light))[..., None]
+        ratio = ratio * win_light[..., None]          # the window's factor (its light, or the relit skin)
     np.save(out / "layers" / "ratio.npy", ratio.astype(np.float16))
 
     # 3: the front and lenses; the head shows the shaded portrait (through the lenses, in the gloss)
@@ -517,18 +605,14 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     set_region(sc, cam, front_objs, 0.04, H, W)
     render(sc, out / "layers" / "front.exr")
 
-    # 4: the temples, the head in front of them held out (the head's sides where the jaw line puts
-    # them, behind where the depth model reads them)
+    # 4: the temples, the run from each hinge to where it goes in behind the ear, over the hair (the
+    # depth map flattens the head's sides too much to hide them right); the part behind the ear is
+    # never seen from the front
     for p in front_objs:
         p.visible_camera = False
     for p in tmpl:
-        p.visible_camera = True
-    Dside, side_fit = head3d.side_corrected(D, box, face, s, f_px)
-    report["side_fit"] = side_fit
-    V2, F2, _ = head3d.mesh(Dside, box, H, W, f_px)
-    sides = mesh_object("head sides", V2, F2)
+        p.visible_camera = " back" not in p.name
     head.hide_render = True
-    sides.is_holdout = True
     set_region(sc, cam, front_objs + tmpl, 0.04, H, W)
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))
@@ -564,7 +648,11 @@ def window_card(target, kdir, light_mm, wn):
             V = np.array([c + u * x0 + v * y0, c + u * x1 + v * y0, c + u * x1 + v * y1, c + u * x0 + v * y1])
             ob = mesh_object("card", V, np.array([[0, 1, 2, 3]]))
             ob.data.materials.append(black)
+            # they only cut the key: in a studio the flags stand by the lamp, out of the gloss's view
             ob.visible_camera = False
+            ob.visible_glossy = False
+            ob.visible_diffuse = False
+            ob.visible_transmission = False
             obs.append(ob)
     return obs
 
@@ -582,13 +670,27 @@ def region_feather(sc, H, W, frac):
     return (t * t * (3 - 2 * t)).astype(np.float32)
 
 
-def shadow_weight(lin, L, s, skin):
-    """Where the frame's shadows are believed (0..1): on the face (its landmarks' outline, the forehead
-    above the brows, 8 mm round, feathered), and only as far as the portrait is lit there. The depth
-    map has no back to the head, so in it the key reaches the far ear and cheek, which the portrait
-    shows in the head's own shadow; a frame can take no key light from where none falls. The
-    portrait's light is read broadly (an 8 mm blur), so eyes, brows and nostrils count as lit skin."""
-    H, W = lin.shape[:2]
+def ear_creases(L, s, cfg):
+    """Where each temple goes in behind the ear, as the camera sees it ("left", "right"): where the ear's
+    top meets the head, 5 mm above the jaw line's top point (InsightFace's first and last contour
+    points sit at the ear's root) and 1.5 mm out from it; or as the settings place it by hand
+    (`ear_crease_px`, the 2x portrait's pixels)."""
+    given = cfg.get("ear_crease_px", {})
+    return {"left": tuple(given.get("left", (L[0, 0] - 1.5 * s, L[0, 1] - 5 * s))),
+            "right": tuple(given.get("right", (L[16, 0] + 1.5 * s, L[16, 1] - 5 * s)))}
+
+
+def crease_point(px, h, ax, o, H, W, f_px, back_mm):
+    """A temple's rest on the ear in the frame's coordinates: on the camera's ray through the ear's
+    crease, `back_mm` deeper than the hinge."""
+    hw = ax @ np.asarray(h, np.float64) + o
+    r = np.array([(px[0] - head3d.cx_(W)) / f_px, (head3d.cy_(H) - px[1]) / f_px, -1.0])
+    e_w = r * (-hw[2] + back_mm)
+    return tuple(ax.T @ (e_w - o))
+
+
+def face_mask(L, s, H, W):
+    """The face (its landmarks' outline and the forehead above the brows), 8 mm round, feathered."""
     m = np.zeros((H, W), np.uint8)
     pts = L[:, :2].copy()
     brow = L[17:27, :2].copy()
@@ -596,9 +698,24 @@ def shadow_weight(lin, L, s, skin):
     cv2.fillConvexPoly(m, cv2.convexHull(np.concatenate([pts, brow]).astype(np.int32)), 1)
     r = int(8 * s)
     m = cv2.dilate(m, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * r + 1,) * 2)).astype(np.float32)
-    m = cv2.GaussianBlur(m, (0, 0), 6 * s)
-    Ls = cv2.GaussianBlur(lum(lin), (0, 0), 8 * s)
-    return np.clip(m, 0, 1) * np.clip(Ls / (0.25 * skin), 0, 1)
+    return np.clip(cv2.GaussianBlur(m, (0, 0), 6 * s), 0, 1)
+
+
+def lit_weight(lin, s, skin):
+    """How lit the portrait is, read broadly (an 8 mm blur, so eyes, brows and nostrils count as lit
+    skin): 1 from a quarter of the lit skin's level up."""
+    return np.clip(cv2.GaussianBlur(lum(lin), (0, 0), 8 * s) / (0.25 * skin), 0, 1)
+
+
+def shadow_weight(lin, L, s, skin, light=None):
+    """Where the frame's shadows are believed (0..1): on the face, and as far as light falls there:
+    the portrait's own light, or the window's (`light`, 0..1). The depth map has no back to the head,
+    so in it the key reaches the far ear and cheek, which the portrait shows in the head's own shadow;
+    a frame can take no key light from where none falls."""
+    lw = lit_weight(lin, s, skin)
+    if light is not None:
+        lw = np.maximum(lw, light)
+    return face_mask(L, s, *lin.shape[:2]) * lw
 
 
 def eye_mid_px(eye_mid, H, W, f_px):
@@ -638,6 +755,18 @@ def composite(cfg, out, img, lin, H, W, report):
     base = lin * ratio
     t_rgb, t_a = matched(tp)
     f_rgb, f_a = matched(fr)
+    # the temples' own shadow where they lie along the head (the depth map's flattened sides cannot take
+    # it in 3D): each visible temple's outline, moved away from the key by the gap between wire and hair
+    # (about 2 mm), softened, darkening what lies under it
+    k_ = report.get("key_used", {})
+    if t_a.max() > 0.05 and k_:
+        gap = look.get("temple_gap_mm", 2.0) * report["px_per_mm"]
+        dx = -gap * math.tan(math.radians(k_.get("az", -45.0)))
+        dy = gap * math.tan(math.radians(k_.get("el", 25.0)))
+        M = np.float32([[1, 0, dx], [0, 1, dy]])
+        sh_ = cv2.warpAffine(t_a[..., 0], M, (W, H))
+        sh_ = cv2.GaussianBlur(sh_, (0, 0), max(0.6 * gap / 2, 1.0))
+        base = base * (1 - look.get("temple_shadow", 0.7) * np.clip(sh_, 0, 1))[..., None]
     comp = base * (1 - t_a) + t_rgb
     comp = comp * (1 - f_a) + f_rgb
     sys.path.insert(0, str(ROOT / "tools" / "photo"))
