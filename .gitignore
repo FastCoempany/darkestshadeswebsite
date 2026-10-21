@@ -5,7 +5,8 @@ brand/fonts/private/
 *.woff
 *.woff2
 
-# Raw and master photography live in the DAM, not here (docs/brief/07-photography.md).
+# Raw photography stays in the darkestshades release; masters live in dam/ (dam/README.md), not in
+# stray /raw/ or /masters/ folders.
 /raw/
 /masters/
 /work/

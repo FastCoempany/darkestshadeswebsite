@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Export the cleaned lightbox finals for the web (docs/brief/07-photography.md, step 11).
 
-    python3 tools/photo/export_web.py              # every final -> assets/photography/ + MANIFEST.csv
+    python3 tools/photo/export_web.py              # every final -> assets/photography/ + MANIFEST.csv,
+                                                   # and its masters -> dam/product/
     python3 tools/photo/export_web.py F02 F05      # some frames only (the manifest is rewritten whole)
-    python3 tools/photo/export_web.py --masters DIR   # also copy the masters, named for the DAM, to DIR
+    python3 tools/photo/export_web.py --no-masters    # web files and manifest only
     python3 tools/photo/export_web.py --manifest      # rewrite MANIFEST.csv only (after a copy change)
 
 Reads work/out/<shot>/stage-full.png (16-bit, from tools/photo/clean_lightbox.py) for each shot in
@@ -13,13 +14,14 @@ upscaled; a close-up cropped smaller than 2048 also gets its own full width), do
 light, and assets/photography/MANIFEST.csv, one row per final, with the alt text built from
 content/copy/en.json (alt.stage, alt.subjects, alt.angles).
 
-The masters (the 16-bit cut-out, cutout.png, and the 16-bit stage version) stay out of this public
-repo; they belong in the DAM (07-photography.md, "Where files live").
+The masters, the 16-bit cut-out (cutout.png) and the 16-bit stage version (stage-full.png, the source
+of every web file), go to the DAM in this repo, dam/product/ (dam/README.md; founder, Oct 21 2026),
+named DS-<frame>-<angle>-<version>-master.png and -stage.png, losslessly recompressed; a master newer
+than its source is left as it is.
 """
 import csv
 import json
 import pathlib
-import shutil
 import sys
 
 import cv2
@@ -31,6 +33,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from clean_lightbox import lin_to_srgb, srgb_to_lin  # noqa: E402
 
 OUT = ROOT / "assets" / "photography"
+DAM = ROOT / "dam" / "product"
 WIDTHS = [640, 960, 1440, 2048]
 VERSION = "v01"
 QUALITY = {"jpg": 84, "webp": 82, "avif": 62}
@@ -83,11 +86,7 @@ def save(im, path, fmt):
 
 
 def main(argv):
-    masters = None
-    if "--masters" in argv:
-        i = argv.index("--masters")
-        masters = pathlib.Path(argv[i + 1])
-        argv = argv[:i] + argv[i + 2:]
+    masters = None if "--no-masters" in argv or "--manifest" in argv else DAM
     images = "--manifest" not in argv
     only = {a.upper() for a in argv if not a.startswith("--")}
     copy = json.loads((ROOT / "content" / "copy" / "en.json").read_text())
@@ -127,8 +126,12 @@ def main(argv):
         master = f"DS-{r['frame']}-{r['angle']}-{VERSION}-master.png"
         if masters:
             masters.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(src / "cutout.png", masters / master)
-            shutil.copyfile(src / "stage-full.png", masters / master.replace("-master", "-stage"))
+            for name, dst in (("cutout.png", masters / master), ("stage-full.png", masters / master.replace("-master", "-stage"))):
+                if dst.exists() and dst.stat().st_mtime >= (src / name).stat().st_mtime:
+                    continue
+                a = cv2.imread(str(src / name), cv2.IMREAD_UNCHANGED)
+                cv2.imwrite(str(dst), a, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+                del a
         tools = ["tools/photo/clean_lightbox.py"]
         if r["gcd"]:
             tools += ["tools/blender/gcd_render.py", "tools/photo/temple_gcd.py"]
@@ -136,7 +139,7 @@ def main(argv):
             "id": fid, "source": r["key"], "frame": r["frame"], "angle": r["angle"], "version": VERSION,
             "width": W, "height": H, "widths": " ".join(map(str, widths)), "formats": "avif webp jpg",
             "tool_chain": "; ".join(tools), "master": master,
-            "master_location": "DAM masters/ (to upload; regenerate with tools/photo/clean_lightbox.py)",
+            "master_location": "dam/product/",
             "status": "final", "alt": alt_text(copy, r["frame"], r["alt"]),
             "crop": " ".join(map(str, rep["crop"])),
         })
