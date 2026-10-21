@@ -39,7 +39,7 @@ from scipy import ndimage as ndi
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from clean_lightbox import lin_to_srgb, load_srgb, lum, srgb_to_lin  # noqa: E402
+from clean_lightbox import STAGE_HEX, hex_lin, lin_to_srgb, load_srgb, lum, srgb_to_lin  # noqa: E402
 
 PEOPLE = ROOT / "content" / "photography" / "people"
 DEBUG = "--debug" in sys.argv
@@ -427,8 +427,6 @@ def main(cfg_path):
     # under the solid rim, as far as the frame's softening on the face reaches (3 px under it, the
     # softened rim still let 5% of the bare face through: a hairline inside the rim) and no further than
     # the solid rim goes.
-    Tface = np.ones_like(lin)
-    Tface_single = np.ones_like(lin)                 # one pass through the lens: what its shadow lets by
     tints, lens_on_face, grown = [], [], []
     reach = max(2, int(round(cfg.get("lens_under_rim_mm", 1.5) * src_px_per_mm)))
     soft_edge = (A > 0.02) & (A < 0.9)
@@ -440,6 +438,13 @@ def main(cfg_path):
     under = int(np.ceil(max(3.0, (3 * soften + 2) / scale)))
     report["lens_under_solid_px"] = under
     lab_t, _ = ndi.label((lum(T) < 0.995) | np.any(lens_src, axis=0))
+    # the lens's tint pixel by pixel, as the cleaned shot has it: F06's and F08's lenses are gradients,
+    # dark at the top (one flat tint drew them as plain lenses), and every lens keeps the photograph's
+    # grain, which a flat fill lost (it read as painted). A light lens that keeps what was behind it in
+    # the shot (F01's and F03's: a temple seen through) is its own tint, flat: the temple isn't behind it
+    # on a face.
+    keep_behind = scfg.get("lens_cleanup", {}).get("keep_behind")
+    Tsrc = np.ones_like(T)
     for m in lens_src:
         er = cv2.erode(m.astype(np.uint8), np.ones((15, 15), np.uint8)) > 0
         vals = T[er]
@@ -451,13 +456,24 @@ def main(cfg_path):
         g = ndi.binary_dilation(g, iterations=reach, mask=g | soft_edge)
         g = ndi.binary_dilation(g, iterations=under, mask=g | solid)
         grown.append(int(g.sum() - m.sum()))
+        gy_, gx_ = np.nonzero(g)
+        by0, by1, bx0, bx1 = gy_.min(), gy_.max() + 1, gx_.min(), gx_.max() + 1
+        if keep_behind:
+            tmap = np.broadcast_to(tint, (by1 - by0, bx1 - bx0, 3))
+        else:
+            own = ((lum(T) < 0.995) & m)[by0:by1, bx0:bx1]        # the lens's own pixels, carried out under the rim
+            iy, ix = ndi.distance_transform_edt(~own, return_distances=False, return_indices=True)
+            tmap = T[by0:by1, bx0:bx1][iy, ix]
+        Tsrc[by0:by1, bx0:bx1] = np.where(g[by0:by1, bx0:bx1, None], tmap, Tsrc[by0:by1, bx0:bx1])
         mw = np.clip(warp(cv2.GaussianBlur(g.astype(np.float32), (0, 0), 1.0)), 0, 1) * (1 - front)
         lens_on_face.append(mw)
-        eff = tint * (fill + (1 - fill) * tint)
-        Tface = Tface * (1 - mw[..., None] * (1 - eff))
-        Tface_single = Tface_single * (1 - mw[..., None] * (1 - tint))
     report["lens_tint_rgb"] = tints
     report["lens_grown_px"] = grown
+    lens_cov = np.clip(np.sum(lens_on_face, 0), 0, 1)
+    Tw = np.clip(cv2.warpPerspective(small(Tsrc), Hs, (W, H), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT,
+                                     borderValue=(1.0, 1.0, 1.0)), 0, 1)
+    Tface_single = 1 - lens_cov[..., None] * (1 - Tw)               # one pass: what the lens's shadow lets by
+    Tface = Tface_single * (fill + (1 - fill) * Tface_single)        # there and back: what the camera sees of the eye
 
     # the frame lit like the scene. Color: the scene light's, from a patch that is neutral in the
     # scene (the backdrop, a white shirt, grey concrete), against the tent's. Level: the backdrop's
@@ -490,7 +506,6 @@ def main(cfg_path):
     # flash's shadow is a thin hard line just under the rim; blurred wide, it read as a drop shadow).
     # Contact: a little darkening of the skin hugging the frame where it sits close (bridge, end
     # pieces). Not behind the lens itself, whose shading is in the lens layer.
-    lens_cov = np.clip(np.sum(lens_on_face, 0), 0, 1)
     stop = 1 - lum(Tface_single)
     caster = Aw + (1 - Aw) * lens_cov * stop
     sh = cfg.get("shadow", {})
@@ -529,7 +544,19 @@ def main(cfg_path):
     sheen = refl[..., None] * (neutral / light_lum)
     report["lens_reflection"] = {"F0": F0, "front_env": round(front_env, 3), "key": key}
 
-    comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * (face_lin * Tface + sheen)
+    # what the camera sees through the lens: the face behind it, darkened twice by the tint, its finest
+    # detail lost in that little light (rendered sharp, lashes and irises read as a grey film laid over
+    # the eyes), plus the reflection above; mixed with the lens as photographed in the product shot,
+    # the bright stage seen through it (`lens.photo`, 0 to 1), whose look is a real lens's
+    ln = cfg.get("lens", {})
+    soft = cv2.GaussianBlur(face_lin, (0, 0), ln.get("face_blur_mm", 1.0) * s)
+    seen = face_lin * (1 - lens_cov[..., None]) + soft * lens_cov[..., None]
+    photo = float(ln.get("photo", 0.0))
+    stage_rgb = hex_lin(STAGE_HEX) * gain * surround
+    inside = (1 - photo) * seen * Tface + photo * (Tw * stage_rgb)
+    under = face_lin * (1 - lens_cov[..., None]) + inside * lens_cov[..., None] + sheen
+    comp = Fw * Aw[..., None] + (1 - Aw[..., None]) * under
+    report["lens"] = {"photo": photo, "face_blur_mm": ln.get("face_blur_mm", 1.0), "fill": fill}
     if DEBUG:
         ys, xs = np.nonzero(Aw > 0.02)
         y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
