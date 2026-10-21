@@ -22,5 +22,9 @@
   "threshold": 0.2,
   "smooth": "flat",
   "keep_behind": true
+ },
+ "wear": {
+  "$comment": "For tools/photo/wear.py: this shot sees the right end piece's side face (pale grey) within about 2 mm of the front's outer edge, which a face to camera wouldn't show; there what is pale and uncolored is dropped.",
+  "side_face": 2.0
  }
 }

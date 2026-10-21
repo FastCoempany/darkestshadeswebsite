@@ -312,14 +312,28 @@ def main(cfg_path):
     # as the lens openings are, then fitted to the photographed front (an affine fit of the two shapes:
     # the product shot sees a rim's top face from a little above, so its outline sits up to 2 mm higher
     # than the drawing's round the same lens openings, and cut there, the rim lost its top edge), and
-    # given a millimetre of slack, so the photograph's own edge stays.
+    # given a millimetre of slack, so the photograph's own edge stays (its dark edge: see below).
     D = np.diag([np.cos(yaw) * s / ppm, s / ppm]).astype(np.float32)
     Ma = np.hstack([Rm @ D, (Rm @ (-D @ origin_px + np.array([0, drop * s], np.float32)) + anchor)[:, None]])
     sil = cv2.warpAffine(silhouette.astype(np.float32), Ma.astype(np.float32), (W, H), flags=cv2.INTER_LINEAR)
     sil, report["outline_fit"] = fit_outline(sil, Aw, s)
     sil = sil > 0.5
     slack = cfg.get("outline_slack_mm", 1.0) * s
-    sil = cv2.dilate(sil.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(slack) + 1,) * 2))
+    inner = sil
+    sil = cv2.dilate(sil.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * int(slack) + 1,) * 2)) > 0
+    # where the product camera saw an end piece's side face (the shot's settings say so: wear.side_face,
+    # in mm from the front's outer edge), what is pale and uncolored along that edge is the side face,
+    # not the front (the outline's fit takes it in, and it stayed as a pale line along F03's end piece);
+    # elsewhere the edge keeps everything, gloss highlights included
+    side = scfg.get("wear", {}).get("side_face")
+    if side:
+        front_lum = float(np.median(lum(Fw[(Aw > 0.9) & inner])))
+        grey = (Fw.max(-1) - Fw.min(-1)) < 0.35 * Fw.max(-1)
+        filled = ndi.binary_fill_holes(Aw > 0.5)
+        edge = cv2.distanceTransform(filled.astype(np.uint8), cv2.DIST_L2, 5) < float(side) * s
+        pale = edge & (lum(Fw) >= max(0.06, 3 * front_lum)) & grey & (Aw > 0.02)
+        sil &= ~cv2.dilate(pale.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+        report["side_face_px"] = int(pale.sum())
     sil = np.clip(cv2.GaussianBlur(sil.astype(np.float32), (0, 0), 0.35 * s), 0, 1)
     report["outside_outline"] = round(float((Aw * (1 - sil)).sum() / max(Aw.sum(), 1)), 4)
     Aw = Aw * sil
