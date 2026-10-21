@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 hero (H), the photographer's landscape width, at 3:2. The engraved wordmark and the old emblem's bracket come off the near temple. At the top of the near lens SAM left the far temple seen through it out of the lens, where it opens onto the rim; it is added by hand (lenses.add), so the gradient refill takes it as it takes the rest. The temple's edges converge well, so the GCD is placed in the 3D model (tools/photo/temple_gcd.py), with the hinge line as measured (it slants across the face, 0.97 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.3 to 41.4 mm from the hinge, the ruler for F06's other temple views. The first placement drew the GCD a third too short: the print's first letters had been missed, so the temple's turn was overestimated.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F06 hero (H), the photographer's landscape width, at 3:2. The engraved wordmark and the old emblem's bracket come off the near temple. At the top of the near lens SAM left the far temple seen through it out of the lens, where it opens onto the rim; it is added by hand (lenses.add), so the gradient refill takes it as it takes the rest. The polygon's top follows the lens's top edge, measured column by column where the lens shows on either side of the temple (x 1700-1880 and 2100-2300) and joined across it: drawn about 20 px lower at first, it left the temple's dark as a shelf on the rim. The temple's edges converge well, so the GCD is placed in the 3D model (tools/photo/temple_gcd.py), with the hinge line as measured (it slants across the face, 0.97 mm along the temple from top to bottom on the side drawing). The model puts the old print 26.3 to 41.4 mm from the hinge, the ruler for F06's other temple views. The first placement drew the GCD a third too short: the print's first letters had been missed, so the temple's turn was overestimated.",
  "shot": "IMG_3483",
  "frame": "F06",
  "angle": "H",
@@ -11,7 +11,7 @@
    "name": "shield lens, near half (wearer's right)",
    "points": [[1750, 1300], [1600, 1600]],
    "add": [
-    [[1790, 722], [1900, 710], [2045, 692], [2040, 720], [1960, 790], [1880, 890], [1830, 895], [1790, 840]]
+    [[1790, 707], [1850, 696], [1900, 689], [1950, 683], [2000, 678], [2045, 673], [2100, 666], [2100, 690], [2040, 720], [1960, 790], [1880, 890], [1830, 895], [1790, 840]]
    ]
   },
   {

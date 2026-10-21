@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 side (A3) from the wearer's right. The old wordmark printed on the near metal temple comes off. The GCD sits on the right end-piece, placed from the 1:1 drawing as on IMG_3456. The lenses are edge-on and stay as shot.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 side (A3) from the wearer's right. The old wordmark printed on the near metal temple comes off; the polygon reaches lower at its left end, where the old emblem's patch reaches lower than the letters (drawn level with them, it left the patch's bottom edge as a light dash). The GCD sits on the right end-piece, placed from the 1:1 drawing as on IMG_3456. The lenses are edge-on and stay as shot.",
  "shot": "IMG_3450",
  "frame": "F04",
  "angle": "A3",
@@ -8,7 +8,7 @@
  "marks": [
   {
    "name": "old wordmark printed on the near metal temple (inset from its edges)",
-   "poly": [[1888, 2555], [2345, 2528], [2345, 2571], [1888, 2592]],
+   "poly": [[1888, 2555], [2345, 2528], [2345, 2571], [2000, 2597], [1888, 2604]],
    "kind": "light",
    "fill_whole": true,
    "temple": {

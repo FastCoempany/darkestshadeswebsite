@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 three-quarter (A2) from the wearer's right, the whole temple in frame. The engraved wordmark and old emblem come off stroke by stroke. The GCD is placed on the right temple with tools/photo/temple_gcd.py: the temple's face modelled in 3D from its converging edges, from the hinge line as measured. The model puts the old print 23.7 to 38.4 mm from the hinge, the ruler for F03's other temple views.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 three-quarter (A2) from the wearer's right, the whole temple in frame. The engraved wordmark and old emblem come off with the whole polygon rebuilt along the temple (fill_whole): taken off stroke by stroke, the letters' soft shoulders that the stroke detector missed were carried along the rows as dark dashes. The GCD is placed on the right temple with tools/photo/temple_gcd.py: the temple's face modelled in 3D from its converging edges, from the hinge line as measured. The model puts the old print 23.7 to 38.4 mm from the hinge, the ruler for F03's other temple views.",
  "shot": "IMG_3495",
  "frame": "F03",
  "angle": "A2",
@@ -20,7 +20,8 @@
  "marks": [
   {
    "name": "engraved wordmark and old emblem, near temple (inset from the temple's edges)",
-   "poly": [[1010, 924], [1400, 980], [1400, 1180], [1010, 1108]],
+   "poly": [[995, 922], [1400, 980], [1400, 1180], [995, 1105]],
+   "fill_whole": true,
    "kind": "dark",
    "stroke_px": 15,
    "threshold": 6,

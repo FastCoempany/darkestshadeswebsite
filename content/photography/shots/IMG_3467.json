@@ -1,9 +1,9 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. The GCD sits on the right wing of the front (the wearer's right; image left), founder Oct 19 2026, as on the front shot (IMG_3423): over the two pin heads, clear of the lens bay's bevel inlay. Seen this close and at this angle the wing's inner half is foreshortened, so the emblem is placed anchor by anchor, its right tip about 25 px short of the bevel (x 882).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. The GCD sits on the right wing of the front (the wearer's right; image left), founder Oct 19 2026, as on the front shot (IMG_3423): over the two pin heads, clear of the lens bay's bevel inlay. Seen this close and at this angle the wing's inner half is foreshortened, so the emblem is placed anchor by anchor, its right tip about 25 px short of the bevel (x 882). The frame is turned about 25 degrees: its alt text says three-quarter view.",
  "shot": "IMG_3467",
  "frame": "F02",
  "angle": "H",
- "alt": "A1",
+ "alt": "A2",
  "region": [0, 0, 4032, 2268],
  "lenses": [
   {

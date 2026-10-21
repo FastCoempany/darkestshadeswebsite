@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 side (A3) from the wearer's left, low: the shoot has no right side view (every right-side shot is a three-quarter). No old mark shows on this temple; no GCD on the left side.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 side (A3) from the wearer's left, low: the shoot has no right side view (every right-side shot is a three-quarter). No old mark shows on this temple; no GCD on the left side. Seen from behind, each lens is bounded by the frame's back bevel round it and, on the bridge side, by the dark S of the nose pad's back: SAM is told both are not lens (`exclude`), and the lenses are not made convex (the hull spanned the S and the bevel, and the clean tint flooded them). The near lens's edge by the hinge, where SAM's mask stopped short of it beside the nose pad's S, is added by hand (lenses.add), up to the S's dark edge as measured: left out, the strip of old lens there stood darker than the clean tint, a small bump (third review).",
  "shot": "IMG_3526",
  "frame": "F05",
  "angle": "A3",
@@ -9,13 +9,27 @@
  "lenses": [
   {
    "name": "near lens (wearer's left)",
-   "points": [[700, 2750], [550, 2600]],
-   "convex": true
+   "points": [[800, 2650], [760, 2500]],
+   "exclude": [[565, 2650], [600, 2480], [965, 2720], [975, 2840]],
+   "add": [
+    [
+     [945, 2876],
+     [955, 2877],
+     [957, 2880],
+     [963, 2886],
+     [966, 2892],
+     [970, 2898],
+     [975, 2904],
+     [977, 2909],
+     [960, 2912],
+     [945, 2905]
+    ]
+   ]
   },
   {
    "name": "far lens (wearer's right)",
-   "points": [[1300, 2550], [1250, 2400]],
-   "convex": true
+   "points": [[1400, 2550], [1350, 2420]],
+   "exclude": [[1200, 2600], [1250, 2720], [1160, 2470]]
   }
  ],
  "lens_cleanup": {

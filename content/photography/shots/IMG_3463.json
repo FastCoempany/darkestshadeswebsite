@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 GCD detail (A6): the right end-piece up close from the front right; the dark tent edge at the bottom of the picture is framed out. The old wordmark printed on the metal temple comes off. The GCD is placed from the 1:1 drawing as on IMG_3456.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F04 GCD detail (A6): the right end-piece up close from the front right; the dark tent edge at the bottom of the picture is framed out. The old wordmark printed on the metal temple comes off. Out of focus, the print's blur reaches well past its letters: the polygon runs from clean temple to clean temple along it (ended inside the blur of the emblem patch and the last S, the rows rebuilt between its ends came out lighter than the temple, a stripe ending in a pale blob). The GCD is placed from the 1:1 drawing as on IMG_3456. lens_cleanup.tint: the lenses take F04's tint as the front view measures it (IMG_3442, median transmission 0.038, 0.038, 0.049), not the one this close-up measures (0.126, 0.128, 0.14: seen at a steep angle with the tent's light on them, they read about three times lighter than F04's dark grey lenses are); founder, Oct 20 2026, 00-decisions.md #38. The near lens's lower right, where SAM's mask stopped 6 to 9 px short of the rim, is added by hand (lenses.add), to where the lens meets the rim's shadow as measured column by column: left out, the photograph's lighter lens showed there as a light sliver beside the dark tint (fourth review).",
  "shot": "IMG_3463",
  "frame": "F04",
  "angle": "A6",
@@ -9,7 +9,26 @@
   {
    "name": "near lens (wearer's right)",
    "points": [[2200, 2800], [2100, 2400]],
-   "convex": true
+   "convex": true,
+   "add": [
+    [
+     [2335, 3312],
+     [2350, 3302],
+     [2360, 3290],
+     [2370, 3275],
+     [2380, 3258],
+     [2390, 3238],
+     [2400, 3215],
+     [2410, 3186],
+     [2400, 3200],
+     [2390, 3222],
+     [2380, 3240],
+     [2370, 3256],
+     [2360, 3273],
+     [2350, 3289],
+     [2335, 3300]
+    ]
+   ]
   },
   {
    "name": "far lens (wearer's left)",
@@ -20,7 +39,7 @@
  "marks": [
   {
    "name": "old wordmark printed on the metal temple (inset from its edges)",
-   "poly": [[238, 2497], [712, 2380], [712, 2481], [238, 2587]],
+   "poly": [[190, 2509], [790, 2361], [790, 2463], [190, 2597]],
    "kind": "light",
    "fill_whole": true,
    "temple": {
@@ -32,7 +51,8 @@
  "lens_cleanup": {
   "tophat_px": 31,
   "threshold": 0.05,
-  "smooth": "flat"
+  "smooth": "flat",
+  "tint": [0.038, 0.038, 0.049]
  },
  "gcd": {
   "view": "yaw-31p-15",

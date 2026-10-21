@@ -1,9 +1,9 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 hero (H), front on and close, landscape: the photographer's width is kept, at 3:2. The right temple's outer face shows end-on at the far left: its old print comes off (rebuilt along the face, which converges hard toward the back) and the GCD goes on as the temple's angle shows it, a narrow sliver near the hinge. It is placed with the old print as a ruler (its ends 23.7 and 38.4 mm from the hinge, from the 3D model on IMG_3495). The temple starts where its face meets the end-piece's narrow side, about 7 mm short of the front's edge: the first placement had taken that edge for the hinge and put the GCD on the end-piece. The striped light panel mirrored in the right lens goes; the far temple seen through the left lens stays. By the bridge the image-left lens turns into its bevel along a dark line that the dust clean-up took for dust inside SAM's mask and left past it, ragged: it is kept (lens_cleanup.keep).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F03 hero (H), front on and close, landscape: the photographer's width is kept, at 3:2. The right temple's outer face shows end-on at the far left: its old print comes off (rebuilt along the face, which converges hard toward the back) and the GCD goes on as the temple's angle shows it, a narrow sliver near the hinge. It is placed with the old print as a ruler (its ends 23.7 and 38.4 mm from the hinge, from the 3D model on IMG_3495). The temple starts where its face meets the end-piece's narrow side, about 7 mm short of the front's edge: the first placement had taken that edge for the hinge and put the GCD on the end-piece. The striped light panel mirrored in the right lens goes; the far temple seen through the left lens stays. By the bridge the image-left lens turns into its bevel along a dark line that the dust clean-up took for dust inside SAM's mask and left past it, ragged: it is kept (lens_cleanup.keep). At the image-right lens's corner by the bridge SAM stopped up to 20 px short of the lens, where the far temple seen through it runs into the rim: the corner is added by hand (lenses.add), along the edge as measured row by row and column by column; left out, the lens there was taken for a pale strip of frame. alt A2: the hero is turned like F02's (the far lens about 0.84 the width of the near one), so its alt text says three-quarter view, not front view.",
  "shot": "IMG_3497",
  "frame": "F03",
  "angle": "H",
- "alt": "A1",
+ "alt": "A2",
  "region": [0, 0, 4032, 2268],
  "tent_fill": "rows",
  "lenses": [
@@ -15,7 +15,37 @@
   {
    "name": "left lens (image right)",
    "points": [[3100, 1300], [2900, 1450]],
-   "convex": true
+   "convex": true,
+   "add": [
+    [
+     [2640, 1040],
+     [2642, 1000],
+     [2645, 970],
+     [2652, 945],
+     [2660, 920],
+     [2670, 900],
+     [2680, 880],
+     [2693, 860],
+     [2708, 840],
+     [2725, 820],
+     [2747, 800],
+     [2760, 790],
+     [2780, 775],
+     [2800, 762],
+     [2820, 752],
+     [2840, 742],
+     [2860, 734],
+     [2880, 727],
+     [2900, 721],
+     [2930, 714],
+     [2960, 709],
+     [2960, 780],
+     [2850, 800],
+     [2760, 860],
+     [2700, 950],
+     [2680, 1040]
+    ]
+   ]
   }
  ],
  "marks": [

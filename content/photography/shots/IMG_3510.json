@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 front (A1). No old mark shows from the front.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 front (A1). No old mark shows from the front. The image-right lens takes two more points low down: with the two upper ones only, SAM stopped at the far temple's end and the tent's floor seen through the lens, and the lens below a V from there to its sides stayed as photographed, with a seam against the refill.",
  "shot": "IMG_3510",
  "frame": "F05",
  "angle": "A1",
@@ -13,7 +13,7 @@
   },
   {
    "name": "left lens (image right)",
-   "points": [[2300, 3150], [2550, 3000]],
+   "points": [[2300, 3150], [2550, 3000], [2300, 3480], [2650, 3450]],
    "convex": true
   }
  ],

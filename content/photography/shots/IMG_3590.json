@@ -1,11 +1,12 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 hero (H), front on, the photographer's landscape width, at 3:2. The gradient lenses are refilled from their own tint, as on the front view. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34).",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F08 hero (H), front on, the photographer's landscape width, at 3:2. The gradient lenses are refilled from their own tint, as on the front view. F08 shows no GCD: the shoot has no outside view of its right temple (00-decisions.md #34). No shadow zone beside the frame (shadow_zone.side 0): the end pieces reach almost to the picture's sides, so the zone's 150 px beside them took in all the tent there, the tent model came in from the far side of each row, and the tent beside the end pieces showed as a grey block below a straight line level with their lowest point.",
  "shot": "IMG_3590",
  "frame": "F08",
  "angle": "H",
  "alt": "A1",
  "region": [0, 0, 4032, 2268],
  "tent_fill": "rows",
+ "shadow_zone": {"side": 0},
  "lenses": [
   {
    "name": "wearer's right lens (image left)",

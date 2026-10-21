@@ -1,9 +1,9 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 hero (H), front on and close, landscape: the photographer's width is kept, at 3:2, the frame's ends running off the edges. The temples seen through the bridge gap stay.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F05 hero (H), front on and close, landscape: the photographer's width is kept, at 3:2, the frame's ends running off the edges. The temples seen through the bridge gap stay. alt A2: the hero is turned like F02's (the far lens about 0.68 the width of the near one), so its alt text says three-quarter view, not front view.",
  "shot": "IMG_3536",
  "frame": "F05",
  "angle": "H",
- "alt": "A1",
+ "alt": "A2",
  "region": [0, 0, 4032, 2268],
  "tent_fill": "rows",
  "lenses": [

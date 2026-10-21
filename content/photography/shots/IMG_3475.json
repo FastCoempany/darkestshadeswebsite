@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 GCD detail (A6): the right wing up close from the front right, framed on the wing. The GCD replaces the two pin heads as on IMG_3423: centered between them, scaled by their spacing (2.64 mm) and height (1.68 mm); the wing's face is seen at about 40 degrees, so the emblem is foreshortened the same way.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F02 GCD detail (A6): the right wing up close from the front right, framed on the wing. The GCD replaces the two pin heads as on IMG_3423: centered between them, scaled by their spacing (2.64 mm) and height (1.68 mm); the wing's face is seen at about 40 degrees, so the emblem is foreshortened the same way. lens_cleanup.keep: the near lens's dark inner edge at its left side, which the dust cleanup took for a speck and filled lighter; read against that patch the edge came out with a dark speck (second review).",
  "shot": "IMG_3475",
  "frame": "F02",
  "angle": "A6",
@@ -28,7 +28,10 @@
  "lens_cleanup": {
   "tophat_px": 31,
   "threshold": 0.05,
-  "smooth": "flat"
+  "smooth": "flat",
+  "keep": [
+   [[503, 1612], [530, 1612], [530, 1652], [503, 1652]]
+  ]
  },
  "gcd": {
   "view": "yaw40",

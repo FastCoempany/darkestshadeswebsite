@@ -1,5 +1,5 @@
 {
- "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 side (A3), low, from the wearer's left: the shoot has no clean right profile. The engraved wordmark on the left temple comes off stroke by stroke, by frequency-selective reconstruction (rows streaked the tortoise), and nothing goes on (the GCD is on the right only). A round print on the far (right) temple's inner face, seen through the far lens, comes off too: the band, as seen on the print's right, carried on to the rim (rows rebuilt from both ends streaked); the blue tortoise along the band's bottom stays. The view is a low three-quarter from the left, and its alt text says so.",
+ "$comment": "Per-shot settings for tools/photo/clean_lightbox.py. Coordinates are pixels in the oriented original. F01 side (A3), low, from the wearer's left: the shoot has no clean right profile. The engraved wordmark on the left temple comes off stroke by stroke, by frequency-selective reconstruction (rows streaked the tortoise), and nothing goes on (the GCD is on the right only). A round print on the far (right) temple's inner face, seen through the far lens, comes off too: the band, as seen on the print's right, carried on to the rim (rows rebuilt from both ends streaked); the blue tortoise along the band's bottom stays, and the print's lower arc over it takes the smoothest fill through its border (left on the blue, it showed as a pale mottled streak). The view is a low three-quarter from the left, and its alt text says so. lens_cleanup.keep: the curved band seen through the near lens, rim to rim, about 10 px wide, passed for dust and was filled out where it was narrow; only its wide parts were kept, a floating dash and a stub (third review).",
  "shot": "IMG_3572",
  "frame": "F01",
  "angle": "A3",
@@ -43,12 +43,81 @@
    },
    "side": "right",
    "texture_from": [[176, 226, 274, 226], [129, 180, 226, 277]]
+  },
+  {
+   "name": "the round print's lower arc, over the blue tortoise below the band (defocused: the smoothest fill through its border)",
+   "kind": "light",
+   "fill_whole": true,
+   "fill": "smooth",
+   "poly": [
+    [128, 2668],
+    [140, 2672],
+    [165, 2672],
+    [172, 2681],
+    [205, 2681],
+    [212, 2670],
+    [224, 2668],
+    [224, 2688],
+    [205, 2694],
+    [165, 2694],
+    [140, 2690],
+    [128, 2684]
+   ]
   }
  ],
  "lens_cleanup": {
   "tophat_px": 31,
   "threshold": 0.2,
   "smooth": "flat",
-  "keep_behind": true
+  "keep_behind": true,
+  "keep": [
+   [
+    [547, 2785],
+    [560, 2795],
+    [571, 2805],
+    [580, 2815],
+    [588, 2825],
+    [594, 2835],
+    [599, 2845],
+    [603, 2855],
+    [607, 2865],
+    [610, 2875],
+    [613, 2885],
+    [616, 2895],
+    [619, 2905],
+    [620, 2920],
+    [620, 2930],
+    [619, 2940],
+    [617, 2950],
+    [615, 2965],
+    [613, 2980],
+    [612, 2990],
+    [612, 3000],
+    [611, 3010],
+    [612, 3020],
+    [613, 3030],
+    [615, 3040],
+    [619, 3050],
+    [623, 3062],
+    [612, 3062],
+    [606, 3045],
+    [598, 3030],
+    [591, 3015],
+    [583, 3000],
+    [574, 2980],
+    [570, 2970],
+    [564, 2955],
+    [559, 2940],
+    [554, 2925],
+    [548, 2905],
+    [543, 2885],
+    [537, 2865],
+    [531, 2845],
+    [525, 2825],
+    [518, 2800],
+    [512, 2780],
+    [530, 2775]
+   ]
+  ]
  }
 }
