@@ -49,6 +49,8 @@ python3 tools/photo/clean_lightbox.py content/photography/shots/IMG_3596.json   
 python3 tools/photo/export_web.py                                              # every final → assets/photography/ (AVIF, WebP, JPEG) + MANIFEST.csv, masters → dam/product/
 python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --face-dark 40 --hinge-x 1603 --temple-mm 9 --face-mm 8.5 --length-mm 8.8 --print 1025,982 1228,1013 1232,1060 1030,1028   # GCD placement on a temple, for the shot's settings
 python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json      # a cast member wearing a cleaned frame → work/people/
+python3 tools/blender/frame3d.py F04 --check --out /tmp/F04.png                 # a frame rebuilt in 3D from its drawings, upright in a light tent
+python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   # the cast member wearing the 3D frame in the scene's light → work/people/<id>-3d/ (depth model: work/models/, head3d.py)
 ```
 App commands (`npm run dev`, `npm run storybook`, `npm run test:visual`) are added in phase 0.
 

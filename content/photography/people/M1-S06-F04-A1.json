@@ -50,5 +50,6 @@
  "lens": {
   "photo": 0.0,
   "face_blur_mm": 0.3
- }
+ },
+ "through_lens": 0.4
 }
