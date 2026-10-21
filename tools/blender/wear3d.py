@@ -212,7 +212,7 @@ def glint(target, g, white):
     v = np.cross(d, u)
     w2, h2 = g["width"] * 500, g["height"] * 500
     ob = mesh_object("glint", np.array([c - u * w2 - v * h2, c + u * w2 - v * h2, c + u * w2 + v * h2, c - u * w2 + v * h2]),
-                     np.array([[0, 1, 2, 3]]))
+                     np.array([[0, 1, 2, 3]]), np.array([[0, 0], [1, 0], [1, 1], [0, 1]], np.float64))
     m = bpy.data.materials.new("glint")
     m.use_nodes = True
     nt = m.node_tree
@@ -221,6 +221,32 @@ def glint(target, g, white):
             nt.nodes.remove(n)
     em = nt.nodes.new("ShaderNodeEmission")
     em.inputs["Strength"].default_value = g["radiance"] * white
+    if g.get("soft", True):
+        # bright in the middle, fading to nothing at its edges (a diffused card, not a hard-edged box:
+        # its reflection is a graded sheen, not a sticker)
+        tc = nt.nodes.new("ShaderNodeTexCoord")
+        sub = nt.nodes.new("ShaderNodeVectorMath")
+        sub.operation = "SUBTRACT"
+        sub.inputs[1].default_value = (0.5, 0.5, 0.0)
+        ln = nt.nodes.new("ShaderNodeVectorMath")
+        ln.operation = "LENGTH"
+        mr = nt.nodes.new("ShaderNodeMapRange")
+        mr.inputs["From Min"].default_value = 0.0
+        mr.inputs["From Max"].default_value = 0.5
+        mr.inputs["To Min"].default_value = 1.0
+        mr.inputs["To Max"].default_value = 0.0
+        pw = nt.nodes.new("ShaderNodeMath")
+        pw.operation = "POWER"
+        pw.inputs[1].default_value = g.get("falloff", 1.6)
+        mul = nt.nodes.new("ShaderNodeMath")
+        mul.operation = "MULTIPLY"
+        mul.inputs[1].default_value = g["radiance"] * white
+        nt.links.new(tc.outputs["UV"], sub.inputs[0])
+        nt.links.new(sub.outputs["Vector"], ln.inputs[0])
+        nt.links.new(ln.outputs["Value"], mr.inputs["Value"])
+        nt.links.new(mr.outputs["Result"], pw.inputs[0])
+        nt.links.new(pw.outputs["Value"], mul.inputs[0])
+        nt.links.new(mul.outputs["Value"], em.inputs["Strength"])
     nt.links.new(em.outputs[0], [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0].inputs["Surface"])
     ob.data.materials.append(m)
     ob.visible_camera = False
@@ -551,7 +577,11 @@ def render_layers(cfg, out, img, lin, H, W, samples):
             # portrait as it was (dividing its old light out there, by the depth map's estimate of it,
             # printed that estimate's errors on the face as blotches)
             w_key = face_mask(L, s, H, W) * lit_weight(lin, s, skin)
-            key_part = w_key * lum(k_win[..., :3]) / e_ + (1 - w_key) * win_frac
+            # off the face (ears, hair) the key only where the portrait shows it reached (the depth map
+            # has no back to the head to shade the far ear), and `off_face` of it (they turn from the
+            # light and sit further back: the near ear a stop under the cheek)
+            off_face = wn.get("off_face", 1.0) * lit_weight(lin, s, skin)
+            key_part = w_key * lum(k_win[..., :3]) / e_ + (1 - w_key) * win_frac * off_face
             win_factor = np.where(e_old > 1e-4, np.clip(key_part + dark * (1 - win_frac), 0, 1.6), dark)
         # where the head's mesh has gaps (it leaves out the steps in depth at the ears' and hair's edges),
         # the light carries on from round them, so the window's edge does not cut there
@@ -760,13 +790,13 @@ def composite(cfg, out, img, lin, H, W, report):
     # (about 2 mm), softened, darkening what lies under it
     k_ = report.get("key_used", {})
     if t_a.max() > 0.05 and k_:
-        gap = look.get("temple_gap_mm", 2.0) * report["px_per_mm"]
+        gap = look.get("temple_gap_mm", 1.5) * report["px_per_mm"]
         dx = -gap * math.tan(math.radians(k_.get("az", -45.0)))
         dy = gap * math.tan(math.radians(k_.get("el", 25.0)))
         M = np.float32([[1, 0, dx], [0, 1, dy]])
         sh_ = cv2.warpAffine(t_a[..., 0], M, (W, H))
-        sh_ = cv2.GaussianBlur(sh_, (0, 0), max(0.6 * gap / 2, 1.0))
-        base = base * (1 - look.get("temple_shadow", 0.7) * np.clip(sh_, 0, 1))[..., None]
+        sh_ = cv2.GaussianBlur(sh_, (0, 0), look.get("temple_shadow_soft_px", 0.8))
+        base = base * (1 - look.get("temple_shadow", 0.75) * np.clip(sh_, 0, 1) * (1 - t_a[..., 0]))[..., None]
     comp = base * (1 - t_a) + t_rgb
     comp = comp * (1 - f_a) + f_rgb
     sys.path.insert(0, str(ROOT / "tools" / "photo"))
@@ -780,6 +810,10 @@ def composite(cfg, out, img, lin, H, W, report):
     g = cfg.get("grade", True)
     gk = g if isinstance(g, dict) else {}
     final = ss90(srgb, size=H / 1280, **gk) if g else srgb
+    if look.get("grain_add"):
+        # a film's grain is in the shadows too (the grade's is in proportion to the light): one even
+        # pass of fine monochrome grain, which also dithers the dark gradients against banding
+        final = np.clip(final + rng.normal(0, look["grain_add"], final.shape[:2]).astype(np.float32)[..., None], 0, 1)
     before = ss90(lin_to_srgb(np.clip(lin, 0, 1)), size=H / 1280, **gk) if g else lin_to_srgb(lin)
     # the crop: a 3:4 portrait cut to the gallery's 4:5, a quarter of what goes from the top and the rest
     # from the bottom (the head sits in the upper half), as tools/photo/wear.py does

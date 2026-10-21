@@ -48,7 +48,8 @@ MM = 0.001
 # running `straight` mm back from the hinge, then curving `drop` mm down behind the ear.
 FRAMES = {
     "F04": {"depth": 7.0, "edge_r": 3.2, "back_r": 0.9, "dome": 0.9,
-            "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.35}, "lip_r": 0.9,
+            "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.45},
+            "lip_r": 0.9,
             "lens": {"radius": 260.0, "thick": 1.6, "inset": 1.4},
             "tilt": 10.0,
             "pads": {"x": 10.8, "y": -4.0, "back": 4.5, "r": (1.6, 5.0, 3.0)},
@@ -227,6 +228,7 @@ def rim_fields(sh, cfg):
     z_in = T / 2 - dr * (1 - u * u * (3 - 2 * u))
     band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
     z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
+    z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
     z_lip = T / 2 - dr - lr + rounded(d_in, lr)
     # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
     # edge and the ring's step
@@ -450,7 +452,7 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(glass.outputs[0], mix.inputs[1])
     nt.links.new(filt.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
-    return {"acetate": principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.035, ior=1.49),
+    return {"acetate": principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49),
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             "lens": lens}
 
