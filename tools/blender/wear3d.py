@@ -163,7 +163,7 @@ def key_light(target, k, power):
     az, el = math.radians(k["az"]), math.radians(k["el"])
     d = Vector((math.sin(az) * math.cos(el), math.sin(el), math.cos(az) * math.cos(el)))
     li = bpy.data.lights.new("key", "AREA")
-    if "size_y" in k:                     # a softbox
+    if k.get("size_y"):                   # a softbox
         li.shape = "RECTANGLE"
         li.size, li.size_y = k["size"], k["size_y"]
     else:
@@ -319,18 +319,28 @@ def place(parts, P, ax, kps, s, D, box, H, W, f_px, cfg, report):
             lo = mid
         else:
             hi = mid
-    t = hi
+    t_pads = hi
+    cornea = pupil_mid + R[:, 2] * 3.0
+
+    def vertex_at(t_):
+        lens_c = np.concatenate([world_points(p, R, o0 + R[:, 2] * t_) for p in lenses])
+        return float(np.min(np.abs((lens_c - cornea) @ R[:, 2])))
+
+    # seated: the lenses `vertex_mm` from the corneas, as a fitted frame sits (the pads then press into
+    # the nose's soft sides a little); not nearer the cheeks or brows than `clearance_mm`
+    t = t_pads
+    if cfg.get("vertex_mm"):
+        t = t_pads - (vertex_at(t_pads) - cfg["vertex_mm"])
+    clearance = cfg.get("clearance_mm", 1.5)
     clear = float(-np.nanmax(penetration(back_pts, t)))
     lens_clear = float(-np.nanmax(penetration(lens_pts, t)))
-    need = max(cfg.get("clearance_mm", 1.5) - clear, cfg.get("clearance_mm", 1.5) - lens_clear, 0.0)
+    need = max(clearance - clear, clearance - lens_clear, 0.0)
     t += need
     o = o0 + R[:, 2] * t
-    lens_c = np.concatenate([world_points(p, R, o) for p in lenses])
-    cornea = pupil_mid + R[:, 2] * 3.0
-    vertex = float(np.min(np.abs((lens_c - cornea) @ R[:, 2])))
-    report["placement"] = {"origin_mm": [round(float(v), 1) for v in o], "pads_touch_at_mm": round(t - need, 1),
-                           "moved_forward_mm": round(need, 1), "rim_to_skin_mm": round(clear + need, 1),
-                           "lens_to_skin_mm": round(lens_clear + need, 1), "vertex_mm": round(vertex, 1)}
+    report["placement"] = {"origin_mm": [round(float(v), 1) for v in o], "pads_touch_at_mm": round(t_pads, 1),
+                           "seated_at_mm": round(t, 1), "pads_into_nose_mm": round(float(np.nanmax(penetration(pad_pts, t))), 1),
+                           "rim_to_skin_mm": round(clear + need, 1), "lens_to_skin_mm": round(lens_clear + need, 1),
+                           "vertex_mm": round(vertex_at(t), 1)}
     return o
 
 
@@ -385,7 +395,9 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     cam.data.shift_x = (head3d.cx_(W) - W / 2) / max(W, H)
     cam.data.shift_y = -(H / 2 - head3d.cy_(H)) / max(W, H)
     report["principal_point"] = [round(head3d.cx_(W), 1), round(head3d.cy_(H), 1)]
-    spec = dict(SCENES[cfg["scene"]])
+    spec = json.loads(json.dumps(SCENES[cfg["scene"]]))
+    for k_, v_ in cfg.get("scene_spec", {}).items():
+        spec[k_] = dict(spec.get(k_, {}), **v_) if isinstance(v_, dict) and isinstance(spec.get(k_), dict) else v_
     spec["key"] = dict(spec["key"], **cfg.get("key", {}))
     report["key_used"] = spec["key"]
 
@@ -441,6 +453,37 @@ def render_layers(cfg, out, img, lin, H, W, samples):
                        "room": round(spec["fill"] * target, 4)}
     bpy.data.objects.remove(card)
 
+    # a window: the key only through a hole in a black card between it and the face (a band of light
+    # across the eyes, a patch on one side), everything else falling to `dark` of what it was. Its
+    # light on the face: the head lit by the key alone, through the card over without it.
+    win_light = None
+    if spec.get("window"):
+        wn = spec["window"]
+        cards = window_card(eye_mid, kdir, spec["key"]["dist"] * 1000, wn)
+        for g in cards:
+            g.hide_render = True
+        room(sc, 0.0, 1.0, 1.0)
+        head.hide_render = False
+        sc.cycles.samples = max(16, samples // 2)
+        set_region(sc, cam, [head], 0.0, H, W)
+        k_open = render(sc, out / "layers" / "key_open.exr")
+        for g in cards:
+            g.hide_render = False
+        k_win = render(sc, out / "layers" / "key_window.exr")
+        lit_ = lum(k_open[..., :3]) > 1e-4
+        win_light = np.zeros((H, W), np.float32)
+        win_light[lit_] = np.clip(lum(k_win[..., :3])[lit_] / lum(k_open[..., :3])[lit_], 0, 1)
+        # where the head's mesh has gaps (it leaves out the steps in depth at the ears' and hair's edges),
+        # the light carries on from round them, so the window's edge does not cut there
+        cov = k_open[..., 3] > 0.5
+        near = cv2.dilate(cov.astype(np.uint8), np.ones((31, 31), np.uint8)) > 0
+        gaps = (near & ~cov).astype(np.uint8)
+        win_light = cv2.inpaint((win_light * 255).astype(np.uint8), gaps, 7, cv2.INPAINT_TELEA).astype(np.float32) / 255
+        win_light = cv2.GaussianBlur(win_light, (0, 0), 1.5)
+        room(sc, spec["fill"] * target, spec["room"]["top"], spec["room"]["bottom"],
+             spec["room"].get("camera_side", 0.0) * target)
+        report["window"] = wn
+
     # 1, 2: the head alone, white; and with the frame casting its shadows (not seen itself)
     head.hide_render = False
     sc.cycles.samples = samples
@@ -460,6 +503,9 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     ratio[lit] = np.clip(shaded[..., :3][lit] / np.maximum(bare[..., :3][lit], 1e-7), 0, 1.0)
     w = shadow_weight(lin, L, s, skin) * edge
     ratio = 1 - w[..., None] * (1 - ratio)
+    if win_light is not None:
+        dark = spec["window"].get("dark", 0.06)
+        ratio = ratio * (win_light + dark * (1 - win_light))[..., None]
     np.save(out / "layers" / "ratio.npy", ratio.astype(np.float16))
 
     # 3: the front and lenses; the head shows the shaded portrait (through the lenses, in the gloss)
@@ -487,6 +533,40 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))
     return report
+
+
+def window_card(target, kdir, light_mm, wn):
+    """Black flags between the key and the face, square to the light, leaving a window that lets
+    through a `width_mm` x `height_mm` patch of light at the face (centred on `target`, moved by
+    `offset_mm`: right and up as the camera sees it). The flags above and below stand `dist_mm` in
+    front of the face, those at the sides `side_dist_mm` (nearer the light, softer edges). Not seen by
+    the camera."""
+    d = np.asarray(kdir, np.float64) / np.linalg.norm(kdir)
+    # the flags' edges run along the picture's horizontal as the light sees it, so a band of light
+    # lies level across the face whatever the light's height (an edge square to the light would tilt)
+    u = np.array([1.0, 0.0, 0.0]) - d[0] * d
+    u /= np.linalg.norm(u)
+    v = np.cross(d, u)
+    black = bpy.data.materials.new("card")
+    black.use_nodes = True
+    black.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1)
+    black.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 1.0
+    big = 1500.0
+    obs = []
+    for which, gd in (("rows", wn.get("dist_mm", 250.0)), ("sides", wn.get("side_dist_mm", wn.get("dist_mm", 250.0)))):
+        k = (light_mm - gd) / light_mm                   # the light's cone, flag to face
+        w2, h2 = wn["width_mm"] / 2 * k, wn["height_mm"] / 2 * k
+        ox, oy = [o * k for o in wn.get("offset_mm", (0.0, 0.0))]
+        c = np.asarray(target, np.float64) + d * gd + u * ox + v * oy
+        rects = ((-big, big, h2, big), (-big, big, -big, -h2)) if which == "rows" else \
+            ((-big, -w2, -big, big), (w2, big, -big, big))
+        for (x0, x1, y0, y1) in rects:
+            V = np.array([c + u * x0 + v * y0, c + u * x1 + v * y0, c + u * x1 + v * y1, c + u * x0 + v * y1])
+            ob = mesh_object("card", V, np.array([[0, 1, 2, 3]]))
+            ob.data.materials.append(black)
+            ob.visible_camera = False
+            obs.append(ob)
+    return obs
 
 
 def region_feather(sc, H, W, frac):
