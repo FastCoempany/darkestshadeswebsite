@@ -44,17 +44,27 @@ MM = 0.001
 # mm behind the ring; tilt: pantoscopic tilt as worn; pads: the nose pads behind the bridge (top
 # and side views: centre x, y, how far behind the front's back, radii); hinge: where the temple
 # starts, behind the front's face and below its top (side view); endpiece: the wedge from the front's
-# back to the hinge, from `top` to `bottom` mm below the front's top; temple: "wire" (round, radius)
-# running `straight` mm back from the hinge, then curving `drop` mm down behind the ear.
+# back to the hinge, from `top` to `bottom` mm below the front's top; `metal`: it is polished black
+# metal, a plate over the tab's outer side standing `plate` mm proud of it, run on back to the hinge as
+# the wedge, one flat outer face (the founder's desk shots, Oct 22 2026: it mirrors the room); temple:
+# "wire" (round, `radius`) or "strip" (a flat bar `height` tall and `thick` across, side and top
+# views), running `straight` mm back from the hinge, then curving `drop` mm down behind the ear; from
+# `tip_from` mm along it the acetate tip, `tip` = (height, width) mm. Meshing: mesh_step (the front's
+# grid, in drawing pixels of 0.05 mm), edge_floor (mm: right at an edge the height runs level along
+# it), exact_distance (edges measured to the outline smoothed into curves, not to its pixel steps);
+# all three keep a three-quarter view's gloss free of streaks. F04's edge_r and back_r are rounder
+# than the side view's line suggests: the desk shots show a pillowy side, not a flat wall.
 FRAMES = {
-    "F04": {"depth": 7.0, "edge_r": 3.2, "back_r": 0.9, "dome": 0.9,
-            "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.45},
-            "lip_r": 0.9,
+    "F04": {"depth": 7.0, "edge_r": 3.5, "back_r": 2.0, "dome": 0.9,
+            "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
+            "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
             "lens": {"radius": 260.0, "thick": 1.6, "inset": 1.4},
             "tilt": 10.0,
             "pads": {"x": 10.8, "y": -4.0, "back": 4.5, "r": (1.6, 5.0, 3.0)},
-            "hinge": {"back": 23.0, "down": 9.5}, "endpiece": {"top": 1.5, "bottom": 17.0, "inset": 4.0},
-            "temple": {"kind": "wire", "radius": 1.05, "straight": 75.0, "drop": 36.0}},
+            "hinge": {"back": 23.0, "down": 9.5},
+            "endpiece": {"top": 1.5, "bottom": 17.0, "inset": 4.0, "metal": True, "plate": 0.5},
+            "temple": {"kind": "strip", "height": 2.75, "thick": 1.2, "straight": 75.0, "drop": 36.0,
+                       "tip_from": 72.0, "tip": (3.0, 2.4)}},
 }
 
 
@@ -174,11 +184,14 @@ def field_mesh(name, mask, zf, zb, origin_px, ppm, step=1):
     for a1, b1 in edge:
         nb.setdefault(a1, []).append(b1)
         nb.setdefault(b1, []).append(a1)
-    for _ in range(4):
-        newP = P.copy()
-        for v in bv:
-            newP[v] = 0.5 * P[v] + 0.5 * P[nb[v]].mean(0)
-        P = newP
+    # the outline's pixel steps smoothed (Taubin: a shrinking step, then a growing one, so curves keep
+    # their size); the walls' facets then turn evenly round it
+    nbl = {v: np.asarray(nb[v]) for v in bv}
+    bvl = np.asarray(list(bv))
+    for _ in range(40):
+        for lam in (0.5, -0.53):
+            avg = np.stack([P[nbl[v]].mean(0) for v in bvl])
+            P[bvl] = P[bvl] + lam * (avg - P[bvl])
     V = np.concatenate([np.stack([P[:, 0], P[:, 1], zf[ys, xs]], 1), np.stack([P[:, 0], P[:, 1], zb[ys, xs]], 1)]) * MM
     F = np.concatenate([front, back, side])
     me = bpy.data.meshes.new(name)
@@ -191,7 +204,17 @@ def field_mesh(name, mask, zf, zb, origin_px, ppm, step=1):
     me.polygons.foreach_set("loop_total", np.full(len(F), 4))
     me.update(calc_edges=True)
     me.validate()
-    me.polygons.foreach_set("use_smooth", np.ones(len(F), bool))
+    # smooth shading, with the walls' rims sharp: a wall shades smooth along the outline but is never
+    # swept to the face's or the back's normal across its height (that mirrored the room as bands on
+    # the walls in a three-quarter view)
+    me.polygons.foreach_set("use_smooth", np.ones(len(me.polygons), bool))
+    ev = np.zeros(len(me.edges) * 2, np.int64)
+    me.edges.foreach_get("vertices", ev)
+    ev = np.sort(ev.reshape(-1, 2), 1)
+    rim = np.sort(np.concatenate([edge, edge + n]), 1)
+    sharp = (np.isin(ev[:, 0] * (2 * n + 1) + ev[:, 1], rim[:, 0] * (2 * n + 1) + rim[:, 1]))
+    attr = me.attributes.get("sharp_edge") or me.attributes.new("sharp_edge", "BOOLEAN", "EDGE")
+    attr.data.foreach_set("value", sharp)
     ob = bpy.data.objects.new(name, me)
     bpy.context.scene.collection.objects.link(ob)
     return ob
@@ -202,6 +225,36 @@ def rounded(d, r):
     gained d mm in from the edge)."""
     t = np.clip(d, 0, r)
     return np.sqrt(np.maximum(r * r - (r - t) ** 2, 0))
+
+
+def curve_distance(region, shape, d_edt, ppm, near_mm=6.0, sigma_px=4.0):
+    """Distance (mm) from the pixels of `region` to the outline of `shape` smoothed into curves, for
+    pixels within `near_mm` of it (the rest keep the pixel distance `d_edt`, smooth enough that far in):
+    the outline traced at pixel level, each contour smoothed along itself, densified, then the nearest
+    point."""
+    from scipy.ndimage import gaussian_filter1d
+    from scipy.spatial import cKDTree
+    cs, _ = cv2.findContours(shape.astype(np.uint8), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+    pts = []
+    for c in cs:
+        c = c[:, 0, :].astype(np.float64)
+        if len(c) < 30:
+            continue
+        c = np.stack([gaussian_filter1d(c[:, 0], sigma_px, mode="wrap"), gaussian_filter1d(c[:, 1], sigma_px, mode="wrap")], 1)
+        seg = np.diff(np.vstack([c, c[:1]]), axis=0)
+        n = np.maximum(1, np.ceil(np.linalg.norm(seg, axis=1) / 0.25)).astype(int)
+        pts.append(np.concatenate([c[i] + seg[i] * np.linspace(0, 1, n[i], endpoint=False)[:, None]
+                                   for i in range(len(c))]))
+    tree = cKDTree(np.concatenate(pts))
+    ys, xs = np.nonzero(region & (d_edt < near_mm))
+    dist, _ = tree.query(np.stack([xs, ys], 1).astype(np.float64), workers=-1)
+    out = d_edt.copy()
+    # a boundary pixel's centre is half a pixel inside the edge (as the pixel distance has it)
+    out[ys, xs] = (dist + 0.5) / ppm
+    # blend into the pixel distance over the last mm, so there is no seam where the two meet
+    w = np.clip((near_mm - out[ys, xs]) / 1.0, 0, 1)
+    out[ys, xs] = w * out[ys, xs] + (1 - w) * d_edt[ys, xs]
+    return out
 
 
 def rim_fields(sh, cfg):
@@ -217,9 +270,20 @@ def rim_fields(sh, cfg):
     sil = ndi.binary_fill_holes(solid | openings)
     d_out = ndi.distance_transform_edt(sil) / ppm
     d_in = ndi.distance_transform_edt(~openings) / ppm
+    if cfg.get("exact_distance"):
+        # the distance to a pixel outline is scalloped along a near-vertical or near-level edge (the
+        # nearest outline pixel jumps at each step of the staircase): a rounded edge read off it came
+        # out terraced. Near the outlines, measure to the outlines smoothed into curves instead
+        d_out = curve_distance(sil, sil, d_out, ppm)
+        d_in = curve_distance(sil & ~openings, openings, d_in, ppm)
     T = cfg["depth"]
     r = cfg["edge_r"]
-    z_out = T / 2 - r + rounded(d_out, r)
+    # the roundings meet the walls vertically, so right at an edge the height changes fastest: read
+    # there, the outline's pixel steps became a sawtooth along the edge (0.05 mm, every few vertices)
+    # that streaked the gloss; from `edge_floor` mm in, the height runs level along every edge
+    f = cfg.get("edge_floor", 0.0)
+    d_out_e, d_in_e = np.maximum(d_out, f), np.maximum(d_in, f)
+    z_out = T / 2 - r + rounded(d_out_e, r)
     bz = cfg["bezel"]
     w, st, dr, lr = bz["width"], bz["step"], bz["drop"], cfg["lip_r"]
     # the ring: up from the lens groove round the lip, a low rounded band, then the step's shoulder up
@@ -229,7 +293,7 @@ def rim_fields(sh, cfg):
     band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
     z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
     z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
-    z_lip = T / 2 - dr - lr + rounded(d_in, lr)
+    z_lip = T / 2 - dr - lr + rounded(d_in_e, lr)
     # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
     # edge and the ring's step
     d_step = np.maximum(d_in - (w + st / 2), 0)
@@ -237,14 +301,20 @@ def rim_fields(sh, cfg):
     z_dome = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * np.clip(t, 0, 1)) ** 0.5)
     zf = np.minimum(np.minimum(np.minimum(z_out, z_in), z_lip), z_dome)
     rb = cfg["back_r"]
-    zb = -(T / 2 - rb) - rounded(np.minimum(d_out, d_in), rb)
+    zb = -(T / 2 - rb) - rounded(np.minimum(d_out_e, d_in_e), rb)
     # a polished part has no creases: the distance fields kink along the middle of every band (the
     # bridge's centre, each rim's midline), which showed as lines in the gloss; smoothed out within
     # the front (a blur that takes nothing from outside it)
     def smooth(z, sig_mm):
         m = solid.astype(np.float64)
         return ndi.gaussian_filter(z * m, sig_mm * ppm) / np.maximum(ndi.gaussian_filter(m, sig_mm * ppm), 1e-6)
-    return smooth(zf, 0.5), smooth(zb, 0.3)
+    if not f:
+        return smooth(zf, 0.5), smooth(zb, 0.3)
+    # near an edge the blur's window is cut by the outline's steps and its average with them: there
+    # the heights stay as the (even) distances give them; the blur takes over from 0.4 mm in
+    near = np.minimum(d_out, d_in)
+    wgt = np.clip((near - 0.4) / 0.8, 0, 1)
+    return wgt * smooth(zf, 0.5) + (1 - wgt) * zf, wgt * smooth(zb, 0.3) + (1 - wgt) * zb
 
 
 def lens_fields(sh, cfg, i):
@@ -300,6 +370,81 @@ def loft(name, rings, material=None, cap=True):
     return ob
 
 
+def outward_normals(ob):
+    """Face normals pointing out of the solid (a loft's winding depends on its rings' order)."""
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(ob.data)
+    bm.free()
+    ob.data.update()
+
+
+def path_points(ctrl, resolution=24):
+    """A NURBS through control points (mm) as a dense polyline (mm), in order along it."""
+    cu = bpy.data.curves.new("_path", "CURVE")
+    cu.dimensions = "3D"
+    sp = cu.splines.new("NURBS")
+    sp.points.add(len(ctrl) - 1)
+    for j, p in enumerate(ctrl):
+        sp.points[j].co = (p[0] * MM, p[1] * MM, p[2] * MM, 1.0)
+    sp.use_endpoint_u = True
+    sp.order_u = 3
+    sp.resolution_u = resolution
+    ob = bpy.data.objects.new("_path", cu)
+    bpy.context.scene.collection.objects.link(ob)
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    P = np.array([v.co[:] for v in me.vertices], np.float64) / MM
+    bpy.data.objects.remove(ob)
+    bpy.data.curves.remove(cu)
+    bpy.data.meshes.remove(me)
+    return P
+
+
+def rounded_rect(w, h, r, n=6):
+    """Points (x across, y up) round a w x h mm rectangle whose corners are rounded to r, in order."""
+    r = min(r, w / 2 - 1e-3, h / 2 - 1e-3)
+    pts = []
+    for cx, cy, a0 in ((w / 2 - r, h / 2 - r, 0), (-w / 2 + r, h / 2 - r, 90), (-w / 2 + r, -h / 2 + r, 180),
+                       (w / 2 - r, -h / 2 + r, 270)):
+        for k in range(n):
+            a = np.radians(a0 + 90 * k / (n - 1))
+            pts.append((cx + r * np.cos(a), cy + r * np.sin(a)))
+    return np.array(pts)
+
+
+def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5):
+    """A bar along the polyline P (mm), resampled every `step` mm: its section a rounded rectangle
+    size = (across, up) mm, kept as upright as the path allows; `round_end`: its last mm close to a
+    rounded tip."""
+    P = np.asarray(P, np.float64)
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    ss = np.r_[np.arange(0, s[-1], step), s[-1]]
+    P = np.stack([np.interp(ss, s, P[:, i]) for i in range(3)], 1)
+    T = np.gradient(P, axis=0)
+    T /= np.linalg.norm(T, axis=1, keepdims=True)
+    L = ss[-1]
+    prof = rounded_rect(size[0], size[1], radius)
+    upv = np.asarray(up, np.float64)
+    rings = []
+    for p, t, si in zip(P, T, ss):
+        u = upv - t * np.dot(upv, t)
+        u /= np.linalg.norm(u)
+        a = np.cross(u, t)
+        k = 1.0
+        if round_end > 0 and si > L - round_end:
+            q = (si - (L - round_end)) / round_end
+            k = max(np.sqrt(max(1 - q * q, 0.0)), 0.12)
+        rings.append([p + a * x * k + u * y * k for x, y in prof])
+    ob = loft(name, rings, material)
+    outward_normals(ob)
+    for pl in ob.data.polygons:
+        pl.use_smooth = True
+    return ob
+
+
 def ellipsoid(name, centre, radii, material=None, rot_deg=(0, 0, 0)):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0)
     ob = bpy.context.active_object
@@ -329,7 +474,7 @@ def build(frame, materials, tilt=None):
     xm, z = wrap_profile(frame)
     T = cfg["depth"]
     zf, zb = rim_fields(sh, cfg)
-    front = field_mesh(f"{frame} front", sh["solid"], zf, zb, sh["origin_px"], sh["ppm"], step=3)
+    front = field_mesh(f"{frame} front", sh["solid"], zf, zb, sh["origin_px"], sh["ppm"], step=cfg.get("mesh_step", 3))
     bend(front, xm, z, -T / 2)                        # the front's face at z = 0 at its most forward point
     front.data.materials.append(materials["acetate"])
     lenses = []
@@ -347,29 +492,51 @@ def build(frame, materials, tilt=None):
         zc = float(np.interp(x, xm, z)) - T - pd["back"] + pd["r"][2] * 0.6
         parts.append(ellipsoid(f"{frame} pad {side}", (x, pd["y"], zc), pd["r"], materials["acetate"],
                                rot_deg=(-12, side * 25, side * 12)))
-    # end pieces: a wedge from the back of the front's ends to the hinge
+    # end pieces: a wedge from the back of the front's ends to the hinge (metal: from a plate over the
+    # tab's outer side, its outer face one plane from the front to the hinge)
     out = sh["outline"]
     top = out[:, 1].max()
     ep, hg = cfg["endpiece"], cfg["hinge"]
-    hinges = []
+    tp = cfg["temple"]
+    hinges, ends = [], []
     for side in (-1, 1):
         xe = out[:, 0].max() if side > 0 else out[:, 0].min()
-        ze = float(np.interp(xe, xm, z)) - T + cfg["back_r"]
+        zface = float(np.interp(xe, xm, z))
+        ze = zface - T + cfg["back_r"]
         y0, y1 = top - ep["top"], top - ep["bottom"]
         xi = xe - side * ep["inset"]
-        hx, hy, hz = xe - side * 1.6, top - hg["down"], float(np.interp(xe, xm, z)) - hg["back"]
-        rings = [[(xi, y0, ze), (xe - side * 0.3, y0, ze), (xe - side * 0.3, y1, ze), (xi, y1, ze)],
-                 [(hx - side * 1.3, hy + 1.6, hz), (hx + side * 1.3, hy + 1.6, hz), (hx + side * 1.3, hy - 1.6, hz),
-                  (hx - side * 1.3, hy - 1.6, hz)]]
+        hx, hy, hz = xe - side * 1.6, top - hg["down"], zface - hg["back"]
+        if ep.get("metal"):
+            th = tp.get("height", 3.2) / 2 + 0.15            # the apex just round the temple's section
+            tw = tp.get("thick", 2.6) / 2 + 0.3
+            zf0 = zface - cfg["edge_r"] * 0.9                 # the plate starts behind the front's rounded edge
+            xo0, xo2 = xe + side * ep.get("plate", 0.5), hx + side * tw
+            xo1 = xo0 + (xo2 - xo0) * (zf0 - ze) / (zf0 - hz)
+            xin = xe - side * 1.2                             # the plate's inside, sunk in the tab
+            rings = [[(xin, y0, zf0), (xo0, y0, zf0), (xo0, y1, zf0), (xin, y1, zf0)],
+                     [(xi, y0, ze), (xo1, y0, ze), (xo1, y1, ze), (xi, y1, ze)],
+                     [(hx - side * tw, hy + th, hz), (xo2, hy + th, hz), (xo2, hy - th, hz), (hx - side * tw, hy - th, hz)]]
+            mat = materials.get("endmetal", materials["acetate"])
+            # the triangle the end piece forms with the front's side (the GCD's place): the wire joint
+            # and the front's outer corners, on the outer face
+            ends.append({"side": side, "apex": (xo2, hy, hz), "top": (xo0, y0, zf0), "bottom": (xo0, y1, zf0)})
+        else:
+            rings = [[(xi, y0, ze), (xe - side * 0.3, y0, ze), (xe - side * 0.3, y1, ze), (xi, y1, ze)],
+                     [(hx - side * 1.3, hy + 1.6, hz), (hx + side * 1.3, hy + 1.6, hz), (hx + side * 1.3, hy - 1.6, hz),
+                      (hx - side * 1.3, hy - 1.6, hz)]]
+            mat = materials["acetate"]
+            ends.append({"side": side, "apex": (hx + side * 1.3, hy, hz), "top": (xe, y0, ze), "bottom": (xe, y1, ze)})
         if side < 0:
             rings = [r[::-1] for r in rings]
-        parts.append(loft(f"{frame} end {side}", rings, materials["acetate"]))
+        parts.append(loft(f"{frame} end {side}", rings, mat))
+        outward_normals(parts[-1])
         hinges.append((hx, hy, hz))
     R = Matrix.Rotation(np.radians(-(cfg["tilt"] if tilt is None else tilt)), 4, "X")
     for p in parts:
         p.matrix_world = R @ p.matrix_world
     Rn = np.asarray(R.to_3x3())
     hinges = [tuple(Rn @ np.asarray(h)) for h in hinges]
+    sh["ends"] = [{k: (tuple(Rn @ np.asarray(v)) if k != "side" else v) for k, v in e.items()} for e in ends]
     return parts, sh, hinges
 
 
@@ -394,6 +561,26 @@ def temples(frame, hinges, materials, ears=None, split=False):
         back = d * 0.35 + np.array([0.0, 0.0, -1.0]) * 0.65
         back /= np.linalg.norm(back)
         tail = [e + back * 14 + down * 6, e + back * 26 + down * 20, e + back * 30 + down * t["drop"]]
+        if t.get("kind") == "strip":
+            # a flat metal bar from the hinge, then the acetate tip from `tip_from` mm along it; split at
+            # the ear's root as the wire is
+            P = path_points([h, h + d * 12, e - d * 10, e] + tail)
+            s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+            se = float(s[np.argmin(np.linalg.norm(P - e, axis=1))])
+            cut = lambda a, b: P[(s >= a - 1e-6) & (s <= b + 1e-6)]
+            tf = min(float(t.get("tip_from", s[-1])), s[-1] - 5.0)
+            strip, tip = (t["thick"], t["height"]), (t["tip"][1], t["tip"][0])
+            pieces = [(f"{frame} temple {k}", cut(0, tf), strip, materials.get("endmetal", materials["metal"]), 0.45, 0.0)]
+            if split and se > tf:
+                pieces += [(f"{frame} temple {k} tip", cut(tf, se), tip, materials["acetate"], 1.0, 0.0),
+                           (f"{frame} temple {k} back", cut(se, s[-1]), tip, materials["acetate"], 1.0, 2.5)]
+            else:
+                pieces += [(f"{frame} temple {k} tip" if not split else f"{frame} temple {k} back",
+                            cut(tf, s[-1]), tip, materials["acetate"], 1.0, 2.5)]
+            for name, Pp, size, mat, rad, rend in pieces:
+                if len(Pp) >= 2:
+                    obs.append(sweep(name, Pp, size, mat, rad, round_end=rend))
+            continue
         runs = [(f"{frame} temple {k}", [h, h + d * 12, e - d * 10, e]), (f"{frame} temple {k} back", [e] + tail)] \
             if split else [(f"{frame} temple {k}", [h, h + d * 12, e - d * 10, e] + tail)]
         for name, path in runs:
@@ -454,6 +641,9 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
     return {"acetate": principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49),
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
+            # polished black metal (F04's end pieces and temples): near black head-on, a mirror at a
+            # glancing angle (the founder's desk shots, Oct 22 2026)
+            "endmetal": principled("endmetal", (0.035, 0.035, 0.038, 1), 0.07, metallic=1.0),
             "lens": lens}
 
 
