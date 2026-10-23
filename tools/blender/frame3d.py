@@ -41,7 +41,8 @@ MM = 0.001
 # bezel: the ring round each lens (front view: the double line `width` mm out from the opening, a
 # step of `step` mm up to the front's face from a ring `drop` mm below it); lip_r: the ring's rounded
 # edge into the lens; lens: its front's radius of curvature (base curve) and thickness, set `inset`
-# mm behind the ring; tilt: pantoscopic tilt as worn; pads: the nose pads behind the bridge (top
+# mm behind the ring; tilt: the front's lean from the temples' line, bottom back (pantoscopic; built
+# as a shear, so the top stays level and the front view keeps the drawing's outline); pads: the nose pads behind the bridge (top
 # and side views: centre x, y, how far behind the front's back, radii); hinge: where the temple
 # starts, behind the front's face and below its top (side view); endpiece: the wedge from the front's
 # back to the hinge, from `top` to `bottom` mm below the front's top; `metal`: it is polished black
@@ -52,19 +53,35 @@ MM = 0.001
 # `tip_from` mm along it the acetate tip, `tip` = (height, width) mm. Meshing: mesh_step (the front's
 # grid, in drawing pixels of 0.05 mm), edge_floor (mm: right at an edge the height runs level along
 # it), exact_distance (edges measured to the outline smoothed into curves, not to its pixel steps);
-# all three keep a three-quarter view's gloss free of streaks. F04's edge_r and back_r are rounder
-# than the side view's line suggests: the desk shots show a pillowy side, not a flat wall.
+# all three keep a three-quarter view's gloss free of streaks.
+#
+# F04 against the founder's side shot of the real frame (Oct 22 2026), where it differs from drawing 05:
+# the frame's top is a flat plateau, its front edge rounded tightly (edge_r 1.8); the arm runs square to
+# the front (tilt 0; the drawing leans the front 12 deg); and the end piece, the metal triangle behind
+# the acetate tab (endpiece["outline"]: u mm back from the tab's back, v mm down from the front's top at
+# the end; edges traced on the shot, scaled by the tab's 15.25 mm from the drawing; its length agrees
+# with the side view's): its base is the tab's back edge, top to bottom, the top corner flush with the
+# plateau; its top edge falls 26 deg to the apex, which sits 14.5 mm back and 56% down (the drawing:
+# 46%); its bottom edge rises 20 deg to it. Top view: the outer face is flush with the tab's side and
+# the temple's, the triangle 2.25 mm across, the strip 1.25; the hinge's pin is vertical, its barrel
+# inside, the screw head on top.
 FRAMES = {
-    "F04": {"depth": 7.0, "edge_r": 3.5, "back_r": 2.0, "dome": 0.9,
+    "F04": {"depth": 7.0, "edge_r": 1.8, "back_r": 1.0, "dome": 0.9,
             "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
             "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
             "lens": {"radius": 260.0, "thick": 1.6, "inset": 1.4},
-            "tilt": 10.0,
+            "tilt": 0.0,
             "pads": {"x": 10.8, "y": -4.0, "back": 4.5, "r": (1.6, 5.0, 3.0)},
-            "hinge": {"back": 23.0, "down": 9.5},
-            "endpiece": {"top": 1.5, "bottom": 17.0, "inset": 4.0, "metal": True, "plate": 0.5},
-            "temple": {"kind": "strip", "height": 2.75, "thick": 1.2, "straight": 75.0, "drop": 36.0,
-                       "tip_from": 72.0, "tip": (3.0, 2.4)}},
+            "endpiece": {"metal": True, "proud": 0.03, "thick": 2.25, "overlap": 0.3, "bevel": 0.12,
+                         "r_top": 0.3, "r_flat": 0.8, "r_bottom": 0.3,
+                         "outline": {"base_top": (0.0, 0.0), "apex_top": (14.5, 7.06), "apex_bottom": (14.5, 9.93),
+                                     "bottom_flat": (1.0, 15.25), "base_bottom": (0.0, 15.25)},
+                         "hinge_barrel": {"r": 0.8, "in": 1.7, "behind": 0.7, "above": 0.35, "head_r": 0.6}},
+            "temple": {"kind": "strip", "height": 2.9, "thick": 1.25, "straight": 75.0, "drop": 36.0,
+                       "tip_from": 72.0, "tip": (3.0, 2.4), "tip_straight": 12.0,
+                       # the acetate tip's mid-line from the joint (mm back, mm down), side view
+                       "tip_path": [(0, 0), (3, 0.05), (13, 0.6), (21, 2.25), (27, 4.65), (33, 9.45),
+                                    (43, 19.15), (53, 29.15), (59.5, 35.15)]}},
 }
 
 
@@ -215,9 +232,70 @@ def field_mesh(name, mask, zf, zb, origin_px, ppm, step=1):
     sharp = (np.isin(ev[:, 0] * (2 * n + 1) + ev[:, 1], rim[:, 0] * (2 * n + 1) + rim[:, 1]))
     attr = me.attributes.get("sharp_edge") or me.attributes.new("sharp_edge", "BOOLEAN", "EDGE")
     attr.data.foreach_set("value", sharp)
+    # the walls' normals square to the outline smoothed along itself: even smoothed, the outline keeps
+    # traces of its pixel steps, and the face's and back's heights wander along it, so the wall's facets
+    # twisted and banded the gloss across the frame's outer sides and top (a polished part has none)
+    def inside(Q):
+        c = np.clip(np.round((Q[:, 0] * ppm + origin_px[0]) / step).astype(int), 0, m.shape[1] - 1)
+        r = np.clip(np.round((origin_px[1] - Q[:, 1] * ppm) / step).astype(int), 0, m.shape[0] - 1)
+        return m[r, c] > 0
+    WN = wall_normals(P, nbl, inside)
+    me.update()
+    cn = np.zeros(len(me.loops) * 3)
+    me.corner_normals.foreach_get("vector", cn)
+    cn = cn.reshape(-1, 3)
+    lv = np.zeros(len(me.loops), np.int64)
+    me.loops.foreach_get("vertex_index", lv)
+    ls = np.zeros(len(me.polygons), np.int64)
+    lt = np.zeros(len(me.polygons), np.int64)
+    me.polygons.foreach_get("loop_start", ls)
+    me.polygons.foreach_get("loop_total", lt)
+    pv = lv[ls[:, None] + np.arange(4)[None, :]] if (lt == 4).all() else None
+    if pv is not None:
+        wall = (pv.min(1) < n) & (pv.max(1) >= n)
+        for pi in np.nonzero(wall)[0]:
+            for j in range(4):
+                v = int(lv[ls[pi] + j]) % n
+                w = WN.get(v)
+                if w is not None:
+                    cn[ls[pi] + j] = (w[0], w[1], 0.0)
+        me.normals_split_custom_set(cn.tolist())
     ob = bpy.data.objects.new(name, me)
     bpy.context.scene.collection.objects.link(ob)
     return ob
+
+
+def wall_normals(P, nbl, inside, sigma_mm=0.6):
+    """Outward normals (2D, unit) at an outline's vertices: each closed loop walked in order, smoothed
+    along itself (Gaussian, sigma_mm), its tangents turned outward (tested with `inside`)."""
+    from scipy.ndimage import gaussian_filter1d
+    left = set(int(v) for v in nbl)
+    N = {}
+    while left:
+        v0 = left.pop()
+        loop, prev, cur = [v0], None, v0
+        while True:
+            cands = [int(w) for w in nbl[cur] if int(w) != prev and int(w) in left]
+            if not cands:
+                break
+            prev, cur = cur, cands[0]
+            left.discard(cur)
+            loop.append(cur)
+        if len(loop) < 12:
+            continue
+        L = np.asarray(loop)
+        pts = P[L]
+        spacing = float(np.median(np.linalg.norm(np.diff(pts, axis=0), axis=1)))
+        sig = max(sigma_mm / max(spacing, 1e-6), 1.0)
+        sm = np.stack([gaussian_filter1d(pts[:, i], sig, mode="wrap") for i in range(2)], 1)
+        t = np.roll(sm, -1, 0) - np.roll(sm, 1, 0)
+        t /= np.linalg.norm(t, axis=1, keepdims=True) + 1e-12
+        nn = np.stack([t[:, 1], -t[:, 0]], 1)
+        if inside(sm + nn * 0.25).mean() > 0.5:
+            nn = -nn
+        for v, w in zip(L, nn):
+            N[int(v)] = w
+    return N
 
 
 def rounded(d, r):
@@ -466,9 +544,9 @@ def ellipsoid(name, centre, radii, material=None, rot_deg=(0, 0, 0)):
 
 
 def build(frame, materials, tilt=None):
-    """The frame's front (with its lenses, nose pads and end pieces), as worn: wrapped, tilted. Returns
-    the parts and the shapes, plus the two hinge points (mm, the parts' coordinates) where the temples
-    start (temples() makes those, once the ears are known)."""
+    """The frame's front (with its lenses, nose pads and end pieces): wrapped, leaning as the frame is
+    built. Returns the parts and the shapes, plus the two hinge points (mm, the parts' coordinates) where
+    the temples start (temples() makes those: as drawn, or bent to the ears once they are known)."""
     cfg = FRAMES[frame]
     sh = front_shapes(frame)
     xm, z = wrap_profile(frame)
@@ -492,11 +570,32 @@ def build(frame, materials, tilt=None):
         zc = float(np.interp(x, xm, z)) - T - pd["back"] + pd["r"][2] * 0.6
         parts.append(ellipsoid(f"{frame} pad {side}", (x, pd["y"], zc), pd["r"], materials["acetate"],
                                rot_deg=(-12, side * 25, side * 12)))
+    # the front's lean (pantoscopic tilt): a shear, the bottom back, so the top stays level and the front
+    # view keeps the drawing's outline
+    th_t = np.tan(np.radians(cfg["tilt"] if tilt is None else tilt))
+    if th_t:
+        for p in parts:
+            co = np.zeros(len(p.data.vertices) * 3)
+            p.data.vertices.foreach_get("co", co)
+            co = co.reshape(-1, 3)
+            co[:, 2] += co[:, 1] * th_t
+            p.data.vertices.foreach_set("co", co.ravel())
+            p.data.update()
+    out = sh["outline"]
+    ep = cfg["endpiece"]
+    if ep.get("outline"):
+        ends, hinges = [], []
+        for side in (-1, 1):
+            obs, end, hinge = side_endpiece(frame, cfg, out, xm, z, side, th_t, materials)
+            parts += obs
+            ends.append(end)
+            hinges.append(hinge)
+        sh["ends"] = ends
+        return parts, sh, hinges
     # end pieces: a wedge from the back of the front's ends to the hinge (metal: from a plate over the
     # tab's outer side, its outer face one plane from the front to the hinge)
-    out = sh["outline"]
     top = out[:, 1].max()
-    ep, hg = cfg["endpiece"], cfg["hinge"]
+    hg = cfg["hinge"]
     tp = cfg["temple"]
     hinges, ends = [], []
     for side in (-1, 1):
@@ -531,13 +630,133 @@ def build(frame, materials, tilt=None):
         parts.append(loft(f"{frame} end {side}", rings, mat))
         outward_normals(parts[-1])
         hinges.append((hx, hy, hz))
-    R = Matrix.Rotation(np.radians(-(cfg["tilt"] if tilt is None else tilt)), 4, "X")
-    for p in parts:
-        p.matrix_world = R @ p.matrix_world
-    Rn = np.asarray(R.to_3x3())
-    hinges = [tuple(Rn @ np.asarray(h)) for h in hinges]
-    sh["ends"] = [{k: (tuple(Rn @ np.asarray(v)) if k != "side" else v) for k, v in e.items()} for e in ends]
+    sh["ends"] = ends
     return parts, sh, hinges
+
+
+def fillet(poly, radii, n=8):
+    """A closed polygon (u, v) with the corners rounded to the given radii (0 keeps a corner sharp)."""
+    P = np.asarray(poly, np.float64)
+    k = len(P)
+    pts = []
+    for i in range(k):
+        a, b, c = P[i - 1], P[i], P[(i + 1) % k]
+        r = radii[i]
+        if r <= 0:
+            pts.append(b)
+            continue
+        d1, d2 = (a - b) / np.linalg.norm(a - b), (c - b) / np.linalg.norm(c - b)
+        ang = np.arccos(np.clip(np.dot(d1, d2), -1, 1))
+        t = min(r / np.tan(ang / 2), 0.45 * np.linalg.norm(a - b), 0.45 * np.linalg.norm(c - b))
+        r = t * np.tan(ang / 2)
+        p1, p2 = b + d1 * t, b + d2 * t
+        bis = (d1 + d2) / np.linalg.norm(d1 + d2)
+        ctr = b + bis * (r / np.sin(ang / 2))
+        a1 = np.arctan2(*(p1 - ctr)[::-1])
+        a2 = np.arctan2(*(p2 - ctr)[::-1])
+        da = (a2 - a1 + np.pi) % (2 * np.pi) - np.pi
+        for s in np.linspace(0, 1, n):
+            pts.append(ctr + r * np.array([np.cos(a1 + da * s), np.sin(a1 + da * s)]))
+    return np.array(pts)
+
+
+def prism(name, poly, x0, x1, to_yz, material, bevel=0.0):
+    """A solid: the polygon (u, v) mapped by to_yz to (y, z) mm, run across x from x0 to x1 mm; its edges
+    bevelled `bevel` mm (a machined part's edges catch the light)."""
+    poly = np.asarray(poly, np.float64)
+    yz = np.array([to_yz(u, v) for u, v in poly])
+    k = len(poly)
+    V = np.concatenate([np.c_[np.full(k, x0), yz], np.c_[np.full(k, x1), yz]]) * MM
+    F = [tuple(range(k)), tuple(range(2 * k - 1, k - 1, -1))]
+    F += [(i, (i + 1) % k, k + (i + 1) % k, k + i) for i in range(k)]
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([tuple(v) for v in V], [], F)
+    me.update()
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(ob)
+    outward_normals(ob)
+    if bevel > 0:
+        m = ob.modifiers.new("bevel", "BEVEL")
+        m.width = bevel * MM
+        m.segments = 3
+        m.limit_method = "ANGLE"
+        m.angle_limit = np.radians(25)
+        m.harden_normals = True
+        dg = bpy.context.evaluated_depsgraph_get()
+        me2 = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+        ob.modifiers.clear()
+        old = ob.data
+        ob.data = me2
+        bpy.data.meshes.remove(old)
+    ob.data.materials.append(material)
+    for pl in ob.data.polygons:
+        pl.use_smooth = False
+    return ob
+
+
+def polygon_centroid(P):
+    """The area centroid of a simple polygon (u, v)."""
+    P = np.asarray(P, np.float64)
+    x, y = P[:, 0], P[:, 1]
+    x1, y1 = np.roll(x, -1), np.roll(y, -1)
+    c = x * y1 - x1 * y
+    A = c.sum() / 2
+    return np.array([((x + x1) * c).sum() / (6 * A), ((y + y1) * c).sum() / (6 * A)])
+
+
+def side_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
+    """One end piece: the metal triangle behind the acetate tab, from its side outline
+    (endpiece["outline"]: u mm back from the tab's back, v mm down from the front's top at the end). Its
+    base is the tab's back edge, top to bottom, its top corner flush with the front's top; its outer face
+    flush with the tab's side (a hair proud, so the two never share a plane), `thick` mm across; the
+    hinge's barrel behind the apex, inside, its screw head on top. Returns the parts, the triangle
+    platform (apex, base corners, its centre: where the GCD sits; on the outer face) and the hinge point
+    (the temple's start: the apex's centre, on the temple's mid-line)."""
+    ep = cfg["endpiece"]
+    tp = cfg["temple"]
+    xe = out[:, 0].max() if side > 0 else out[:, 0].min()
+    near = out[np.abs(out[:, 0] - xe) < 1.5]
+    ytop = float(near[:, 1].max()) - 0.03                      # a hair under the top: no coplanar faces
+    # the tab's back: the front's back plane at the end, the base set `overlap` mm into the acetate so no
+    # gap opens at the back's rounded edge
+    zb = float(np.interp(xe, xm, z)) - cfg["depth"] + ep.get("overlap", 0.3) + ytop * th_t
+    to_yz = lambda u, v: (ytop - v, zb - u - v * th_t)
+    P = {k: np.asarray(v, np.float64) for k, v in ep["outline"].items()}
+    poly = [P["base_top"], P["apex_top"], P["apex_bottom"], P["bottom_flat"], P["base_bottom"]]
+    shape = fillet(poly, [ep["r_top"], 0, 0, ep["r_flat"], ep["r_bottom"]])
+    xo = xe + side * ep["proud"]                                # the outer face
+    mat = materials.get("endmetal", materials["acetate"])
+    obs = [prism(f"{frame} end {side}", shape, xo, xo - side * ep["thick"], to_yz, mat, ep.get("bevel", 0.0))]
+    # the hinge: a barrel round a vertical pin just behind the apex, on the inside, its screw head on top
+    ua, vt, vb = float(P["apex_top"][0]), float(P["apex_top"][1]), float(P["apex_bottom"][1])
+    hb = ep["hinge_barrel"]
+    yb0, yb1 = ytop - vb - 0.1, ytop - vt + hb["above"]
+    zc = to_yz(ua, (vt + vb) / 2)[1] - hb["behind"]
+    xc = xo - side * hb["in"]
+    bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=hb["r"] * MM, depth=(yb1 - yb0) * MM,
+                                        location=(xc * MM, (yb0 + yb1) / 2 * MM, zc * MM), rotation=(np.pi / 2, 0, 0))
+    bar = bpy.context.active_object
+    bar.name = f"{frame} hinge {side}"
+    bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=hb["head_r"] * MM, depth=0.18 * MM,
+                                        location=(xc * MM, (yb1 + 0.09) * MM, zc * MM), rotation=(np.pi / 2, 0, 0))
+    head = bpy.context.active_object
+    head.name = f"{frame} hinge {side} screw"
+    for ob in (bar, head):
+        # the cylinders' axes along y (their rotation applied), so the parts share the frame's coordinates
+        ob.data.transform(ob.matrix_basis)
+        ob.matrix_basis.identity()
+        ob.data.materials.append(mat)
+        for pl in ob.data.polygons:
+            pl.use_smooth = True
+        obs.append(ob)
+    ya, za = to_yz(ua, (vt + vb) / 2)
+    # the triangle platform's centre: its area centroid, on the outer face (the founder: the GCD is centred
+    # on the triangle, Oct 22 2026)
+    cu, cv = polygon_centroid(shape)
+    end = {"side": side, "apex": (xo, ya, za), "top": (xo, *to_yz(*P["base_top"])),
+           "bottom": (xo, *to_yz(*P["base_bottom"])), "centre": (xo, *to_yz(cu, cv)),
+           "normal": (float(side), 0.0, 0.0), "uv_centre": (float(cu), float(cv))}
+    return obs, end, (xo - side * tp["thick"] / 2, ya, za)
 
 
 def temples(frame, hinges, materials, ears=None, split=False):
@@ -551,6 +770,27 @@ def temples(frame, hinges, materials, ears=None, split=False):
     obs = []
     for k, h in enumerate(hinges):
         h = np.asarray(h, np.float64)
+        if ears is None and t.get("tip_path"):
+            # as drawn and photographed: square to the front, straight back from the hinge to the joint,
+            # then the acetate tip along the side drawing's curve; split where the tip starts to bend
+            jt = h + np.array([0.0, 0.0, -t["tip_from"]])
+            tip = path_points([jt + np.array([0.0, -dv, -du]) for du, dv in t["tip_path"]], resolution=16)
+            P = np.vstack([h + np.outer(np.linspace(0, 1, 120), jt - h), tip[1:]])
+            s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+            cut = lambda a, b: P[(s >= a - 1e-6) & (s <= b + 1e-6)]
+            tf, sb = t["tip_from"], t["tip_from"] + t.get("tip_straight", 12.0)
+            strip, tipsz = (t["thick"], t["height"]), (t["tip"][1], t["tip"][0])
+            metal = materials.get("endmetal", materials["metal"])
+            pieces = [(f"{frame} temple {k}", cut(0, tf), strip, metal, 0.4, 0.0)]
+            if split:
+                pieces += [(f"{frame} temple {k} tip", cut(tf, sb), tipsz, materials["acetate"], 1.0, 0.0),
+                           (f"{frame} temple {k} back", cut(sb, s[-1]), tipsz, materials["acetate"], 1.0, 2.5)]
+            else:
+                pieces += [(f"{frame} temple {k} tip", cut(tf, s[-1]), tipsz, materials["acetate"], 1.0, 2.5)]
+            for name, Pp, size, mat, rad, rend in pieces:
+                if len(Pp) >= 2:
+                    obs.append(sweep(name, Pp, size, mat, rad, round_end=rend))
+            continue
         if ears is None:
             e = h + np.array([0.0, -2.0, -t["straight"]])
         else:
