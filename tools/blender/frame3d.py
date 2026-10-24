@@ -65,7 +65,24 @@ MM = 0.001
 # 46%); its bottom edge rises 20 deg to it. Top view: the outer face is flush with the tab's side and
 # the temple's, the triangle 2.25 mm across, the strip 1.25; the hinge's pin is vertical, its barrel
 # inside, the screw head on top.
+# F02 (drawing 03 and its cleaned front shot): a thick crimson-tortoise front (6.5 mm, its outer edge
+# well rounded), a 3.2 mm bevel round each lens (the black layer under the tortoise: the "lens bay's bevel
+# inlay"), the front leaning ~10 deg at its rims (side view: 13.5 deg below the brow, the brow itself
+# upright), wings at its top corners run back 17 mm to the hinges (side view: the block from 1 to 15 mm
+# below the top, the temple's centre 9.7 mm down), and black metal temples 2.6 x 1.2 mm (built round:
+# from the front they are lines). `texture`: the acetate's colour and the metal on the front, from the
+# cleaned front shot (tools/blender/frame_texture.py).
 FRAMES = {
+    "F02": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.7,
+            "bezel": {"width": 3.2, "step": 0.8, "drop": 1.2, "bump": 0.3, "groove": 0.0, "groove_w": 0.5},
+            "lip_r": 0.8, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            "lens": {"radius": 150.0, "thick": 1.6, "inset": 0.9},
+            "tilt": 10.0,
+            "pads": {"x": 10.0, "y": -3.0, "back": 1.5, "r": (1.4, 4.5, 2.5)},     # tucked behind the rims (the front shot shows none)
+            "endpiece": {"top": 1.0, "bottom": 13.0, "inset": 4.0},
+            "hinge": {"down": 9.7, "back": 17.0},
+            "temple": {"kind": "wire", "radius": 1.0, "straight": 95.0, "drop": 30.0},
+            "texture": "work/frames3d/F02"},
     "F04": {"depth": 7.0, "edge_r": 1.8, "back_r": 1.0, "dome": 0.9,
             "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
             "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
@@ -543,6 +560,46 @@ def ellipsoid(name, centre, radii, material=None, rot_deg=(0, 0, 0)):
     return ob
 
 
+def planar_uv(ob, tex):
+    """The front view's projection as the part's UVs ("frame_uv"): each corner's x, y (mm, the frame's
+    coordinates) through the texture's map (frame_texture.py) to its pixel, as a fraction of its size."""
+    M = np.asarray(tex["mm_to_px"], np.float64)
+    w, h = tex["size"]
+    me = ob.data
+    co = np.zeros(len(me.vertices) * 3)
+    me.vertices.foreach_get("co", co)
+    co = co.reshape(-1, 3) / MM
+    W_ = np.asarray(ob.matrix_world)
+    co = co @ W_[:3, :3].T + W_[:3, 3] / MM
+    lv = np.zeros(len(me.loops), np.int64)
+    me.loops.foreach_get("vertex_index", lv)
+    px = co[lv, :2] @ M[:, :2].T + M[:, 2]
+    uv = np.stack([px[:, 0] / w, 1 - px[:, 1] / h], 1)
+    layer = me.uv_layers.get("frame_uv") or me.uv_layers.new(name="frame_uv")
+    layer.data.foreach_set("uv", uv.astype(np.float32).ravel())
+
+
+def texture_info(frame):
+    t = FRAMES[frame].get("texture")
+    if not t:
+        return None
+    import json
+    d = ROOT / t
+    info = json.loads((d / "map.json").read_text())
+    info["dir"] = str(d)
+    return info
+
+
+def _textured(parts, frame, materials):
+    """The acetate parts take the frame's own colour (planar UVs from the front view)."""
+    tex = texture_info(frame)
+    if not tex:
+        return
+    for p in parts:
+        if p.data.materials and p.data.materials[0] == materials["acetate"]:
+            planar_uv(p, tex)
+
+
 def build(frame, materials, tilt=None):
     """The frame's front (with its lenses, nose pads and end pieces): wrapped, leaning as the frame is
     built. Returns the parts and the shapes, plus the two hinge points (mm, the parts' coordinates) where
@@ -591,6 +648,7 @@ def build(frame, materials, tilt=None):
             ends.append(end)
             hinges.append(hinge)
         sh["ends"] = ends
+        _textured(parts, frame, materials)
         return parts, sh, hinges
     # end pieces: a wedge from the back of the front's ends to the hinge (metal: from a plate over the
     # tab's outer side, its outer face one plane from the front to the hinge)
@@ -602,6 +660,9 @@ def build(frame, materials, tilt=None):
         xe = out[:, 0].max() if side > 0 else out[:, 0].min()
         zface = float(np.interp(xe, xm, z))
         ze = zface - T + cfg["back_r"]
+        # measured from the front's top at its end (a front higher at the brow than at its wings would
+        # otherwise stand the end piece up above the wing)
+        top = float(out[np.abs(out[:, 0] - xe) < 3.0][:, 1].max())
         y0, y1 = top - ep["top"], top - ep["bottom"]
         xi = xe - side * ep["inset"]
         hx, hy, hz = xe - side * 1.6, top - hg["down"], zface - hg["back"]
@@ -631,6 +692,7 @@ def build(frame, materials, tilt=None):
         outward_normals(parts[-1])
         hinges.append((hx, hy, hz))
     sh["ends"] = ends
+    _textured(parts, frame, materials)
     return parts, sh, hinges
 
 
@@ -879,12 +941,66 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(glass.outputs[0], mix.inputs[1])
     nt.links.new(filt.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
-    return {"acetate": principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49),
+    tex = texture_info(frame)
+    acetate = principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49)
+    if tex:
+        acetate = textured_acetate(tex)
+    return {"acetate": acetate,
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             # polished black metal (F04's end pieces and temples): near black head-on, a mirror at a
             # glancing angle (the founder's desk shots, Oct 22 2026)
             "endmetal": principled("endmetal", (0.035, 0.035, 0.038, 1), 0.07, metallic=1.0),
             "lens": lens}
+
+
+def textured_acetate(tex, rough=0.06):
+    """Polished acetate in the frame's own colour (albedo.png, linear), with the metal set into the front
+    where masks.png marks it: R the GCD's gold band, G its onyx, B pin heads (steel)."""
+    m = bpy.data.materials.new("acetate")
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != "OUTPUT_MATERIAL":
+            nt.nodes.remove(n)
+    outn = [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0]
+    uv = nt.nodes.new("ShaderNodeUVMap")
+    uv.uv_map = "frame_uv"
+    alb = nt.nodes.new("ShaderNodeTexImage")
+    alb.image = bpy.data.images.load(str(pathlib.Path(tex["dir"]) / "albedo.png"))
+    alb.image.colorspace_settings.name = "Linear Rec.709"
+    alb.interpolation = "Cubic"
+    alb.extension = "EXTEND"
+    msk = nt.nodes.new("ShaderNodeTexImage")
+    msk.image = bpy.data.images.load(str(pathlib.Path(tex["dir"]) / "masks.png"))
+    msk.image.colorspace_settings.name = "Non-Color"
+    msk.interpolation = "Linear"
+    msk.extension = "EXTEND"
+    for t_ in (alb, msk):
+        nt.links.new(uv.outputs["UV"], t_.inputs["Vector"])
+    sep = nt.nodes.new("ShaderNodeSeparateColor")
+    nt.links.new(msk.outputs["Color"], sep.inputs["Color"])
+
+    def bsdf(base, rough_, metallic=0.0):
+        b = nt.nodes.new("ShaderNodeBsdfPrincipled")
+        b.inputs["Base Color"].default_value = base
+        b.inputs["Roughness"].default_value = rough_
+        b.inputs["Metallic"].default_value = metallic
+        b.inputs["IOR"].default_value = 1.49
+        return b
+    ace = bsdf((0.01, 0.01, 0.01, 1), rough)
+    nt.links.new(alb.outputs["Color"], ace.inputs["Base Color"])
+    gold = bsdf((0.565, 0.366, 0.145, 1), 0.22, 1.0)          # brand gold, #C6A36A
+    onyx = bsdf((0.006, 0.006, 0.006, 1), 0.04)
+    pin = bsdf((0.85, 0.85, 0.85, 1), 0.32, 1.0)              # domed steel heads: they gather the room
+    cur = ace.outputs[0]
+    for ch, b in (("Red", gold), ("Green", onyx), ("Blue", pin)):
+        mx = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(sep.outputs[ch], mx.inputs["Fac"])
+        nt.links.new(cur, mx.inputs[1])
+        nt.links.new(b.outputs[0], mx.inputs[2])
+        cur = mx.outputs[0]
+    nt.links.new(cur, outn.inputs["Surface"])
+    return m
 
 
 def check(frame, out, samples=64):

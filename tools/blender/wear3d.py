@@ -57,6 +57,15 @@ F_MM, SENSOR_H = 85.0, 36.0           # the portraits' lens, prompted (reference
 # (a white card's level); room: how the room's brightness runs from overhead to the floor (what the
 # frame's gloss mirrors).
 SCENES = {
+    # S07: a flash on the camera, a little high and to its left (the face's shading and the hard shadow
+    # on the backdrop right of the head), small: crisp shadows, pin-point glints in the gloss; the white
+    # room bounces a lot back. What the gloss and the lenses mirror: the white paper floor in front of
+    # her, lit by the flash (a lens leaning forward at the bottom sees the floor over most of itself and
+    # the dim studio above a soft horizon)
+    "S07": {"key": {"az": -12.0, "el": 18.0, "size": 0.12, "dist": 1.5}, "fill": 0.25,
+            "room": {"top": 0.8, "bottom": 1.2, "camera_side": 0.0},
+            "reflect": {"hdri": "studio", "rot_deg": 0.0, "scale": 4.0, "clamp": 3.0, "soften_px": 4.0,
+                        "sat": 0.0}},
     "S06": {"key": {"az": -45.0, "el": 25.0, "size": 0.9, "size_y": 1.2, "dist": 1.6}, "fill": 0.03,
             "room": {"top": 2.0, "bottom": 0.1, "camera_side": 0.03}},
 }
@@ -126,10 +135,50 @@ def setup(W, H, samples):
     return sc, cam
 
 
-def room(sc, level, top, bottom, camera_side=0.0):
+HDRI = pathlib.Path(bpy.utils.resource_path("LOCAL")) / "datafiles" / "studiolights" / "world"
+
+
+_MAPS = {}
+
+
+def room_map(reflect):
+    """The environment map for the gloss: one of Blender's bundled studio-light maps (CC0, Poly Haven),
+    its lamps capped at `clamp`, and with `soften_px` blurred (wrapping round), so a thin stand or
+    cable in the room does not draw a hairline across a lens."""
+    key = (reflect["hdri"], reflect.get("clamp", 3.0), reflect.get("soften_px", 0.0), reflect.get("sat", 1.0))
+    if key in _MAPS:
+        return _MAPS[key]
+    im = bpy.data.images.load(str(HDRI / f"{reflect['hdri']}.exr"), check_existing=False)
+    w, h = im.size
+    a = np.empty(w * h * 4, np.float32)
+    im.pixels.foreach_get(a)
+    rgb = np.minimum(a.reshape(h, w, 4)[..., :3], reflect.get("clamp", 3.0))
+    sp = reflect.get("soften_px", 0.0)
+    if sp:
+        pad = int(4 * sp) + 1
+        ext = np.concatenate([rgb[:, -pad:], rgb, rgb[:, :pad]], 1)
+        rgb = cv2.GaussianBlur(ext, (0, 0), sp)[:, pad:-pad]
+    sat = reflect.get("sat", 1.0)
+    if sat != 1.0:
+        # the room's own colour cast out (a white studio's light is the flash's, not the map's)
+        y = (0.2126 * rgb[..., 0] + 0.7152 * rgb[..., 1] + 0.0722 * rgb[..., 2])[..., None]
+        rgb = y + sat * (rgb - y)
+    out = bpy.data.images.new("room_map", w, h, alpha=True, float_buffer=True)
+    out.colorspace_settings.name = "Linear Rec.709"
+    out.pixels.foreach_set(np.concatenate([rgb, np.ones((h, w, 1), np.float32)], -1).astype(np.float32).ravel())
+    _MAPS[key] = out
+    return out
+
+
+def room(sc, level, top, bottom, camera_side=0.0, reflect=None, reflect_level=0.0):
     """The world: a dim room, brighter overhead than at the floor (y is up here), normalised so a white
     card facing the room's middle reads `level`; and the studio behind the camera (the side the
-    subject faces, +z), lit by the key's spill: what a lens and the frame's face mirror."""
+    subject faces, +z), lit by the key's spill: what a lens and the frame's face mirror.
+
+    `reflect` ({"hdri": name, "rot_deg": a, "scale": k, "clamp": c}): what the gloss mirrors is a real
+    room instead (one of Blender's bundled environment maps, turned `rot_deg` about the vertical,
+    its values capped at `clamp` and times `scale` x `reflect_level`), while the light on the skin stays
+    the flat room above (only rays the gloss sends out see it)."""
     world = bpy.data.worlds.new("room")
     sc.world = world
     world.use_nodes = True
@@ -156,6 +205,31 @@ def room(sc, level, top, bottom, camera_side=0.0):
     bg = nt.nodes["Background"]
     bg.inputs["Color"].default_value = (1, 1, 1, 1)
     nt.links.new(add.outputs["Value"], bg.inputs["Strength"])
+    if reflect and reflect_level > 0:
+        mp = nt.nodes.new("ShaderNodeMapping")
+        # the maps have z up; here y is up: x turned a quarter, then the map spun about the vertical
+        mp.inputs["Rotation"].default_value = (math.radians(90.0), 0.0, math.radians(reflect.get("rot_deg", 0.0)))
+        nt.links.new(tc.outputs["Generated"], mp.inputs["Vector"])
+        env = nt.nodes.new("ShaderNodeTexEnvironment")
+        env.image = room_map(reflect)
+        nt.links.new(mp.outputs["Vector"], env.inputs["Vector"])
+        cap = nt.nodes.new("ShaderNodeMix")
+        cap.data_type = "RGBA"
+        cap.blend_type = "DARKEN"
+        cap.inputs["Factor"].default_value = 1.0
+        c = reflect.get("clamp", 3.0)
+        cap.inputs[7].default_value = (c, c, c, 1)
+        nt.links.new(env.outputs["Color"], cap.inputs[6])
+        bg2 = nt.nodes.new("ShaderNodeBackground")
+        nt.links.new(cap.outputs[2], bg2.inputs["Color"])
+        bg2.inputs["Strength"].default_value = reflect.get("scale", 1.0) * reflect_level
+        lp = nt.nodes.new("ShaderNodeLightPath")
+        mix = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(lp.outputs["Is Glossy Ray"], mix.inputs["Fac"])
+        nt.links.new(bg.outputs[0], mix.inputs[1])
+        nt.links.new(bg2.outputs[0], mix.inputs[2])
+        wo = [n for n in nt.nodes if n.type == "OUTPUT_WORLD"][0]
+        nt.links.new(mix.outputs[0], wo.inputs["Surface"])
     return world
 
 
@@ -514,6 +588,7 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     white = white_material()
     head.data.materials.append(white)
 
+    report["reflect"] = spec.get("reflect")
     # the light, calibrated on a white card facing the key at the eyes
     eye_mid = (P[36:42].mean(0) + P[42:48].mean(0)) / 2
     key, kdir = key_light(eye_mid * MM, spec["key"], 1.0)
@@ -528,7 +603,7 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     power = target / max(card_val, 1e-9)
     key.data.energy = power
     room(sc, spec["fill"] * target, spec["room"]["top"], spec["room"]["bottom"],
-         spec["room"].get("camera_side", 0.0) * target)
+         spec["room"].get("camera_side", 0.0) * target, spec.get("reflect"), target)
     report["light"] = {"card_at_1W": round(card_val, 6), "skin_lin": round(skin, 3), "key_W": round(power, 1),
                        "room": round(spec["fill"] * target, 4)}
 
@@ -602,7 +677,7 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         win_light = cv2.GaussianBlur(win_factor, (0, 0), 1.5)
         win_key = cv2.GaussianBlur(win_frac, (0, 0), 1.5)
         room(sc, spec["fill"] * target, spec["room"]["top"], spec["room"]["bottom"],
-             spec["room"].get("camera_side", 0.0) * target)
+             spec["room"].get("camera_side", 0.0) * target, spec.get("reflect"), target)
         report["window"] = wn
 
     for g_ in ([spec["glint"]] if spec.get("glint") else []) + spec.get("glints", []):
@@ -810,6 +885,9 @@ def composite(cfg, out, img, lin, H, W, report):
 
     base = lin * ratio
     t_rgb, t_a = matched(tp)
+    if not look.get("temples", True):
+        # the hair falls over the temples (a bob over the ears): nothing of them shows
+        t_rgb, t_a = t_rgb * 0, t_a * 0
     f_rgb, f_a = matched(fr)
     # the temples' own shadow where they lie along the head (the depth map's flattened sides cannot take
     # it in 3D): each visible temple's outline, moved away from the key by the gap between wire and hair
