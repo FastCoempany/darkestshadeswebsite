@@ -67,17 +67,7 @@
  "scene_spec": {
   "reflect": {
    "rot_deg": 60.0
-  },
-  "glints": [
-   {
-    "az": 0.0,
-    "el": -38.0,
-    "dist": 1.0,
-    "width": 1.6,
-    "height": 0.8,
-    "radiance": 0.3
-   }
-  ]
+  }
  },
  "ear_crease_px": {
   "right": [
