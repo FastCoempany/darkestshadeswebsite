@@ -712,6 +712,19 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     head.data.materials.clear()
     head.data.materials.append(photo_material((lin * ratio).astype(np.float32), cfg.get("through_lens", 1.0)))
     head.visible_camera = False
+    # and behind it the portrait again, on a card square to the camera: where the head's mesh has a gap
+    # (the steep sides of the face, the head's edge, which it leaves out) a lens showed the bright room
+    # through it as a pale patch with stepped edges; now it shows what the camera saw there
+    back = None
+    if cfg.get("backplate", True):
+        zb = D_eyes + cfg.get("backplate_mm", 150.0)
+        cn = np.array([[0, 0], [W, 0], [W, H], [0, H]], np.float64)
+        Vb = np.stack([(cn[:, 0] - head3d.cx_(W)) / f_px * zb, (head3d.cy_(H) - cn[:, 1]) / f_px * zb,
+                       -np.full(4, zb)], 1)
+        back = mesh_object("backplate", Vb, np.array([[0, 3, 2, 1]]), np.stack([cn[:, 0] / W, 1 - cn[:, 1] / H], 1))
+        back.data.materials.append(head.data.materials[0])
+        back.visible_camera = False
+        back.visible_shadow = False
     for p in front_objs:
         p.visible_camera = True
     set_region(sc, cam, front_objs, 0.04, H, W)
@@ -725,6 +738,8 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     for p in tmpl:
         p.visible_camera = " back" not in p.name
     head.hide_render = True
+    if back is not None:
+        back.hide_render = True
     set_region(sc, cam, front_objs + tmpl, 0.04, H, W)
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))
@@ -869,7 +884,10 @@ def composite(cfg, out, img, lin, H, W, report):
     tp = read_exr(out / "layers" / "temples.exr")
     look = cfg.get("look3d", {})
     sigma = look.get("soften_px", 0.6)
-    black = np.percentile(lin.reshape(-1, 3), 0.2, axis=0).astype(np.float32)
+    # the picture's black floor: its darkest pixels, unless they are a dark subject's own colour (deep
+    # brown skin read as the floor printed a black frame brown): then the scene's, given in `black`
+    black = np.asarray(look["black"], np.float32) if look.get("black") else \
+        np.percentile(lin.reshape(-1, 3), 0.2, axis=0).astype(np.float32)
     rng = np.random.default_rng(7)
     grain = look.get("grain", noise_level(img))
 

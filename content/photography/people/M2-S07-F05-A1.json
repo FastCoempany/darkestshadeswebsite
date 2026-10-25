@@ -54,5 +54,24 @@
   "photo": 0.0,
   "face_blur_mm": 0.3
  },
- "through_lens": 0.15
+ "through_lens": 0.15,
+ "skin_albedo": 0.15,
+ "look3d": {
+  "black": [
+   0.004,
+   0.0034,
+   0.0034
+  ]
+ },
+ "scene_spec": {
+  "reflect": {
+   "rot_deg": 60.0
+  }
+ },
+ "ear_crease_px": {
+  "right": [
+   1386,
+   757
+  ]
+ }
 }
