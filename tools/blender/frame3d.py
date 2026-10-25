@@ -73,9 +73,9 @@ MM = 0.001
 # from the front they are lines). `texture`: the acetate's colour and the metal on the front, from the
 # cleaned front shot (tools/blender/frame_texture.py).
 # F05 (drawing 04, the cleaned front and right three-quarter shots, the founder's desk shots of Oct 25 2026):
-# a puffy gloss black front (7.5 mm, its outer edge rounded 3.4 mm, the face domed 1.8 mm), each lens deep in
-# a well: the face rolls over into it (2.2 mm) with no ring, the well's wall runs straight down, the lens
-# 3.6 mm under the face's top (the front view's line round each opening is the roll's edge); the front leans
+# a puffy gloss black front (7.5 mm, its outer edge rounded 2.2 mm, the broad face domed 0.9 mm), each lens
+# deep in a well: the face rolls over into it (1.8 mm) with no ring, the well's wall runs straight down, the
+# lens 3.2 mm under the face's top (the front view's line round each opening is the roll's edge); the front leans
 # ~11 deg (side view); the temples' tips, which hang below the front
 # at its outer ends in the front view, trimmed off its outline (`trim_tips`, |x| mm). The end piece is
 # F04's kind of metal triangle on the tab's side, from the side view: level along the front's top for
