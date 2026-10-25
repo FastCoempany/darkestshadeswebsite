@@ -903,6 +903,10 @@ def composite(cfg, out, img, lin, H, W, report):
 
     base = lin * ratio
     t_rgb, t_a = matched(tp)
+    # a temple seen nearly edge-on mirrors whatever lies to the side at a grazing angle, where even black
+    # paint reflects most of it: in a white studio that drew F05's black temple as a silver bar. On set
+    # the white would be flagged off it; here its reflection is turned down (`temple_gain`)
+    t_rgb = t_rgb * look.get("temple_gain", 1.0)
     if not look.get("temples", True):
         # the hair falls over the temples (a bob over the ears): nothing of them shows
         t_rgb, t_a = t_rgb * 0, t_a * 0
