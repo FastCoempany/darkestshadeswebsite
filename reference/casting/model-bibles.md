@@ -30,8 +30,6 @@ Generation never draws glasses. The real frame is composited afterwards (`docs/b
 
 **NB.** A 27-year-old Mexican Indigenous non-binary person, slim. Warm light-brown skin, smooth. Straight black hair parted in the center, falling to the jaw and just past it, tucked behind the left ear on one side. Broad high cheekbones, a strong straight nose, full lips, a defined jaw; neither feminine nor masculine in styling. No makeup, no jewelry. Still and direct, mouth closed.
 
-**M4** (the founder's own, outside round 1; `docs/brief/00-decisions.md` #40). A man in his late twenties, lean, with a long neck. Fair skin with a few faint freckles across the cheeks. Dark brown, nearly black hair slicked straight back off the forehead, close at the sides; ears visible. Angular face, high cheekbones, a sharp jaw and chin, a straight nose, full lips. Clean-shaven. Cool and unsmiling, mouth closed. His first portrait came to us finished, wearing an olive suede bomber with a brown shearling collar over a grey shirt and a white vest, and another maker's sunglasses: it is composited whole (cut out, relit, the stand-in glasses taken off), not generated from this paragraph.
-
 ## Prompt template
 
 ```
