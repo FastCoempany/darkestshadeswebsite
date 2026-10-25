@@ -266,6 +266,22 @@ def field_mesh(name, mask, zf, zb, origin_px, ppm, step=1):
         for lam in (0.5, -0.53):
             avg = np.stack([P[nbl[v]].mean(0) for v in bvl])
             P[bvl] = P[bvl] + lam * (avg - P[bvl])
+    # Taubin passes long waves untouched, and along a nearly level or upright stretch of outline the
+    # pixel steps come a millimetre or more apart: the edge stayed stepped. Each closed loop also
+    # smoothed along itself, as its walls' normals are (and as the heights' distances measure it); no
+    # vertex moved more than `cap` px, so a corner never folds over the row inside
+    from scipy.ndimage import gaussian_filter1d
+    cap = 0.6 * step / ppm
+    for L in outline_loops(nbl):
+        if len(L) < 12 or int(L[0]) not in set(nbl[int(L[-1])].tolist()):
+            continue
+        pts = P[L]
+        spacing = float(np.median(np.linalg.norm(np.diff(pts, axis=0), axis=1)))
+        sm = np.stack([gaussian_filter1d(pts[:, i], max(0.6 / max(spacing, 1e-6), 1.0), mode="wrap")
+                       for i in range(2)], 1)
+        mv = sm - pts
+        ln = np.linalg.norm(mv, axis=1, keepdims=True)
+        P[L] = pts + mv * np.minimum(1.0, cap / np.maximum(ln, 1e-9))
     V = np.concatenate([np.stack([P[:, 0], P[:, 1], zf[ys, xs]], 1), np.stack([P[:, 0], P[:, 1], zb[ys, xs]], 1)]) * MM
     F = np.concatenate([front, back, side])
     me = bpy.data.meshes.new(name)
@@ -322,12 +338,10 @@ def field_mesh(name, mask, zf, zb, origin_px, ppm, step=1):
     return ob
 
 
-def wall_normals(P, nbl, inside, sigma_mm=0.6):
-    """Outward normals (2D, unit) at an outline's vertices: each closed loop walked in order, smoothed
-    along itself (Gaussian, sigma_mm), its tangents turned outward (tested with `inside`)."""
-    from scipy.ndimage import gaussian_filter1d
+def outline_loops(nbl):
+    """An outline's vertices (`nbl`: each one's neighbours along it) as loops, each walked in order."""
     left = set(int(v) for v in nbl)
-    N = {}
+    loops = []
     while left:
         v0 = left.pop()
         loop, prev, cur = [v0], None, v0
@@ -338,9 +352,18 @@ def wall_normals(P, nbl, inside, sigma_mm=0.6):
             prev, cur = cur, cands[0]
             left.discard(cur)
             loop.append(cur)
-        if len(loop) < 12:
+        loops.append(np.asarray(loop))
+    return loops
+
+
+def wall_normals(P, nbl, inside, sigma_mm=0.6):
+    """Outward normals (2D, unit) at an outline's vertices: each closed loop walked in order, smoothed
+    along itself (Gaussian, sigma_mm), its tangents turned outward (tested with `inside`)."""
+    from scipy.ndimage import gaussian_filter1d
+    N = {}
+    for L in outline_loops(nbl):
+        if len(L) < 12:
             continue
-        L = np.asarray(loop)
         pts = P[L]
         spacing = float(np.median(np.linalg.norm(np.diff(pts, axis=0), axis=1)))
         sig = max(sigma_mm / max(spacing, 1e-6), 1.0)
@@ -411,7 +434,10 @@ def rim_fields(sh, cfg):
         # nearest outline pixel jumps at each step of the staircase): a rounded edge read off it came
         # out terraced. Near the outlines, measure to the outlines smoothed into curves instead
         d_out = curve_distance(sil, sil, d_out, ppm)
-        d_in = curve_distance(sil & ~openings, openings, d_in, ppm)
+        # the openings' outlines smoothed as their walls are (0.6 mm): at 0.2 mm, the steps along their
+        # nearly level stretches, a millimetre apart, still waved every height read off the distance, and
+        # the slope into each lens mirrored the lens's rim as a row of scallops (F05)
+        d_in = curve_distance(sil & ~openings, openings, d_in, ppm, sigma_px=0.6 * ppm)
     T = cfg["depth"]
     r = cfg["edge_r"]
     # the roundings meet the walls vertically, so right at an edge the height changes fastest: read
@@ -448,7 +474,10 @@ def rim_fields(sh, cfg):
         tb = np.clip(d_out / np.maximum(d_out + d_in, 1e-3), 0, 1)
         face = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * tb))
         zo = face - r + rounded(d_out_e, r)
-        ti = np.clip(d_in / W_, 0, 1)
+        # the sweep starts `edge_floor` mm out from the opening, level up to there (as the outer edge
+        # does): right at the opening it is at its steepest, and the edge row's heights, read at the
+        # pixel steps, would run in a sawtooth along the lens's edge
+        ti = np.clip((d_in - f) / max(W_ - f, 1e-3), 0, 1)
         zi = zl + seam + (face - zl - seam) * (1 - (1 - ti) ** bz.get("p", 2.0))
         k = bz.get("blend", 0.6)
         h = np.clip(k - np.abs(zo - zi), 0, None) / k
