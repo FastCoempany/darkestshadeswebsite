@@ -27,7 +27,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 - All copy from `content/copy/en.json`. No lorem ipsum anywhere. `@darkestshades`, `darkestshades.com`, `#DarkestShades`.
 
 **Imagery**
-- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. People only from the seven-person generated cast, wearing the real frames (composited, never generated). Until finals land, every image is a labelled `ShotSlot`. Reference videos and Prada/runway material never ship.
+- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. People only from the generated cast (the seven from casting round 1 and M4, `00-decisions.md` #30, #40), wearing the real frames (composited, never generated). Until finals land, every image is a labelled `ShotSlot`. Reference videos and Prada/runway material never ship.
 
 **Build**
 - Mobile first: 390, then 768, 1024, 1440. WCAG 2.2 AA.
@@ -51,6 +51,7 @@ python3 tools/photo/temple_gcd.py IMG_3495 --cols 900:1560:50 --band 650:1350 --
 python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json      # a cast member wearing a cleaned frame → work/people/
 python3 tools/blender/frame3d.py F04 --check --out /tmp/F04.png                 # a frame rebuilt in 3D from its drawings, upright in a light tent
 python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   # the cast member wearing the 3D frame in the scene's light → work/people/<id>-3d/ (depth model: work/models/, head3d.py)
+bash tools/scenes/s08/run.sh                                                    # M4 in F05 in the lounge, built whole (room, relight, 3D frame) → work/people/DS-CAST-M4-S08-F05-v01/
 ```
 App commands (`npm run dev`, `npm run storybook`, `npm run test:visual`) are added in phase 0.
 

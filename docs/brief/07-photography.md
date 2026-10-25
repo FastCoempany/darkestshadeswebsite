@@ -3,7 +3,7 @@
 Two tracks, one look:
 
 - **Product**: the 317 real lightbox shots, cleaned to a consistent catalog set with the GCD in place of the old marks (`00-decisions.md` #8, #9).
-- **People**: seven generated models in generated SS90-patina scenes, wearing the **real** frames, composited from the product cut-outs (#15–#17).
+- **People**: seven generated models in generated SS90-patina scenes, wearing the **real** frames, composited from the product cut-outs (#15–#17); and M4, the founder's own generated man (#40), composited whole into built scenes (S08, `tools/scenes/s08/`).
 
 Everything runs on free tools (#24). Tool availability in the cloud workspace is in `09-build-plan.md` (network access must be **Full** for Hugging Face, Figma asset downloads and Adobe Fonts).
 
@@ -109,6 +109,7 @@ Simple, striking, institutional. One figure per frame. Each scene has a code and
 | S05 | Doorway wedge of light on a dark floor | One hard key through the door |
 | S06 | Studio portrait against black, head and shoulders | Hard key, no fill |
 | S07 | Studio portrait against warm white, three-quarter | Flash, short hard shadow |
+| S08 | The lounge (#41): black-painted brick with new hand-painted abstract art, a distressed rustic red leather chesterfield, candles; built in Blender, not generated | Magenta key front right, blue rim behind left, warm wash on the art, candle glow |
 
 Wardrobe: uniform-like, no logos: black or navy nylon, crisp white or grey shirting, fine knits, tailored trousers, a long coat. Nothing that competes with the frame.
 

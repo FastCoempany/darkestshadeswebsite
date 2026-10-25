@@ -72,6 +72,15 @@ MM = 0.001
 # below the top, the temple's centre 9.7 mm down), and black metal temples 2.6 x 1.2 mm (built round:
 # from the front they are lines). `texture`: the acetate's colour and the metal on the front, from the
 # cleaned front shot (tools/blender/frame_texture.py).
+# F05 (drawing 04, the cleaned front and right three-quarter shots): a puffy gloss black front (7.5 mm, its
+# edge rounded 3.4 mm, the face domed 1.8 mm), the lenses sunk 2.6 mm in a soft ring 3.5 mm wide (the front
+# view's line round each opening); the front leans ~11 deg (side view); the temples' tips, which hang below the front
+# at its outer ends in the front view, trimmed off its outline (`trim_tips`, |x| mm). The end piece is
+# F04's kind of metal triangle on the tab's side, from the side view: level along the front's top for
+# 4.9 mm (`top_flat`), falling 21 deg to the apex 18 mm back, its bottom edge rising 31 deg to it; its
+# base set 3.4 mm into the tab (the band the side view draws along it covers the tab's side); then a
+# flat metal temple 2.7 to 2.4 mm tall to the acetate tip's joint 74 mm back, the tip curving down as drawn.
+# The metal is satin black (`metal_rough`: the product shots show soft gradients on it, no mirror).
 FRAMES = {
     "F02": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.7,
             "bezel": {"width": 3.2, "step": 0.8, "drop": 1.2, "bump": 0.3, "groove": 0.0, "groove_w": 0.5},
@@ -99,6 +108,22 @@ FRAMES = {
                        # the acetate tip's mid-line from the joint (mm back, mm down), side view
                        "tip_path": [(0, 0), (3, 0.05), (13, 0.6), (21, 2.25), (27, 4.65), (33, 9.45),
                                     (43, 19.15), (53, 29.15), (59.5, 35.15)]}},
+    "F05": {"depth": 7.5, "edge_r": 3.4, "back_r": 1.2, "dome": 1.8,
+            "bezel": {"width": 3.5, "step": 2.6, "drop": 2.6, "bump": 0.0, "groove": 0.0, "groove_w": 0.5},
+            "lip_r": 1.2, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            "trim_tips": (58.0, 53.0),
+            "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.0},
+            "tilt": 10.0,
+            "pads": {"x": 10.0, "y": -5.0, "back": 3.5, "r": (1.6, 5.0, 3.0)},
+            "endpiece": {"metal": True, "metal_rough": 0.34, "proud": 0.03, "thick": 2.0, "overlap": 3.7, "bevel": 0.12,
+                         "r_top": 0.5, "r_topflat": 1.5, "r_flat": 0.6, "r_bottom": 0.5,
+                         "outline": {"base_top": (0.0, 0.0), "top_flat": (4.9, 0.1), "apex_top": (18.0, 5.6),
+                                     "apex_bottom": (17.5, 8.1), "bottom_flat": (4.6, 15.1), "base_bottom": (0.0, 15.1)},
+                         "hinge_barrel": {"r": 0.8, "in": 1.7, "behind": 0.7, "above": 0.35, "head_r": 0.6}},
+            "temple": {"kind": "strip", "height": 2.6, "thick": 1.3, "straight": 75.0, "drop": 30.0,
+                       "tip_from": 74.0, "tip": (3.0, 2.2), "tip_straight": 12.0,
+                       "tip_path": [(0, 0), (1, 0.03), (8, 0.46), (13, 0.94), (18, 1.63), (23, 2.58), (28, 3.85),
+                                    (33, 5.65), (38, 8.35), (43, 12.63), (48, 17.9), (53, 22.78), (55, 24.0)]}},
 }
 
 
@@ -136,6 +161,18 @@ def front_shapes(frame, ppm=20):
         ys, xs = np.nonzero(m)
         centres.append(((xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2))
     ox, oy = np.mean(centres, axis=0)
+    trim = FRAMES.get(frame, {}).get("trim_tips")
+    if trim:
+        # the temples' acetate tips, hanging behind the ears, show below the front at its outer ends in
+        # the front view: not the front. Between |x| = trim[0] and trim[1] mm its bottom edge runs straight
+        # from the edge's height at one to the other
+        for side in (-1, 1):
+            xa, xb = (int(round(ox + side * v * ppm)) for v in trim)
+            lo, hi = min(xa, xb), max(xa, xb)
+            ya, yb = (int(np.nonzero(silhouette[:, x])[0].max()) for x in (xa, xb))
+            for x in range(lo, hi + 1):
+                yl = ya + (yb - ya) * (x - xa) / (xb - xa)
+                silhouette[int(np.ceil(yl)) + 1:, x] = False
 
     def poly(mask, grow_px=0):
         m = mask.astype(np.uint8)
@@ -784,8 +821,10 @@ def side_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
     zb = float(np.interp(xe, xm, z)) - cfg["depth"] + ep.get("overlap", 0.3) + ytop * th_t
     to_yz = lambda u, v: (ytop - v, zb - u - v * th_t)
     P = {k: np.asarray(v, np.float64) for k, v in ep["outline"].items()}
-    poly = [P["base_top"], P["apex_top"], P["apex_bottom"], P["bottom_flat"], P["base_bottom"]]
-    shape = fillet(poly, [ep["r_top"], 0, 0, ep["r_flat"], ep["r_bottom"]])
+    # an outline may run level along the front's top before it falls to the apex (`top_flat`, F05)
+    flat = ["top_flat"] if "top_flat" in P else []
+    poly = [P[k] for k in ["base_top"] + flat + ["apex_top", "apex_bottom", "bottom_flat", "base_bottom"]]
+    shape = fillet(poly, [ep["r_top"]] + [ep.get("r_topflat", 1.0)] * len(flat) + [0, 0, ep["r_flat"], ep["r_bottom"]])
     xo = xe + side * ep["proud"]                                # the outer face
     mat = materials.get("endmetal", materials["acetate"])
     obs = [prism(f"{frame} end {side}", shape, xo, xo - side * ep["thick"], to_yz, mat, ep.get("bevel", 0.0))]
@@ -942,6 +981,7 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(filt.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
     tex = texture_info(frame)
+    metal_rough = FRAMES.get(frame, {}).get("endpiece", {}).get("metal_rough", 0.07)
     acetate = principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49)
     if tex:
         acetate = textured_acetate(tex)
@@ -949,7 +989,7 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             # polished black metal (F04's end pieces and temples): near black head-on, a mirror at a
             # glancing angle (the founder's desk shots, Oct 22 2026)
-            "endmetal": principled("endmetal", (0.035, 0.035, 0.038, 1), 0.07, metallic=1.0),
+            "endmetal": principled("endmetal", (0.035, 0.035, 0.038, 1), metal_rough, metallic=1.0),
             "lens": lens}
 
 
