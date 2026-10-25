@@ -72,9 +72,11 @@ MM = 0.001
 # below the top, the temple's centre 9.7 mm down), and black metal temples 2.6 x 1.2 mm (built round:
 # from the front they are lines). `texture`: the acetate's colour and the metal on the front, from the
 # cleaned front shot (tools/blender/frame_texture.py).
-# F05 (drawing 04, the cleaned front and right three-quarter shots): a puffy gloss black front (7.5 mm, its
-# edge rounded 3.4 mm, the face domed 1.8 mm), the lenses sunk 2.6 mm in a soft ring 3.5 mm wide (the front
-# view's line round each opening); the front leans ~11 deg (side view); the temples' tips, which hang below the front
+# F05 (drawing 04, the cleaned front and right three-quarter shots, the founder's desk shots of Oct 25 2026):
+# a puffy gloss black front (7.5 mm, its outer edge rounded 3.4 mm, the face domed 1.8 mm), each lens deep in
+# a well: the face rolls over into it (2.2 mm) with no ring, the well's wall runs straight down, the lens
+# 3.6 mm under the face's top (the front view's line round each opening is the roll's edge); the front leans
+# ~11 deg (side view); the temples' tips, which hang below the front
 # at its outer ends in the front view, trimmed off its outline (`trim_tips`, |x| mm). The end piece is
 # F04's kind of metal triangle on the tab's side, from the side view: level along the front's top for
 # 4.9 mm (`top_flat`), falling 21 deg to the apex 18 mm back, its bottom edge rising 31 deg to it; its
@@ -109,11 +111,11 @@ FRAMES = {
                        # the acetate tip's mid-line from the joint (mm back, mm down), side view
                        "tip_path": [(0, 0), (3, 0.05), (13, 0.6), (21, 2.25), (27, 4.65), (33, 9.45),
                                     (43, 19.15), (53, 29.15), (59.5, 35.15)]}},
-    "F05": {"depth": 7.5, "edge_r": 3.4, "back_r": 1.2, "dome": 1.8,
-            "bezel": {"width": 3.5, "step": 2.6, "drop": 2.6, "bump": 0.0, "groove": 0.0, "groove_w": 0.5},
-            "lip_r": 1.2, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+    "F05": {"depth": 7.5, "edge_r": 2.2, "back_r": 1.2, "dome": 0.9,
+            "bezel": {"kind": "roll", "r": 1.8, "width": 1.8, "step": 0.0, "drop": 1.8},
+            "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
             "trim_tips": (58.0, 53.0),
-            "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.0},
+            "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.4},
             "tilt": 10.0,
             "pads": {"x": 10.0, "y": -5.0, "back": 3.5, "r": (1.6, 5.0, 3.0)},
             "endpiece": {"metal": True, "coated": True, "metal_rough": 0.34, "proud": 0.03, "thick": 2.0, "overlap": 3.7, "bevel": 0.12,
@@ -419,20 +421,27 @@ def rim_fields(sh, cfg):
     z_out = T / 2 - r + rounded(d_out_e, r)
     bz = cfg["bezel"]
     w, st, dr, lr = bz["width"], bz["step"], bz["drop"], cfg["lip_r"]
-    # the ring: up from the lens groove round the lip, a low rounded band, then the step's shoulder up
-    # to the front's face
-    u = np.clip((d_in - (w - st / 2)) / st, 0, 1)
-    z_in = T / 2 - dr * (1 - u * u * (3 - 2 * u))
-    band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
-    z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
-    z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
-    # the lip only within its radius of the opening: run on past it at the ring's height, it capped the
-    # whole face at the ring (every front came out flat, the step, the dome and the rounded outer edge
-    # all under that cap: F05's puffy front read as a cut-out with no gloss along its edges)
-    z_lip = np.where(d_in_e < lr, T / 2 - dr - lr + rounded(d_in_e, lr), np.inf)
+    if bz.get("kind") == "roll":
+        # no ring: the face rolls over into the lens well as it does at the outer edge (radius `r`),
+        # then the well's wall runs straight down to the lens (F05: the founder's desk shots, Oct 25 2026)
+        z_in = T / 2 - bz["r"] + rounded(d_in_e, bz["r"])
+        z_lip = np.full_like(z_in, np.inf)
+        d_step = np.maximum(d_in - bz["r"], 0)
+    else:
+        # the ring: up from the lens groove round the lip, a low rounded band, then the step's shoulder up
+        # to the front's face
+        u = np.clip((d_in - (w - st / 2)) / st, 0, 1)
+        z_in = T / 2 - dr * (1 - u * u * (3 - 2 * u))
+        band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
+        z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
+        z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
+        # the lip only within its radius of the opening: run on past it at the ring's height, it capped
+        # the whole face at the ring (every front came out flat, the step, the dome and the rounded outer
+        # edge all under that cap: F05's puffy front read as a cut-out with no gloss along its edges)
+        z_lip = np.where(d_in_e < lr, T / 2 - dr - lr + rounded(d_in_e, lr), np.inf)
+        d_step = np.maximum(d_in - (w + st / 2), 0)
     # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
-    # edge and the ring's step
-    d_step = np.maximum(d_in - (w + st / 2), 0)
+    # edge and the ring's step (or the well's roll)
     t = d_out / np.maximum(d_out + d_step, 1e-3)
     z_dome = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * np.clip(t, 0, 1)) ** 0.5)
     zf = np.minimum(np.minimum(np.minimum(z_out, z_in), z_lip), z_dome)
