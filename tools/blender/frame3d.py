@@ -74,8 +74,8 @@ MM = 0.001
 # cleaned front shot (tools/blender/frame_texture.py).
 # F05 (drawing 04, the cleaned front and right three-quarter shots, the founder's desk shots of Oct 25 2026):
 # a puffy gloss black front (7.5 mm, its outer edge rounded 2.2 mm, the broad face domed 0.9 mm), each lens
-# deep in a well: the face rolls over into it (1.8 mm) with no ring, the well's wall runs straight down, the
-# lens 3.2 mm under the face's top (the front view's line round each opening is the roll's edge); the front leans
+# deep in a well: the face sweeps down into it in one smooth convex curve 3.4 mm wide, no ring, no wall, no
+# crease, to the lens 3.2 mm under the face's top (a 0.15 mm seam where they meet); the front leans
 # ~11 deg (side view); the temples' tips, which hang below the front
 # at its outer ends in the front view, trimmed off its outline (`trim_tips`, |x| mm). The end piece is
 # F04's kind of metal triangle on the tab's side, from the side view: level along the front's top for
@@ -112,7 +112,7 @@ FRAMES = {
                        "tip_path": [(0, 0), (3, 0.05), (13, 0.6), (21, 2.25), (27, 4.65), (33, 9.45),
                                     (43, 19.15), (53, 29.15), (59.5, 35.15)]}},
     "F05": {"depth": 7.5, "edge_r": 2.2, "back_r": 1.2, "dome": 0.9,
-            "bezel": {"kind": "roll", "r": 1.8, "width": 1.8, "step": 0.0, "drop": 1.8},
+            "bezel": {"kind": "well", "width": 3.4, "p": 2.5, "seam": 0.15, "blend": 0.6, "step": 0.0, "drop": 1.8},
             "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
             "trim_tips": (58.0, 53.0),
             "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.4},
@@ -395,7 +395,8 @@ def curve_distance(region, shape, d_edt, ppm, near_mm=6.0, sigma_px=4.0):
 def rim_fields(sh, cfg):
     """The front's face and back as height fields over the front view (mm; z = 0 mid-thickness): the
     face rounded at the outer edge, stepping down to the ring round each lens and rounding into the
-    lens; the back flat, its edges rounded."""
+    lens (bezel kind "well": no ring, the face sweeping down into each lens in one smooth curve); the
+    back flat, its edges rounded."""
     from scipy import ndimage as ndi
     ppm = sh["ppm"]
     solid = sh["solid"]
@@ -421,38 +422,63 @@ def rim_fields(sh, cfg):
     z_out = T / 2 - r + rounded(d_out_e, r)
     bz = cfg["bezel"]
     w, st, dr, lr = bz["width"], bz["step"], bz["drop"], cfg["lip_r"]
-    if bz.get("kind") == "roll":
-        # no ring: the face rolls over into the lens well as it does at the outer edge (radius `r`),
-        # then the well's wall runs straight down to the lens (F05: the founder's desk shots, Oct 25 2026)
-        z_in = T / 2 - bz["r"] + rounded(d_in_e, bz["r"])
-        z_lip = np.full_like(z_in, np.inf)
-        d_step = np.maximum(d_in - bz["r"], 0)
-    else:
-        # the ring: up from the lens groove round the lip, a low rounded band, then the step's shoulder up
-        # to the front's face
-        u = np.clip((d_in - (w - st / 2)) / st, 0, 1)
-        z_in = T / 2 - dr * (1 - u * u * (3 - 2 * u))
-        band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
-        z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
-        z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
-        # the lip only within its radius of the opening: run on past it at the ring's height, it capped
-        # the whole face at the ring (every front came out flat, the step, the dome and the rounded outer
-        # edge all under that cap: F05's puffy front read as a cut-out with no gloss along its edges)
-        z_lip = np.where(d_in_e < lr, T / 2 - dr - lr + rounded(d_in_e, lr), np.inf)
-        d_step = np.maximum(d_in - (w + st / 2), 0)
-    # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
-    # edge and the ring's step (or the well's roll)
-    t = d_out / np.maximum(d_out + d_step, 1e-3)
-    z_dome = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * np.clip(t, 0, 1)) ** 0.5)
-    zf = np.minimum(np.minimum(np.minimum(z_out, z_in), z_lip), z_dome)
     rb = cfg["back_r"]
-    zb = -(T / 2 - rb) - rounded(np.minimum(d_out_e, d_in_e), rb)
+
     # a polished part has no creases: the distance fields kink along the middle of every band (the
     # bridge's centre, each rim's midline), which showed as lines in the gloss; smoothed out within
     # the front (a blur that takes nothing from outside it)
     def smooth(z, sig_mm):
         m = solid.astype(np.float64)
         return ndi.gaussian_filter(z * m, sig_mm * ppm) / np.maximum(ndi.gaussian_filter(m, sig_mm * ppm), 1e-6)
+
+    if bz.get("kind") == "well":
+        # the face and the lens wells as one smooth surface (F05, the founder's desk shots of Oct 25 2026:
+        # no ring, no wall, no crease anywhere between the face and the lens). The face is a low dome
+        # across the rim; at the outer edge it rounds over (edge_r); towards each opening it sweeps down,
+        # one convex curve `width` mm wide, to a hair (`seam`) above the lens's own edge, which meets it
+        # with only that seam's dark line. The parts meet through a smooth minimum: a plain minimum
+        # creased wherever two of them crossed, and every crease drew its own line in the gloss.
+        W_ = bz["width"]
+        seam = bz.get("seam", 0.15)
+        # the lens's front under every point of the rim (its sphere carried on past its edge), the
+        # nearer lens's
+        lf = [lens_fields(sh, cfg, i)[0] for i in range(len(sh["opening_masks"]))]
+        dd = [ndi.distance_transform_edt(~m) for m in sh["opening_masks"]]
+        zl = np.where(dd[0] <= dd[1], lf[0], lf[1]) if len(lf) > 1 else lf[0]
+        tb = np.clip(d_out / np.maximum(d_out + d_in, 1e-3), 0, 1)
+        face = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * tb))
+        zo = face - r + rounded(d_out_e, r)
+        ti = np.clip(d_in / W_, 0, 1)
+        zi = zl + seam + (face - zl - seam) * (1 - (1 - ti) ** bz.get("p", 2.0))
+        k = bz.get("blend", 0.6)
+        h = np.clip(k - np.abs(zo - zi), 0, None) / k
+        zf = np.minimum(zo, zi) - h * h * k / 4
+        zb = -(T / 2 - rb) - rounded(np.minimum(d_out_e, d_in_e), rb)
+        # the blur only away from the edges: along the outer edge the heights stay as the distances give
+        # them, and down in each well's foot as the sweep gives them (the blur, taking nothing from the
+        # opening, lifted the foot off the lens and turned its last mm concave)
+        wo = np.clip((d_out - 0.4) / 0.8, 0, 1) * np.clip((d_in - 0.5) / 1.0, 0, 1)
+        wb = np.clip((np.minimum(d_out, d_in) - 0.4) / 0.8, 0, 1)
+        return wo * smooth(zf, bz.get("smooth_mm", 0.35)) + (1 - wo) * zf, wb * smooth(zb, 0.3) + (1 - wb) * zb
+
+    # the ring: up from the lens groove round the lip, a low rounded band, then the step's shoulder up
+    # to the front's face
+    u = np.clip((d_in - (w - st / 2)) / st, 0, 1)
+    z_in = T / 2 - dr * (1 - u * u * (3 - 2 * u))
+    band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
+    z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
+    z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
+    # the lip only within its radius of the opening: run on past it at the ring's height, it capped
+    # the whole face at the ring (every front came out flat, the step, the dome and the rounded outer
+    # edge all under that cap: F05's puffy front read as a cut-out with no gloss along its edges)
+    z_lip = np.where(d_in_e < lr, T / 2 - dr - lr + rounded(d_in_e, lr), np.inf)
+    d_step = np.maximum(d_in - (w + st / 2), 0)
+    # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
+    # edge and the ring's step
+    t = d_out / np.maximum(d_out + d_step, 1e-3)
+    z_dome = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * np.clip(t, 0, 1)) ** 0.5)
+    zf = np.minimum(np.minimum(np.minimum(z_out, z_in), z_lip), z_dome)
+    zb = -(T / 2 - rb) - rounded(np.minimum(d_out_e, d_in_e), rb)
     if not f:
         return smooth(zf, 0.5), smooth(zb, 0.3)
     # near an edge the blur's window is cut by the outline's steps and its average with them: there
