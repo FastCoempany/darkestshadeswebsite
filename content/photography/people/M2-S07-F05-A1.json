@@ -1,0 +1,58 @@
+{
+ "$comment": "Settings for tools/blender/wear3d.py (and tools/photo/wear.py): one generated person wearing one real frame. F05 rebuilt in 3D from its drawing (tools/blender/frame3d.py), on M2's S07 portrait.",
+ "id": "DS-CAST-M2-S07-F05-v01",
+ "cast": "M2",
+ "scene": "S07",
+ "frame": "F05",
+ "angle": "A1",
+ "wardrobe": "shirt",
+ "format": "4:5",
+ "status": "draft",
+ "portrait": "work/people/raw/M2-S07-n31-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "31:2",
+  "size": [
+   960,
+   1280
+  ],
+  "generated": "2026-10-21",
+  "prompt": "Studio portrait photograph against a warm white seamless paper backdrop. Head and shoulders, framed from mid-chest up, the head centered in the upper half of the frame. On-camera flash just above the lens: crisp, even light on the face and a short, hard-edged shadow on the backdrop just behind the head. 85 mm lens, eye level.\nA 34-year-old Nigerian man, lean and long-limbed. Deep dark brown skin with a soft sheen. Cleanly shaved head; ears visible. Long lean face, high cheekbones, a strong jaw, a broad nose, full lips. Clean-shaven. Calm and intent, mouth closed.\nWardrobe: a crisp white cotton shirt buttoned to the collar, no tie, no logos.\nHead facing the camera, chin level, eyes open, looking just past the camera.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3510",
+ "pd_mm": 64,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "backdrop_box": [
+  20,
+  20,
+  200,
+  200
+ ],
+ "shadow": {
+  "offset_mm": 0.8,
+  "blur_mm": 0.3,
+  "strength": 0.5,
+  "contact": 0.2,
+  "contact_mm": 0.8
+ },
+ "reflection": {
+  "front_env": 0.25
+ },
+ "soften_px": 0.35,
+ "grade": {
+  "lift": 0.012,
+  "sat": 0.95,
+  "halation": 0.15,
+  "grain": 0.012
+ },
+ "upscale": 2,
+ "light": {},
+ "lens": {
+  "photo": 0.0,
+  "face_blur_mm": 0.3
+ },
+ "through_lens": 0.15
+}
