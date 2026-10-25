@@ -80,7 +80,8 @@ MM = 0.001
 # 4.9 mm (`top_flat`), falling 21 deg to the apex 18 mm back, its bottom edge rising 31 deg to it; its
 # base set 3.4 mm into the tab (the band the side view draws along it covers the tab's side); then a
 # flat metal temple 2.7 to 2.4 mm tall to the acetate tip's joint 74 mm back, the tip curving down as drawn.
-# The metal is satin black (`metal_rough`: the product shots show soft gradients on it, no mirror).
+# The metal is satin black paint (`coated`, `metal_rough`: the product shots show soft gradients on it, no
+# mirror, and black at every angle).
 FRAMES = {
     "F02": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.7,
             "bezel": {"width": 3.2, "step": 0.8, "drop": 1.2, "bump": 0.3, "groove": 0.0, "groove_w": 0.5},
@@ -115,7 +116,7 @@ FRAMES = {
             "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.0},
             "tilt": 10.0,
             "pads": {"x": 10.0, "y": -5.0, "back": 3.5, "r": (1.6, 5.0, 3.0)},
-            "endpiece": {"metal": True, "metal_rough": 0.34, "proud": 0.03, "thick": 2.0, "overlap": 3.7, "bevel": 0.12,
+            "endpiece": {"metal": True, "coated": True, "metal_rough": 0.34, "proud": 0.03, "thick": 2.0, "overlap": 3.7, "bevel": 0.12,
                          "r_top": 0.5, "r_topflat": 1.5, "r_flat": 0.6, "r_bottom": 0.5,
                          "outline": {"base_top": (0.0, 0.0), "top_flat": (4.9, 0.1), "apex_top": (18.0, 5.6),
                                      "apex_bottom": (17.5, 8.1), "bottom_flat": (4.6, 15.1), "base_bottom": (0.0, 15.1)},
@@ -425,7 +426,10 @@ def rim_fields(sh, cfg):
     band = np.clip((d_in - lr) / max(w - st / 2 - lr, 1e-3), 0, 1)
     z_in = z_in + bz.get("bump", 0.0) * np.sin(np.pi * band) * (d_in < w)
     z_in = z_in - bz.get("groove", 0.0) * np.exp(-((d_in - w) / bz.get("groove_w", 0.45)) ** 2)
-    z_lip = T / 2 - dr - lr + rounded(d_in_e, lr)
+    # the lip only within its radius of the opening: run on past it at the ring's height, it capped the
+    # whole face at the ring (every front came out flat, the step, the dome and the rounded outer edge
+    # all under that cap: F05's puffy front read as a cut-out with no gloss along its edges)
+    z_lip = np.where(d_in_e < lr, T / 2 - dr - lr + rounded(d_in_e, lr), np.inf)
     # the face itself domed across the rim (a pillow, not a plate): highest midway between the outer
     # edge and the ring's step
     d_step = np.maximum(d_in - (w + st / 2), 0)
@@ -981,15 +985,20 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(filt.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
     tex = texture_info(frame)
-    metal_rough = FRAMES.get(frame, {}).get("endpiece", {}).get("metal_rough", 0.07)
+    ep_cfg = FRAMES.get(frame, {}).get("endpiece", {})
+    metal_rough = ep_cfg.get("metal_rough", 0.07)
     acetate = principled("acetate", (0.0015, 0.0015, 0.0017, 1), 0.06, ior=1.49)
     if tex:
         acetate = textured_acetate(tex)
+    # polished black metal (F04's end pieces and temples): near black head-on, a mirror at a glancing
+    # angle (the founder's desk shots, Oct 22 2026). `coated` (F05): black paint over the metal, a satin
+    # dielectric: its product shots, in a white tent, show it black at every angle, where bare metal went
+    # silver along a temple seen edge-on in a white studio
+    endmetal = (principled("endmetal", (0.008, 0.008, 0.0085, 1), metal_rough, ior=1.5) if ep_cfg.get("coated")
+                else principled("endmetal", (0.035, 0.035, 0.038, 1), metal_rough, metallic=1.0))
     return {"acetate": acetate,
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
-            # polished black metal (F04's end pieces and temples): near black head-on, a mirror at a
-            # glancing angle (the founder's desk shots, Oct 22 2026)
-            "endmetal": principled("endmetal", (0.035, 0.035, 0.038, 1), metal_rough, metallic=1.0),
+            "endmetal": endmetal,
             "lens": lens}
 
 
