@@ -1,5 +1,5 @@
 {
- "$comment": "Settings for tools/blender/wear3d.py: W2 in the S06 black studio, her head turned three-quarters to her left so her right temple, with F03's GCD, faces the camera (the founder, Oct 26 2026: the GCD is never scaled or moved to show; the view turns instead). F03 rebuilt in 3D (tools/blender/frame3d.py).",
+ "$comment": "Settings for tools/blender/wear3d.py: W2 in the S06 black studio, her head turned three-quarters to her left so her right temple, with F03's GCD, faces the camera (the founder, Oct 26 2026: the GCD is never scaled or moved to show; the view turns instead). F03 rebuilt in 3D (tools/blender/frame3d.py). Her right ear faces the camera: the temple's lower edge rests on its root, where the helix's top meets the head (ear_crease_px, the temple's middle there, read off the portrait), and runs on 15 mm behind it, the ear laid over it along the helix's rim and its front edge (ear_occluders_px, the rim traced where the hair meets the skin); its shadow on the side of her head is rendered on a sheet 12 mm inside it at the hinge (F03's 145 mm front against a head about 115 mm across the temples), closing to the ear, kept to 4% of the light at its darkest as the portrait's own shadows are (the concha under the helix 3.7%, the far cheek 3%) (temple_sheet).",
  "id": "DS-CAST-W2-S06-F03-A2-v01",
  "cast": "W2",
  "scene": "S06",
@@ -57,6 +57,165 @@
  "look3d": {
   "hide_temples": [
    "left"
+  ],
+  "ear_overrun_mm": 15.0,
+  "ear_occluders_px": [
+   [
+    [
+     395,
+     785
+    ],
+    [
+     400,
+     778
+    ],
+    [
+     405,
+     772
+    ],
+    [
+     410,
+     767
+    ],
+    [
+     415,
+     762.5
+    ],
+    [
+     420,
+     758.5
+    ],
+    [
+     425,
+     756.5
+    ],
+    [
+     430,
+     755
+    ],
+    [
+     435,
+     753.5
+    ],
+    [
+     440,
+     753
+    ],
+    [
+     445,
+     752
+    ],
+    [
+     450,
+     752
+    ],
+    [
+     455,
+     754
+    ],
+    [
+     460,
+     758
+    ],
+    [
+     465,
+     759
+    ],
+    [
+     470,
+     760
+    ],
+    [
+     480,
+     763
+    ],
+    [
+     490,
+     766
+    ],
+    [
+     500,
+     769
+    ],
+    [
+     510,
+     772
+    ],
+    [
+     520,
+     775
+    ],
+    [
+     530,
+     777.5
+    ],
+    [
+     540,
+     779.5
+    ],
+    [
+     550,
+     782
+    ],
+    [
+     553,
+     795
+    ],
+    [
+     550,
+     808
+    ],
+    [
+     545,
+     822
+    ],
+    [
+     538,
+     840
+    ],
+    [
+     530,
+     858
+    ],
+    [
+     522,
+     875
+    ],
+    [
+     515,
+     900
+    ],
+    [
+     380,
+     900
+    ],
+    [
+     376,
+     850
+    ],
+    [
+     380,
+     810
+    ],
+    [
+     388,
+     795
+    ]
+   ]
+  ],
+  "temple_sheet": {
+   "sides": [
+    "right"
+   ],
+   "gap_front_mm": 12.0,
+   "gap_ear_mm": 0.5,
+   "floor": 0.04
+  }
+ },
+ "ear_crease_px": {
+  "left": [
+   548,
+   760
   ]
  }
 }

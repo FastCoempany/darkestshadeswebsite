@@ -128,10 +128,25 @@ def sample_depth(D, box, u, v):
     return np.where(ok, q, np.inf)
 
 
+def fill_depth(D, px):
+    """The depth map with the backdrop next to the head, `px` pixels out, given the depth beside it
+    (each ring the mean of its placed neighbours), so a mesh of it runs on past the head's outline."""
+    D = np.asarray(D, np.float32)
+    ok = np.isfinite(D)
+    Dz = np.where(ok, D, 0).astype(np.float32)
+    for _ in range(int(px)):
+        num = cv2.blur(Dz * ok, (3, 3))
+        den = cv2.blur(ok.astype(np.float32), (3, 3))
+        new = ~ok & (den > 0)
+        Dz[new] = num[new] / den[new]
+        ok = ok | new
+    return np.where(ok, Dz, np.inf).astype(np.float64)
+
+
 def mesh(D, box, H, W, f_px, step=3, jump_mm=10.0):
     """The depth map as a mesh in camera space (mm; x right, y up, the camera looking down -z), with a
     UV per vertex that is its pixel in the portrait. Quads that straddle a jump in depth (an ear's
-    edge, the hair against the backdrop) are left out."""
+    edge, the hair against the backdrop) are left out; with `jump_mm` None, none are."""
     Ds = D[::step, ::step]
     h, w = Ds.shape
     yy, xx = np.mgrid[0:h, 0:w]
@@ -148,8 +163,9 @@ def mesh(D, box, H, W, f_px, step=3, jump_mm=10.0):
     a, b, c, d = idx[:-1, :-1], idx[:-1, 1:], idx[1:, 1:], idx[1:, :-1]
     good = (a >= 0) & (b >= 0) & (c >= 0) & (d >= 0)
     q = np.stack([a[good], d[good], c[good], b[good]], 1)
-    z = Dv[q]
-    q = q[(z.max(1) - z.min(1)) < jump_mm * step / 3]
+    if jump_mm is not None:
+        z = Dv[q]
+        q = q[(z.max(1) - z.min(1)) < jump_mm * step / 3]
     return V, q, UV
 
 

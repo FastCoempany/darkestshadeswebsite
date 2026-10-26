@@ -1107,12 +1107,14 @@ def gcd_parts(frame, materials, length, centre, along, up, normal, proud=0.02):
     return obs
 
 
-def temples(frame, hinges, materials, ears=None, split=False):
+def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0):
     """The temples, from each hinge (mm) back to the ear and curving down behind it. `ears`: the point
     on each side where the temple rests on the ear's root, in the same coordinates; without them, the
     drawing's: straight back from the hinge. With `split`, each temple is two objects, the run from the
     hinge to the ear and the part behind the ear (named "... back"), so a front view can leave the
-    second out: from the front it is always behind the ear."""
+    second out: from the front it is always behind the ear. `split_after_mm` moves that split on past
+    the ear's root (acetate and strip temples), for a view in which the ear itself is seen hiding where
+    the temple goes in (a three-quarter view: the composite lays the ear over it)."""
     cfg = FRAMES[frame]
     t = cfg["temple"]
     obs = []
@@ -1142,7 +1144,8 @@ def temples(frame, hinges, materials, ears=None, split=False):
             size = lambda s_: (tf(s_), hf(s_))
             rad = lambda s_: min(t.get("edge_r", 0.9), 0.45 * min(tf(s_), hf(s_)))
             if split:
-                a_, b_ = s <= se + 1e-6, s >= se - 1e-6
+                sc_ = min(se + split_after_mm, float(s[-1]) - 5.0)
+                a_, b_ = s <= sc_ + 1e-6, s >= sc_ - 1e-6
                 pieces = [(f"{frame} temple {k}", P[a_], 0.0, 0.0), (f"{frame} temple {k} back", P[b_], float(s[b_][0]), 2.5)]
             else:
                 pieces = [(f"{frame} temple {k}", P, 0.0, 2.5)]
@@ -1208,7 +1211,7 @@ def temples(frame, hinges, materials, ears=None, split=False):
             # the ear's root as the wire is
             P = path_points([h, h + d * 12, e - d * 10, e] + tail)
             s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
-            se = float(s[np.argmin(np.linalg.norm(P - e, axis=1))])
+            se = min(float(s[np.argmin(np.linalg.norm(P - e, axis=1))]) + split_after_mm, float(s[-1]) - 5.0)
             cut = lambda a, b: P[(s >= a - 1e-6) & (s <= b + 1e-6)]
             tf = min(float(t.get("tip_from", s[-1])), s[-1] - 5.0)
             strip, tip = (t["thick"], t["height"]), (t["tip"][1], t["tip"][0])

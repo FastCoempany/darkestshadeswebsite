@@ -23,7 +23,10 @@ product photo is a flat front view lit by a light tent. Here the frame is a 3D o
   it (only on the face, and only as far as the portrait is lit there); the front and lenses, the head
   behind them showing the shaded portrait (each lens shows the face through its tint, `through_lens`
   of it where the founder wants dark lenses to all but hide the eyes; the frame's inner edges mirror
-  the skin); the temples, hidden behind the head where it is in front of them;
+  the skin); the temples, hidden behind the head where it is in front of them; in a three-quarter
+  view, the near temple's shadow on a sheet standing in for the side of the head (`temple_sheet`), the
+  far temple left to show only through its lens (`hide_temples`), the near ear laid over the temple
+  where it goes in behind it (`ear_crease_px`, `ear_occluders_px`, `ear_overrun_mm`);
 - the composite: the portrait times the shadow ratio, the temples over it, the front and lenses over
   those; the frame layers matched to the photograph (its softness, black level and grain), the scene's
   grade over the whole picture, and the crop (3:4 to the gallery's 4:5), as tools/photo/wear.py does.
@@ -377,7 +380,9 @@ def white_material():
 
 def photo_material(rgb, through_lens=1.0):
     """The portrait (linear RGB, top row first) as light given off by the head: what the camera sees of
-    the face through a lens, and what the frame's gloss mirrors of it."""
+    the face through a lens, and what the frame's gloss mirrors of it. Only from the side the camera
+    saw: a reflection that reaches the depth map from behind has run into the head from its far side,
+    which the portrait never showed, so there it is black (as head_interior is)."""
     H, W = rgb.shape[:2]
     im = bpy.data.images.new("photo", W, H, alpha=True, float_buffer=True)
     im.colorspace_settings.name = "Linear Rec.709"
@@ -404,9 +409,122 @@ def photo_material(rgb, through_lens=1.0):
     mx.inputs["To Min"].default_value = 1.0
     mx.inputs["To Max"].default_value = through_lens
     nt.links.new(lp.outputs["Transmission Depth"], mx.inputs["Value"])     # any path through a lens
-    nt.links.new(mx.outputs["Result"], em.inputs["Strength"])
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    front = nt.nodes.new("ShaderNodeMath")
+    front.operation = "SUBTRACT"
+    front.inputs[0].default_value = 1.0
+    nt.links.new(geo.outputs["Backfacing"], front.inputs[1])
+    st = nt.nodes.new("ShaderNodeMath")
+    st.operation = "MULTIPLY"
+    nt.links.new(mx.outputs["Result"], st.inputs[0])
+    nt.links.new(front.outputs[0], st.inputs[1])
+    nt.links.new(st.outputs[0], em.inputs["Strength"])
     nt.links.new(em.outputs[0], [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0].inputs["Surface"])
     return m
+
+
+def head_interior(eye_mid, ax, axes=(50.0, 70.0, 70.0), back=95.0):
+    """A black ellipsoid inside the head (`axes`: half its width, height and depth, mm; its centre `back`
+    mm behind the eyes), seen only by reflections: the head's far side and back, which the depth map
+    lacks. A reflection that runs into the head meets the head, not the portrait's backplate behind it
+    (W2's three-quarter: the far temple's inner face, seen through its lens, mirrored the backplate's
+    lit skin as an orange bar, where the real one would show the dark side of her head). Small enough
+    to stay inside any head, and within the temples."""
+    nu, nv = 48, 24
+    th = np.linspace(0, np.pi, nv + 1)[1:-1]
+    ph = np.linspace(0, 2 * np.pi, nu, endpoint=False)
+    T, Ph = np.meshgrid(th, ph, indexing="ij")
+    unit = np.stack([np.sin(T) * np.cos(Ph), np.cos(T), np.sin(T) * np.sin(Ph)], -1).reshape(-1, 3)
+    unit = np.vstack([unit, [[0, 1, 0], [0, -1, 0]]])
+    top, bot = len(unit) - 2, len(unit) - 1
+    F = []
+    for i in range(nv - 2):
+        for j in range(nu):
+            a, b = i * nu + j, i * nu + (j + 1) % nu
+            F += [[a, a + nu, b + nu], [a, b + nu, b]]
+    last = (nv - 2) * nu
+    F += [[top, (j + 1) % nu, j] for j in range(nu)] + [[bot, last + j, last + (j + 1) % nu] for j in range(nu)]
+    V = (unit * np.asarray(axes)) @ ax.T + (np.asarray(eye_mid, np.float64) - ax[:, 2] * back)
+    ob = mesh_object("head interior", V, np.array(F))
+    m = bpy.data.materials.new("head interior")
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != "OUTPUT_MATERIAL":
+            nt.nodes.remove(n)
+    em = nt.nodes.new("ShaderNodeEmission")
+    em.inputs["Strength"].default_value = 0.0
+    nt.links.new(em.outputs[0], [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0].inputs["Surface"])
+    ob.data.materials.append(m)
+    ob.visible_camera = False
+    ob.visible_diffuse = False
+    ob.visible_transmission = False
+    ob.visible_shadow = False
+    ob.visible_volume_scatter = False
+    return ob
+
+
+def temple_sheet_shadow(sc, cam, cfg, tmpl, front_objs, head, hinges, ears, ax, o, H, W, samples, out):
+    """The shadow a temple casts on the side of the head, for a view that shows that side (a three-
+    quarter view; from the front it is seen edge-on, and the composite's flat shadow serves). The depth
+    map reads the head's sides too shallow to take it in 3D (W2's three-quarter put the temple 30 mm
+    inside it at the ear), so a white sheet stands in for the skin: along the temple, `gap_front_mm`
+    inside its inner face at the hinge, closing to `gap_ear_mm` at the ear's root, lit as the head is.
+    Returns the sheet's light with the temple there over without it (1 off the sheet): the key's soft
+    shadow and the room's light the temple keeps off, crisp where it lies on the ear."""
+    ts = cfg["look3d"]["temple_sheet"]
+    t = frame3d.FRAMES[cfg["frame"]]["temple"]
+    thick = frame3d.table(t["thicks"]) if t.get("thicks") else (lambda s_: t.get("thick", 2.0))
+    hidden = cfg.get("look3d", {}).get("hide_temples", [])
+    white = white_material()
+    sheets = []
+    for k_, (h, e) in enumerate(zip(hinges, ears)):
+        side_name = ("right", "left")[k_]                # the wearer's, as `hide_temples` names them
+        if side_name in hidden or side_name not in ts.get("sides", ["right", "left"]):
+            continue
+        h, e = np.asarray(h, np.float64), np.asarray(e, np.float64)
+        d = e - h
+        run = float(np.linalg.norm(d))
+        d /= run
+        up = np.array([0.0, 1.0, 0.0]) - d * d[1]
+        up /= np.linalg.norm(up)
+        n_in = np.cross(up, d)
+        if n_in[0] * h[0] > 0:                           # towards the head's middle
+            n_in = -n_in
+        g0, g1 = ts.get("gap_front_mm", 8.0), ts.get("gap_ear_mm", 0.5)
+        ss = np.linspace(-4.0, run + ts.get("past_ear_mm", 12.0), 64)
+        zz = np.linspace(-ts.get("below_mm", 30.0), ts.get("above_mm", 12.0), 32)
+        V = np.array([h + d * s_ + n_in * (thick(max(s_, 0.0)) / 2 + g0 + (g1 - g0) * np.clip(s_ / run, 0, 1)) + up * z_
+                      for s_ in ss for z_ in zz]) @ ax.T + o
+        nz = len(zz)
+        F = np.array([[i * nz + j, i * nz + j + 1, (i + 1) * nz + j + 1, (i + 1) * nz + j]
+                      for i in range(len(ss) - 1) for j in range(nz - 1)])
+        sheet = mesh_object(f"temple sheet {k_}", V, F)
+        sheet.data.materials.append(white)
+        sheets.append(sheet)
+    state = {p: (p.hide_render, p.visible_camera, p.visible_shadow) for p in front_objs + tmpl + [head]}
+    for p in front_objs + tmpl + [head]:
+        p.hide_render = True
+    keep = sc.cycles.samples
+    sc.cycles.samples = max(32, samples // 2)
+    set_region(sc, cam, sheets, 0.03, H, W)
+    bare = render(sc, out / "layers" / "sheet_bare.exr")
+    hid = [k_ for k_, sd in ((0, "right"), (1, "left")) if sd in hidden]
+    for p in tmpl:
+        if not any(f" temple {k_}" in p.name for k_ in hid):
+            p.hide_render = False
+            p.visible_camera = False
+            p.visible_shadow = True
+    shaded = render(sc, out / "layers" / "sheet_shaded.exr")
+    sc.cycles.samples = keep
+    for p, (hr, vc, vs) in state.items():
+        p.hide_render, p.visible_camera, p.visible_shadow = hr, vc, vs
+    for sh_ in sheets:
+        bpy.data.objects.remove(sh_)
+    rt = np.ones((H, W), np.float32)
+    on = (bare[..., 3] > 0.5) & (lum(bare[..., :3]) > 1e-6)
+    rt[on] = np.clip(lum(shaded[..., :3])[on] / lum(bare[..., :3])[on], 0, 1)
+    return rt
 
 
 def set_region(sc, cam, objs, margin, H, W):
@@ -579,7 +697,8 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         if creases.get(side) is not None:
             ears[k_] = crease_point(creases[side], h, ax, o, H, W, f_px, cfg.get("ear_depth_mm", 85.0))
     report["ear_creases"] = {k_: (None if v is None else [round(float(c), 1) for c in v]) for k_, v in creases.items()}
-    tmpl = frame3d.temples(cfg["frame"], hinges, mats, ears=ears, split=True)
+    tmpl = frame3d.temples(cfg["frame"], hinges, mats, ears=ears, split=True,
+                           split_after_mm=cfg.get("look3d", {}).get("ear_overrun_mm", 0.0))
     rig = bpy.data.objects.new("glasses", None)
     sc.collection.objects.link(rig)
     for p in parts + tmpl:
@@ -713,10 +832,23 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         ratio = ratio * win_light[..., None]          # the window's factor (its light, or the relit skin)
     np.save(out / "layers" / "ratio.npy", ratio.astype(np.float16))
 
-    # 3: the front and lenses; the head shows the shaded portrait (through the lenses, in the gloss)
-    head.data.materials.clear()
-    head.data.materials.append(photo_material((lin * ratio).astype(np.float32), cfg.get("through_lens", 1.0)))
-    head.visible_camera = False
+    # 2b: a visible temple's shadow on the side of the head, where a three-quarter view shows that side
+    # (`temple_sheet`)
+    if cfg.get("look3d", {}).get("temple_sheet"):
+        rt = temple_sheet_shadow(sc, cam, cfg, tmpl, front_objs, head, hinges, ears, ax, o, H, W, samples, out)
+        np.save(out / "layers" / "temple_shadow.npy", rt.astype(np.float16))
+        report["temple_sheet"] = cfg["look3d"]["temple_sheet"]
+
+    # 3: the front and lenses; the head shows the shaded portrait (through the lenses, in the gloss): its
+    # mesh carried on past its outline onto the backdrop and every quad kept, so the edge a lens shows
+    # is the portrait's own (W2's three-quarter: across her cheek's edge the far lens showed the mesh's
+    # 3 px steps, the backplate taking over beyond them bent through the lens to another place)
+    head.hide_render = True
+    Vs, Fs, UVs = head3d.mesh(head3d.fill_depth(D, cfg.get("lens_fill_px", 12)), box, H, W, f_px, jump_mm=None)
+    seen = mesh_object("head as seen", Vs, Fs, UVs)
+    seen.data.materials.append(photo_material((lin * ratio).astype(np.float32), cfg.get("through_lens", 1.0)))
+    seen.visible_camera = False
+    interior = head_interior(eye_mid, ax)
     # and behind it the portrait again, on a card square to the camera: where the head's mesh has a gap
     # (the steep sides of the face, the head's edge, which it leaves out) a lens showed the bright room
     # through it as a pale patch with stepped edges; now it shows what the camera saw there
@@ -727,7 +859,7 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         Vb = np.stack([(cn[:, 0] - head3d.cx_(W)) / f_px * zb, (head3d.cy_(H) - cn[:, 1]) / f_px * zb,
                        -np.full(4, zb)], 1)
         back = mesh_object("backplate", Vb, np.array([[0, 3, 2, 1]]), np.stack([cn[:, 0] / W, 1 - cn[:, 1] / H], 1))
-        back.data.materials.append(head.data.materials[0])
+        back.data.materials.append(seen.data.materials[0])
         back.visible_camera = False
         back.visible_shadow = False
     for p in front_objs:
@@ -745,9 +877,9 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     hidden = [k_ for k_, sd in ((0, "right"), (1, "left")) if sd in cfg.get("look3d", {}).get("hide_temples", [])]
     for p in tmpl:
         p.visible_camera = " back" not in p.name and not any(f" temple {k_}" in p.name for k_ in hidden)
-    head.hide_render = True
-    if back is not None:
-        back.hide_render = True
+    for p in (head, seen, interior, back):
+        if p is not None:
+            p.hide_render = True
     set_region(sc, cam, front_objs + tmpl, 0.04, H, W)
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))
@@ -919,11 +1051,33 @@ def composite(cfg, out, img, lin, H, W, report):
         # the hair falls over the temples (a bob over the ears): nothing of them shows
         t_rgb, t_a = t_rgb * 0, t_a * 0
     f_rgb, f_a = matched(fr)
+    # the ear over the temple where it goes in behind it (a three-quarter view: the near ear faces the
+    # camera): `ear_occluders_px`, the outer ear's outline in the portrait (2x pixels) where the temple
+    # crosses it, the temple's run carried `ear_overrun_mm` on behind it
+    ear = np.zeros((H, W), np.float32)
+    for poly in look.get("ear_occluders_px", []):
+        q = 4
+        big = np.zeros((H * q, W * q), np.uint8)
+        cv2.fillPoly(big, [np.round((np.asarray(poly, np.float64) + 0.5) * q - 0.5).astype(np.int32)], 255, cv2.LINE_AA)
+        ear = np.maximum(ear, cv2.resize(big, (W, H), interpolation=cv2.INTER_AREA).astype(np.float32) / 255)
+    if ear.max() > 0:
+        ear = cv2.GaussianBlur(ear, (0, 0), look.get("ear_feather_px", 0.7))
+        t_rgb, t_a = t_rgb * (1 - ear[..., None]), t_a * (1 - ear[..., None])
+    # a temple's shadow on the side of the head, rendered on a sheet standing in for the skin
+    # (`temple_sheet`): where the portrait is lit, and not on the ear, which lies outside the temple
+    sheet_path = out / "layers" / "temple_shadow.npy"
+    if look.get("temple_sheet") and sheet_path.exists():
+        rt = np.load(sheet_path).astype(np.float32)
+        # the room's bounce the sheet's renders leave out: no shadow deeper than the portrait's own (`floor`)
+        fl = look["temple_sheet"].get("floor", 0.0)
+        rt = fl + (1 - fl) * rt
+        w_t = lit_weight(lin, report["px_per_mm"], report["light"]["skin_lin"]) * (1 - ear)
+        base = base * (1 - w_t * (1 - rt))[..., None]
     # the temples' own shadow where they lie along the head (the depth map's flattened sides cannot take
     # it in 3D): each visible temple's outline, moved away from the key by the gap between wire and hair
     # (about 2 mm), softened, darkening what lies under it
     k_ = report.get("key_used", {})
-    if t_a.max() > 0.05 and k_:
+    if t_a.max() > 0.05 and k_ and not look.get("temple_sheet"):
         gap = look.get("temple_gap_mm", 1.5) * report["px_per_mm"]
         dx = -gap * math.tan(math.radians(k_.get("az", -45.0)))
         dy = gap * math.tan(math.radians(k_.get("el", 25.0)))
