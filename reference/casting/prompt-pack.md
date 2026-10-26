@@ -39,6 +39,7 @@ Uniform-like, no logos, nothing that competes with the frame. One per image:
 Every first final is a front view: it wears a frame's A1 cut-out.
 
 - **A1:** `Head facing the camera, chin level, eyes open, looking just past the camera.`
+- **A2:** `Head turned three-quarters to her left (toward the right edge of the picture), so her right cheek, right temple and right ear face the camera; chin level, eyes open, looking the way her head is turned.` ("his" for a man.) The wearer's right toward the camera: the GCD's side (W2-S06-F03-A2, Oct 26 2026). Its yaw is about 35-40 degrees; a three-quarter portrait is checked for that turn, not the front view's 10.
 
 ## Tail
 

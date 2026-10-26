@@ -533,7 +533,12 @@ def main(cfg_path, samples=128):
 def render_layers(cfg, out, img, lin, H, W, samples):
     face = face_points(img)
     eyes = np.array(sorted(face.kps[:2].tolist()), np.float64)
-    s = float(np.linalg.norm(eyes[1] - eyes[0])) / cfg.get("pd_mm", 62.0)
+    # the scale (px per mm at the eyes) from the eyes' distance in 3D (InsightFace's 68 landmarks: x, y and z
+    # in the picture's pixels): on a head turned from the camera the distance across the picture is
+    # foreshortened (W2's three-quarter: 184 px across it, 208 in 3D; it drew the frame 13% small); facing
+    # the camera the two agree within 0.3%
+    L3 = face.landmark_3d_68.astype(np.float64)
+    s = float(np.linalg.norm(L3[36:42].mean(0) - L3[42:48].mean(0))) / cfg.get("pd_mm", 62.0)
     f_px = H * F_MM / SENSOR_H
     head3d.PP = (W / 2, float(eyes[:, 1].mean()) if cfg.get("eye_level", True) else H / 2)
     L = face.landmark_3d_68.astype(np.float64)
@@ -735,8 +740,11 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     # never seen from the front
     for p in front_objs:
         p.visible_camera = False
+    # a temple on the side the head is turned from runs behind the head (three-quarter views): `hide_temples`
+    # names it by the wearer's side ("left", "right")
+    hidden = [k_ for k_, sd in ((0, "right"), (1, "left")) if sd in cfg.get("look3d", {}).get("hide_temples", [])]
     for p in tmpl:
-        p.visible_camera = " back" not in p.name
+        p.visible_camera = " back" not in p.name and not any(f" temple {k_}" in p.name for k_ in hidden)
     head.hide_render = True
     if back is not None:
         back.hide_render = True
