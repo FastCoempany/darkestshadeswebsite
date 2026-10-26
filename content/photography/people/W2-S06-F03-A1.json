@@ -1,5 +1,5 @@
 {
- "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "$comment": "Settings for tools/blender/wear3d.py (and tools/photo/wear.py): one generated person wearing one real frame. F03 rebuilt in 3D from its drawing (tools/blender/frame3d.py), on W2's S06 portrait. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
  "id": "DS-CAST-W2-S06-F03-v01",
  "cast": "W2",
  "scene": "S06",
@@ -50,5 +50,7 @@
  "lens": {
   "photo": 0.0,
   "face_blur_mm": 0.3
- }
+ },
+ "through_lens": 1.0,
+ "skin_albedo": 0.15
 }

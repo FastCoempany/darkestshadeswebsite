@@ -50,10 +50,12 @@ MM = 0.001
 # the wedge, one flat outer face (the founder's desk shots, Oct 22 2026: it mirrors the room); temple:
 # "wire" (round, `radius`) or "strip" (a flat bar `height` tall and `thick` across, side and top
 # views), running `straight` mm back from the hinge, then curving `drop` mm down behind the ear; from
-# `tip_from` mm along it the acetate tip, `tip` = (height, width) mm. Meshing: mesh_step (the front's
-# grid, in drawing pixels of 0.05 mm), edge_floor (mm: right at an edge the height runs level along
-# it), exact_distance (edges measured to the outline smoothed into curves, not to its pixel steps);
-# all three keep a three-quarter view's gloss free of streaks.
+# `tip_from` mm along it the acetate tip, `tip` = (height, width) mm; or "acetate" (F03: a solid
+# temple whose `heights` and `thicks` taper along it, on a "block" end piece; `gcd`: the emblem set into
+# one temple's outer face). Meshing: mesh_step (the front's grid, in drawing pixels of 0.05 mm),
+# edge_floor (mm: right at an edge the height runs level along it), exact_distance (edges measured to
+# the outline smoothed into curves, not to its pixel steps); all three keep a three-quarter view's gloss
+# free of streaks.
 #
 # F04 against the founder's side shot of the real frame (Oct 22 2026), where it differs from drawing 05:
 # the frame's top is a flat plateau, its front edge rounded tightly (edge_r 1.8); the arm runs square to
@@ -84,6 +86,16 @@ MM = 0.001
 # flat metal temple 2.7 to 2.4 mm tall to the acetate tip's joint 74 mm back, the tip curving down as drawn.
 # The metal is satin black paint (`coated`, `metal_rough`: the product shots show soft gradients on it, no
 # mirror, and black at every angle).
+# F03 (drawing 02, its cleaned shots, the founder's desk shots of Oct 26 2026): F02's front (the two drawings'
+# fronts lie on each other: the same outline, openings, bevel line, bridge, lean and wrap), all gloss black,
+# with a yellow lens; its face flatter (the photographs: one even tone across it, dome 0.3). Round each lens
+# a straight bevel (the photographs: the broad face, then a defined edge where a sloped band runs down to
+# the lens, its amber edge glowing through it): a chamfer from the drawing's line 3.2 mm out, rounded over
+# 0.3 mm at its top, to the lens 2.1 mm under the face. Acetate temples (side view: 9 mm tall from the
+# joint, 8.2 mm behind the end's face, to 80 mm back, then narrowing to 5 mm and turning down behind the
+# ear; top view: 4.3 mm across at the joint, 2 mm at the tip; edges rounded 0.9 mm), the joint on a short
+# acetate block that carries the temple's section into the end tab; the GCD on the right temple's outer
+# face (f03.json: 8.8 mm long, centred 0.82 x the 9 mm face from the joint, 39% down it).
 FRAMES = {
     "F02": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.7,
             "bezel": {"width": 3.2, "step": 0.8, "drop": 1.2, "bump": 0.3, "groove": 0.0, "groove_w": 0.5},
@@ -95,6 +107,22 @@ FRAMES = {
             "hinge": {"down": 9.7, "back": 17.0},
             "temple": {"kind": "wire", "radius": 1.0, "straight": 95.0, "drop": 30.0},
             "texture": "work/frames3d/F02"},
+    "F03": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.3,
+            "bezel": {"kind": "well", "width": 3.2, "p": 1.0, "round": 0.3, "seam": 0.15, "blend": 0.6,
+                      "step": 0.0, "drop": 1.2},
+            "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            "lens": {"radius": 150.0, "thick": 1.6, "inset": 0.9},
+            "tilt": 10.0,
+            "pads": {"x": 10.0, "y": -3.0, "back": 1.5, "r": (1.4, 4.5, 2.5)},
+            "endpiece": {"kind": "block", "back": 8.2, "inset": 0.03, "flare": 1.2, "into": 2.0},
+            "temple": {"kind": "acetate", "top_below": 3.7, "height": 9.0, "edge_r": 0.9,
+                       "heights": [(0, 9.0), (80, 9.0), (90, 7.8), (95, 6.4), (100, 5.2), (110, 4.8), (150, 4.0)],
+                       "thicks": [(0, 4.3), (20, 4.0), (40, 3.6), (60, 3.3), (90, 2.75), (120, 2.25), (150, 2.0)],
+                       "straight": 80.0, "drop": 30.0,
+                       # the mid-line beyond the straight run (mm back, mm down), side view
+                       "tip_path": [(0, 0), (10, -0.5), (15, -1.0), (20, -1.3), (30, 0.1), (40, 4.4),
+                                    (50, 11.4), (58, 14.3)]},
+            "gcd": {"side": -1, "length": 8.8, "from_joint": 7.4, "down": 3.5}},
     "F04": {"depth": 7.0, "edge_r": 1.8, "back_r": 1.0, "dome": 0.9,
             "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
             "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
@@ -477,8 +505,16 @@ def rim_fields(sh, cfg):
         # the sweep starts `edge_floor` mm out from the opening, level up to there (as the outer edge
         # does): right at the opening it is at its steepest, and the edge row's heights, read at the
         # pixel steps, would run in a sawtooth along the lens's edge
-        ti = np.clip((d_in - f) / max(W_ - f, 1e-3), 0, 1)
-        zi = zl + seam + (face - zl - seam) * (1 - (1 - ti) ** bz.get("p", 2.0))
+        ti = np.clip((d_in - f) / max(W_ - f, 1e-3), 0, None)
+        if bz.get("p", 2.0) == 1.0:
+            # a straight bevel (F03): a chamfer from the lens up to the face, meeting it at a defined
+            # edge, rounded over `round` mm either side (a parabola: the slope runs down to the face's in
+            # that width, no kink)
+            rho = bz.get("round", 0.3) / max(W_ - f, 1e-3)
+            g = np.where(ti < 1 - rho, ti, np.where(ti < 1 + rho, ti - (ti - (1 - rho)) ** 2 / (4 * rho), 1.0))
+        else:
+            g = 1 - (1 - np.clip(ti, 0, 1)) ** bz.get("p", 2.0)
+        zi = zl + seam + (face - zl - seam) * g
         k = bz.get("blend", 0.6)
         h = np.clip(k - np.abs(zo - zi), 0, None) / k
         zf = np.minimum(zo, zi) - h * h * k / 4
@@ -615,10 +651,11 @@ def rounded_rect(w, h, r, n=6):
     return np.array(pts)
 
 
-def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5):
+def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5, s0=0.0):
     """A bar along the polyline P (mm), resampled every `step` mm: its section a rounded rectangle
     size = (across, up) mm, kept as upright as the path allows; `round_end`: its last mm close to a
-    rounded tip."""
+    rounded tip. `size` and `radius` may instead be functions of the distance along the bar (mm, from
+    `s0` at P's start: a piece of a longer bar keeps that bar's taper)."""
     P = np.asarray(P, np.float64)
     s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
     ss = np.r_[np.arange(0, s[-1], step), s[-1]]
@@ -626,10 +663,12 @@ def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, st
     T = np.gradient(P, axis=0)
     T /= np.linalg.norm(T, axis=1, keepdims=True)
     L = ss[-1]
-    prof = rounded_rect(size[0], size[1], radius)
     upv = np.asarray(up, np.float64)
     rings = []
     for p, t, si in zip(P, T, ss):
+        sz = size(s0 + si) if callable(size) else size
+        rad = radius(s0 + si) if callable(radius) else radius
+        prof = rounded_rect(sz[0], sz[1], rad)
         u = upv - t * np.dot(upv, t)
         u /= np.linalg.norm(u)
         a = np.cross(u, t)
@@ -745,6 +784,16 @@ def build(frame, materials, tilt=None):
             p.data.update()
     out = sh["outline"]
     ep = cfg["endpiece"]
+    if ep.get("kind") == "block":
+        hinges, ends = [], []
+        for side in (-1, 1):
+            ob, end, hinge = block_endpiece(frame, cfg, out, xm, z, side, th_t, materials)
+            parts.append(ob)
+            ends.append(end)
+            hinges.append(hinge)
+        sh["ends"] = ends
+        _textured(parts, frame, materials)
+        return parts, sh, hinges
     if ep.get("outline"):
         ends, hinges = [], []
         for side in (-1, 1):
@@ -928,6 +977,96 @@ def side_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
     return obs, end, (xo - side * tp["thick"] / 2, ya, za)
 
 
+def block_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
+    """An acetate end piece (F03): the temple's own section carried forward from the joint into the
+    front's end tab, its outer face flush with the tab's side (`inset` mm inside it, so the two never
+    share a plane); its bottom flaring down `flare` mm into the tab. Returns it, its end record (no GCD
+    platform: F03's GCD is on the temple) and the hinge point (the temple's start: its section's centre, a
+    hair behind the joint)."""
+    ep, tp, T = cfg["endpiece"], cfg["temple"], cfg["depth"]
+    xe = out[:, 0].max() if side > 0 else out[:, 0].min()
+    zface = float(np.interp(xe, xm, z))
+    yt = float(out[:, 1].max()) - tp["top_below"]            # the temple's top edge (side view)
+    yb = yt - tp["height"]
+    yc = (yt + yb) / 2
+    th0 = tp["thicks"][0][1] if tp.get("thicks") else tp["thick"]
+    xo = xe - side * ep.get("inset", 0.03)
+    xc = xo - side * th0 / 2
+    z_face = zface + yc * th_t                                # the tab's face at the temple's height
+    z_joint = z_face - ep["back"]
+    z_in = z_face - T + ep.get("into", 2.0)                    # inside the tab
+    r = tp.get("edge_r", 0.9)
+    fl = ep.get("flare", 0.0)
+    rings = []
+    for zz, flare in ((z_in, fl), (z_face - T, fl * 0.6), (z_joint, 0.0)):
+        h = tp["height"] + flare
+        prof = rounded_rect(th0, h, r)
+        rings.append([(xc + x, yc - flare / 2 + y, zz) for x, y in prof])
+    ob = loft(f"{frame} end {side}", rings, materials["acetate"])
+    outward_normals(ob)
+    for pl in ob.data.polygons:
+        pl.use_smooth = True
+    end = {"side": side, "apex": (xo, yc, z_joint), "top": (xo, yt, z_joint), "bottom": (xo, yb, z_joint),
+           "centre": (xo, yc, z_joint), "normal": (float(side), 0.0, 0.0)}
+    return ob, end, (xc, yc, z_joint - 0.05)
+
+
+def table(pairs):
+    """A piecewise-linear function of distance (mm) from (s, value) pairs."""
+    s_, v_ = np.asarray(pairs, np.float64).T
+    return lambda s: float(np.interp(s, s_, v_))
+
+
+def gcd_parts(frame, P, s_at, side, materials, length, offset_up, half_thick, up=(0.0, 1.0, 0.0), proud=0.02):
+    """The GCD (gold band, black onyx inset; brand/emblems/gcd/svg/gcd-geometry.svg) set into a temple's
+    outer face: `length` mm long, its centre `s_at` mm along the temple's path P from the joint and
+    `offset_up` mm above the section's centre, parallel to the temple; the outer face `half_thick` mm
+    out from the path, the emblem's face `proud` mm out of it."""
+    sys.path.insert(0, str(ROOT / "tools" / "blender"))
+    import gcd_render
+    P = np.asarray(P, np.float64)
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+    i = int(np.searchsorted(s, s_at))
+    p = np.array([np.interp(s_at, s, P[:, k]) for k in range(3)])
+    t = P[min(i + 1, len(P) - 1)] - P[max(i - 1, 0)]
+    t /= np.linalg.norm(t)
+    u = np.asarray(up, np.float64) - t * np.dot(up, t)
+    u /= np.linalg.norm(u)
+    a = np.cross(u, t)                                        # the section's "across" (as sweep() builds it)
+    n = a * (1.0 if np.dot(a, [side, 0, 0]) > 0 else -1.0)    # out of the temple's outer face
+    svg = gcd_render.GEOM.read_text()
+    outer = gcd_render.parse_path(re.search(r'id="outer"\s+d="([^"]+)"', svg).group(1))
+    aperture = gcd_render.parse_path(re.search(r'id="aperture"\s+d="([^"]+)"', svg).group(1))
+    k = length / (gcd_render.LENGTH_M / MM)                   # the master is built 12 mm long
+    depth = gcd_render.GOLD_DEPTH / MM * k
+    gold = to_mesh(gcd_render.curve_object(f"{frame} gcd gold", outer + aperture, gcd_render.GOLD_DEPTH,
+                                           gcd_render.GOLD_BEVEL, 0.0))
+    stone = to_mesh(gcd_render.curve_object(f"{frame} gcd onyx", aperture,
+                                            gcd_render.GOLD_DEPTH - 2 * gcd_render.STONE_RECESS,
+                                            gcd_render.STONE_BEVEL, -gcd_render.STONE_RECESS))
+    c = p + n * (half_thick + proud - depth / 2) + u * offset_up
+    # the emblem's x along the temple (reading left to right seen from outside), y up, z out of the face
+    xa = -t if side < 0 else t
+    R = np.stack([xa, u, n], 1)
+    obs = []
+    for ob, mat in ((gold, materials["gold"]), (stone, materials["onyx"])):
+        me = ob.data
+        co = np.zeros(len(me.vertices) * 3)
+        me.vertices.foreach_get("co", co)
+        co = co.reshape(-1, 3) / MM * k                         # mm, emblem frame
+        co[:, 2] += ob.location.z / MM * k
+        ob.location = (0, 0, 0)
+        w = co @ R.T + c
+        me.vertices.foreach_set("co", (w * MM).ravel())
+        me.update()
+        me.materials.clear()
+        me.materials.append(mat)
+        for pl in me.polygons:
+            pl.use_smooth = True
+        obs.append(ob)
+    return obs
+
+
 def temples(frame, hinges, materials, ears=None, split=False):
     """The temples, from each hinge (mm) back to the ear and curving down behind it. `ears`: the point
     on each side where the temple rests on the ear's root, in the same coordinates; without them, the
@@ -939,6 +1078,42 @@ def temples(frame, hinges, materials, ears=None, split=False):
     obs = []
     for k, h in enumerate(hinges):
         h = np.asarray(h, np.float64)
+        if t.get("kind") == "acetate":
+            # a solid acetate temple (F03): its section from the side and top views along its length
+            # (`heights`, `thicks`: mm from the joint), edges rounded `edge_r`; straight back from the joint
+            # and down behind the ear, as drawn or bent to the ear
+            side = 1.0 if h[0] > 0 else -1.0
+            if ears is None:
+                jt = h + np.array([0.0, 0.0, -t["straight"]])
+                tip = path_points([jt + np.array([0.0, -dv, -du]) for du, dv in t["tip_path"]], resolution=16)
+                P = np.vstack([h + np.outer(np.linspace(0, 1, 160), jt - h), tip[1:]])
+            else:
+                e = np.asarray(ears[k], np.float64)
+                d = e - h
+                d /= np.linalg.norm(d)
+                down = np.array([0.0, -1.0, 0.0])
+                back = d * 0.35 + np.array([0.0, 0.0, -1.0]) * 0.65
+                back /= np.linalg.norm(back)
+                tail = [e + back * 14 + down * 6, e + back * 26 + down * 20, e + back * 30 + down * t["drop"]]
+                P = path_points([h, h + d * 12, e - d * 10, e] + tail)
+            s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
+            se = t["straight"] if ears is None else float(s[np.argmin(np.linalg.norm(P - e, axis=1))])
+            hf, tf = table(t["heights"]), table(t["thicks"])
+            size = lambda s_: (tf(s_), hf(s_))
+            rad = lambda s_: min(t.get("edge_r", 0.9), 0.45 * min(tf(s_), hf(s_)))
+            if split:
+                a_, b_ = s <= se + 1e-6, s >= se - 1e-6
+                pieces = [(f"{frame} temple {k}", P[a_], 0.0, 0.0), (f"{frame} temple {k} back", P[b_], float(s[b_][0]), 2.5)]
+            else:
+                pieces = [(f"{frame} temple {k}", P, 0.0, 2.5)]
+            for name, Pp, s0, rend in pieces:
+                if len(Pp) >= 2:
+                    obs.append(sweep(name, Pp, size, materials["acetate"], rad, round_end=rend, s0=s0))
+            g = cfg.get("gcd")
+            if g and side == g["side"]:
+                sa = g["from_joint"]
+                obs += gcd_parts(frame, P, sa, side, materials, g["length"], hf(sa) / 2 - g["down"], tf(sa) / 2)
+            continue
         if ears is None and t.get("tip_path"):
             # as drawn and photographed: square to the front, straight back from the hinge to the joint,
             # then the acetate tip along the side drawing's curve; split where the tip starts to bend
@@ -1063,7 +1238,10 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     return {"acetate": acetate,
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             "endmetal": endmetal,
-            "lens": lens}
+            "lens": lens,
+            # the GCD set into a temple (F03): brand gold #C6A36A, polished; black onyx (as the texture's)
+            "gold": principled("gcd gold", (0.565, 0.366, 0.145, 1), 0.22, metallic=1.0),
+            "onyx": principled("gcd onyx", (0.006, 0.006, 0.006, 1), 0.04)}
 
 
 def textured_acetate(tex, rough=0.06):
@@ -1116,9 +1294,11 @@ def textured_acetate(tex, rough=0.06):
     return m
 
 
-def check(frame, out, samples=64):
+def check(frame, out, samples=64, tint=None, el_deg=4.0, yaw_deg=0.0):
     """The built frame, upright in a light tent and seen from the front and a little above as the
-    product shot was taken, for a side-by-side with the product photo."""
+    product shot was taken, for a side-by-side with the product photo. `tint`: the lens's (a light lens
+    shows what is behind it); `yaw_deg`: the frame turned (its right towards the camera for positive), for
+    a three-quarter shot."""
     sys.path.insert(0, str(ROOT / "tools" / "blender"))
     import gcd_render
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -1126,14 +1306,14 @@ def check(frame, out, samples=64):
     gcd_render.setup_scene(1600, samples, light="lightbox")
     sc.render.resolution_x, sc.render.resolution_y = 1600, 1000
     sc.render.film_transparent = False
-    mats = materials_for(frame)
+    mats = materials_for(frame, tint) if tint else materials_for(frame)
     parts, sh, hinges = build(frame, mats)
     parts += temples(frame, hinges, mats)
     rig = bpy.data.objects.new("rig", None)
     sc.collection.objects.link(rig)
     for p in parts:
         p.parent = rig
-    rig.rotation_euler = (np.radians(90), 0, 0)        # the frame's up (y) to the world's up (z)
+    rig.rotation_euler = (np.radians(90), 0, np.radians(yaw_deg))   # the frame's up (y) to the world's up (z)
     # the tent's front is open where the camera looks in: dark in the directions round the camera,
     # which is what the frame's face mirrors (it is why a black frame photographs black in a tent)
     nt = sc.world.node_tree
@@ -1159,7 +1339,7 @@ def check(frame, out, samples=64):
     cam.data.sensor_fit = "HORIZONTAL"
     cam.data.sensor_width = 36
     dist = (sh["width"] + 40) * MM * 100 / 36
-    el = np.radians(4.0)
+    el = np.radians(el_deg)
     cam.location = (0, -dist * np.cos(el), dist * np.sin(el))
     cam.rotation_euler = (np.radians(90) - el, 0, 0)
     sc.render.filepath = str(out)
@@ -1172,6 +1352,10 @@ if __name__ == "__main__":
     ap.add_argument("frame")
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--tint", default=None, help="the lens's transmission, linear r,g,b (wear3d.lens_tint)")
+    ap.add_argument("--el", type=float, default=4.0, help="the camera's height above the frame's centre, degrees")
+    ap.add_argument("--yaw", type=float, default=0.0, help="the frame turned about the vertical, degrees")
     a = ap.parse_args()
     if a.check:
-        check(a.frame, pathlib.Path(a.out or f"/tmp/{a.frame}-3d-check.png"))
+        tint = tuple(float(v) for v in a.tint.split(",")) if a.tint else None
+        check(a.frame, pathlib.Path(a.out or f"/tmp/{a.frame}-3d-check.png"), tint=tint, el_deg=a.el, yaw_deg=a.yaw)
