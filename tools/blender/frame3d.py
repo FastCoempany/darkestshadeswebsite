@@ -1156,10 +1156,21 @@ def temples(frame, hinges, materials, ears=None, split=False):
                 pg = product_gcd(frame)
                 face = float(pg["templeFaceHeightMm"])
                 sa = GCD_FROM_HINGE * face
-                p_, t_, u_, a_ = path_frame(P, sa)
-                n_ = a_ * (1.0 if np.dot(a_, [side, 0, 0]) > 0 else -1.0)
-                centre = p_ + n_ * tf(sa) / 2 + u_ * (hf(sa) / 2 - GCD_DOWN * face)
-                obs += gcd_parts(frame, materials, float(pg["lengthMm"]), centre, -t_ if side < 0 else t_, u_, n_)
+
+                def face_pt(s_):
+                    p_, t_, u_, a_ = path_frame(P, s_)
+                    n_ = a_ * (1.0 if np.dot(a_, [side, 0, 0]) > 0 else -1.0)
+                    return p_ + n_ * tf(s_) / 2, u_, n_
+                centre, u_, n_ = face_pt(sa)
+                # flat on the face, which turns in as the temple narrows (set square to the temple's mid-line,
+                # its front end sat 0.013 mm into the acetate)
+                along = face_pt(sa + 1.0)[0] - face_pt(sa - 1.0)[0]
+                along -= u_ * np.dot(along, u_)
+                along /= np.linalg.norm(along)
+                x_e = -along if side < 0 else along           # reading left to right seen from outside
+                n_ = np.cross(x_e, u_)                         # out of the face
+                centre = centre + u_ * (hf(sa) / 2 - GCD_DOWN * face)
+                obs += gcd_parts(frame, materials, float(pg["lengthMm"]), centre, x_e, u_, n_)
             continue
         if ears is None and t.get("tip_path"):
             # as drawn and photographed: square to the front, straight back from the hinge to the joint,
