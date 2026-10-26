@@ -122,7 +122,7 @@ FRAMES = {
                        # the mid-line beyond the straight run (mm back, mm down), side view
                        "tip_path": [(0, 0), (10, -0.5), (15, -1.0), (20, -1.3), (30, 0.1), (40, 4.4),
                                     (50, 11.4), (58, 14.3)]},
-            "gcd": {"side": -1, "length": 8.8, "from_joint": 7.4, "down": 3.5}},
+            "gcd": {"side": -1, "on": "temple"}},
     "F04": {"depth": 7.0, "edge_r": 1.8, "back_r": 1.0, "dome": 0.9,
             "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
             "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
@@ -138,7 +138,11 @@ FRAMES = {
                        "tip_from": 72.0, "tip": (3.0, 2.4), "tip_straight": 12.0,
                        # the acetate tip's mid-line from the joint (mm back, mm down), side view
                        "tip_path": [(0, 0), (3, 0.05), (13, 0.6), (21, 2.25), (27, 4.65), (33, 9.45),
-                                    (43, 19.15), (53, 29.15), (59.5, 35.15)]}},
+                                    (43, 19.15), (53, 29.15), (59.5, 35.15)]},
+            # where the cleaned shots set it (IMG_3456, tools/photo/temple_gcd.py): the side view's mm, the
+            # emblem's centre and the hinge's (the wire's collar), on the face the end piece and the front's
+            # side make
+            "gcd": {"side": -1, "on": "endpiece", "hinge_mm": (25.0, 10.375), "centre_mm": (11.47, 10.59)}},
     "F05": {"depth": 7.5, "edge_r": 2.2, "back_r": 1.2, "dome": 0.9,
             "bezel": {"kind": "well", "width": 3.4, "p": 2.5, "seam": 0.15, "blend": 0.6, "step": 0.0, "drop": 1.8},
             "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
@@ -154,7 +158,9 @@ FRAMES = {
             "temple": {"kind": "strip", "height": 2.6, "thick": 1.3, "straight": 75.0, "drop": 30.0,
                        "tip_from": 74.0, "tip": (3.0, 2.2), "tip_straight": 12.0,
                        "tip_path": [(0, 0), (1, 0.03), (8, 0.46), (13, 0.94), (18, 1.63), (23, 2.58), (28, 3.85),
-                                    (33, 5.65), (38, 8.35), (43, 12.63), (48, 17.9), (53, 22.78), (55, 24.0)]}},
+                                    (33, 5.65), (38, 8.35), (43, 12.63), (48, 17.9), (53, 22.78), (55, 24.0)]},
+            # as the cleaned shots set it (IMG_3545, IMG_3547)
+            "gcd": {"side": -1, "on": "endpiece", "hinge_mm": (27.4, 22.15), "centre_mm": (13.93, 22.45)}},
 }
 
 
@@ -801,6 +807,16 @@ def build(frame, materials, tilt=None):
             parts += obs
             ends.append(end)
             hinges.append(hinge)
+            g = cfg.get("gcd")
+            if g and g.get("on") == "endpiece" and side == g["side"]:
+                # on the end piece's outer face, where the side view puts it from the hinge (the apex, where
+                # the wire goes in): forward and down by the drawing's mm, along the temple
+                xo, ya, za = end["apex"]
+                fwd = g["hinge_mm"][0] - g["centre_mm"][0]
+                down = g["centre_mm"][1] - g["hinge_mm"][1]
+                along = np.array([0.0, 0.0, 1.0 if side < 0 else -1.0])
+                parts += gcd_parts(frame, materials, float(product_gcd(frame)["lengthMm"]), (xo, ya - down, za + fwd),
+                                   along, np.array([0.0, 1.0, 0.0]), np.array([float(side), 0.0, 0.0]))
         sh["ends"] = ends
         _textured(parts, frame, materials)
         return parts, sh, hinges
@@ -1017,13 +1033,23 @@ def table(pairs):
     return lambda s: float(np.interp(s, s_, v_))
 
 
-def gcd_parts(frame, P, s_at, side, materials, length, offset_up, half_thick, up=(0.0, 1.0, 0.0), proud=0.02):
-    """The GCD (gold band, black onyx inset; brand/emblems/gcd/svg/gcd-geometry.svg) set into a temple's
-    outer face: `length` mm long, its centre `s_at` mm along the temple's path P from the joint and
-    `offset_up` mm above the section's centre, parallel to the temple; the outer face `half_thick` mm
-    out from the path, the emblem's face `proud` mm out of it."""
-    sys.path.insert(0, str(ROOT / "tools" / "blender"))
-    import gcd_render
+# The GCD on the product executes one way only (the founder, Oct 26 2026): full size, its own proportions,
+# its one placement, on every frame, in every view; never scaled, moved or left off to suit a picture.
+# Its length is the product's (content/products/<frame>.json, gcd.lengthMm: 0.98 x the temple face's
+# height); on a temple its centre is 0.82 x that height from the hinge seam and 39% down the face,
+# parallel to the temple (01-brand-system.md, "Physical scale on the frames").
+GCD_FROM_HINGE, GCD_DOWN = 0.82, 0.39
+
+
+def product_gcd(frame):
+    """The frame's GCD as its product file gives it."""
+    import json
+    return json.loads((ROOT / "content" / "products" / f"{frame.lower()}.json").read_text())["gcd"]
+
+
+def path_frame(P, s_at, up=(0.0, 1.0, 0.0)):
+    """A swept bar's frame `s_at` mm along its path P (mm): the point, the tangent, the section's up and
+    its across (as sweep() builds them)."""
     P = np.asarray(P, np.float64)
     s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
     i = int(np.searchsorted(s, s_at))
@@ -1032,36 +1058,50 @@ def gcd_parts(frame, P, s_at, side, materials, length, offset_up, half_thick, up
     t /= np.linalg.norm(t)
     u = np.asarray(up, np.float64) - t * np.dot(up, t)
     u /= np.linalg.norm(u)
-    a = np.cross(u, t)                                        # the section's "across" (as sweep() builds it)
-    n = a * (1.0 if np.dot(a, [side, 0, 0]) > 0 else -1.0)    # out of the temple's outer face
+    return p, t, u, np.cross(u, t)
+
+
+def gcd_parts(frame, materials, length, centre, along, up, normal, proud=0.02):
+    """The GCD (gold band, black onyx inset), built from the vector master (brand/emblems/gcd/svg/
+    gcd-geometry.svg) and scaled so the band's outline is exactly `length` mm long, its height the
+    master's proportion of that. Its centre at `centre` (mm, on the face it is set
+    into), its length along `along` (reading left to right seen from outside), its top towards `up`, its
+    face `proud` mm out along `normal`."""
+    sys.path.insert(0, str(ROOT / "tools" / "blender"))
+    import gcd_render
     svg = gcd_render.GEOM.read_text()
     outer = gcd_render.parse_path(re.search(r'id="outer"\s+d="([^"]+)"', svg).group(1))
     aperture = gcd_render.parse_path(re.search(r'id="aperture"\s+d="([^"]+)"', svg).group(1))
-    k = length / (gcd_render.LENGTH_M / MM)                   # the master is built 12 mm long
-    depth = gcd_render.GOLD_DEPTH / MM * k
+    # the polished edge rounded inside the outline (offset in by its radius), so the band's outer edge is
+    # the master's outline exactly: its length and its height the master's proportion of it
     gold = to_mesh(gcd_render.curve_object(f"{frame} gcd gold", outer + aperture, gcd_render.GOLD_DEPTH,
-                                           gcd_render.GOLD_BEVEL, 0.0))
+                                           gcd_render.GOLD_BEVEL, 0.0, offset=-gcd_render.GOLD_BEVEL))
     stone = to_mesh(gcd_render.curve_object(f"{frame} gcd onyx", aperture,
                                             gcd_render.GOLD_DEPTH - 2 * gcd_render.STONE_RECESS,
                                             gcd_render.STONE_BEVEL, -gcd_render.STONE_RECESS))
-    c = p + n * (half_thick + proud - depth / 2) + u * offset_up
-    # the emblem's x along the temple (reading left to right seen from outside), y up, z out of the face
-    xa = -t if side < 0 else t
-    R = np.stack([xa, u, n], 1)
+
+    def local_mm(ob):
+        co = np.zeros(len(ob.data.vertices) * 3)
+        ob.data.vertices.foreach_get("co", co)
+        return co.reshape(-1, 3) / MM + np.asarray(ob.location) / MM
+    # the scale from the band as built (the master's canvas is wider than the emblem: scaling the canvas
+    # to the length made F03's GCD 3.7% short, 8.47 mm for 8.8)
+    cg = local_mm(gold)
+    k = length / float(np.ptp(cg[:, 0]))
+    mid = (cg.min(0) + cg.max(0)) / 2
+    depth = float(np.ptp(cg[:, 2])) * k
+    c = np.asarray(centre, np.float64) + np.asarray(normal, np.float64) * (proud - depth / 2)
+    R = np.stack([np.asarray(along, np.float64), np.asarray(up, np.float64), np.asarray(normal, np.float64)], 1)
     obs = []
     for ob, mat in ((gold, materials["gold"]), (stone, materials["onyx"])):
-        me = ob.data
-        co = np.zeros(len(me.vertices) * 3)
-        me.vertices.foreach_get("co", co)
-        co = co.reshape(-1, 3) / MM * k                         # mm, emblem frame
-        co[:, 2] += ob.location.z / MM * k
+        co = (local_mm(ob) - mid * np.array([1.0, 1.0, 0.0])) * k
         ob.location = (0, 0, 0)
         w = co @ R.T + c
-        me.vertices.foreach_set("co", (w * MM).ravel())
-        me.update()
-        me.materials.clear()
-        me.materials.append(mat)
-        for pl in me.polygons:
+        ob.data.vertices.foreach_set("co", (w * MM).ravel())
+        ob.data.update()
+        ob.data.materials.clear()
+        ob.data.materials.append(mat)
+        for pl in ob.data.polygons:
             pl.use_smooth = True
         obs.append(ob)
     return obs
@@ -1110,9 +1150,16 @@ def temples(frame, hinges, materials, ears=None, split=False):
                 if len(Pp) >= 2:
                     obs.append(sweep(name, Pp, size, materials["acetate"], rad, round_end=rend, s0=s0))
             g = cfg.get("gcd")
-            if g and side == g["side"]:
-                sa = g["from_joint"]
-                obs += gcd_parts(frame, P, sa, side, materials, g["length"], hf(sa) / 2 - g["down"], tf(sa) / 2)
+            if g and g.get("on") == "temple" and side == g["side"]:
+                # on the temple's outer face: centre 0.82 x the face's height from the hinge seam (the path
+                # starts at it), 39% down the face, parallel to the temple
+                pg = product_gcd(frame)
+                face = float(pg["templeFaceHeightMm"])
+                sa = GCD_FROM_HINGE * face
+                p_, t_, u_, a_ = path_frame(P, sa)
+                n_ = a_ * (1.0 if np.dot(a_, [side, 0, 0]) > 0 else -1.0)
+                centre = p_ + n_ * tf(sa) / 2 + u_ * (hf(sa) / 2 - GCD_DOWN * face)
+                obs += gcd_parts(frame, materials, float(pg["lengthMm"]), centre, -t_ if side < 0 else t_, u_, n_)
             continue
         if ears is None and t.get("tip_path"):
             # as drawn and photographed: square to the front, straight back from the hinge to the joint,

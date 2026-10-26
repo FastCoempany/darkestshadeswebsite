@@ -12,6 +12,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 **Brand**
 - Tagline: **See Everything. Reveal Nothing.** Prada is the idol; the design lens is "philosophy as manifesto, before product" (`02-raf-lens.md`). **Raf Simons is never named, shown or quoted** anywhere in the site, metadata, alt text or shipped code.
 - Marks: Anastasiia's logo and angular brand mark are primary; the **GCD** (gold band, black onyx inset) is the secondary insignia. **Nav and favicon use the brand mark, never the GCD.** Marks come only from `brand/marks/` and `brand/emblems/gcd/`. The Eclipse Silhouette and the old engraved wordmark never appear.
+- **The GCD on the product executes one way only**: full size, its own proportion and its one placement (`01-brand-system.md`; per frame in `content/products/`), on every frame in every photo, composite and render, whatever the view. Never scaled, moved or left off to suit a picture.
 - Fonts: **Owners Wide** (Medium) and **Stolzl** (Light, Book, Regular, Medium) only. **Never commit font files** (public repo); load them as `brand/fonts/README.md` says.
 - Color: **role tokens only** in `app/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product images always sit on the stage color.
 

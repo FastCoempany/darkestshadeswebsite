@@ -17,7 +17,7 @@ Retired: the Eclipse Silhouette (`darkestshades` repo, `brand/emblems/eclipse-si
 - **Size steps.** Under 48 px wide: `gcd-flat-gold.svg` (no veins). 48–160 px: `gcd-onyx.svg` (metallic gradient, veins). Above 160 px or in photography: the 3D render (`gcd-3d-front-*.png`) or the emblem as it appears on the product.
 - **On light surfaces** use `gcd-gold-black.svg` or the 3D render. Flat gold on paper is 2.1:1, so it is decoration only, never a carrier of meaning.
 - **Clear space**: a quarter of the emblem's height on every side.
-- **Physical scale on the frames**: one GCD, on the right temple (F02: the right wing; F04, F05: the right end-piece). Length = 0.98 × the temple face height at the hinge; centre 0.82 × that height from the hinge; 39% down the temple face; parallel to the temple; always clear of the lens bay's bevel. Per-frame sizes are in `06-products.md`.
+- **Physical scale on the frames**: one GCD, on the right temple (F02: the right wing; F04, F05: the right end-piece). Length = 0.98 × the temple face height at the hinge; centre 0.82 × that height from the hinge; 39% down the temple face; parallel to the temple; always clear of the lens bay's bevel. Per-frame sizes are in `06-products.md`. It executes one way only (founder, Oct 26 2026): at that size, proportion and placement on every frame, in every photo, composite and 3D render, whatever the view; never scaled, moved or left off to suit a picture.
 - The kit's `logo-kit/svg/eclipse-*.svg` files in `darkestshades` are the wrong (lopsided) shape. The master is `brand/emblems/gcd/svg/gcd-geometry.svg`, redrawn from the symmetric render and checked against it.
 
 ## Color
