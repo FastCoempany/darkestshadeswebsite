@@ -83,7 +83,9 @@ def spread(img, known, levels=10):
 
 def outline(img_bgr8):
     """The person's outline (bool) from depth: the backdrop's far plateau against the person in front of it
-    (two groups of depths with almost nothing between: Otsu's split), the largest piece, holes filled."""
+    (two groups of depths with almost nothing between: Otsu's split), the largest piece, holes filled; and
+    what hangs behind the head (hair below the ears, which the model places between the face and the
+    backdrop), added where it reaches well past that outline."""
     import head3d
     d = head3d.disparity(img_bgr8).astype(np.float32)
     # the model's 518 px grid, brought up to the picture's size, drew its steps into the outline as a row
@@ -92,9 +94,32 @@ def outline(img_bgr8):
     lo, hi = np.percentile(d, [1, 99])
     u = np.clip((d - lo) / max(hi - lo, 1e-6) * 255, 0, 255).astype(np.uint8)
     t, _ = cv2.threshold(u, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    sil = u > t
-    n, lab, st, _ = cv2.connectedComponentsWithStats(sil.astype(np.uint8))
-    sil = ndi.binary_fill_holes(lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])))
+
+    def largest(m):
+        n, lab, st, _ = cv2.connectedComponentsWithStats(m.astype(np.uint8))
+        return ndi.binary_fill_holes(lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])))
+    sil = largest(u > t)
+    # the line a third of the way from the backdrop to the person, not Otsu's halfway: the model dips
+    # between a collar and the neck it stands off (W1: the collar's tip, 30 px of it, fell below halfway)
+    far, near = float(np.median(u[~sil])), float(np.median(u[sil]))
+    sil = largest(u > far + 0.35 * (near - far))
+    # NB's hair, hanging below the ears behind the jaw in the key's shadow, sits lower still: cut off at the
+    # jaw, it left a bob. A line a fifth of the way takes it, but would also move the whole outline out by
+    # the model's soft edge: so only what it adds beyond 12 px of the outline, in pieces of a real size,
+    # joins it
+    weak = u > far + 0.2 * (near - far)
+    ring = cv2.dilate(sil.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (25, 25))) > 0
+    n, lab, st, _ = cv2.connectedComponentsWithStats((weak & ~ring).astype(np.uint8))
+    min_px = 0.002 * u.size
+    extra = np.isin(lab, [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] > min_px])
+    if extra.any():
+        # each piece with the weak region joining it to the outline
+        grown = cv2.dilate(extra.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (27, 27))) > 0
+        joined = largest(sil | (weak & grown))
+        # the two lines meet in a step of a few pixels where the added piece joins: evened out there, and
+        # only there (evened out everywhere, W1's collar lost its edge against her neck)
+        near = cv2.dilate(extra.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (81, 81))) > 0
+        sil = np.where(near, cv2.GaussianBlur(joined.astype(np.float32), (0, 0), 6) > 0.5, joined)
     gap = float(np.mean(u[sil]) - np.mean(u[~sil])) / 255
     return sil, gap
 
@@ -118,12 +143,14 @@ def person_matte(rgb, img_bgr8, chin_y):
         carried out from its own side), apart by TELL_LO or less: not at all; by TELL_HI or more: fully."""
         d = np.linalg.norm(spread(rgb, t == 1.0) - spread(rgb, t == 0.0), axis=-1)
         return np.clip((d - TELL_LO) / (TELL_HI - TELL_LO), 0, 1)
-    # the band widens round the head for the hair, but only where the hair parts from the backdrop: where
-    # it does not (dark hair on black), a wide band only let the picture's grain in, as grey smudges
+    # the band widens where the person parts from the backdrop: round the head for the hair, and below it
+    # for what the depth's outline misses by more than a few pixels (the tip of W1's collar against her
+    # neck, cut off by 30 px); where they do not part (dark hair on black), a wide band only let the
+    # picture's grain in, as grey smudges
     yy = np.arange(H, dtype=np.float32)[:, None]
     head = np.clip((chin_y + 80 - yy) / 160, 0, 1) * np.ones((1, W), np.float32)
     tell0 = cv2.GaussianBlur(telling(trimap(BAND_BODY)).astype(np.float32), (0, 0), 15)
-    tri = trimap(BAND_BODY + (BAND_HEAD - BAND_BODY) * head * tell0)
+    tri = trimap(BAND_BODY + (BAND_HEAD - BAND_BODY) * np.maximum(head, 0.6) * tell0)
     alpha = np.clip(estimate_alpha_cf(rgb.astype(np.float64), tri), 0, 1).astype(np.float32)
     # the solve takes the picture's grain into the edge as a speckle in its opacity (a lens draws an edge
     # smooth): evened out along the picture's own structure (a guided filter), so a hair keeps its line
