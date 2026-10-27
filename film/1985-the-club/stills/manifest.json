@@ -1,0 +1,442 @@
+{
+ "film": "DARKEST SHADES, 1985 / THE CLUB, 30 s 9:16 mockup: first-frame stills",
+ "built": "2026-10-27",
+ "builder": "stills builder (Figma MCP generate_image on the founder's Figma AI credits)",
+ "figma_file": {
+  "key": "TOxO9PLRD9ZRmCflksxOdJ",
+  "url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+  "name": "Darkest Shades \u00b7 1985 / The Club \u00b7 first frames",
+  "session_id": "6319b92f-0e76-484f-a873-e779b2ef5b26"
+ },
+ "model": "gpt-image-2.5-sunburst",
+ "output_size": "864x1536 (the model's 9:16 size; 1080x1920 was requested). Exactly 9:16; the Runway web app accepts it as-is or the operator upscales to 1080x1920 with lanczos before upload.",
+ "generations_total": 18,
+ "credits_estimate": 36,
+ "rejected_and_retried": 6,
+ "failed": [],
+ "m3_portrait": {
+  "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/refs/M3-portrait-raw.png",
+  "source_file_key": "0aADcg6X248iXssGmxZ2jj",
+  "node_id": "6:2",
+  "kind": "raw image fill (original upload), 960x1280",
+  "export_also": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/refs/M3-portrait-export.png"
+ },
+ "stills": [
+  {
+   "id": "s01",
+   "for_clip": "c01",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s01.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "1:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 1,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "1:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s01.png"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Pale limestone mansion, double central stair, plain dark awning over the under-stair door, iron fence, hedges, warm windows. SUV entering from the left, headlights on, wheel blur, three car-lengths short of the stair: room to glide in and stop. No people, no text.",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still photograph, 28 mm wide lens, camera locked at sidewalk height across the street. Blue-hour Chicago dusk, steel-blue sky, charcoal street. Opposite: a pale limestone historic Chicago mansion facade with a grand central stone staircase and a discreet doorway tucked beneath it under a plain dark awning, iron fence, hedges, warm incandescent windows; the doorway beneath the stair visible but not announced, the awning plain and unlettered. In the near lane a black full-size luxury SUV, badges unreadable is still rolling in from the left, headlights on, three car-lengths short of the empty curb space before the central staircase, faint motion blur on the wheels, room to glide forward and stop. Empty sidewalk, no people, no signage, no street numbers. Facade fills the upper two thirds, street and SUV the lower third. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "c62ab94d6dee8d17070455770e271367d013dbe22f1f0f2a18504bfbfdebc132",
+   "file_sha256": "7550b1e58277c38a4f91bb9985494adbc0a45d9509c1b162a3004b90abe41759",
+   "local_edit": null
+  },
+  {
+   "id": "s02",
+   "for_clip": "c02",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s02.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "2:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 1,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "2:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s02.png"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Crop lands at the mouth, no eyes. Peacoat over black knit, hand on a slim dark lever (reads chrome-dark rather than black), the folded chunky black front emerging from the coat's right inside pocket with a thin folded temple. Hands clean.",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still, 50-65 mm, rear seat of a black luxury SUV, blue hour. Chest-to-jaw crop of a seated man, top edge at his mouth, no eyes. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit. Right hand on a slim black door lever, mid-pull; left hand crossing to the coat's right inside pocket, the folded sunglasses emerging: gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "5028315aafbba5dcc147dc06f326b1fee9ab3e4c44d1a8996beacca1aa33de8f",
+   "file_sha256": "cdfd6851114f5c43084888ea49fd80ba4303d9b3dc1aa3833168880e98cd8d77",
+   "local_edit": null
+  },
+  {
+   "id": "s03",
+   "for_clip": "c03",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s03.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "19:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 2,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "3:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s03.png"
+    },
+    {
+     "take": 2,
+     "node_id": "19:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s03.png",
+     "note": "retake 2026-10-27 16:00 UTC: emblem re-described as a gold ring with onyx centre; no triangle"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Right temple sits 1 cm above the ear, thumb and forefinger at the hinge, dark wire temple, black triangular end-piece with the gold emblem to camera. The lens is inside the frame (the prompt asked for the eye region outside it) but it is fully opaque: no eyes. Clip c03's crop should hold this framing; the operator judges the lens at 200 percent.",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still, 85-100 mm macro, dim SUV cabin, blue hour: the right side of a man's face: ear, temple, cheekbone, stubble; the eyes lie outside the frame. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Seating his sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them: the right temple 1 cm above the ear, thumb and forefinger at the hinge, end-piece and gold emblem to camera in dusk light. Navy peacoat collar. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "706d691eb4e1e75030980ac2b6e1c57dabd01260981aaf3e9a7d91d2ce255901",
+   "file_sha256": "d4dee63b36c82347dafd0f139bc8b206cfaecfdd2fd34431a0d5c0be340ed791",
+   "local_edit": null,
+   "retake2_reason": "previous take drew the emblem as a gold triangle plaque (reads as another house); s09 face too high; s10 wrong chair/wall"
+  },
+  {
+   "id": "s04",
+   "for_clip": "c04",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s04.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "10:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 2,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "4:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s04-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "10:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s04.png"
+    }
+   ],
+   "verdict": "accepted on retake",
+   "notes": "Take 1 rejected: gold wire temple (F05's are thin black wire, see the product photo), face in profile with the lens to camera, and a knee-length overcoat instead of the peacoat. Take 2: back of head square to camera, hip-length peacoat, one shoe on the asphalt, facade, awning, fence, hedges, stair. The thin wire temple catches warm window light and may still read gold at 200 percent; this is the better of the two allowed takes.",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 35 mm, camera low in the street behind the rear street-side corner of a black full-size luxury SUV, badges unreadable, looking along its flank. Blue-hour Chicago dusk. Beyond it, upper right: the pale limestone mansion facade, its grand central stone staircase, the doorway beneath under a plain dark awning, iron fence, hedges, warm windows. The rear street-side door is open, a man half out, one shoe on the asphalt, the other still inside, turned fully away from camera, the back of his head square to the lens, his right ear visible, his face hidden. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a hip-length double-breasted dark navy wool peacoat over a black knit, dark trousers, black shoes, and sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin black metal wire temples with a small black triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them; from behind only the thin black wire temple and its end-piece show at his ear, no lens visible. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "3538de35ad8d69ccf0426ed5967a8a72270d9e4be3f0e43bed35e798e26052e0",
+   "file_sha256": "d027211284244630d8d0ebeaef5cddfe4103fd669f9246088fae024a5833dbc8",
+   "local_edit": null
+  },
+  {
+   "id": "s05",
+   "for_clip": "c05",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s05.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "5:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 1,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "5:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s05.png"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Blunt bob, heavy fringe, fair matte skin, long dark coat, no jewellery. Rounded-square red-and-black tortoise front, two warm points reflected in opaque lenses, no eyes. Chin level, her right hand in his, his peacoat sleeve in frame, his head above the top edge, fence post in the foreground. Room above her head to rise.",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still, 50-65 mm, camera by an iron fence at seated-passenger height, looking into the open curbside rear door of a black full-size luxury SUV, badges unreadable, blue-hour Chicago dusk. A woman in the rear seat, turned to the door. A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses, rounded-square red-and-black tortoise acetate front, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; lenses fully opaque, no eyes visible through them; two warm window lights reflected as points in the lenses. Chin level. Her right hand has just taken a man's right hand at frame right, his navy peacoat sleeve in frame, his head above the top edge. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "10ce0f07659035fdc1a02d17e9c9e92de452542f107c420dcd69a229eb439b57",
+   "file_sha256": "5fa82220a34ead6ba0f2abea3e38b89ab4ba46fb3b8ddb269cecb539e4e1fc72",
+   "local_edit": null
+  },
+  {
+   "id": "s06",
+   "for_clip": "c06",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s06.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "12:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 2,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "6:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s06-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "12:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s06.png"
+    }
+   ],
+   "verdict": "accepted on retake",
+   "notes": "Take 1 rejected: the man's temple rendered as a thick black acetate arm, not the thin wire, and his coat was a long belted overcoat. Take 2: thin dark wire temple over his ear, hip-length peacoat, her long coat and bob, podium with the lit arch inlay, archway off-axis right, maitre d' small behind the podium (dark dress, hair back, no glasses). Couple a third of the way in, mid-stride. Gold wall sconces are the one gold element besides the far inlay glow.",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 35 mm, camera at shoulder height directly behind a couple walking away down a narrow hallway, warm ivory and stone, 18-24 ft deep, a monolithic bevelled stone podium terminating the axis with a shallow inlay of repeated narrow arches faintly lit from within, an archway just off-axis. They are a third of the way in, mid-stride, backs to camera, faces unseen. The man, left: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a hip-length double-breasted dark navy wool peacoat over a black knit, dark trousers; of his sunglasses (gloss black chunky rectangular acetate front, pillowed corners, thin black metal wire temples, as thin as a pencil lead, with a small black triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece) only a thin black wire temple shows over each ear, no thick arm, no lens visible. The woman, right: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings; of her sunglasses (rounded-square red-and-black tortoise acetate, slim black metal wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing) only a slim black wire temple shows at each ear under the hair; lenses fully opaque, no eyes visible through them. Far ahead, small, a composed woman in her forties, dark uniform-like dress, hair pulled back, no glasses, stands behind the podium; the archway opens right of it. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "b5f1c4166a6d02e186defec77c0a8b54a97c72a8bd9f01c856688e8874d1da10",
+   "file_sha256": "e5c86d827a4d86a170576b41fcae76d40ed5e314793aaaee79833c659533b2c0",
+   "local_edit": null
+  },
+  {
+   "id": "s07",
+   "for_clip": "c07",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s07.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "7:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 1,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "7:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s07.png"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Thick bevelled stone podium, her hand (short natural nails, no rings, dark cuff) mid-slide on the matte-black remote, his fingertips entering in a navy cuff at the near edge, arch inlay soft behind. No faces. Two things to know: the remote carries tiny unreadable button glyphs, and a white shirt cuff shows under his navy sleeve (the man is dressed in a black knit elsewhere).",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still photograph, 85 mm macro, camera low at the near edge of a monolithic bevelled stone podium, looking across its top, warm ivory light, shallow focus. A woman's hand, no rings, short natural nails, a dark dress cuff, is sliding a small matte-black remote control across the stone toward the camera; the remote is halfway, mid-slide, her fingertips on it. At the near edge a man's fingertips in a dark navy wool cuff are just entering the frame, open, ready to receive it. Foreground: the thick bevelled stone edge of the podium; beyond the hand, out of focus, a shallow inlay of repeated narrow arches faintly lit from within. No faces in frame. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "d2ba06450c7dc497afa23cefcdb82bbd56ac860e210936ea3b90fe083366facf",
+   "file_sha256": "40e81b57ff76ff433145f6af42cadcbeec4a8e897103d86acbaacaa725a0563b",
+   "local_edit": null
+  },
+  {
+   "id": "s08",
+   "for_clip": "c08",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s08.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "8:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 1,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "8:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s08.png"
+    }
+   ],
+   "verdict": "accepted (local clean-up)",
+   "notes": "Pale wall, two black chairs, oval smoked-glass table in the lower foreground with the gold point on it, TV above, tower speaker left, couple mid-sit with hands on the chair arms; both lens pairs opaque. A 17x4 px light label-shaped mark on the TV's bottom bezel was painted out locally with bezel pixels from its left (work/s08-take1-original.png is the untouched generation; work/s08-tv-bezel-after.png shows the result).",
+   "prompt_source": "pack/stills.json prompt verbatim",
+   "prompt_used": "Vertical 9:16 still, 50 mm, camera locked at chest height behind the coffee table in a viewing room: pale grey-white wall, two monumental black chairs, a smoked-glass coffee table, a modern flat TV, one large black floor-standing tower speaker, nothing else; huge negative space, cooler neutral wall. Chairs centred, TV above, speaker left of it; the smoked-glass table fills the lower foreground, slightly too far from the chairs, one tiny gold point, a gold-capped tooth, on the glass. A couple is lowering into the chairs, mid-sit, hands on the chair arms. The man, left chair: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate, pillowed corners, thin wire temples with a small triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece. The woman, right chair: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses, rounded-square red-and-black tortoise acetate, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "6e2ff23648faee757667908b7eeb7ea391bac0c2ac8fc6eb6b5838f4c32a5ae0",
+   "file_sha256": "1dceae9fcb0c2eba0f45f722552c1ccb67baa308d5f6477a3374b1bf1ed47943",
+   "local_edit": "TV bezel label mark painted out"
+  },
+  {
+   "id": "s09",
+   "for_clip": "c09",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s09.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "20:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 3,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "9:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s09-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "14:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s09.png"
+    },
+    {
+     "take": 3,
+     "node_id": "20:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s09.png",
+     "note": "retake 2026-10-27 16:00 UTC: emblem re-described as a gold ring with onyx centre; no triangle"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Take 1 rejected: gold metal temple and end-piece, and the whole face above the glass horizon. Take 2: chin and mouth below the horizon, opaque lenses just above it, thin dark wire temple with the black end-piece and gold emblem, a real molar with a champagne-gold cap sharp in the foreground with its reflection. Room for the head to settle and the hand to enter from the right.",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 85 mm, camera exactly at table height at the edge of a smoked-glass table, pale wall. Sharp in the foreground, a real molar with an exquisite champagne-gold cap, not jewellery; the glass a horizon. Beyond, soft, a man's head lowering behind the far edge of the glass: his chin and mouth already hidden below the table horizon, only the sunglasses, cheekbones and hair above it, the lenses a little above the glass. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Sunglasses: gloss black chunky rectangular acetate front with soft pillowed corners, thin black metal wire temples, as thin as a pencil lead, with a small black triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; no gold temple, no gold frame; lenses fully opaque, no eyes visible through them. Navy peacoat collar. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "f0741907276d04deecf1d60140aee47026929496e1ee60fcaa5ffd564f26b404",
+   "file_sha256": "4849a0481cbcfb844c4ee24f34fb449dc82ecdaa6ffaec5464176a3439b78052",
+   "local_edit": null,
+   "retake2_reason": "previous take drew the emblem as a gold triangle plaque (reads as another house); s09 face too high; s10 wrong chair/wall"
+  },
+  {
+   "id": "s10",
+   "for_clip": "c10",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s10.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "21:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 3,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "11:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s10-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "16:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s10.png"
+    },
+    {
+     "take": 3,
+     "node_id": "21:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s10.png",
+     "note": "retake 2026-10-27 16:00 UTC: emblem re-described as a gold ring with onyx centre; no triangle"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Take 1 rejected: a gold T-shaped bar on the end-piece that reads as a logo, and the 'tooth' was a gold bullet-shaped cylinder. Take 2: real capped molar between thumb and forefinger a few centimetres from the corner of the closed mouth, thin black wire temple with a plain gold dot emblem, remote on the chair arm, left hand on the right lapel, opaque lenses. He faces camera-left so the visible end-piece is his left one (the emblem belongs on the right); accepted as the better of the two.",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 65-85 mm, medium close-up chest to brow, a man in a monumental black chair, pale wall, camera slightly right. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin black metal wire temples, as thin as a pencil lead, with a small black triangular end-piece carrying a tiny plain gold-and-onyx dot emblem on the right end-piece, no lettering, no gold bar, no gold temple; lenses fully opaque, no eyes visible through them. His right hand holds a real extracted human molar with a champagne-gold cap and pale roots between thumb and forefinger at the corner of his closed mouth, not a bullet, not jewellery; left hand on the right lapel; a small matte-black remote on the chair arm. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "99e735db78a4a3d74ff33c232bf73c5cfd64a56714849c5dfb051fb52308f7ea",
+   "file_sha256": "527eaf194b8f61f478dd72df2c0a3e5a85b657631d7bb6805e7212d499cb79de",
+   "local_edit": null,
+   "retake2_reason": "previous take drew the emblem as a gold triangle plaque (reads as another house); s09 face too high; s10 wrong chair/wall"
+  },
+  {
+   "id": "s11",
+   "for_clip": "c11",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s11.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "18:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 2,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "13:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s11-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "18:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s11.png"
+    }
+   ],
+   "verdict": "accepted on retake (local clean-up)",
+   "notes": "Take 1 rejected: her front rendered plain black instead of red-and-black tortoise, and the table was a clear round glass on a wire frame. Take 2: red-brown acetate front (reads as a clear red-brown rather than a mottled tortoise, close enough to the product), both lens pairs opaque, remote in his right hand on the chair arm, hands in her lap, hair neutral, round smoked-glass table on a pedestal (s08's table is oval: a continuity difference between c08 and c11, separated by c09 and c10). A small label mark on the TV bezel was painted out locally as in s08 (work/s11-take2-original.png is untouched).",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 35-50 mm, camera locked at seated eye level, square to the two chairs in a viewing room: pale grey-white wall, two monumental black chairs, a low oval smoked-glass coffee table, a modern flat TV, one large black floor-standing tower speaker, nothing else; speaker left of the TV, the smoked-glass table in the lower foreground close to the man's knees; cooler neutral wall. A couple sits calmly, upright, hair neutral, the air still. The man, left chair, a small black remote in his right hand on the chair arm: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate, pillowed corners, thin black metal wire temples with a small triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece. The woman, right chair, hands in her lap: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses with a rounded-square acetate front in a clearly visible red-and-black tortoiseshell pattern, warm red-brown mottled with black, not plain black, slim black metal wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; both pairs of lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "f6a83ce3870ea098d0a26c9103e7f3b699e896338fb9317ae1fdb0f7d023c9df",
+   "file_sha256": "6adbc3c8ac289cbacd9a72ec519697b62361823c8e89fb42b91623de9e476244",
+   "local_edit": "TV bezel label mark painted out"
+  },
+  {
+   "id": "s12",
+   "for_clip": "c12",
+   "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s12.png",
+   "width": 864,
+   "height": 1536,
+   "aspect": "9:16",
+   "figma_file_key": "TOxO9PLRD9ZRmCflksxOdJ",
+   "figma_file_url": "https://www.figma.com/design/TOxO9PLRD9ZRmCflksxOdJ",
+   "node_id": "22:2",
+   "model": "gpt-image-2.5-sunburst",
+   "requested_size": "1080x1920",
+   "generations_used": 3,
+   "takes": [
+    {
+     "take": 1,
+     "node_id": "15:2",
+     "result": "rejected",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/work/s12-take1-rejected.png"
+    },
+    {
+     "take": 2,
+     "node_id": "17:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s12.png"
+    },
+    {
+     "take": 3,
+     "node_id": "22:2",
+     "result": "kept",
+     "file": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/s12.png",
+     "note": "retake 2026-10-27 16:00 UTC: emblem re-described as a gold ring with onyx centre; no triangle"
+    }
+   ],
+   "verdict": "accepted",
+   "notes": "Take 1 rejected: no blast at all (hair at rest, collar flat), while the pack requires s12 to be already mid-blast. Take 2: hair streaming hard back, collar up, head holding; thin black wire temple, black triangular end-piece with the gold emblem to camera (he faces camera-right, so this is his right side), opaque lenses. Under the blast the hair reads longer than 'short at the sides'; take 1 (work/s12-take1-rejected.png) is the on-bible no-wind alternate if continuity with c11 jars.",
+   "prompt_source": "take 1: pack prompt verbatim; take 2: rewritten (see prompt_used)",
+   "prompt_used": "Vertical 9:16 still, 85 mm, extreme close portrait, a seated man, three-quarter right, the right end-piece of his sunglasses to camera, pale grey-white wall. A violent wall of air is hitting him from the front: every strand of his thick black hair is streaming straight back off the forehead and whipping horizontally behind his head, loose strands flying, the navy peacoat collar and lapel flattened against him and fluttering, the stubbled cheek pressed flat by the force, the head holding against it; the sunglasses stay perfectly seated. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Sunglasses: gloss black chunky rectangular acetate front with soft pillowed corners, thin black metal wire temples, as thin as a pencil lead, with a small black triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece, no lettering; lenses fully opaque, no eyes visible through them; seated and still. The gold emblem sharp. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+   "prompt_sha256": "c679fa1bc837da231ff25825dc70d8c47842e0644e032b368b1c290588ea269e",
+   "file_sha256": "5f6d70fa6fb822f25a113996d5814c0a5bfa6646b6bb3b86b9f71efaa03a9fe9",
+   "local_edit": null,
+   "retake2_reason": "previous take drew the emblem as a gold triangle plaque (reads as another house); s09 face too high; s10 wrong chair/wall"
+  }
+ ]
+}
