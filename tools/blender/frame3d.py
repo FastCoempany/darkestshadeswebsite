@@ -66,7 +66,11 @@ MM = 0.001
 # plateau; its top edge falls 26 deg to the apex, which sits 14.5 mm back and 56% down (the drawing:
 # 46%); its bottom edge rises 20 deg to it. Top view: the outer face is flush with the tab's side and
 # the temple's, the triangle 2.25 mm across, the strip 1.25; the hinge's pin is vertical, its barrel
-# inside, the screw head on top.
+# inside, the screw head on top. The ring round each lens (drawing 05's front view and the cleaned
+# front shot, Oct 27 2026): flat, 3.3-3.4 mm from the opening to a crisp step up to the face, whose
+# two edges the drawing draws 0.26-0.35 mm apart; in the light tent the ring reads one even black, only
+# the lip's rounding into the lens catching a faint line. Built with a pillow and a groove along the
+# step, it drew four or five parallel highlights round each lens that the frame does not have.
 # F02 (drawing 03 and its cleaned front shot): a thick crimson-tortoise front (6.5 mm, its outer edge
 # well rounded), a 3.2 mm bevel round each lens (the black layer under the tortoise: the "lens bay's bevel
 # inlay"), the front leaning ~10 deg at its rims (side view: 13.5 deg below the brow, the brow itself
@@ -124,7 +128,7 @@ FRAMES = {
                                     (50, 11.4), (58, 14.3)]},
             "gcd": {"side": -1, "on": "temple"}},
     "F04": {"depth": 7.0, "edge_r": 1.8, "back_r": 1.0, "dome": 0.9,
-            "bezel": {"width": 3.5, "step": 1.6, "drop": 1.3, "bump": 0.8, "groove": 0.4, "groove_w": 0.6},
+            "bezel": {"width": 3.5, "step": 0.5, "drop": 1.3, "bump": 0.0, "groove": 0.0},
             "lip_r": 0.9, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
             "lens": {"radius": 260.0, "thick": 1.6, "inset": 1.4},
             "tilt": 0.0,

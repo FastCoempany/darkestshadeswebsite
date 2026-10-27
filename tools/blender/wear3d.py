@@ -651,18 +651,24 @@ def main(cfg_path, samples=128):
 def render_layers(cfg, out, img, lin, H, W, samples):
     face = face_points(img)
     eyes = np.array(sorted(face.kps[:2].tolist()), np.float64)
-    # the scale (px per mm at the eyes) from the eyes' distance in 3D (InsightFace's 68 landmarks: x, y and z
-    # in the picture's pixels): on a head turned from the camera the distance across the picture is
-    # foreshortened (W2's three-quarter: 184 px across it, 208 in 3D; it drew the frame 13% small); facing
-    # the camera the two agree within 0.3%
+    # the scale (px per mm at the eyes): the pupillary distance is the pupils', so from the detector's eye
+    # points, which sit on the pupils, as long as the head faces the camera within 15 deg (the distance
+    # then foreshortened 3% at most). Turned further, the distance across the picture is foreshortened
+    # (W2's three-quarter: 184 px across it), and the eyes' distance in 3D is taken from InsightFace's 68
+    # landmarks (x, y and z in the picture's pixels; W2: 208). Not on a face to the camera: those are the
+    # centres of the eyes' outlines, which stand off the pupils where an eye looks aside or its outline is
+    # read into a shadow (M1's right eye: the outline's centre 16 px off the pupil, the frame drawn 7% big)
     L3 = face.landmark_3d_68.astype(np.float64)
-    s = float(np.linalg.norm(L3[36:42].mean(0) - L3[42:48].mean(0))) / cfg.get("pd_mm", 62.0)
+    e3 = L3[36:42].mean(0) - L3[42:48].mean(0)
+    turned = float(np.linalg.norm(e3[:2]) / np.linalg.norm(e3)) < math.cos(math.radians(15.0))
+    s = float(np.linalg.norm(e3) if turned else np.linalg.norm(eyes[1] - eyes[0])) / cfg.get("pd_mm", 62.0)
     f_px = H * F_MM / SENSOR_H
     head3d.PP = (W / 2, float(eyes[:, 1].mean()) if cfg.get("eye_level", True) else H / 2)
     L = face.landmark_3d_68.astype(np.float64)
     P, D_eyes = camera_space(L, H, W, f_px, s)
     ax = head_frame(P)
-    report = {"id": cfg["id"], "px_per_mm": round(s, 3), "distance_mm": round(D_eyes, 1)}
+    report = {"id": cfg["id"], "px_per_mm": round(s, 3), "scale_from": "eyes in 3D" if turned else "pupils",
+              "distance_mm": round(D_eyes, 1)}
     if cfg.get("despecular"):
         sh_ = sheen(lin, L, s) * cfg["despecular"]
         np.save(out / "layers" / "sheen.npy", sh_.astype(np.float16))
