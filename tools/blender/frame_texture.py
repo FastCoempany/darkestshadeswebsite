@@ -3,6 +3,7 @@
 
     python3 tools/blender/frame_texture.py F02            # the angle set's A1 shot (work/out/<shot>/)
     python3 tools/blender/frame_texture.py F01 --temples  # and a band for acetate temples in the same material
+    python3 tools/blender/frame_texture.py F06 --openings # only the lens openings as the front shot shows them
 
 A tortoise acetate is a pattern, not a colour: the 3D front takes it from the real frame. The cleaned
 front shot (tools/photo/clean_lightbox.py: the frame cut out, its lenses in their own layer, the GCD
@@ -19,6 +20,9 @@ Writes work/frames3d/<frame>/: albedo.png (16-bit, linear), masks.png (R gold, G
 (the affine from the front's millimetres, frame3d's coordinates, to the texture's pixels); with
 --temples, temple.png: the same acetate laid anew along a band that frame3d wraps round each temple (the
 front shot never sees the temples' faces), its blue and black and their proportions read off the front.
+With --openings, only openings.png (the lens openings in the front drawing's pixels, 20 per mm, which
+frame3d builds the front round where the drawing does not draw them: F06), openings.json and
+openings-check.jpg (the drawing's lines and the openings over the shot).
 """
 import argparse
 import json
@@ -98,6 +102,94 @@ def register(sil_photo, sil_draw, init):
     return (np.diag([q, q, 1.0]) @ np.vstack([Mq, [0, 0, 1]]))[:2]
 
 
+def photo_openings(frame, shot):
+    """A frame's lens openings as its cleaned front shot shows them, in the front drawing's pixels (20 per
+    mm, frame3d.front_shapes' grid): the shot's lens layer brought back through the affine that registers
+    the shot's outline to the drawing's. For a front whose drawing does not draw its openings (F06: one
+    line round the shield; the photograph shows a bridge between two openings)."""
+    import frame3d
+    from scipy import ndimage as ndi
+    po = ROOT / "work" / "out" / shot
+    cut = np.asarray(Image.open(po / "cutout.png")).astype(np.float32)
+    alpha = cut[..., 3] / 255
+    T = np.asarray(Image.open(po / "layers" / "lens.png")).astype(np.float32) / 255
+    lens = (T.mean(-1) < 0.9).astype(np.uint8)
+    sil_photo = ndi.binary_fill_holes(alpha > 0.5)
+    sh = frame3d.front_shapes(frame, ppm=20)
+    op = np.zeros_like(sh["solid"])
+    for m in sh["opening_masks"]:
+        op |= m
+    sil_draw = ndi.binary_fill_holes(sh["solid"] | op)
+    ys, xs = np.nonzero(sil_photo)
+    yd, xd = np.nonzero(sil_draw)
+    sx = (xs.max() - xs.min()) / (xd.max() - xd.min())
+    sy = (ys.max() - ys.min()) / (yd.max() - yd.min())
+    init = np.array([[sx, 0, xs.min() - sx * xd.min()], [0, sy, ys.min() - sy * yd.min()]])
+    A = register(sil_photo, sil_draw, init)                  # drawing px -> photo px
+    Hd, Wd = sil_draw.shape
+    warped = cv2.warpAffine(sil_draw.astype(np.uint8), A.astype(np.float32), (sil_photo.shape[1], sil_photo.shape[0]),
+                            flags=cv2.INTER_NEAREST).astype(bool)
+    iou = float((warped & sil_photo).sum() / (warped | sil_photo).sum())
+    Ainv = cv2.invertAffineTransform(A.astype(np.float32))   # photo px -> drawing px
+    ld = cv2.warpAffine(lens.astype(np.float32), Ainv, (Wd, Hd), flags=cv2.INTER_LINEAR) > 0.5
+    n, lab, st, _ = cv2.connectedComponentsWithStats(ld.astype(np.uint8))
+    big = 1 + np.argsort(-st[1:, cv2.CC_STAT_AREA])[:2]
+    ld = np.isin(lab, big)
+    ld = ndi.binary_fill_holes(ld)
+    # the lens layer's edge is SAM's, ragged by half a millimetre where the dark lens meets the black rim, and
+    # waving by a few tenths over a few millimetres: the rim's gloss drew every wave as a kink in its
+    # highlight (smoothed along itself at 1.2 mm, the bridge's side still read as a wavy line). Each opening's
+    # outline is a smoothing spline instead, as close to the shot's edge as its noise (`edge_noise_mm`), so it
+    # keeps the corners the frame has and none of the waves
+    from scipy.interpolate import splev, splprep
+    cfg = frame3d.FRAMES.get(frame, {})
+    pads = cfg.get("openings_pads")
+    if pads and sh.get("step_mask") is not None:
+        # beside the nose the shot sees the pads through the lens, and SAM's lens stops at them: there the
+        # opening runs as the rest of its edge does, `ring` mm inside the drawing's step line (`below` mm
+        # down from the step line's top, within `half` mm of the centre)
+        stp = sh["step_mask"]
+        d = ndi.distance_transform_edt(stp) / 20
+        rows, cols = np.nonzero(stp.any(1))[0], np.nonzero(stp.any(0))[0]
+        t = (np.arange(Hd)[:, None] - rows.min()) / 20 * np.ones((1, Wd))
+        xm = np.abs(np.arange(Wd)[None, :] - (cols.min() + cols.max()) / 2) / 20 * np.ones((Hd, 1))
+        # the two edges blended as signed distances (mm, + inside the opening) over 6 mm below `below`, so
+        # the shot's edge runs into the drawing's without a step
+        sd_shot = (ndi.distance_transform_edt(ld) - ndi.distance_transform_edt(~ld)) / 20
+        a = np.clip((t - pads["below"]) / 6.0, 0, 1) * np.clip((pads["half"] - xm) / 3.0, 0, 1)
+        ld = ((1 - a) * sd_shot + a * (d - pads["ring"])) > 0
+    noise = cfg.get("edge_noise_mm", 0.15) * 20
+    sm = np.zeros((Hd, Wd), np.uint8)
+    cs, _ = cv2.findContours(ld.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+    for c in cs:
+        c = c[:, 0, :].astype(np.float64)
+        if len(c) < 50:
+            continue
+        c = c[::2]
+        c = c[np.r_[True, np.linalg.norm(np.diff(c, axis=0), axis=1) > 0]]   # a spur doubles back on itself
+        c = np.vstack([c, c[:1]])                    # closed: the last point repeats the first
+        tck, _u = splprep([c[:, 0], c[:, 1]], s=len(c) * noise ** 2, per=1)
+        x_, y_ = splev(np.linspace(0, 1, 8 * len(c), endpoint=False), tck)
+        cv2.fillPoly(sm, [np.round(np.stack([x_, y_], 1) * 16).astype(np.int32)], 1, cv2.LINE_8, shift=4)
+    ld = sm > 0
+    out = ROOT / "work" / "frames3d" / frame
+    out.mkdir(parents=True, exist_ok=True)
+    cv2.imwrite(str(out / "openings.png"), ld.astype(np.uint8) * 255)
+    # a check: the drawing's lines (red) and the openings (blue) over the shot brought to the drawing
+    stage = np.asarray(Image.open(po / "stage-full.png")).astype(np.float32)
+    stage = (stage / (65535 if stage.max() > 255 else 255) * 255).astype(np.uint8)
+    pic = cv2.warpAffine(stage, Ainv, (Wd, Hd), flags=cv2.INTER_AREA)
+    im, _ = frame3d.render_view(frame, "front", 20)
+    pic[im < 200] = (255, 0, 0)
+    edge = ld & ~cv2.erode(ld.astype(np.uint8), np.ones((3, 3), np.uint8)).astype(bool)
+    pic[edge] = (0, 90, 255)
+    Image.fromarray(pic).save(out / "openings-check.jpg", quality=90)
+    info = {"frame": frame, "shot": shot, "ppm": 20, "outline_iou": round(iou, 4),
+            "openings_mm2": [round(float(st[i, cv2.CC_STAT_AREA]) / 400, 1) for i in big]}
+    (out / "openings.json").write_text(json.dumps(info, indent=1))
+    print(json.dumps(info))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("frame")
@@ -106,12 +198,17 @@ def main():
     ap.add_argument("--temples", action="store_true", help="also lay the acetate along a band for the temples")
     ap.add_argument("--temple-mm", type=float, nargs=2, default=(170.0, 32.0),
                     help="the band's length along the temple and its height round the temple's section, mm")
+    ap.add_argument("--openings", action="store_true",
+                    help="only the lens openings as the front shot shows them (work/frames3d/<frame>/openings.png)")
     a = ap.parse_args()
     import frame3d
     shot = a.shot
     if not shot:
         sets = json.loads((ROOT / "content" / "photography" / "lightbox-angle-set.json").read_text())
         shot = sets["frames"][a.frame]["picks"]["A1"]
+    if a.openings:
+        photo_openings(a.frame, shot)
+        return
     po = ROOT / "work" / "out" / shot
     cut = np.asarray(Image.open(po / "cutout.png")).astype(np.float32)
     rgb, alpha = cut[..., :3], cut[..., 3] / 255

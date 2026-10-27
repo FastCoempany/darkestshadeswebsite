@@ -94,6 +94,13 @@ The generator is **Figma `generate_image` with `gpt-image-2.5-sunburst`** on the
    - the GCD comes with the frame, as placed on the product shot.
 5. **Grade everything together**: the SS90 look (`01-brand-system.md`): fine grain, lifted blacks, warm paper whites, faint halation, low saturation, applied to the finished composite in `wear.py` so person, scene and frame share one surface; the grain and halation scale with the picture, so they look the same at any export size. 3:4 portraits are then cut to the gallery's 4:5.
 6. **Check** each final against a list: scale against the face, nose-pad contact, temple to ear, no glasses artifacts from the generator, hands and fingers plausible, no text or logos in the scene, the GCD correct and once.
+7. **Cut out** (`tools/photo/cutout.py`): every cast picture is made so the person wearing the frame can be lifted off the backdrop and set in any scene (founder, Oct 27 2026, `00-decisions.md` #40). The cut-out is the finished picture with an alpha channel (`work/people/<id>-3d/cutout.png`: 16-bit RGBA, straight alpha, sRGB, the picture's crop and grade):
+   - the person's outline from depth: Depth Anything V2 on the portrait as generated. In a studio portrait the backdrop is a far plateau, so the outline holds where the colors do not part: a black sweater on black, a white shirt on the warm white. ISNet, a color model, made both half see-through; BiRefNet needs more memory than the workspace has;
+   - its edge read from the picture: closed-form matting (PyMatting) in a band either side of the outline, wider round the head for the hair; where person and backdrop are too alike there to tell apart, the depth's own edge, softened by a pixel;
+   - the frame's coverage from its renders, exactly. A lens with the backdrop behind it (a three-quarter view's far lens, past the cheek; `layers/lens_mask.exr`) is a filter, opaque by what its transmission holds back. One alpha darkens a new background through the lens but cannot tint it;
+   - the edge's colors freed of the old backdrop, unmixed in sRGB as design tools blend: laid back on the backdrop, the cut-out gives the picture back. The scene it is set in takes the same SS90 grade.
+
+   What the backdrop decides: the outline holds on any plain backdrop; a hair's single strands only where they differ from it. Light hair reads on black (M1); dark hair reads on the warm white; dark hair on black falls back to the depth's smooth outline, without its stray strands (NB in S06). A new portrait's backdrop contrasts with the hair: S06 black for light hair, S07 warm white for dark hair.
 
 Why not the alternatives: generating people *with* glasses would invent the product, which the founder's own AI-photography guide rules out; separate person and background generations never quite agree on light; local open models (SDXL, Flux) are too slow and too large for this workspace's CPU; the Gemini app holds faces from references but its free output carries a visible watermark, so it can only make references, never finals; Weave and every paid route are out (#24).
 
@@ -109,6 +116,8 @@ Simple, striking, institutional. One figure per frame. Each scene has a code and
 | S05 | Doorway wedge of light on a dark floor | One hard key through the door |
 | S06 | Studio portrait against black, head and shoulders | Hard key, no fill |
 | S07 | Studio portrait against warm white, three-quarter | Flash, short hard shadow |
+
+Cut-outs (step 7) come from the plain backdrops: S06, S07 and S02 (its shadow on the floor stays behind). S01, S03, S04 and S05 are places, lit as places: those pictures stay whole.
 
 Wardrobe: uniform-like, no logos: black or navy nylon, crisp white or grey shirting, fine knits, tailored trousers, a long coat. Nothing that competes with the frame.
 

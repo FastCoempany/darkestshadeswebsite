@@ -1,5 +1,5 @@
 {
- "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "$comment": "Settings for tools/blender/wear3d.py (and tools/photo/wear.py): one generated person wearing one real frame. F06 rebuilt in 3D from its drawing and front shot (tools/blender/frame3d.py), on NB's S06 portrait. NB's hair is tucked behind the right ear (the picture's left), where the right temple runs to the ear's root (ear_crease_px); on the other side it falls straight past the ear, over the left temple (hide_temples). The shield's shadow lies wide across the cheeks under the hard key: its edges warmed as skin warms them (skin_scatter_mm, shadow_warm), where the plaster head's left a cold grey band. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels; ear_crease_px in the portrait's 2x pixels.",
  "id": "DS-CAST-NB-S06-F06-v01",
  "cast": "NB",
  "scene": "S06",
@@ -50,5 +50,28 @@
  "lens": {
   "photo": 0.0,
   "face_blur_mm": 0.3
- }
+ },
+ "ear_crease_px": {
+  "left": [
+   425,
+   835
+  ]
+ },
+ "look3d": {
+  "hide_temples": [
+   "left"
+  ],
+  "skin_scatter_mm": [
+   1.0,
+   0.4,
+   0.25
+  ],
+  "shadow_warm": [
+   0.94,
+   1.0,
+   1.04
+  ]
+ },
+ "skin_albedo": 0.3,
+ "through_lens": 1.0
 }

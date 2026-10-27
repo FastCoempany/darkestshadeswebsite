@@ -4,6 +4,7 @@ and composited into the portrait by differential rendering.
 
     python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json [--samples 128]
     python3 tools/blender/wear3d.py <settings> --composite-only      # re-composite the last renders
+    python3 tools/blender/wear3d.py <settings> --lens-mask-only      # a picture made before the lens mask: just that
 
 The flat composites (tools/photo/wear.py) looked pasted on, every version (founder, Oct 21 2026): a
 product photo is a flat front view lit by a light tent. Here the frame is a 3D object on a 3D head:
@@ -27,12 +28,15 @@ product photo is a flat front view lit by a light tent. Here the frame is a 3D o
   view, the near temple's shadow on a sheet standing in for the side of the head (`temple_sheet`), the
   far temple left to show only through its lens (`hide_temples`), the near ear laid over the temple
   where it goes in behind it (`ear_crease_px`, `ear_occluders_px`, `ear_overrun_mm`);
-- the composite: the portrait times the shadow ratio, the temples over it, the front and lenses over
-  those; the frame layers matched to the photograph (its softness, black level and grain), the scene's
-  grade over the whole picture, and the crop (3:4 to the gallery's 4:5), as tools/photo/wear.py does.
+- the composite: the portrait times the shadow ratio (on skin, its edges warmed as skin warms them, where
+  `skin_scatter_mm` and `shadow_warm` are set: the render's head is white plaster), the temples over it,
+  the front and lenses over those; the frame layers matched to the photograph (its softness, black level
+  and grain), the scene's grade over the whole picture, and the crop (3:4 to the gallery's 4:5), as
+  tools/photo/wear.py does.
 
 Writes work/people/<id>-3d/: composite.png (16-bit, the crop), composite.jpg, compare.jpg (before and
-after), zoom.jpg (the frame at 1:1), report.json, layers/ (the renders).
+after), zoom.jpg (the frame at 1:1), report.json, layers/ (the renders; lens_mask.exr, where the camera
+sees a lens, for the cut-out: tools/photo/cutout.py).
 """
 import json
 import math
@@ -595,9 +599,19 @@ def place(parts, P, ax, kps, s, D, box, H, W, f_px, cfg, report):
             hi = mid
     t_pads = hi
     cornea = pupil_mid + R[:, 2] * 3.0
+    shield = frame3d.FRAMES.get(cfg["frame"], {}).get("shield", False)
 
     def vertex_at(t_):
         lens_c = np.concatenate([world_points(p, R, o0 + R[:, 2] * t_) for p in lenses])
+        if shield:
+            # a shield runs on past the eyes and wraps back round the face (F06): its nearest point to the
+            # eyes' plane is at its ends, so it is measured in front of the pupils
+            near = []
+            for e in eyes:
+                d = lens_c - e
+                lat = d - np.outer(d @ R[:, 2], R[:, 2])
+                near.append(lens_c[np.linalg.norm(lat, axis=1) < 4.0])
+            lens_c = np.concatenate(near)
         return float(np.min(np.abs((lens_c - cornea) @ R[:, 2])))
 
     # seated: the lenses `vertex_mm` from the corneas, as a fitted frame sits (the pads then press into
@@ -641,6 +655,9 @@ def main(cfg_path, samples=128):
     H, W = img.shape[:2]
     lin = img[..., ::-1].astype(np.float32) / 255
     lin = np.where(lin <= 0.04045, lin / 12.92, ((lin + 0.055) / 1.055) ** 2.4).astype(np.float32)
+    if LENS_MASK_ONLY:
+        render_layers(cfg, out, img, lin, H, W, samples)
+        return
     if COMPOSITE_ONLY and (out / "layers" / "front.exr").exists():
         report = json.loads((out / "report.json").read_text())
     else:
@@ -711,6 +728,16 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         p.parent = rig
     rig.matrix_world = Matrix.Translation(Vector(o * MM)) @ Matrix(ax.tolist()).to_4x4()
     front_objs = parts                                  # front, lenses, pads, end pieces
+    if LENS_MASK_ONLY:
+        # a picture rendered before the lens mask was a pass of its own: the frame placed again, as the
+        # picture has it, and only the mask rendered
+        for p in tmpl:
+            p.hide_render = True
+        set_region(sc, cam, front_objs, 0.04, H, W)
+        lens_mask(sc, front_objs, out / "layers" / "lens_mask.exr")
+        report["lens_mask_only"] = True
+        (out / "lens_mask_report.json").write_text(json.dumps(report, indent=1))
+        return report
 
     # the head
     V, F, UV = head3d.mesh(D, box, H, W, f_px)
@@ -872,6 +899,7 @@ def render_layers(cfg, out, img, lin, H, W, samples):
         p.visible_camera = True
     set_region(sc, cam, front_objs, 0.04, H, W)
     render(sc, out / "layers" / "front.exr")
+    lens_mask(sc, front_objs, out / "layers" / "lens_mask.exr")
 
     # 4: the temples, the run from each hinge to where it goes in behind the ear, over the hair (the
     # depth map flattens the head's sides too much to hide them right); the part behind the ear is
@@ -890,6 +918,38 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))
     return report
+
+
+def lens_mask(sc, front_objs, path, samples=16):
+    """Where the camera sees a lens, the rims in front of its edges: white on transparency. The cut-out
+    (tools/photo/cutout.py) makes a lens with the backdrop behind it a filter rather than a solid (a
+    three-quarter view's far lens, past the cheek): the front layer's alpha cannot tell a lens from a rim."""
+    em = bpy.data.materials.new("lens mask")
+    em.use_nodes = True
+    nt = em.node_tree
+    for n in list(nt.nodes):
+        if n.type != "OUTPUT_MATERIAL":
+            nt.nodes.remove(n)
+    e = nt.nodes.new("ShaderNodeEmission")
+    nt.links.new(e.outputs[0], [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0].inputs["Surface"])
+    lenses = [p for p in front_objs if " lens " in p.name]
+    others = [p for p in front_objs if p not in lenses]
+    kept = {p: list(p.data.materials) for p in lenses}
+    for p in lenses:
+        p.data.materials.clear()
+        p.data.materials.append(em)
+    for p in others:
+        p.is_holdout = True
+    n0, d0 = sc.cycles.samples, sc.cycles.use_denoising
+    sc.cycles.samples, sc.cycles.use_denoising = samples, False
+    render(sc, path)
+    sc.cycles.samples, sc.cycles.use_denoising = n0, d0
+    for p in others:
+        p.is_holdout = False
+    for p, ms in kept.items():
+        p.data.materials.clear()
+        for m in ms:
+            p.data.materials.append(m)
 
 
 def window_card(target, kdir, light_mm, wn):
@@ -1047,6 +1107,17 @@ def composite(cfg, out, img, lin, H, W, report):
         rgb = rgb + black * a
         return rgb, a
 
+    sc_mm = look.get("skin_scatter_mm")
+    if sc_mm:
+        # light that enters skin comes out again a little way off, red the furthest: a shadow's edge on skin
+        # is warm. The render's head is white plaster, so its shadows' edges came out grey, and a large frame's
+        # shadow under the lenses (F06 on NB) showed a cold grey band where the cheek turns out of it; each
+        # channel of the shadow spread as far as skin carries that colour (`skin_scatter_mm`: red, green, blue)
+        ratio = np.dstack([cv2.GaussianBlur(np.ascontiguousarray(ratio[..., c]), (0, 0), max(sc_mm[c] * report["px_per_mm"], 0.1))
+                           for c in range(3)])
+        # and what light reaches a shadow on skin has come through skin: redder (`shadow_warm`, each
+        # channel's shadow raised to a power, below 1 lighter)
+        ratio = np.clip(ratio, 1e-4, 1) ** np.asarray(look.get("shadow_warm", [1.0, 1.0, 1.0]), np.float32)
     base = lin * ratio
     t_rgb, t_a = matched(tp)
     # a temple seen nearly edge-on mirrors whatever lies to the side at a grazing angle, where even black
@@ -1157,6 +1228,7 @@ def lens_tint(cfg):
 
 
 COMPOSITE_ONLY = "--composite-only" in sys.argv
+LENS_MASK_ONLY = "--lens-mask-only" in sys.argv
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--") and not a.isdigit()]

@@ -108,6 +108,17 @@ MM = 0.001
 # ear; top view: 4.3 mm across at the joint, 2 mm at the tip; edges rounded 0.9 mm), the joint on a short
 # acetate block that carries the temple's section into the end tab; the GCD on the right temple's outer
 # face (f03.json: 8.8 mm long, centred 0.82 x the 9 mm face from the joint, 39% down it).
+# F06 (drawing 06, its cleaned shots, Oct 27 2026): a flat-top shield in gloss black acetate. Drawing 06's
+# front view draws the outline and, 3 mm inside it, one line round the whole shield (139 x 48 mm, the lens
+# size the product data carries). The front shot shows that line as a step: the face a band round the
+# outside, a lower level inside it, 1.9 mm wide over the brow and 2.6 mm below each opening, and at that
+# level a bridge from the brow down to the nose between two openings, which the drawing does not draw. So
+# the openings are the photograph's (frame_texture.py --openings), the step is the drawing's line, and one
+# flat lens lies behind both openings out to the step (`shield`). The front 5.5 mm deep and 7 deg off upright
+# (side view); acetate temples flush with the brow's top, 9.65 mm tall and 2.85 mm thick from the joint,
+# narrowing from 91 mm back to the tip's hook; tall smoky pads (side and top views: 19 mm tall, 7 mm behind
+# the front); the GCD on the right temple. The front view draws the temples' tips hanging below the front's
+# ends: left out (`front_drop`).
 FRAMES = {
     "F01": {"depth": 5.5, "edge_r": 2.4, "back_r": 1.0, "dome": 0.3,
             # a narrow bevel round each lens (drawing 01's double line, 0.6-0.85 mm out from the opening)
@@ -197,6 +208,41 @@ FRAMES = {
                                     (33, 5.65), (38, 8.35), (43, 12.63), (48, 17.9), (53, 22.78), (55, 24.0)]},
             # as the cleaned shots set it (IMG_3545, IMG_3547)
             "gcd": {"side": -1, "on": "endpiece", "hinge_mm": (27.4, 22.15), "centre_mm": (13.93, 22.45)}},
+    "F06": {"depth": 5.5, "edge_r": 1.2, "back_r": 0.8, "dome": 0.15,
+            "shield": True, "openings": "photo", "front_drop": {"x_within": 3.1, "y_below": 11.45},
+            # the openings beside the nose, where the front shot sees the pads through the lens: the lower
+            # level 2.3 mm wide inside the step, as round the rest (frame_texture.py --openings)
+            "openings_pads": {"ring": 2.3, "below": 15.0, "half": 22.0},
+            "bezel": {"kind": "terrace", "width": 0.0, "step": 0.8, "drop": 0.35},
+            "lip_r": 0.5, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            # the grey gradient, dark at the top: the cleaned front shot's transmission (linear) row by row
+            # across the openings, at mm above the openings' centre (frame_texture.py's registration)
+            "lens": {"radius": 1.0e5, "thick": 1.6, "inset": 0.5,
+                     "gradient": [(22, (0.0161, 0.0141, 0.0218)), (18, (0.0178, 0.0138, 0.0264)),
+                                  (14, (0.0240, 0.0181, 0.0369)), (10, (0.0349, 0.0280, 0.0512)),
+                                  (6, (0.0508, 0.0433, 0.0691)), (2, (0.0716, 0.0643, 0.0915)),
+                                  (-2, (0.0973, 0.0910, 0.1176)), (-6, (0.1282, 0.1230, 0.1477)),
+                                  (-10, (0.1649, 0.1608, 0.1820)), (-14, (0.2079, 0.2051, 0.2205)),
+                                  (-18, (0.2577, 0.2564, 0.2653)), (-22, (0.2917, 0.2918, 0.2974))]},
+            "tilt": 7.0,
+            # smoky acetate pads: dark seen along their length from above (the top shot), a grey that light
+            # passes through from the front (the hero shot, through the lens)
+            "pads": {"x": 12.3, "y": -6.0, "back": 5.6, "r": (2.0, 9.5, 3.5), "clear": True, "smoke": 0.35},
+            "endpiece": {"kind": "block", "back": 6.0, "inset": 0.03, "flare": 0.0, "into": 2.0},
+            "temple": {"kind": "acetate", "top_below": 1.2, "height": 9.65, "edge_r": 0.9,
+                       "heights": [(0, 9.7), (90.7, 9.65), (92.7, 9.5), (94.7, 9.15), (96.7, 8.7), (98.7, 8.2),
+                                   (100.7, 7.65), (102.7, 7.0), (104.7, 6.5), (106.7, 5.95), (108.7, 5.5),
+                                   (110.7, 5.2), (112.7, 4.95), (116.8, 4.95), (120.5, 5.4), (123.2, 5.7),
+                                   (128.8, 6.6), (134.9, 7.9), (141.2, 9.7), (144.2, 10.5), (147.0, 10.5),
+                                   (149.6, 9.0), (152.1, 5.7)],
+                       "thicks": [(0, 2.85), (76, 2.85), (86, 2.8), (96, 2.7), (106, 2.45), (116, 2.25),
+                                  (126, 1.95), (136, 1.7), (152, 1.4)],
+                       "straight": 90.7, "drop": 30.0,
+                       # the mid-line beyond the straight run (mm back, mm down), side view
+                       "tip_path": [(0, 0), (2, -0.07), (4, -0.22), (6, -0.45), (8, -0.7), (10, -0.92), (12, -1.15),
+                                    (14, -1.32), (17, -1.45), (20, -1.37), (22, -1.17), (27, -0.07), (32, 1.75),
+                                    (37, 4.33), (42, 7.48), (47, 11.4), (52, 14.58), (55, 15.4), (57, 15.6)]},
+            "gcd": {"side": -1, "on": "temple"}},
 }
 
 
@@ -207,6 +253,18 @@ def render_view(frame, view, ppm=20):
     svg = svg.replace("currentColor", "#000").replace('stroke-width="0.25"', 'stroke-width="0.06"')
     svg = svg.replace('vector-effect="non-scaling-stroke"', "")
     vb = [float(v) for v in re.search(r'viewBox="([^"]+)"', svg).group(1).split()]
+    drop = FRAMES.get(frame, {}).get("front_drop") if view == "front" else None
+    if drop:
+        # the temples' tips, which the front view draws hanging below the front's ends (F06): every line
+        # wholly below `y_below` mm and within `x_within` mm of either side of the drawing left out
+        def keep(m):
+            pts = np.array([(float(a), float(b)) for a, b in re.findall(r"([-\d.]+)[ ,]([-\d.]+)", m.group(1))])
+            if not len(pts):
+                return True
+            low = pts[:, 1].min() >= drop["y_below"]
+            side = pts[:, 0].max() <= vb[0] + drop["x_within"] or pts[:, 0].min() >= vb[0] + vb[2] - drop["x_within"]
+            return not (low and side)
+        svg = re.sub(r'<path[^>]* d="([^"]+)"[^>]*/>', lambda m: m.group(0) if keep(m) else "", svg)
     png = cairosvg.svg2png(bytestring=svg.encode(), output_width=int(vb[2] * ppm), output_height=int(vb[3] * ppm),
                            background_color="white")
     return cv2.imdecode(np.frombuffer(png, np.uint8), cv2.IMREAD_GRAYSCALE), ppm
@@ -216,14 +274,39 @@ def front_shapes(frame, ppm=20):
     """The front view's outline and lens openings as polygons in mm (origin midway between the two
     lens-box centres, x right as drawn, y up)."""
     from scipy import ndimage as ndi
+    cfg = FRAMES.get(frame, {})
     im, ppm = render_view(frame, "front", ppm)
     free = 1 - cv2.dilate((im < 200).astype(np.uint8), np.ones((3, 3), np.uint8))
     lab, n = ndi.label(free)
     border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}
     sizes = ndi.sum(np.ones_like(lab), lab, range(1, n + 1))
     inner = [(sizes[i - 1], i) for i in range(1, n + 1) if i not in border]
-    lenses = [i for _, i in sorted(inner, reverse=True)[:2]]
-    lens_masks = sorted([lab == i for i in lenses], key=lambda m: np.nonzero(m)[1].mean())
+    step = None
+    if cfg.get("shield"):
+        # one region inside the drawing's lines (F06): the step round the whole shield, one line from end
+        # to end over the brow; the openings are the photograph's (below)
+        # (the drawing's centre line, down from the top to the nose, halves it: the two halves rejoined)
+        halves = [lab == i for _, i in sorted(inner, reverse=True)[:2]]
+        step = cv2.morphologyEx((halves[0] | halves[1]).astype(np.uint8), cv2.MORPH_CLOSE,
+                                cv2.getStructuringElement(cv2.MORPH_RECT, (int(0.3 * ppm) | 1, 1))) > 0
+        lens_masks = [step]
+    else:
+        lenses = [i for _, i in sorted(inner, reverse=True)[:2]]
+        lens_masks = sorted([lab == i for i in lenses], key=lambda m: np.nonzero(m)[1].mean())
+    if cfg.get("openings") == "photo":
+        # the lens openings as the cleaned front shot shows them, registered to the drawing
+        # (frame_texture.py --openings): F06's front has a bridge down from the brow between two openings,
+        # where the drawing's front view draws only the step round one shield
+        f = ROOT / "work" / "frames3d" / frame / "openings.png"
+        if f.exists():
+            op = cv2.imread(str(f), cv2.IMREAD_GRAYSCALE)
+            if op.shape != im.shape:
+                op = cv2.resize(op, (im.shape[1], im.shape[0]), interpolation=cv2.INTER_AREA)
+            k_, lab2, st2, _ = cv2.connectedComponentsWithStats((op > 127).astype(np.uint8))
+            big = 1 + np.argsort(-st2[1:, cv2.CC_STAT_AREA])[:2]
+            lens_masks = sorted([lab2 == i for i in big], key=lambda m: np.nonzero(m)[1].mean())
+        else:
+            print(f"{frame}: no {f}; the drawing's region stands in for the openings")
     # everything inside the outermost line: closed over the drawing's narrow double lines first (a bevel
     # line close beside the edge left a slit open to the outside, and the front got a groove along it)
     ink = cv2.morphologyEx((im < 200).astype(np.uint8), cv2.MORPH_CLOSE,
@@ -259,12 +342,19 @@ def front_shapes(frame, ppm=20):
     openings = np.zeros_like(silhouette)
     for m in lens_masks:
         openings |= cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
+    if step is not None:
+        # one lens behind both openings: the shield, out to the step line less 0.3 mm (its edge inside the
+        # front, under the lower level and the bridge)
+        shells = [cv2.erode(step.astype(np.uint8), cv2.getStructuringElement(
+            cv2.MORPH_ELLIPSE, (int(0.3 * ppm) * 2 + 1,) * 2)) > 0]
+    else:
+        shells = [cv2.dilate(m.astype(np.uint8), cv2.getStructuringElement(
+            cv2.MORPH_ELLIPSE, (int(1.2 * ppm) * 2 + 1,) * 2)) > 0 for m in lens_masks]
     return {"outline": poly(silhouette), "openings": [poly(m, 1) for m in lens_masks],
             "opening_masks": [cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0 for m in lens_masks],
-            "lenses": [poly(m, int(1.0 * ppm)) for m in lens_masks],
+            "lenses": [poly(m, int(1.0 * ppm)) for m in (shells if step is not None else lens_masks)],
             "width": float(np.ptp(np.nonzero(silhouette)[1]) / ppm),
-            "solid": silhouette & ~openings, "lens_masks": [cv2.dilate(m.astype(np.uint8),
-            cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (int(1.2 * ppm) * 2 + 1,) * 2)) > 0 for m in lens_masks],
+            "solid": silhouette & ~openings, "lens_masks": shells, "step_mask": step,
             "origin_px": (ox, oy), "ppm": ppm}
 
 
@@ -527,6 +617,34 @@ def rim_fields(sh, cfg):
         m = solid.astype(np.float64)
         return ndi.gaussian_filter(z * m, sig_mm * ppm) / np.maximum(ndi.gaussian_filter(m, sig_mm * ppm), 1e-6)
 
+    if bz.get("kind") == "terrace":
+        # F06 (drawing 06 and its cleaned shots): the face is a band round the outside, `drop` mm proud of
+        # a lower level inside the drawing's step line, one line round the whole shield and straight across
+        # the brow; the lower level runs round both openings and is the bridge between them. The step is a
+        # smooth rise `step` mm wide (its rounded top catches the faint line the front shot shows); the
+        # lower level rounds into each opening (lip_r)
+        stp = sh["step_mask"]
+        d_si = ndi.distance_transform_edt(stp) / ppm
+        d_so = ndi.distance_transform_edt(~stp) / ppm
+        if cfg.get("exact_distance"):
+            d_si = curve_distance(stp & sil, stp, d_si, ppm, sigma_px=0.6 * ppm)
+            d_so = curve_distance(sil & ~stp, ~stp & sil, d_so, ppm, sigma_px=0.6 * ppm)
+        sd = np.where(stp, -d_si, d_so)                    # mm from the step line, + towards the outer edge
+        u = np.clip(sd / st + 0.5, 0, 1)
+        u = u * u * (3 - 2 * u)
+        # the face domed a little across its band, highest midway between the outer edge and the step
+        tb = np.clip(d_out / np.maximum(d_out + np.maximum(sd, 0), 1e-3), 0, 1)
+        face = T / 2 - cfg.get("dome", 0.0) * (1 - np.sin(np.pi * tb))
+        zo = face - r + rounded(d_out_e, r)
+        z_low = T / 2 - dr
+        z = z_low + (zo - z_low) * u
+        z_lip = np.where(d_in_e < lr, z_low - lr + rounded(d_in_e, lr), np.inf)
+        zf = np.minimum(np.minimum(z, zo), z_lip)
+        zb = -(T / 2 - rb) - rounded(np.minimum(d_out_e, d_in_e), rb)
+        near = np.minimum(d_out, d_in)
+        wgt = np.clip((near - 0.4) / 0.8, 0, 1)
+        return wgt * smooth(zf, 0.3) + (1 - wgt) * zf, wgt * smooth(zb, 0.3) + (1 - wgt) * zb
+
     if bz.get("kind") == "well":
         # the face and the lens wells as one smooth surface (F05, the founder's desk shots of Oct 25 2026:
         # no ring, no wall, no crease anywhere between the face and the lens). The face is a low dome
@@ -600,7 +718,8 @@ def lens_fields(sh, cfg, i):
     about the lens box's centre, its edge `inset` mm behind the ring."""
     ppm = sh["ppm"]
     m = sh["lens_masks"][i]
-    ys, xs = np.nonzero(sh["opening_masks"][i])
+    # a shield (one lens behind both openings) curves about its own centre
+    ys, xs = np.nonzero(sh["opening_masks"][i] if sh.get("step_mask") is None else m)
     cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
     H, W = m.shape
     yy, xx = np.mgrid[0:H, 0:W]
@@ -808,7 +927,7 @@ def build(frame, materials, tilt=None):
     bend(front, xm, z, -T / 2)                        # the front's face at z = 0 at its most forward point
     front.data.materials.append(materials["acetate"])
     lenses = []
-    for i in range(2):
+    for i in range(len(sh["lens_masks"])):
         lf, lb = lens_fields(sh, cfg, i)
         ln = field_mesh(f"{frame} lens {i}", sh["lens_masks"][i], lf, lb, sh["origin_px"], sh["ppm"], step=3)
         bend(ln, xm, z, -T / 2)
@@ -1339,6 +1458,31 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     nt.links.new(glass.outputs[0], mix.inputs[1])
     nt.links.new(filt.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], outn.inputs["Surface"])
+    grad = FRAMES.get(frame, {}).get("lens", {}).get("gradient")
+    if grad:
+        # a gradient lens (F06): its tint by height on the lens, as measured (the lens's own coordinates
+        # are the frame's: mm above the openings' centre, in metres)
+        tc = nt.nodes.new("ShaderNodeTexCoord")
+        sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+        nt.links.new(tc.outputs["Object"], sep.inputs["Vector"])
+        ys = [g[0] for g in grad]
+        lo, hi = min(ys), max(ys)
+        mr = nt.nodes.new("ShaderNodeMapRange")
+        mr.inputs["From Min"].default_value = lo * MM
+        mr.inputs["From Max"].default_value = hi * MM
+        mr.clamp = True
+        nt.links.new(sep.outputs["Y"], mr.inputs["Value"])
+        ramp = nt.nodes.new("ShaderNodeValToRGB")
+        els = ramp.color_ramp.elements
+        pts = sorted(((y - lo) / (hi - lo), c) for y, c in grad)
+        els[0].position, els[0].color = pts[0][0], (*pts[0][1], 1)
+        els[1].position, els[1].color = pts[-1][0], (*pts[-1][1], 1)
+        for p_, c_ in pts[1:-1]:
+            e_ = els.new(p_)
+            e_.color = (*c_, 1)
+        nt.links.new(mr.outputs["Result"], ramp.inputs["Fac"])
+        nt.links.new(ramp.outputs["Color"], glass.inputs["Base Color"])
+        nt.links.new(ramp.outputs["Color"], filt.inputs["Color"])
     tex = texture_info(frame)
     ep_cfg = FRAMES.get(frame, {}).get("endpiece", {})
     metal_rough = ep_cfg.get("metal_rough", 0.07)
@@ -1362,7 +1506,7 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
             # the GCD set into a temple (F03): brand gold #C6A36A, polished; black onyx (as the texture's)
             "gold": principled("gcd gold", (0.565, 0.366, 0.145, 1), 0.22, metallic=1.0),
             "onyx": principled("gcd onyx", (0.006, 0.006, 0.006, 1), 0.04),
-            "clear": clear_acetate()}
+            "clear": clear_acetate(FRAMES.get(frame, {}).get("pads", {}).get("smoke", 1.0))}
 
 
 def textured_acetate(tex, rough=0.06):
@@ -1415,12 +1559,13 @@ def textured_acetate(tex, rough=0.06):
     return m
 
 
-def clear_acetate():
-    """Clear acetate (F01's nose pads): a colourless polished dielectric that light passes."""
+def clear_acetate(tint=1.0):
+    """Clear acetate (F01's nose pads): a polished dielectric that light passes, colourless or smoky grey
+    (`tint`: what one pass through it lets by, F06's pads)."""
     m = bpy.data.materials.new("clear acetate")
     m.use_nodes = True
     b = m.node_tree.nodes["Principled BSDF"]
-    b.inputs["Base Color"].default_value = (1.0, 1.0, 1.0, 1)
+    b.inputs["Base Color"].default_value = (tint, tint, tint, 1)
     b.inputs["Transmission Weight"].default_value = 1.0
     b.inputs["Roughness"].default_value = 0.05
     b.inputs["IOR"].default_value = 1.49
