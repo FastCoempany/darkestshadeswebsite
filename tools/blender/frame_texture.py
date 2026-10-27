@@ -2,6 +2,7 @@
 """A frame's own colour for its 3D build (frame3d.py), from its cleaned front product shot.
 
     python3 tools/blender/frame_texture.py F02            # the angle set's A1 shot (work/out/<shot>/)
+    python3 tools/blender/frame_texture.py F01 --temples  # and a band for acetate temples in the same material
 
 A tortoise acetate is a pattern, not a colour: the 3D front takes it from the real frame. The cleaned
 front shot (tools/photo/clean_lightbox.py: the frame cut out, its lenses in their own layer, the GCD
@@ -15,7 +16,9 @@ The metal on the front is found in the same shot: the GCD's gold band and its on
 and any pin heads (small bright neutral rounds). The build gives them gold, black stone and steel.
 
 Writes work/frames3d/<frame>/: albedo.png (16-bit, linear), masks.png (R gold, G onyx, B pins), map.json
-(the affine from the front's millimetres, frame3d's coordinates, to the texture's pixels).
+(the affine from the front's millimetres, frame3d's coordinates, to the texture's pixels); with
+--temples, temple.png: the same acetate laid anew along a band that frame3d wraps round each temple (the
+front shot never sees the temples' faces), its blue and black and their proportions read off the front.
 """
 import argparse
 import json
@@ -52,6 +55,30 @@ def fill_out(img, known, levels=9):
     return np.where(known[..., None], img, est)
 
 
+def tortoise(h, w, ppm, coverage, blue, black, along_mm=5.0, across_mm=2.0, seed=7):
+    """A blue-and-black tortoise acetate laid anew (F01's temples), h x w px at `ppm` px per mm, repeating
+    both ways: its blue blotches where a smooth random field (a Gaussian's width `along_mm` along the band,
+    `across_mm` across it: the sheet's pattern runs drawn out along a temple, as F01's three-quarter and
+    detail shots show) stands in its top `coverage`, two finer fields breaking their edges into the torn
+    outlines the front's blotches have; inside them the
+    blue varies as the real blotches do, 15% either side of the front's own blue (`blue`, linear)."""
+    rng = np.random.default_rng(seed)
+    fy = np.fft.fftfreq(h)[:, None]
+    fx = np.fft.fftfreq(w)[None, :]
+
+    def field(sa, sc):
+        G = np.exp(-2 * np.pi ** 2 * ((sc * ppm * fy) ** 2 + (sa * ppm * fx) ** 2))
+        f = np.real(np.fft.ifft2(np.fft.fft2(rng.standard_normal((h, w))) * G))
+        return (f - f.mean()) / f.std()
+    f = field(along_mm, across_mm) + 0.45 * field(along_mm / 2.5, across_mm / 2.5) + 0.2 * field(along_mm / 6, across_mm / 6)
+    t = np.quantile(f, 1 - coverage)
+    m = np.clip((f - t) / 0.08 + 0.5, 0, 1)
+    m = m * m * (3 - 2 * m)
+    shade = 1.0 + 0.15 * np.clip(field(2 * along_mm, 2 * across_mm), -1, 1)
+    col = black[None, None, :] * (1 - m[..., None]) + (blue[None, None, :] * shade[..., None]) * m[..., None]
+    return col.astype(np.float32)
+
+
 def register(sil_photo, sil_draw, init):
     """The affine taking the drawing's pixels to the photo's, refined from `init` by matching the two
     filled outlines (blurred), at a quarter of the photo's size."""
@@ -76,6 +103,9 @@ def main():
     ap.add_argument("frame")
     ap.add_argument("--shot", default=None)
     ap.add_argument("--ppm", type=float, default=12.0, help="the texture's pixels per mm")
+    ap.add_argument("--temples", action="store_true", help="also lay the acetate along a band for the temples")
+    ap.add_argument("--temple-mm", type=float, nargs=2, default=(170.0, 32.0),
+                    help="the band's length along the temple and its height round the temple's section, mm")
     a = ap.parse_args()
     import frame3d
     shot = a.shot
@@ -173,6 +203,23 @@ def main():
             "mm_to_px": [[round(float(v), 6) for v in r] for r in Mt],
             "outline_iou": round(iou, 4), "tent_white_linear": round(bg, 4),
             "metal_px": {"gold": int(gold.sum()), "onyx": int(onyx.sum()), "pins": int(pins.sum())}}
+    if a.temples:
+        # acetate temples in the same material (F01): the front shot never sees their faces, so their
+        # colour is the front's acetate laid anew along a band (`--temple-mm` long, round the temple's
+        # section, repeating), with the front's own blue and black in the front's proportions
+        px = alb[known]
+        blueness = px[:, 2] - np.maximum(px[:, 0], px[:, 1])
+        is_blue = blueness > 0.05
+        coverage = float(is_blue.mean())
+        blue = np.median(px[blueness > np.percentile(blueness[is_blue], 50)], axis=0) if is_blue.any() else px.mean(0)
+        black = np.median(px[blueness < 0.01], axis=0)
+        L_mm, V_mm = a.temple_mm
+        band = tortoise(int(round(V_mm * a.ppm)), int(round(L_mm * a.ppm)), a.ppm, coverage, blue, black)
+        cv2.imwrite(str(out / "temple.png"), cv2.cvtColor((np.clip(band, 0, 1) * 65535 + 0.5).astype(np.uint16), cv2.COLOR_RGB2BGR))
+        bp = np.where(band <= 0.0031308, 12.92 * band, 1.055 * np.clip(band, 0, 1) ** (1 / 2.4) - 0.055)
+        Image.fromarray((np.clip(bp, 0, 1) * 255).astype(np.uint8)).save(out / "temple-preview.jpg", quality=92)
+        info["temple"] = {"file": "temple.png", "mm": [L_mm, V_mm], "ppm": a.ppm, "blue_coverage": round(coverage, 3),
+                          "blue": [round(float(v), 4) for v in blue], "black": [round(float(v), 4) for v in black]}
     (out / "map.json").write_text(json.dumps(info, indent=1))
     print(json.dumps(info))
 

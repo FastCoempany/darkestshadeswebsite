@@ -1,5 +1,5 @@
 {
- "$comment": "Settings for tools/photo/wear.py: one generated person wearing one real, cleaned frame. Portrait coordinates (boxes, polygons, crop) are in the generated image's own pixels.",
+ "$comment": "Settings for tools/blender/wear3d.py (and tools/photo/wear.py): one generated person wearing one real frame. F01 rebuilt in 3D from its drawing (tools/blender/frame3d.py), on M2's S07 portrait, set as his F05 is: the same ear crease, black floor and room, the white studio's grazing mirror on the temples turned down (temple_gain; at 0.2, not F05's 0.06, so the tortoise keeps its blue); its light blue lens shows his eyes as it shows the tent (through_lens 1).",
  "id": "DS-CAST-M2-S07-F01-v01",
  "cast": "M2",
  "scene": "S07",
@@ -53,5 +53,26 @@
  "lens": {
   "photo": 0.0,
   "face_blur_mm": 0.3
- }
+ },
+ "ear_crease_px": {
+  "right": [
+   1386,
+   757
+  ]
+ },
+ "look3d": {
+  "black": [
+   0.004,
+   0.0034,
+   0.0034
+  ],
+  "temple_gain": 0.2
+ },
+ "scene_spec": {
+  "reflect": {
+   "rot_deg": 60.0
+  }
+ },
+ "skin_albedo": 0.15,
+ "through_lens": 1.0
 }

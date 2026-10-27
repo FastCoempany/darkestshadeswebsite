@@ -71,6 +71,14 @@ MM = 0.001
 # two edges the drawing draws 0.26-0.35 mm apart; in the light tent the ring reads one even black, only
 # the lip's rounding into the lens catching a faint line. Built with a pillow and a groove along the
 # step, it drew four or five parallel highlights round each lens that the frame does not have.
+# F01 (drawing 01, its cleaned shots, Oct 27 2026): a navigator in blue-and-black tortoise acetate, its
+# straight brow bar across the top over the nose's opening; a narrow bevel (0.8 mm) round each light blue
+# lens; the front 10 deg off upright; 12 mm acetate temples at the front's mid-height (17.9 mm below its
+# top), 3.95 mm thick at the joint tapering to 2.1, straight for 73.5 mm and then narrowing to 6 mm before
+# the tip's paddle (its eyelet is not built: it is always behind the ear on a head); the joint 6.5 mm
+# behind the end tab's face; the GCD on the right temple. The front's colour is the cleaned front shot's;
+# the temples', which that shot never sees, the same blue and black laid anew along them
+# (frame_texture.py --temples).
 # F02 (drawing 03 and its cleaned front shot): a thick crimson-tortoise front (6.5 mm, its outer edge
 # well rounded), a 3.2 mm bevel round each lens (the black layer under the tortoise: the "lens bay's bevel
 # inlay"), the front leaning ~10 deg at its rims (side view: 13.5 deg below the brow, the brow itself
@@ -101,6 +109,30 @@ MM = 0.001
 # acetate block that carries the temple's section into the end tab; the GCD on the right temple's outer
 # face (f03.json: 8.8 mm long, centred 0.82 x the 9 mm face from the joint, 39% down it).
 FRAMES = {
+    "F01": {"depth": 5.5, "edge_r": 2.4, "back_r": 1.0, "dome": 0.3,
+            # a narrow bevel round each lens (drawing 01's double line, 0.6-0.85 mm out from the opening)
+            "bezel": {"kind": "well", "width": 0.8, "p": 1.0, "round": 0.2, "seam": 0.12, "blend": 0.3,
+                      "step": 0.0, "drop": 0.6},
+            "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            "lens": {"radius": 150.0, "thick": 1.6, "inset": 0.5},
+            "tilt": 10.0,
+            # small clear pads inside the rims at the lens centres' height (the inside shot), 11.8 mm apart
+            # (the top view), just behind the bridge
+            "pads": {"x": 7.1, "y": 2.0, "back": 2.5, "r": (1.2, 3.0, 2.0), "clear": True},
+            "endpiece": {"kind": "block", "back": 6.5, "inset": 0.03, "flare": 0.6, "into": 2.0},
+            "temple": {"kind": "acetate", "top_below": 17.9, "height": 12.0, "edge_r": 0.8,
+                       "heights": [(0, 12.0), (73.5, 12.0), (78.5, 10.4), (82.5, 8.9), (85.5, 8.1), (90.5, 7.2),
+                                   (95.5, 6.6), (100.5, 6.2), (110, 6.0), (122, 6.6), (129, 7.3), (136, 9.0),
+                                   (142, 9.5), (150, 7.0)],
+                       "thicks": [(0, 3.95), (15.5, 3.77), (35.5, 3.5), (55.5, 3.23), (75.5, 2.96), (105.5, 2.57),
+                                  (125.5, 2.31), (139.5, 2.12), (150, 2.0)],
+                       "straight": 73.5, "drop": 30.0,
+                       # the mid-line beyond the straight run (mm back, mm down), side view
+                       "tip_path": [(0, 0), (5, -0.6), (9, -1.26), (12, -1.58), (17, -1.85), (22, -1.88), (27, -1.68),
+                                    (32, -1.19), (37, -0.17), (42, 1.52), (47, 4.15), (52, 8.3), (55, 12.7), (59, 16.2),
+                                    (62, 18.1), (65, 20.1)]},
+            "gcd": {"side": -1, "on": "temple"},
+            "texture": "work/frames3d/F01"},
     "F02": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.7,
             "bezel": {"width": 3.2, "step": 0.8, "drop": 1.2, "bump": 0.3, "groove": 0.0, "groove_w": 0.5},
             "lip_r": 0.8, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
@@ -661,11 +693,12 @@ def rounded_rect(w, h, r, n=6):
     return np.array(pts)
 
 
-def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5, s0=0.0):
+def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5, s0=0.0, uv_mm=None):
     """A bar along the polyline P (mm), resampled every `step` mm: its section a rounded rectangle
     size = (across, up) mm, kept as upright as the path allows; `round_end`: its last mm close to a
     rounded tip. `size` and `radius` may instead be functions of the distance along the bar (mm, from
-    `s0` at P's start: a piece of a longer bar keeps that bar's taper)."""
+    `s0` at P's start: a piece of a longer bar keeps that bar's taper). `uv_mm`: a band's size (mm) to
+    lay along it (bar_uv)."""
     P = np.asarray(P, np.float64)
     s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
     ss = np.r_[np.arange(0, s[-1], step), s[-1]]
@@ -688,6 +721,8 @@ def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, st
             k = max(np.sqrt(max(1 - q * q, 0.0)), 0.12)
         rings.append([p + a * x * k + u * y * k for x, y in prof])
     ob = loft(name, rings, material)
+    if uv_mm:
+        bar_uv(ob, rings, [s0 + si for si in ss], uv_mm)
     outward_normals(ob)
     for pl in ob.data.polygons:
         pl.use_smooth = True
@@ -744,6 +779,12 @@ def texture_info(frame):
     return info
 
 
+def band_mm(frame):
+    """The frame's temple band (frame_texture.py --temples): its length and height, mm; None without one."""
+    tex = texture_info(frame)
+    return tuple(tex["temple"]["mm"]) if tex and tex.get("temple") else None
+
+
 def _textured(parts, frame, materials):
     """The acetate parts take the frame's own colour (planar UVs from the front view)."""
     tex = texture_info(frame)
@@ -779,7 +820,9 @@ def build(frame, materials, tilt=None):
     for side in (-1, 1):
         x = side * pd["x"]
         zc = float(np.interp(x, xm, z)) - T - pd["back"] + pd["r"][2] * 0.6
-        parts.append(ellipsoid(f"{frame} pad {side}", (x, pd["y"], zc), pd["r"], materials["acetate"],
+        # clear acetate pads (F01: glued inside the rims, unseen from the front) or the front's own
+        parts.append(ellipsoid(f"{frame} pad {side}", (x, pd["y"], zc), pd["r"],
+                               materials["clear"] if pd.get("clear") else materials["acetate"],
                                rot_deg=(-12, side * 25, side * 12)))
     # the front's lean (pantoscopic tilt): a shear, the bottom back, so the top stays level and the front
     # view keeps the drawing's outline
@@ -1018,11 +1061,16 @@ def block_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
     r = tp.get("edge_r", 0.9)
     fl = ep.get("flare", 0.0)
     rings = []
-    for zz, flare in ((z_in, fl), (z_face - T, fl * 0.6), (z_joint, 0.0)):
+    zs = (z_in, z_face - T, z_joint)
+    for zz, flare in zip(zs, (fl, fl * 0.6, 0.0)):
         h = tp["height"] + flare
         prof = rounded_rect(th0, h, r)
         rings.append([(xc + x, yc - flare / 2 + y, zz) for x, y in prof])
-    ob = loft(f"{frame} end {side}", rings, materials["acetate"])
+    band = band_mm(frame) if "temple" in materials else None
+    ob = loft(f"{frame} end {side}", rings, materials["temple"] if band else materials["acetate"])
+    if band:
+        # the temple's acetate carried forward into the tab (u: mm along the temple, before its start)
+        bar_uv(ob, rings, [z_joint - zz for zz in zs], band)
     outward_normals(ob)
     for pl in ob.data.polygons:
         pl.use_smooth = True
@@ -1153,9 +1201,12 @@ def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0
                 pieces = [(f"{frame} temple {k}", P[a_], 0.0, 0.0), (f"{frame} temple {k} back", P[b_], float(s[b_][0]), 2.5)]
             else:
                 pieces = [(f"{frame} temple {k}", P, 0.0, 2.5)]
+            # in the front's material, laid along the temple (F01's tortoise), or the front's plain black
+            band = band_mm(frame) if "temple" in materials else None
             for name, Pp, s0, rend in pieces:
                 if len(Pp) >= 2:
-                    obs.append(sweep(name, Pp, size, materials["acetate"], rad, round_end=rend, s0=s0))
+                    obs.append(sweep(name, Pp, size, materials["temple"] if band else materials["acetate"], rad,
+                                     round_end=rend, s0=s0, uv_mm=band))
             g = cfg.get("gcd")
             if g and g.get("on") == "temple" and side == g["side"]:
                 # on the temple's outer face: centre 0.82 x the face's height from the hinge seam (the path
@@ -1300,13 +1351,18 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     # silver along a temple seen edge-on in a white studio
     endmetal = (principled("endmetal", (0.008, 0.008, 0.0085, 1), metal_rough, ior=1.5) if ep_cfg.get("coated")
                 else principled("endmetal", (0.035, 0.035, 0.038, 1), metal_rough, metallic=1.0))
-    return {"acetate": acetate,
+    extra = {}
+    if tex and tex.get("temple"):
+        # acetate temples in the front's material (F01): its band laid along each temple (sweep UVs)
+        extra["temple"] = band_acetate(pathlib.Path(tex["dir"]) / tex["temple"]["file"])
+    return {**extra, "acetate": acetate,
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             "endmetal": endmetal,
             "lens": lens,
             # the GCD set into a temple (F03): brand gold #C6A36A, polished; black onyx (as the texture's)
             "gold": principled("gcd gold", (0.565, 0.366, 0.145, 1), 0.22, metallic=1.0),
-            "onyx": principled("gcd onyx", (0.006, 0.006, 0.006, 1), 0.04)}
+            "onyx": principled("gcd onyx", (0.006, 0.006, 0.006, 1), 0.04),
+            "clear": clear_acetate()}
 
 
 def textured_acetate(tex, rough=0.06):
@@ -1357,6 +1413,80 @@ def textured_acetate(tex, rough=0.06):
         cur = mx.outputs[0]
     nt.links.new(cur, outn.inputs["Surface"])
     return m
+
+
+def clear_acetate():
+    """Clear acetate (F01's nose pads): a colourless polished dielectric that light passes."""
+    m = bpy.data.materials.new("clear acetate")
+    m.use_nodes = True
+    b = m.node_tree.nodes["Principled BSDF"]
+    b.inputs["Base Color"].default_value = (1.0, 1.0, 1.0, 1)
+    b.inputs["Transmission Weight"].default_value = 1.0
+    b.inputs["Roughness"].default_value = 0.05
+    b.inputs["IOR"].default_value = 1.49
+    return m
+
+
+def band_acetate(path, rough=0.06):
+    """Polished acetate coloured by a band image (linear) laid along a swept bar: its "bar_uv" runs u along
+    the bar and v round its section, both in the band's own units (sweep(uv_mm=...))."""
+    m = bpy.data.materials.new("acetate temple")
+    m.use_nodes = True
+    nt = m.node_tree
+    for n in list(nt.nodes):
+        if n.type != "OUTPUT_MATERIAL":
+            nt.nodes.remove(n)
+    outn = [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0]
+    uv = nt.nodes.new("ShaderNodeUVMap")
+    uv.uv_map = "bar_uv"
+    alb = nt.nodes.new("ShaderNodeTexImage")
+    alb.image = bpy.data.images.load(str(path))
+    alb.image.colorspace_settings.name = "Linear Rec.709"
+    alb.interpolation = "Cubic"
+    alb.extension = "REPEAT"
+    nt.links.new(uv.outputs["UV"], alb.inputs["Vector"])
+    b = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    b.inputs["Roughness"].default_value = rough
+    b.inputs["IOR"].default_value = 1.49
+    nt.links.new(alb.outputs["Color"], b.inputs["Base Color"])
+    nt.links.new(b.outputs[0], outn.inputs["Surface"])
+    return m
+
+
+def bar_uv(ob, rings, s_of_ring, band_mm):
+    """UVs ("bar_uv") for a loft of `rings` (each a list of points, mm): u the distance along the bar
+    (`s_of_ring`, mm), v the way round each ring as a share of its perimeter, so the band (`band_mm`: its
+    length, its height) wraps once round the section whatever the section's size, with no seam: it repeats
+    top to bottom. The end caps take their ring's first point's u."""
+    L_mm, _ = band_mm
+    k = len(rings[0])
+    vfrac = []
+    for r in rings:
+        r = np.asarray(r, np.float64)
+        d = np.linalg.norm(np.diff(np.vstack([r, r[:1]]), axis=0), axis=1)
+        c = np.r_[0, np.cumsum(d)]
+        vfrac.append(c / c[-1])                         # k + 1 values: the last is 1 (back to the start)
+    me = ob.data
+    uv = np.zeros((len(me.loops), 2), np.float32)
+    lv = np.zeros(len(me.loops), np.int64)
+    me.loops.foreach_get("vertex_index", lv)
+    n_side = (len(rings) - 1) * k
+    for pi, pl in enumerate(me.polygons):
+        ls = range(pl.loop_start, pl.loop_start + pl.loop_total)
+        if pi < n_side:
+            j, i = divmod(pi, k)
+            wrap = (i + 1) % k == 0
+            for li in ls:
+                vi = int(lv[li])
+                jr, ir = divmod(vi, k)
+                v = vfrac[jr][ir] if not (wrap and ir == 0) else 1.0
+                uv[li] = (s_of_ring[jr] / L_mm, v)
+        else:
+            for li in ls:
+                jr, ir = divmod(int(lv[li]), k)
+                uv[li] = (s_of_ring[jr] / L_mm, vfrac[jr][ir])
+    layer = me.uv_layers.get("bar_uv") or me.uv_layers.new(name="bar_uv")
+    layer.data.foreach_set("uv", uv.ravel())
 
 
 def check(frame, out, samples=64, tint=None, el_deg=4.0, yaw_deg=0.0):
