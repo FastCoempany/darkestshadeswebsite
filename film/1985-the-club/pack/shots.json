@@ -1,0 +1,714 @@
+{
+  "film": "DARKEST SHADES, 1985 / THE CLUB, 30 s 9:16 mockup",
+  "master": {
+    "fps": 24,
+    "frames": 720,
+    "seconds": 30.0,
+    "generated_frames_end": 653,
+    "graphics": "shots 19 (653-685) and 20 (685-720) are the finished end cards in post/"
+  },
+  "generation": {
+    "app": "app.runwayml.com (web app, founder's Pro plan)",
+    "model": "Gen-4 Turbo",
+    "mode": "image-to-video from one first-frame still",
+    "ratio": "9:16",
+    "duration_s": 5,
+    "clip_frames_at_24fps": 120,
+    "credits_per_take": 25,
+    "api": "never; no uploads outside the web app session on the founder's computer"
+  },
+  "frame_table": {
+    "01": {
+      "start": 0,
+      "end": 31,
+      "frames": 31,
+      "label": "SUV pulls into the mansion curb"
+    },
+    "02": {
+      "start": 31,
+      "end": 54,
+      "frames": 23,
+      "label": "interior door lever"
+    },
+    "03": {
+      "start": 54,
+      "end": 91,
+      "frames": 37,
+      "label": "F05 from pocket, unfold"
+    },
+    "04": {
+      "start": 91,
+      "end": 115,
+      "frames": 24,
+      "label": "F05 on, emblem"
+    },
+    "05": {
+      "start": 115,
+      "end": 134,
+      "frames": 19,
+      "label": "man exits"
+    },
+    "06": {
+      "start": 134,
+      "end": 163,
+      "frames": 29,
+      "label": "opens wife's door"
+    },
+    "07": {
+      "start": 163,
+      "end": 204,
+      "frames": 41,
+      "label": "wife takes hand, rises, looks up"
+    },
+    "08": {
+      "start": 204,
+      "end": 230,
+      "frames": 26,
+      "label": "door close, toward entrance"
+    },
+    "09": {
+      "start": 230,
+      "end": 266,
+      "frames": 36,
+      "label": "couple enters hall"
+    },
+    "10": {
+      "start": 266,
+      "end": 300,
+      "frames": 34,
+      "label": "greeting + mutual head turn"
+    },
+    "11": {
+      "start": 300,
+      "end": 326,
+      "frames": 26,
+      "label": "remote slide"
+    },
+    "12": {
+      "start": 326,
+      "end": 360,
+      "frames": 34,
+      "label": "through arch / chairs"
+    },
+    "13": {
+      "start": 360,
+      "end": 389,
+      "frames": 29,
+      "label": "tooth spotted, table pulled"
+    },
+    "14": {
+      "start": 389,
+      "end": 434,
+      "frames": 45,
+      "label": "table-height inspection"
+    },
+    "15": {
+      "start": 434,
+      "end": 470,
+      "frames": 36,
+      "label": "tooth test + pocket"
+    },
+    "16": {
+      "start": 470,
+      "end": 497,
+      "frames": 27,
+      "label": "remote power click (incl. silent beat)"
+    },
+    "17": {
+      "start": 497,
+      "end": 619,
+      "frames": 122,
+      "label": "full blast"
+    },
+    "18": {
+      "start": 619,
+      "end": 653,
+      "frames": 34,
+      "label": "impact close-up"
+    },
+    "19": {
+      "start": 653,
+      "end": 685,
+      "frames": 32,
+      "label": "SEE EVERYTHING. (graphic, done)"
+    },
+    "20": {
+      "start": 685,
+      "end": 720,
+      "frames": 35,
+      "label": "REVEAL NOTHING. + mark (graphic, done)"
+    }
+  },
+  "clips": [
+    {
+      "id": "c01",
+      "first_frame_still": "s01",
+      "shots_covered": [
+        "01"
+      ],
+      "framing": "Wide, 28 mm, locked from across the street; the SUV arrives.",
+      "prompt_text": "Camera locked on a tripod, no movement, no zoom. The black SUV glides forward from the left along the curb and comes to a smooth stop in front of the mansion's central staircase, brake lights glowing once, the body settling a few centimetres on its suspension. The wheels turn and stop; nothing else moves except a faint drift of evening traffic light far down the street. The building, fence, hedges and awning stay rigid and identical in every frame. No one exits the vehicle; no faces, sunglasses or eyes appear. Blue-hour light constant, no flicker.",
+      "covers": [
+        {
+          "shot": "01",
+          "use_frames": [
+            36,
+            67
+          ],
+          "place_at_frames": [
+            0,
+            31
+          ],
+          "master_frames": 31,
+          "used_frames": 31,
+          "label": "SUV pulls into the mansion curb"
+        }
+      ],
+      "qc": [
+        "building warps: facade, stair, fence or awning geometry drifts",
+        "SUV body or wheel geometry changes, or the car slides without the wheels turning",
+        "camera drifts, zooms or flickers"
+      ],
+      "takes_budget": 1,
+      "retake_note": "If the SUV overshoots or never stops, add 'the SUV stops by the second second and stays parked' and slide the use window later. If the facade warps, say 'static architecture, only the vehicle moves' first in the prompt.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 553
+    },
+    {
+      "id": "c02",
+      "first_frame_still": "s02",
+      "shots_covered": [
+        "02",
+        "03"
+      ],
+      "framing": "Chest-to-jaw crop inside the SUV, 50-65 mm, locked; lever, pocket, unfold.",
+      "prompt_text": "Camera locked, 50-65 mm, chest-to-jaw crop held exactly; the top edge never rises above the mouth, so the eyes never show. The right hand finishes pulling the black door lever and lets it go; the door cracks open a sliver of blue dusk light. In the same beat the left hand slides fully into the coat's right inside chest pocket and draws out the folded sunglasses. Both hands meet at chest height and open the thin wire temples one after the other; the glasses rise steadily toward the top of frame and leave it as they go to the face. The sunglasses keep their exact chunky rectangular shape and fixed proportions in the hands; five fingers per hand; the coat and the cabin stay still.",
+      "covers": [
+        {
+          "shot": "02",
+          "use_frames": [
+            16,
+            39
+          ],
+          "place_at_frames": [
+            31,
+            54
+          ],
+          "master_frames": 23,
+          "used_frames": 23,
+          "label": "interior door lever"
+        },
+        {
+          "shot": "03",
+          "use_frames": [
+            39,
+            76
+          ],
+          "place_at_frames": [
+            54,
+            91
+          ],
+          "master_frames": 37,
+          "used_frames": 37,
+          "label": "F05 from pocket, unfold"
+        }
+      ],
+      "qc": [
+        "frame shape drift: the sunglasses change width, lens shape or temple thickness in the hands",
+        "eyes visible: the crop rises above the mouth or the head drops into frame",
+        "hands wrong: extra or fused fingers, a hand passing through the coat or the lever"
+      ],
+      "takes_budget": 2,
+      "retake_note": "If the lever and the pocket happen at the same time and read as a muddle, order them: 'first the right hand releases the lever, then the left hand enters the pocket'. If the unfold fails, end the clip on the folded glasses rising and let shot 04's macro carry the opening temples; use a shorter 03 window and hold the last good frame.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 686
+    },
+    {
+      "id": "c03",
+      "first_frame_still": "s03",
+      "shots_covered": [
+        "04"
+      ],
+      "framing": "Macro 85-100 mm on the right temple, ear and end-piece; the settle and the emblem.",
+      "prompt_text": "Camera locked, macro 85-100 mm, no reframing. The right temple of the sunglasses slides the last centimetre down over the ear and seats, the triangular end-piece coming to rest just behind the ear with its tiny gold-and-black emblem toward camera; the thumb and forefinger release the temple and withdraw out of frame to the lower right. A narrow line of dusk light moves once across the end-piece and the gold emblem. The head holds completely still; the sunglasses stay fixed on the face once seated; the eye region stays outside the frame and the eyes never show. Skin, stubble and hair do not change.",
+      "covers": [
+        {
+          "shot": "04",
+          "use_frames": [
+            24,
+            48
+          ],
+          "place_at_frames": [
+            91,
+            115
+          ],
+          "master_frames": 24,
+          "used_frames": 24,
+          "label": "F05 on, emblem"
+        }
+      ],
+      "qc": [
+        "frame shape drift, or the emblem moves, reverses, doubles or changes colour",
+        "eyes visible at the left edge of frame",
+        "hands wrong: extra fingers, or the temple clips into the skin or floats off the ear"
+      ],
+      "takes_budget": 2,
+      "retake_note": "The emblem is product-critical: judge it at 200 percent on the first, middle and last used frame against the still. If the light sweep smears the emblem, drop the sweep from the prompt and let the grade add it; if the fingers mutate, say 'the fingers withdraw immediately' so they leave frame early.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 604
+    },
+    {
+      "id": "c04",
+      "first_frame_still": "s04",
+      "shots_covered": [
+        "05",
+        "06"
+      ],
+      "framing": "35 mm, locked low behind the SUV's rear street-side corner; he exits and walks round to her door.",
+      "prompt_text": "Camera locked low behind the SUV's rear street-side corner, 35 mm, no pan. The man steps fully out of the rear door onto the street, turns away from camera and pushes the door shut, then walks unhurried around the rear bumper toward the camera side and on to the curbside rear door, where his right hand reaches the handle and begins to pull it open. Natural gait, shoes contacting the ground, coat swinging slightly. The SUV body, wheels and reflections stay rigid; the mansion facade, stair, fence and awning never warp. His sunglasses stay fixed on his face throughout and his eyes never show; his face is mostly turned from camera.",
+      "covers": [
+        {
+          "shot": "05",
+          "use_frames": [
+            12,
+            31
+          ],
+          "place_at_frames": [
+            115,
+            134
+          ],
+          "master_frames": 19,
+          "used_frames": 19,
+          "label": "man exits"
+        },
+        {
+          "shot": "06",
+          "use_frames": [
+            31,
+            60
+          ],
+          "place_at_frames": [
+            134,
+            163
+          ],
+          "master_frames": 29,
+          "used_frames": 29,
+          "label": "opens wife's door"
+        }
+      ],
+      "qc": [
+        "building warps: facade, stair or fence geometry drifts behind the walk",
+        "SUV or door mechanics wrong: door morphs, body stretches, feet not contacting the ground",
+        "eyes visible, or the sunglasses leave or change on the face as he turns"
+      ],
+      "takes_budget": 2,
+      "retake_note": "The walk round the car is the riskiest motion. If the body warps, split the ask: 'he steps out and walks toward the rear bumper' only, and cut shot 06 from a later window where he reaches the curbside door; if feet slide, add 'slow deliberate steps'. Never accept a frame where his face turns to camera with eyes readable.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 635
+    },
+    {
+      "id": "c05",
+      "first_frame_still": "s05",
+      "shots_covered": [
+        "07",
+        "08"
+      ],
+      "framing": "50-65 mm, locked at seated height by the fence, into her open door; she rises, chin up; door closes, they go.",
+      "prompt_text": "Camera locked at seated passenger height by the fence, 50-65 mm, no reframing. She closes her hand around his, the smallest closed-mouth smile appears, and she rises smoothly out of the SUV to standing, her chin tilting upward toward the building as warm window lights slide faintly across her opaque dark lenses; her face passes up through the frame. Then his sleeve swings the rear door closed with a soft solid motion and the two of them turn and walk toward the camera side of frame, leaving it. Her sunglasses stay perfectly fixed on her face, same rounded-square shape, and her eyes never show; his head stays above the frame top. The SUV and facade stay rigid.",
+      "covers": [
+        {
+          "shot": "07",
+          "use_frames": [
+            12,
+            53
+          ],
+          "place_at_frames": [
+            163,
+            204
+          ],
+          "master_frames": 41,
+          "used_frames": 41,
+          "label": "wife takes hand, rises, looks up"
+        },
+        {
+          "shot": "08",
+          "use_frames": [
+            53,
+            79
+          ],
+          "place_at_frames": [
+            204,
+            230
+          ],
+          "master_frames": 26,
+          "used_frames": 26,
+          "label": "door close, toward entrance"
+        }
+      ],
+      "qc": [
+        "frame shape drift on her sunglasses: bridge, lens shape or temple changes as she rises",
+        "eyes visible through the lenses at any frame, or the smile opens the mouth",
+        "hands wrong on the clasp, or the door and SUV body warp on the close"
+      ],
+      "takes_budget": 2,
+      "retake_note": "Product-critical for F02. If the rise lifts her head out of frame too early, ask for 'she rises slowly' and use an earlier window. If his face enters frame, add 'his head stays above the frame' earlier in the prompt. If the door close fails, cut shot 08 shorter on the turn and let the audio carry the latch.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 667
+    },
+    {
+      "id": "c06",
+      "first_frame_still": "s06",
+      "shots_covered": [
+        "09",
+        "10"
+      ],
+      "framing": "35 mm, slow dolly behind the couple down the hallway; stop at the podium; greeting; the mutual head turn.",
+      "prompt_text": "Camera dollies forward slowly behind the couple at shoulder height, 35 mm, matching their walking pace down the narrow hallway toward the stone podium, then stops as they stop a step short of it. The woman behind the podium lifts her head and speaks briefly, composed, with a small welcoming nod. Then the couple's heads turn a few degrees toward each other, a tiny shared glance, and hold. Natural gait, coats moving slightly, hair settling; no one turns to the camera. Both pairs of sunglasses stay fixed on their faces, seen only as temples over the ears, and no eyes ever show. Walls, podium and archway stay rigid.",
+      "covers": [
+        {
+          "shot": "09",
+          "use_frames": [
+            8,
+            44
+          ],
+          "place_at_frames": [
+            230,
+            266
+          ],
+          "master_frames": 36,
+          "used_frames": 36,
+          "label": "couple enters hall"
+        },
+        {
+          "shot": "10",
+          "use_frames": [
+            44,
+            78
+          ],
+          "place_at_frames": [
+            266,
+            300
+          ],
+          "master_frames": 34,
+          "used_frames": 34,
+          "label": "greeting + mutual head turn"
+        }
+      ],
+      "qc": [
+        "building warps: hallway walls, podium or archway bend, or the woman behind the podium morphs",
+        "sunglasses move independently of the heads, or an eye shows on the head turn",
+        "gait wrong: feet sliding, legs crossing, or the couple drifts through the podium"
+      ],
+      "takes_budget": 2,
+      "retake_note": "If the dolly fights the walk, lock the camera and let them walk away from it ('camera static'). If the head turn is too big and shows a cheek and eye, say 'a few degrees only, profiles never reach the camera'. The greeting needs no lip accuracy; audio is built separately.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 619
+    },
+    {
+      "id": "c07",
+      "first_frame_still": "s07",
+      "shots_covered": [
+        "11"
+      ],
+      "framing": "85 mm macro on the podium top; the remote slides to his hand.",
+      "prompt_text": "Camera locked macro, 85 mm, focus on the podium top, no reframing. The woman's hand slides the small black remote the rest of the way across the stone toward camera and stops; the man's hand enters from the near edge, closes on the remote and lifts it cleanly out of frame toward the right, and her hand withdraws. Only hands are in frame: five fingers each, no rings, the dark cuffs. The podium's bevelled edge and the faintly lit arched inlay behind stay rigid and the glow constant. No faces, sunglasses or eyes appear.",
+      "covers": [
+        {
+          "shot": "11",
+          "use_frames": [
+            24,
+            50
+          ],
+          "place_at_frames": [
+            300,
+            326
+          ],
+          "master_frames": 26,
+          "used_frames": 26,
+          "label": "remote slide"
+        }
+      ],
+      "qc": [
+        "hands wrong: extra or fused fingers, or the remote morphs or doubles",
+        "building warps: the podium bevel or the arched inlay bends or flickers",
+        "a face or eyes appear in frame"
+      ],
+      "takes_budget": 1,
+      "retake_note": "Low risk. If the two hands tangle, ask for 'her hand releases before his hand arrives'. A take where the remote merely stops and his hand only touches it is usable: cut on the touch.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 522
+    },
+    {
+      "id": "c08",
+      "first_frame_still": "s08",
+      "shots_covered": [
+        "12",
+        "13"
+      ],
+      "framing": "50 mm, locked at chest height behind the table; the couple settles; he notices and pulls the table.",
+      "prompt_text": "Camera locked at chest height behind the table, 50 mm, no movement. The couple finishes lowering into the two black chairs and settles, hands on the chair arms, then holds still for a beat. The man's head dips as he notices the tiny gold point on the glass table; he leans forward, grips the near edge of the table and drags it a short distance toward his knees, the glass sliding heavily and the tooth riding with it, then he stays leaned over it. She stays still. Both pairs of sunglasses stay fixed on the faces; no eyes ever show. Chairs, TV, speaker and wall stay rigid.",
+      "covers": [
+        {
+          "shot": "12",
+          "use_frames": [
+            12,
+            46
+          ],
+          "place_at_frames": [
+            326,
+            360
+          ],
+          "master_frames": 34,
+          "used_frames": 34,
+          "label": "through arch / chairs"
+        },
+        {
+          "shot": "13",
+          "use_frames": [
+            46,
+            75
+          ],
+          "place_at_frames": [
+            360,
+            389
+          ],
+          "master_frames": 29,
+          "used_frames": 29,
+          "label": "tooth spotted, table pulled"
+        }
+      ],
+      "qc": [
+        "furniture warps: chairs, table, TV or speaker change shape or position",
+        "frame shape drift or eyes visible on either face",
+        "hands wrong on the table edge, or the table passes through his legs"
+      ],
+      "takes_budget": 2,
+      "retake_note": "If the gold point vanishes on the pull, accept it only if the next clip (c09) re-establishes the tooth within 1 s; otherwise retake with 'a tiny gold speck stays visible on the glass'. If the sit-down is already finished in frame 0, use the pull only and hold the first frame for shot 12.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 575
+    },
+    {
+      "id": "c09",
+      "first_frame_still": "s09",
+      "shots_covered": [
+        "14"
+      ],
+      "framing": "85 mm, locked exactly at table height; tooth sharp, he lowers behind the table, takes it.",
+      "prompt_text": "Camera locked exactly at table height, 85 mm, focus held on the tooth in the foreground, no reframing. The man's head lowers slowly behind the far edge of the glass until the dark opaque lenses sit just above the table horizon, then holds there, perfectly still, for a long beat. His right hand enters from the right, fingers slow and deliberate, closes on the gold-capped tooth and lifts it straight up out of the top of frame. The tooth stays sharp and unchanged while it is on the glass; the sunglasses stay fixed on the face and the eyes never show through the lenses. Table, wall and light stay constant.",
+      "covers": [
+        {
+          "shot": "14",
+          "use_frames": [
+            20,
+            65
+          ],
+          "place_at_frames": [
+            389,
+            434
+          ],
+          "master_frames": 45,
+          "used_frames": 45,
+          "label": "table-height inspection"
+        }
+      ],
+      "qc": [
+        "tooth morphs, or reads as jewellery, candy or a prop instead of a capped molar",
+        "frame shape drift, or eyes visible above the table horizon",
+        "hands wrong: extra fingers, or the hand passes through the glass"
+      ],
+      "takes_budget": 2,
+      "retake_note": "Product-critical (the film's strangest image). If the head stops too high and shows cheek and lens interior, ask for 'lenses just above the glass edge'. If the pick-up fails, use the lowering and the hold only (frames 20-65 without the hand) and let c10 start with the tooth already at the mouth.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 609
+    },
+    {
+      "id": "c10",
+      "first_frame_still": "s10",
+      "shots_covered": [
+        "15",
+        "16"
+      ],
+      "framing": "65-85 mm medium close-up, locked; tooth test, into the chest pocket, remote up, power click, hold.",
+      "prompt_text": "Camera locked, 65-85 mm medium close-up, no reframing. He presses the gold cap of the tooth briefly against his upper-right rear teeth with his lips barely parted, a tiny grimace, and lowers it; his left hand opens the right side of the coat and his right hand tucks the tooth into the inside chest pocket, and the coat falls closed. His right hand then lifts the small black remote from the chair arm, raises it in front of his chest with the thumb on the power button, and presses once; then everything holds still. The sunglasses stay perfectly fixed on his face and the eyes never show through the opaque lenses; five fingers per hand; the chair stays rigid.",
+      "covers": [
+        {
+          "shot": "15",
+          "use_frames": [
+            12,
+            48
+          ],
+          "place_at_frames": [
+            434,
+            470
+          ],
+          "master_frames": 36,
+          "used_frames": 36,
+          "label": "tooth test + pocket"
+        },
+        {
+          "shot": "16",
+          "use_frames": [
+            48,
+            75
+          ],
+          "place_at_frames": [
+            470,
+            497
+          ],
+          "master_frames": 27,
+          "used_frames": 27,
+          "label": "remote power click (incl. silent beat)"
+        }
+      ],
+      "qc": [
+        "eyes visible through the lenses, or frame shape drift during the grimace",
+        "hands wrong: fingers multiply, the tooth or the remote morphs or vanishes",
+        "sunglasses slip or tilt on the face"
+      ],
+      "takes_budget": 2,
+      "retake_note": "Four actions in 2.6 s is the densest ask. If the take runs long, retime the used window up to 1.5x in post (setpts) rather than retaking; if the pocket beat fails, cut from the grimace straight to the remote rising and let the audio carry the pocket. The click must land on the last frame of shot 16's window; slide the window to it.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 662
+    },
+    {
+      "id": "c11",
+      "first_frame_still": "s11",
+      "shots_covered": [
+        "17"
+      ],
+      "framing": "35-50 mm two-shot, locked; the full blast, the camera refuses to react.",
+      "prompt_text": "Camera locked on a tripod, 35-50 mm, absolutely no camera shake, no zoom, no reframing. For the first fraction of a second nothing moves. Then a wall of air from the tower speaker hits the couple: hair drives straight back and streams, his swept hair and her blunt bob and fringe whipping, coat collars and lapels flatten and flutter, cheeks press, and both bodies sink back into the chairs and stay pinned. The force is continuous to the last frame. The speaker, TV, wall, chairs and glass table stay rigid and unmoved. Both pairs of sunglasses stay perfectly fixed on the faces, no slipping, no rattling, same shape, and the eyes never show.",
+      "covers": [
+        {
+          "shot": "17",
+          "use_frames": [
+            0,
+            120
+          ],
+          "place_at_frames": [
+            497,
+            619
+          ],
+          "master_frames": 122,
+          "used_frames": 120,
+          "label": "full blast",
+          "conform": "120 generated frames fill 122 master frames: hold the last frame 2 frames, or setpts=122/120*PTS before fps=24"
+        }
+      ],
+      "qc": [
+        "camera shakes, zooms, drifts or the frame breathes",
+        "hair not moving on the blast, or the furniture, speaker or TV warps",
+        "sunglasses move independently of the head, change shape, or eyes become visible"
+      ],
+      "takes_budget": 2,
+      "retake_note": "Uses the whole 5 s: 120 generated frames fill 122 master frames by holding the last frame for 2 frames (or setpts 122/120). The blast must start within the first 7 frames; if it starts late, trim the head and hold the last frame longer, up to 10 frames. If the hair barely moves, say 'hurricane-force wind on hair and clothing only' and keep the furniture lines.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 643
+    },
+    {
+      "id": "c12",
+      "first_frame_still": "s12",
+      "shots_covered": [
+        "18"
+      ],
+      "framing": "85 mm extreme close portrait of the man, three-quarter right, emblem to camera; unmoved in the blast.",
+      "prompt_text": "Camera locked, 85 mm, no camera shake, no reframing. The wall of air continues: his hair streams straight back and whips, the coat collar flattens and ripples, the stubbled cheek is pressed by the force, the head holds against it. The sunglasses do not move at all: same shape, same seat on the nose and ear, the gold-and-black emblem on the end-piece steady and sharp, the opaque dark lenses still; the eyes never show. The pale wall behind stays rigid. The force is constant from the first frame to the last.",
+      "covers": [
+        {
+          "shot": "18",
+          "use_frames": [
+            16,
+            50
+          ],
+          "place_at_frames": [
+            619,
+            653
+          ],
+          "master_frames": 34,
+          "used_frames": 34,
+          "label": "impact close-up"
+        }
+      ],
+      "qc": [
+        "sunglasses move, the emblem drifts, reverses or blurs, or the frame shape changes",
+        "eyes visible through the lenses",
+        "hair not moving on the blast, or the camera shakes"
+      ],
+      "takes_budget": 2,
+      "retake_note": "Product-critical (the final portrait). Judge the emblem at 200 percent on every 4th frame. A take with any head turn is regenerated, never fixed. If hair motion is weak, raise it in the prompt; never ask for motion on the glasses.",
+      "model": "Gen-4 Turbo",
+      "ratio": "9:16",
+      "duration": 5,
+      "resolution": "1080x1920 when offered, else 720x1280",
+      "credits_per_take": 25,
+      "prompt_chars": 510
+    }
+  ],
+  "summary": {
+    "clips": 12,
+    "first_pass_credits": 300,
+    "cap": 600,
+    "remaining_for_retakes": 300,
+    "retakes_affordable": 12,
+    "planned_max_spend_with_takes_budget": 550,
+    "float_after_planned_retakes": 50,
+    "retake_priority": [
+      "c11",
+      "c12",
+      "c03",
+      "c05",
+      "c09",
+      "c02",
+      "c10",
+      "c04",
+      "c08",
+      "c06",
+      "c01",
+      "c07"
+    ]
+  }
+}

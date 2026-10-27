@@ -1,0 +1,163 @@
+{
+  "stills": [
+    {
+      "id": "s01",
+      "for_clip": "c01",
+      "persons": [],
+      "prompt": "Vertical 9:16 still photograph, 28 mm wide lens, camera locked at sidewalk height across the street. Blue-hour Chicago dusk, steel-blue sky, charcoal street. Opposite: a pale limestone historic Chicago mansion facade with a grand central stone staircase and a discreet doorway tucked beneath it under a plain dark awning, iron fence, hedges, warm incandescent windows; the doorway beneath the stair visible but not announced, the awning plain and unlettered. In the near lane a black full-size luxury SUV, badges unreadable is still rolling in from the left, headlights on, three car-lengths short of the empty curb space before the central staircase, faint motion blur on the wheels, room to glide forward and stop. Empty sidewalk, no people, no signage, no street numbers. Facade fills the upper two thirds, street and SUV the lower third. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s01.png",
+      "prompt_chars": 1029
+    },
+    {
+      "id": "s02",
+      "for_clip": "c02",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 50-65 mm, rear seat of a black luxury SUV, blue hour. Chest-to-jaw crop of a seated man, top edge at his mouth, no eyes. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit. Right hand on a slim black door lever, mid-pull; left hand crossing to the coat's right inside pocket, the folded sunglasses emerging: gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s02.png",
+      "prompt_chars": 1093
+    },
+    {
+      "id": "s03",
+      "for_clip": "c03",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 85-100 mm macro, dim SUV cabin, blue hour: the right side of a man's face: ear, temple, cheekbone, stubble; the eyes lie outside the frame. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Seating his sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them: the right temple 1 cm above the ear, thumb and forefinger at the hinge, end-piece and gold emblem to camera in dusk light. Navy peacoat collar. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s03.png",
+      "prompt_chars": 1092
+    },
+    {
+      "id": "s04",
+      "for_clip": "c04",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 35 mm, camera low in the street behind the rear street-side corner of a black full-size luxury SUV, badges unreadable, looking along its flank. Blue-hour Chicago dusk. Beyond it, upper right: the pale limestone mansion facade, its grand central stone staircase, the doorway beneath under a plain dark awning, iron fence, hedges, warm windows. The rear street-side door is open, a man half out, one shoe on the asphalt, turned away, the back of his head and right ear to camera. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them; only the temple shows at his ear. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s04.png",
+      "prompt_chars": 1364,
+      "length_note": "1364 chars, over the 1,100 guideline: this frame holds 1 cast members and the brief's rule that each bible is pasted word for word wins; see NOTES.md"
+    },
+    {
+      "id": "s05",
+      "for_clip": "c05",
+      "persons": [
+        "W1"
+      ],
+      "prompt": "Vertical 9:16 still, 50-65 mm, camera by an iron fence at seated-passenger height, looking into the open curbside rear door of a black full-size luxury SUV, badges unreadable, blue-hour Chicago dusk. A woman in the rear seat, turned to the door. A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses, rounded-square red-and-black tortoise acetate front, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; lenses fully opaque, no eyes visible through them; two warm window lights reflected as points in the lenses. Chin level. Her right hand has just taken a man's right hand at frame right, his navy peacoat sleeve in frame, his head above the top edge. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s05.png",
+      "prompt_chars": 1372,
+      "length_note": "1372 chars, over the 1,100 guideline: this frame holds 1 cast members and the brief's rule that each bible is pasted word for word wins; see NOTES.md"
+    },
+    {
+      "id": "s06",
+      "for_clip": "c06",
+      "persons": [
+        "M3",
+        "W1"
+      ],
+      "prompt": "Vertical 9:16 still, 35 mm, camera at shoulder height directly behind a couple walking away down a narrow hallway, warm ivory and stone, 18-24 ft deep, a monolithic bevelled stone podium terminating the axis with a shallow inlay of repeated narrow arches faintly lit from within, an archway just off-axis. They are a third of the way in, mid-stride, backs to camera, faces unseen. The man, left: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit; of his sunglasses (gloss black chunky rectangular acetate, pillowed corners, thin wire temples with a small triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece) only the temples show over his ears. The woman, right: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings; of her sunglasses (rounded-square red-and-black tortoise acetate, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing) only the temples show at her ears; lenses fully opaque, no eyes visible through them. Far ahead, small, a composed woman in her forties, dark uniform-like dress, hair pulled back, no glasses, stands behind the podium; the archway opens right of it. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s06.png",
+      "prompt_chars": 2149,
+      "length_note": "2149 chars, over the 1,100 guideline: this frame holds 2 cast members and the brief's rule that each bible is pasted word for word wins; see NOTES.md"
+    },
+    {
+      "id": "s07",
+      "for_clip": "c07",
+      "persons": [],
+      "prompt": "Vertical 9:16 still photograph, 85 mm macro, camera low at the near edge of a monolithic bevelled stone podium, looking across its top, warm ivory light, shallow focus. A woman's hand, no rings, short natural nails, a dark dress cuff, is sliding a small matte-black remote control across the stone toward the camera; the remote is halfway, mid-slide, her fingertips on it. At the near edge a man's fingertips in a dark navy wool cuff are just entering the frame, open, ready to receive it. Foreground: the thick bevelled stone edge of the podium; beyond the hand, out of focus, a shallow inlay of repeated narrow arches faintly lit from within. No faces in frame. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s07.png",
+      "prompt_chars": 851
+    },
+    {
+      "id": "s08",
+      "for_clip": "c08",
+      "persons": [
+        "M3",
+        "W1"
+      ],
+      "prompt": "Vertical 9:16 still, 50 mm, camera locked at chest height behind the coffee table in a viewing room: pale grey-white wall, two monumental black chairs, a smoked-glass coffee table, a modern flat TV, one large black floor-standing tower speaker, nothing else; huge negative space, cooler neutral wall. Chairs centred, TV above, speaker left of it; the smoked-glass table fills the lower foreground, slightly too far from the chairs, one tiny gold point, a gold-capped tooth, on the glass. A couple is lowering into the chairs, mid-sit, hands on the chair arms. The man, left chair: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate, pillowed corners, thin wire temples with a small triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece. The woman, right chair: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses, rounded-square red-and-black tortoise acetate, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s08.png",
+      "prompt_chars": 2097,
+      "length_note": "2097 chars, over the 1,100 guideline: this frame holds 2 cast members and the brief's rule that each bible is pasted word for word wins; see NOTES.md"
+    },
+    {
+      "id": "s09",
+      "for_clip": "c09",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 85 mm, camera exactly at table height at the edge of a smoked-glass table, pale wall. Sharp in the foreground, a real molar with an exquisite champagne-gold cap, not jewellery; the glass a horizon. Beyond, soft, a man's head lowering, sunglasses just above the horizon, chin hidden. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Sunglasses: gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them. Navy peacoat collar. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s09.png",
+      "prompt_chars": 1100
+    },
+    {
+      "id": "s10",
+      "for_clip": "c10",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 65-85 mm, medium close-up chest to brow, a man in a monumental black chair, pale wall, camera slightly right. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them. Right hand holds a small gold-capped molar at the corner of his closed mouth; left hand on the right lapel; a remote on the chair arm. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s10.png",
+      "prompt_chars": 1097
+    },
+    {
+      "id": "s11",
+      "for_clip": "c11",
+      "persons": [
+        "M3",
+        "W1"
+      ],
+      "prompt": "Vertical 9:16 still, 35-50 mm, camera locked at seated eye level, square to the two chairs in a viewing room: pale grey-white wall, two monumental black chairs, a smoked-glass coffee table, a modern flat TV, one large black floor-standing tower speaker, nothing else; speaker left of the TV, the glass table in the lower foreground close to the man's knees; cooler neutral wall. A couple sits calmly, upright, hair neutral, the air still. The man, left chair, a small black remote in his right hand on the chair arm: A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. He wears a dark navy wool peacoat over a black knit and sunglasses, gloss black chunky rectangular acetate, pillowed corners, thin wire temples with a small triangular end-piece, opaque dark grey lenses, tiny gold-and-black emblem on the right end-piece. The woman, right chair, hands in her lap: A 24-year-old Korean woman, slender with narrow shoulders and a long neck. Fair, smooth, matte skin with a cool undertone. Glossy blue-black hair in a blunt bob cut level with the jaw, a heavy straight fringe cut just above the brows, the hair falling straight over both ears. Long oval face, high flat cheekbones, a small straight nose with a low bridge, small full lips in their natural soft rose. No makeup, no jewelry. Still and unsmiling, mouth closed. She wears an elegant long dark evening coat, no logos, no earrings and sunglasses, rounded-square red-and-black tortoise acetate, slim black wire temples, opaque dark grey lenses, tiny gold-and-black emblem on the right wing; lenses fully opaque, no eyes visible through them. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s11.png",
+      "prompt_chars": 2051,
+      "length_note": "2051 chars, over the 1,100 guideline: this frame holds 2 cast members and the brief's rule that each bible is pasted word for word wins; see NOTES.md"
+    },
+    {
+      "id": "s12",
+      "for_clip": "c12",
+      "persons": [
+        "M3"
+      ],
+      "prompt": "Vertical 9:16 still, 85 mm, extreme close portrait, a seated man, three-quarter right, the right end-piece of his sunglasses to camera, pale grey-white wall. A 38-year-old South Asian man, lean. Medium brown skin with a warm undertone. Thick black hair swept back off the forehead, short at the sides; ears visible. Long face, defined cheekbones, a straight prominent nose, a close stubble of two or three days along the jaw and upper lip. Unstyled, serious, mouth closed. Sunglasses: gloss black chunky rectangular acetate front with soft pillowed corners, thin metal wire temples with a small triangular end-piece, opaque dark grey lenses, a tiny gold-and-black emblem on the right end-piece; lenses fully opaque, no eyes visible through them; seated and still. Air blast from the front: hair driven straight back, navy peacoat collar flattened, stubbled cheek pressed; the gold emblem sharp. Photographic, restrained 35 mm colour-negative look; 2026 objects, a camera that remembers 1985: fine grain, mild halation, dense blacks. No text, no logos, no watermark, no visible eyes.",
+      "aspect": "9:16",
+      "model": "gpt-image-2.5-sunburst",
+      "output": "stills/s12.png",
+      "prompt_chars": 1082
+    }
+  ],
+  "rules": {
+    "aspect": "9:16",
+    "model": "gpt-image-2.5-sunburst",
+    "output_dir": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/stills/",
+    "one_still_per_clip": true,
+    "bibles_verbatim": [
+      "M3",
+      "W1"
+    ],
+    "ends_with": "No text, no logos, no watermark, no visible eyes."
+  }
+}
