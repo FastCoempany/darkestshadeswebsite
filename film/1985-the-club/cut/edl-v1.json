@@ -1,0 +1,128 @@
+[
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/still-s01.mp4",
+  "in_frame": 0,
+  "out_frame": 31,
+  "place_at": 0,
+  "label": "shot 01 SUV arrives (still)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/still-s02.mp4",
+  "in_frame": 0,
+  "out_frame": 23,
+  "place_at": 31,
+  "label": "shot 02 lever (still)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c02.mp4",
+  "in_frame": 10,
+  "out_frame": 47,
+  "place_at": 54,
+  "label": "shot 03 F05 from pocket (c02)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c03.mp4",
+  "in_frame": 0,
+  "out_frame": 24,
+  "place_at": 91,
+  "label": "shot 04 emblem hold (c03)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c04.mp4",
+  "in_frame": 8,
+  "out_frame": 27,
+  "place_at": 115,
+  "label": "shot 05 man exits (c04)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c04.mp4",
+  "in_frame": 40,
+  "out_frame": 69,
+  "place_at": 134,
+  "label": "shot 06 around the car (c04 substitute)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c05.mp4",
+  "in_frame": 12,
+  "out_frame": 53,
+  "place_at": 163,
+  "label": "shot 07 wife rises (c05)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/c05-shot08.mp4",
+  "in_frame": 0,
+  "out_frame": 26,
+  "place_at": 204,
+  "label": "shot 08 toward entrance (c05 tail + hold)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c06.mp4",
+  "in_frame": 8,
+  "out_frame": 44,
+  "place_at": 230,
+  "label": "shot 09 corridor (c06)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c06.mp4",
+  "in_frame": 44,
+  "out_frame": 78,
+  "place_at": 266,
+  "label": "shot 10 approach podium (c06 walk-only)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/still-s07.mp4",
+  "in_frame": 0,
+  "out_frame": 26,
+  "place_at": 300,
+  "label": "shot 11 remote slide (still)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c08.mp4",
+  "in_frame": 8,
+  "out_frame": 42,
+  "place_at": 326,
+  "label": "shot 12 settle (c08)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/c08-shot13.mp4",
+  "in_frame": 0,
+  "out_frame": 29,
+  "place_at": 360,
+  "label": "shot 13 lean (c08 + hold)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c09.mp4",
+  "in_frame": 74,
+  "out_frame": 119,
+  "place_at": 389,
+  "label": "shot 14 tooth pickup (c09)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c10.mp4",
+  "in_frame": 12,
+  "out_frame": 48,
+  "place_at": 434,
+  "label": "shot 15 tooth test (c10)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c10.mp4",
+  "in_frame": 80,
+  "out_frame": 107,
+  "place_at": 470,
+  "label": "shot 16 beat before impact (c10)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/derived/still-s11.mp4",
+  "in_frame": 0,
+  "out_frame": 122,
+  "place_at": 497,
+  "label": "shot 17 blast (still; c11 rejected)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c12.mp4",
+  "in_frame": 16,
+  "out_frame": 50,
+  "place_at": 619,
+  "label": "shot 18 impact close-up (c12)"
+ }
+]
