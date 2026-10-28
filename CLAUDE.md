@@ -6,6 +6,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 1. `docs/brief/00-decisions.md`: what's settled and what's open. It wins any conflict.
 2. `docs/brief/01-brand-system.md` → `09-build-plan.md`.
 3. `content/products/*.json`, `content/drops/*.json`, `content/copy/en.json`, `design/tokens/`.
+4. During the site build: `docs/build/RUN.md` (how the end-to-end run works) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
 
 ## Non-negotiables
 
