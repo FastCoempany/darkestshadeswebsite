@@ -15,7 +15,7 @@ The DAM is `dam/` in this repo, on `main` (#39; `dam/README.md`): the full-resol
 |---|---|---|
 | Originals (untouched) | `darkestshades` release `DARKESTSHADES.zip` → `Lighbox shots/` (and the founder's Google Drive folder of the same name) | `IMG_3554.jpg` as shot |
 | Masters (cleaned, full resolution, 16-bit PNG) | `dam/product/`, written by `tools/photo/export_web.py` | `DS-F01-A2-v01-master.png` (cut-out with alpha), `DS-F01-A2-v01-stage.png` (on the stage, the web files' source) |
-| People masters | `dam/people/` | `DS-CAST-W1-S03-F05-v01-master.png` (cast slot, scene, frame) |
+| People masters | `dam/people/` | `DS-CAST-W1-S07-F02-v01-master.png` (cast slot, scene, frame), and its cut-out `DS-CAST-W1-S07-F02-v01-cutout.png` |
 | Web exports | this repo, `assets/photography/` (created when finals land) | `ds-f01-a2-1440.avif` / `.webp` / `.jpg` |
 | Delivery | Shopify Files / product media (CDN) | same names |
 | Register | `assets/photography/MANIFEST.csv`: id, source shot(s), frame, angle, version, tool chain, master location, status, alt text | one row per final |

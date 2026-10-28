@@ -7,7 +7,7 @@
  "angle": "A1",
  "wardrobe": "nylon",
  "format": "4:5",
- "status": "draft",
+ "status": "final",
  "portrait": "work/people/W1-S07-A1-raw.png",
  "portrait_source": {
   "tool": "Figma generate_image",

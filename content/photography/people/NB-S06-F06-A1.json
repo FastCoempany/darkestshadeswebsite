@@ -7,7 +7,7 @@
  "angle": "A1",
  "wardrobe": "shirt",
  "format": "4:5",
- "status": "draft",
+ "status": "final",
  "portrait": "work/people/raw/NB-S06-n23-2.png",
  "portrait_source": {
   "tool": "Figma generate_image",

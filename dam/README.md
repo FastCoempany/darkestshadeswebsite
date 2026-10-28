@@ -7,7 +7,7 @@ This folder is the home of the brand's photography masters: the full-resolution 
 | Folder | What | Files |
 |---|---|---|
 | `product/` | The 56 cleaned lightbox finals: eight frames, angles A1–A6 and the hero (H) | `DS-F01-A1-v01-stage.png`: 16-bit RGB on the stage color `#E4E2DD`, with the frame's own shadow. Every web file in `assets/photography/` is made from it.<br>`DS-F01-A1-v01-master.png`: 16-bit RGBA cut-out, the lenses' tint folded into the alpha (exact over the stage color, close over anything light), for compositing. |
-| `people/` | On-model finals: the generated cast wearing the real frames (`docs/brief/07-photography.md`, track 2), added as they are made | `DS-CAST-W1-S07-F02-v01-master.png` (cast slot, scene, frame, version) |
+| `people/` | On-model finals: the generated cast wearing the real frames (`docs/brief/07-photography.md`, track 2), added as they are made. Nine since Oct 28 2026, approved by the founder: every frame at least once (F03 twice). | `DS-CAST-W1-S07-F02-v01-master.png`: the picture, 16-bit RGB (cast slot, scene, frame, angle when not A1, version). Every web file in `assets/photography/` is made from it.<br>`DS-CAST-W1-S07-F02-v01-cutout.png`: the same picture cut out, 16-bit RGBA, for setting the person in any scene (`00-decisions.md` #40). |
 
 Angle codes: **A1** front · **A2** three-quarter · **A3** side · **A4** top-down · **A5** inside (from behind) · **A6** GCD detail · **H** landscape hero.
 

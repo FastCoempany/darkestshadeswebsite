@@ -6,6 +6,7 @@
     python3 tools/photo/export_web.py F02 F05      # some frames only (the manifest is rewritten whole)
     python3 tools/photo/export_web.py --no-masters    # web files and manifest only
     python3 tools/photo/export_web.py --manifest      # rewrite MANIFEST.csv only (after a copy change)
+    python3 tools/photo/export_web.py --people        # on-model finals only; product rows kept as they are
 
 Reads work/out/<shot>/stage-full.png (16-bit, from tools/photo/clean_lightbox.py) for each shot in
 content/photography/shots/: one final per frame and angle, the hero (H) included. Writes
@@ -19,9 +20,12 @@ of every web file), go to the DAM in this repo, dam/product/ (dam/README.md; fou
 named DS-<frame>-<angle>-<version>-master.png and -stage.png, losslessly recompressed; a master newer
 than its source is left as it is.
 
-On-model finals (content/photography/people/<id>.json with "status": "final", composited by
-tools/photo/wear.py into work/people/<id>/composite.png) go the same way: ds-cast-<cast>-<scene>-<frame>
-web files, a manifest row (alt.onModel), and the master to dam/people/.
+On-model finals (content/photography/people/<id>.json with "status": "final") go the same way:
+ds-cast-<cast>-<scene>-<frame> web files (an A2 shot keeps its angle: ds-cast-w2-s06-f09-a2), a
+manifest row (alt.onModel), and the masters to dam/people/: <id>-master.png (16-bit) and, where the
+picture has one, its 16-bit cut-out <id>-cutout.png (00-decisions.md #40). The picture comes from
+work/people/<id>-3d/ (the 3D frame, tools/blender/wear3d.py and tools/photo/cutout.py) when that
+exists, else from work/people/<id>/ (tools/photo/wear.py).
 """
 import csv
 import json
@@ -120,6 +124,7 @@ def save(im, path, fmt):
 def main(argv):
     masters = None if "--no-masters" in argv or "--manifest" in argv else DAM
     images = "--manifest" not in argv
+    people_only = "--people" in argv
     only = {a.upper() for a in argv if not a.startswith("--")}
     copy = json.loads((ROOT / "content" / "copy" / "en.json").read_text())
     OUT.mkdir(parents=True, exist_ok=True)
@@ -132,7 +137,7 @@ def main(argv):
     for r in finals():
         fid = f"ds-{r['frame'].lower()}-{r['angle'].lower()}"
         src = ROOT / "work" / "out" / r["key"]
-        if only and r["frame"] not in only:
+        if people_only or (only and r["frame"] not in only):
             if fid in old:
                 rows.append(old[fid])
             continue
@@ -176,7 +181,9 @@ def main(argv):
         print(fid, r["key"], f"{W}x{H}", widths)
     for c in people_finals():
         fid = c["id"].rsplit("-v", 1)[0].lower()
-        src = ROOT / "work" / "people" / c["id"] / "composite.png"
+        three_d = ROOT / "work" / "people" / f"{c['id']}-3d"
+        src_dir = three_d if (three_d / "composite.png").exists() else ROOT / "work" / "people" / c["id"]
+        src = src_dir / "composite.png"
         if only and c["frame"] not in only:
             if fid in old:
                 rows.append(old[fid])
@@ -201,15 +208,25 @@ def main(argv):
         master = f"{c['id']}-master.png"
         if masters:
             DAM_PEOPLE.mkdir(parents=True, exist_ok=True)
-            dst = DAM_PEOPLE / master
-            if not (dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime):
-                cv2.imwrite(str(dst), cv2.imread(str(src), cv2.IMREAD_UNCHANGED), [cv2.IMWRITE_PNG_COMPRESSION, 9])
+            for name, dst in (("composite.png", DAM_PEOPLE / master),
+                              ("cutout.png", DAM_PEOPLE / master.replace("-master", "-cutout"))):
+                s = src_dir / name
+                if not s.exists() or (dst.exists() and dst.stat().st_mtime >= s.stat().st_mtime):
+                    continue
+                a = cv2.imread(str(s), cv2.IMREAD_UNCHANGED)
+                cv2.imwrite(str(dst), a, [cv2.IMWRITE_PNG_COMPRESSION, 9])
+                del a
         ps = c["portrait_source"]
+        if src_dir == three_d:
+            chain = (f"Figma generate_image ({ps['model']}); portrait upscaled x{c.get('upscale', 2)} (tools/photo/wear.py); "
+                     "tools/blender/frame3d.py; tools/blender/wear3d.py; tools/photo/cutout.py")
+        else:
+            chain = f"Figma generate_image ({ps['model']}); {rep.get('upscale', 'none')} (upscaled); tools/photo/wear.py"
         rows.append({
             "id": fid, "source": f"figma {ps['figma_file']} node {ps['node']} + {c['product_shot']}",
             "frame": c["frame"], "angle": c.get("angle", "A1"), "version": c["id"].rsplit("-", 1)[1],
             "width": W, "height": H, "widths": " ".join(map(str, widths)), "formats": "avif webp jpg",
-            "tool_chain": f"Figma generate_image ({ps['model']}); {rep.get('upscale', 'none')} (upscaled); tools/photo/wear.py",
+            "tool_chain": chain,
             "master": master, "master_location": "dam/people/", "status": "final",
             "alt": on_model_alt(copy, c), "crop": " ".join(map(str, rep.get("crop", []))),
         })
