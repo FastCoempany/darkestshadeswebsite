@@ -24,7 +24,8 @@ product photo is a flat front view lit by a light tent. Here the frame is a 3D o
   it (only on the face, and only as far as the portrait is lit there); the front and lenses, the head
   behind them showing the shaded portrait (each lens shows the face through its tint, `through_lens`
   of it where the founder wants dark lenses to all but hide the eyes; the frame's inner edges mirror
-  the skin); the temples, hidden behind the head where it is in front of them; in a three-quarter
+  the skin); the temples, hidden behind the head where it is in front of them (translucent ones show
+  the portrait behind them through their tint); in a three-quarter
   view, the near temple's shadow on a sheet standing in for the side of the head (`temple_sheet`), the
   far temple left to show only through its lens (`hide_temples`), the near ear laid over the temple
   where it goes in behind it (`ear_crease_px`, `ear_occluders_px`, `ear_overrun_mm`);
@@ -914,6 +915,19 @@ def render_layers(cfg, out, img, lin, H, W, samples):
     for p in (head, seen, interior, back):
         if p is not None:
             p.hide_render = True
+    if frame3d.FRAMES[cfg["frame"]]["temple"].get("smoke"):
+        # translucent temples (F08's smoke acetate): what lies behind them seen through them, the shaded
+        # portrait at its full light (the acetate's own tint dims it; `through_lens` is for the lenses), not
+        # in their gloss and not shading them (the depth map's flattened sides would)
+        behind = photo_material((lin * ratio).astype(np.float32), 1.0)
+        for p in (seen, back):
+            if p is not None:
+                p.hide_render = False
+                p.data.materials[0] = behind
+                p.visible_camera = False
+                p.visible_glossy = False
+                p.visible_diffuse = False
+                p.visible_shadow = False
     set_region(sc, cam, front_objs + tmpl, 0.04, H, W)
     render(sc, out / "layers" / "temples.exr")
     (out / "report.json").write_text(json.dumps(report, indent=1))

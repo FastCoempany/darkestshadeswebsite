@@ -119,6 +119,16 @@ MM = 0.001
 # narrowing from 91 mm back to the tip's hook; tall smoky pads (side and top views: 19 mm tall, 7 mm behind
 # the front); the GCD on the right temple. The front view draws the temples' tips hanging below the front's
 # ends: left out (`front_drop`).
+# F08 (drawing 08, its cleaned shots, Oct 27 2026): a squared aviator in gloss black acetate, 4.3 mm deep (top
+# view), its edges rounded 1 mm; the double bridge: a straight brow across the top, and below it, between
+# the lenses, a keyhole cut through the front (`holes`: the region inside the drawing's lines there; its
+# edge rounds into it as the outer edge does). Round each lens the face rounds down into it over 1.5 mm (the
+# drawing's double line), the lip catching a line of light along the lens's bottom edge in the front shot;
+# the lens a grey gradient as measured. The front 8 deg off the temples' line (side view). Translucent smoke
+# grey acetate temples on a short black block (the joint 5 mm behind the end's face), 10.75 mm tall at the
+# joint, the top edge straight back to the bend while the bottom edge dips 2.8 mm 55-80 mm back and rises to
+# a 5.5 mm neck over the ear (`offsets`), 3.9 mm thick tapering to 2.1, edges rounded 1.4 mm; inside each a
+# textured metal core, seen through the acetate (`core`); the GCD on the right temple.
 FRAMES = {
     "F01": {"depth": 5.5, "edge_r": 2.4, "back_r": 1.0, "dome": 0.3,
             # a narrow bevel round each lens (drawing 01's double line, 0.6-0.85 mm out from the opening)
@@ -243,6 +253,61 @@ FRAMES = {
                                     (14, -1.32), (17, -1.45), (20, -1.37), (22, -1.17), (27, -0.07), (32, 1.75),
                                     (37, 4.33), (42, 7.48), (47, 11.4), (52, 14.58), (55, 15.4), (57, 15.6)]},
             "gcd": {"side": -1, "on": "temple"}},
+    "F08": {"depth": 4.3, "edge_r": 1.0, "back_r": 0.6, "dome": 0.2,
+            # the keyhole between the brow and the lower bridge (the double bridge), cut through the front
+            "holes": [(0.0, 18.0)],
+            # the ring round each lens (drawing 08's double line, 1.4-1.6 mm out from the opening): the face
+            # rounding down into the lens, its lip catching a line of light along the lens's edge
+            "bezel": {"kind": "well", "width": 1.5, "p": 2.0, "seam": 0.12, "blend": 0.3, "step": 0.0, "drop": 1.0},
+            "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            # the grey gradient, dark and a little blue at the top: the cleaned front shot's transmission
+            # (linear) row by row across the openings, at mm above the openings' centre
+            "lens": {"radius": 180.0, "thick": 1.6, "inset": 0.4,
+                     "gradient": [(20.5, (0.0165, 0.0134, 0.0250)), (18, (0.0292, 0.0260, 0.0418)),
+                                  (15, (0.0443, 0.0407, 0.0603)), (12, (0.0600, 0.0561, 0.0787)),
+                                  (9, (0.0794, 0.0767, 0.0986)), (6, (0.1002, 0.0976, 0.1222)),
+                                  (3, (0.1228, 0.1204, 0.1471)), (0, (0.1494, 0.1472, 0.1733)),
+                                  (-3, (0.1790, 0.1779, 0.2026)), (-6, (0.2120, 0.2118, 0.2340)),
+                                  (-9, (0.2476, 0.2481, 0.2667)), (-12, (0.2862, 0.2878, 0.3022)),
+                                  (-15, (0.3269, 0.3303, 0.3391)), (-18, (0.3708, 0.3763, 0.3777)),
+                                  (-20, (0.4006, 0.4071, 0.4041))]},
+            "tilt": 8.0,
+            # black acetate fins standing back from the rims beside the nose opening, just under the lower
+            # bridge (the top shot: two sculpted fins behind the bridge, one either side of it; the back view:
+            # their ends at the opening's top corners)
+            "pads": {"x": 9.5, "y": -2.0, "back": 4.0, "r": (1.5, 6.5, 4.5)},
+            "endpiece": {"kind": "block", "back": 5.0, "inset": 0.03, "flare": 0.0, "into": 2.0},
+            "temple": {"kind": "acetate", "top_below": 16.55, "height": 10.75, "edge_r": 1.4,
+                       "heights": [(0, 10.75), (2.8, 10.75), (7.8, 10.65), (12.8, 10.55), (22.8, 10.25), (32.8, 10.1),
+                                   (42.8, 10.0), (52.8, 10.25), (57.8, 10.6), (62.8, 11.1), (67.8, 11.9), (70.8, 12.6),
+                                   (72.8, 13.15), (74.8, 13.2), (77.8, 12.6), (82.8, 10.75), (87.8, 8.7), (92.8, 7.1),
+                                   (97.8, 6.0), (102.8, 5.5), (106.8, 5.43), (108.8, 5.54), (110.8, 5.71), (112.8, 5.95),
+                                   (117.0, 6.62), (121.3, 7.19), (125.8, 7.54), (130.4, 7.94), (135.2, 8.31),
+                                   (140.0, 8.64), (144.9, 8.96), (149.8, 9.27), (152.2, 9.43), (155.2, 9.4)],
+                       # the section's centre below the straight run (mm): the bottom edge's wave, the top edge
+                       # straight (side view)
+                       "offsets": [(0, 0.0), (12.8, 0.1), (22.8, 0.2), (32.8, 0.32), (42.8, 0.52), (52.8, 0.85),
+                                   (57.8, 1.12), (62.8, 1.52), (67.8, 2.02), (70.8, 2.42), (72.8, 2.75), (74.8, 2.82),
+                                   (77.8, 2.57), (82.8, 1.75), (87.8, 0.87), (92.8, 0.17), (97.8, -0.28), (100.8, -0.4),
+                                   (104.8, -0.425), (108.8, -0.225), (110.8, 0.0)],
+                       "thicks": [(0, 3.9), (3, 3.89), (8, 3.84), (13, 3.8), (23, 3.64), (33, 3.54), (43, 3.39),
+                                  (53, 3.3), (63, 3.14), (73, 3.04), (83, 2.91), (93, 2.8), (103, 2.7), (113, 2.57),
+                                  (124, 2.43), (135, 2.36), (147, 2.23), (153, 2.17), (157, 2.13)],
+                       "straight": 110.8, "drop": 25.0, "round_end": 4.5,
+                       # the mid-line beyond the straight run (mm back, mm down), side view
+                       "tip_path": [(0, 0), (2, 0.33), (4, 0.85), (6, 1.5), (8, 2.28), (10, 3.16), (12, 4.13),
+                                    (14, 5.18), (16, 6.31), (18, 7.5), (20, 8.75), (22, 10.06), (24, 11.35),
+                                    (26, 12.7), (28, 14.08), (30, 15.48), (32, 16.88), (34, 18.31), (36, 19.7),
+                                    (38, 21.0)],
+                       # translucent smoke grey acetate (what passing through it lets by: the backdrop behind a
+                       # temple shows at 0.20-0.25 of its light in the three-quarter shots), round a textured
+                       # metal core (the shots: 45% of the temple's height, the hinge's leaf at the joint taller;
+                       # it ends 88 mm back, its bottom edge rising to its top)
+                       "smoke": (0.19, 0.18, 0.187),
+                       "core": {"heights": [(0, 6.4), (6.0, 6.4), (8.0, 4.6), (82.0, 4.6), (88.0, 0.3)],
+                                "ups": [(0, 0.0), (82.0, 0.0), (88.0, 2.15)],
+                                "thick": 0.6, "from": 0.3, "to": 88.0}},
+            "gcd": {"side": -1, "on": "temple"}},
 }
 
 
@@ -317,6 +382,15 @@ def front_shapes(frame, ppm=20):
         ys, xs = np.nonzero(m)
         centres.append(((xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2))
     ox, oy = np.mean(centres, axis=0)
+    # holes through the front where the drawing draws them (F08's keyhole between the brow and the lower
+    # bridge): the region inside the drawing's lines at each point given (mm, the frame's coordinates)
+    holes = []
+    for hx, hy in cfg.get("holes", []):
+        px, py = int(round(ox + hx * ppm)), int(round(oy - hy * ppm))
+        i = lab[py, px]
+        if i == 0 or i in border:
+            raise ValueError(f"{frame}: no region inside the drawing's lines at ({hx}, {hy}) mm")
+        holes.append(cv2.dilate((lab == i).astype(np.uint8), np.ones((3, 3), np.uint8)) > 0)
     trim = FRAMES.get(frame, {}).get("trim_tips")
     if trim:
         # the temples' acetate tips, hanging behind the ears, show below the front at its outer ends in
@@ -342,6 +416,8 @@ def front_shapes(frame, ppm=20):
     openings = np.zeros_like(silhouette)
     for m in lens_masks:
         openings |= cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0
+    for m in holes:
+        silhouette = silhouette & ~m
     if step is not None:
         # one lens behind both openings: the shield, out to the step line less 0.3 mm (its edge inside the
         # front, under the lower level and the bridge)
@@ -354,7 +430,7 @@ def front_shapes(frame, ppm=20):
             "opening_masks": [cv2.dilate(m.astype(np.uint8), np.ones((3, 3), np.uint8)) > 0 for m in lens_masks],
             "lenses": [poly(m, int(1.0 * ppm)) for m in (shells if step is not None else lens_masks)],
             "width": float(np.ptp(np.nonzero(silhouette)[1]) / ppm),
-            "solid": silhouette & ~openings, "lens_masks": shells, "step_mask": step,
+            "solid": silhouette & ~openings, "lens_masks": shells, "step_mask": step, "holes": holes,
             "origin_px": (ox, oy), "ppm": ppm}
 
 
@@ -587,6 +663,8 @@ def rim_fields(sh, cfg):
     for m in sh["opening_masks"]:
         openings |= m
     sil = ndi.binary_fill_holes(solid | openings)
+    for m in sh.get("holes", []):
+        sil &= ~m                                         # a hole's edge is an outer edge (F08's keyhole)
     d_out = ndi.distance_transform_edt(sil) / ppm
     d_in = ndi.distance_transform_edt(~openings) / ppm
     if cfg.get("exact_distance"):
@@ -812,12 +890,14 @@ def rounded_rect(w, h, r, n=6):
     return np.array(pts)
 
 
-def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5, s0=0.0, uv_mm=None):
+def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, step=0.5, s0=0.0, uv_mm=None,
+          offset=None):
     """A bar along the polyline P (mm), resampled every `step` mm: its section a rounded rectangle
     size = (across, up) mm, kept as upright as the path allows; `round_end`: its last mm close to a
     rounded tip. `size` and `radius` may instead be functions of the distance along the bar (mm, from
     `s0` at P's start: a piece of a longer bar keeps that bar's taper). `uv_mm`: a band's size (mm) to
-    lay along it (bar_uv)."""
+    lay along it (bar_uv). `offset`: a function of the same distance, how far (mm) the section's centre
+    stands above the path (F08's temple: its bottom edge waves, its top runs straight)."""
     P = np.asarray(P, np.float64)
     s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(P, axis=0), axis=1))]
     ss = np.r_[np.arange(0, s[-1], step), s[-1]]
@@ -838,7 +918,8 @@ def sweep(name, P, size, material, radius, up=(0.0, 1.0, 0.0), round_end=0.0, st
         if round_end > 0 and si > L - round_end:
             q = (si - (L - round_end)) / round_end
             k = max(np.sqrt(max(1 - q * q, 0.0)), 0.12)
-        rings.append([p + a * x * k + u * y * k for x, y in prof])
+        oy = offset(s0 + si) if offset else 0.0
+        rings.append([p + a * x * k + u * (y * k + oy) for x, y in prof])
     ob = loft(name, rings, material)
     if uv_mm:
         bar_uv(ob, rings, [s0 + si for si in ss], uv_mm)
@@ -1314,18 +1395,32 @@ def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0
             hf, tf = table(t["heights"]), table(t["thicks"])
             size = lambda s_: (tf(s_), hf(s_))
             rad = lambda s_: min(t.get("edge_r", 0.9), 0.45 * min(tf(s_), hf(s_)))
+            # the section's centre below the straight run where the side view's edges are not parallel (F08)
+            of = (lambda s_, f_=table(t["offsets"]): -f_(s_)) if t.get("offsets") else None
+            rend_ = t.get("round_end", 2.5)
+            sc_ = float(s[-1])
             if split:
                 sc_ = min(se + split_after_mm, float(s[-1]) - 5.0)
                 a_, b_ = s <= sc_ + 1e-6, s >= sc_ - 1e-6
-                pieces = [(f"{frame} temple {k}", P[a_], 0.0, 0.0), (f"{frame} temple {k} back", P[b_], float(s[b_][0]), 2.5)]
+                pieces = [(f"{frame} temple {k}", P[a_], 0.0, 0.0), (f"{frame} temple {k} back", P[b_], float(s[b_][0]), rend_)]
             else:
-                pieces = [(f"{frame} temple {k}", P, 0.0, 2.5)]
-            # in the front's material, laid along the temple (F01's tortoise), or the front's plain black
+                pieces = [(f"{frame} temple {k}", P, 0.0, rend_)]
+            # in the front's material, laid along the temple (F01's tortoise), the front's plain black, or a
+            # translucent acetate of its own (F08's smoke grey)
             band = band_mm(frame) if "temple" in materials else None
+            mat = materials["temple_smoke"] if t.get("smoke") else (materials["temple"] if band else materials["acetate"])
             for name, Pp, s0, rend in pieces:
                 if len(Pp) >= 2:
-                    obs.append(sweep(name, Pp, size, materials["temple"] if band else materials["acetate"], rad,
-                                     round_end=rend, s0=s0, uv_mm=band))
+                    obs.append(sweep(name, Pp, size, mat, rad, round_end=rend, s0=s0, uv_mm=band, offset=of))
+            if t.get("core"):
+                # the metal core inside a translucent temple (F08), along its straight run, its end cut as its
+                # `ups` and `heights` give it; not on past the ear's root
+                c_ = t["core"]
+                ch, cu_ = table(c_["heights"]), table(c_.get("ups", [(0.0, 0.0)]))
+                sel = (s >= c_["from"] - 1e-6) & (s <= min(c_["to"], sc_) + 1e-6)
+                if sel.sum() >= 2:
+                    obs.append(sweep(f"{frame} temple {k} core", P[sel], lambda s_: (c_["thick"], ch(s_)),
+                                     materials["core"], 0.2, s0=float(s[sel][0]), offset=cu_))
             g = cfg.get("gcd")
             if g and g.get("on") == "temple" and side == g["side"]:
                 # on the temple's outer face: centre 0.82 x the face's height from the hinge seam (the path
@@ -1346,7 +1441,7 @@ def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0
                 along /= np.linalg.norm(along)
                 x_e = -along if side < 0 else along           # reading left to right seen from outside
                 n_ = np.cross(x_e, u_)                         # out of the face
-                centre = centre + u_ * (hf(sa) / 2 - GCD_DOWN * face)
+                centre = centre + u_ * (hf(sa) / 2 - GCD_DOWN * face + (of(sa) if of else 0.0))
                 obs += gcd_parts(frame, materials, float(pg["lengthMm"]), centre, x_e, u_, n_)
             continue
         if ears is None and t.get("tip_path"):
@@ -1499,6 +1594,11 @@ def materials_for(frame, tint=(0.04, 0.04, 0.04)):
     if tex and tex.get("temple"):
         # acetate temples in the front's material (F01): its band laid along each temple (sweep UVs)
         extra["temple"] = band_acetate(pathlib.Path(tex["dir"]) / tex["temple"]["file"])
+    tp_cfg = FRAMES.get(frame, {}).get("temple", {})
+    if tp_cfg.get("smoke"):
+        # translucent temples (F08): smoke grey acetate round a textured metal core (matte, mid grey)
+        extra["temple_smoke"] = clear_acetate(tp_cfg["smoke"])
+        extra["core"] = principled("core", (0.42, 0.42, 0.40, 1), 0.5, metallic=1.0)
     return {**extra, "acetate": acetate,
             "metal": principled("metal", (0.005, 0.005, 0.0055, 1), 0.6),      # black-coated wire, satin
             "endmetal": endmetal,
@@ -1561,11 +1661,14 @@ def textured_acetate(tex, rough=0.06):
 
 def clear_acetate(tint=1.0):
     """Clear acetate (F01's nose pads): a polished dielectric that light passes, colourless or smoky grey
-    (`tint`: what one pass through it lets by, F06's pads)."""
+    (`tint`: what one pass through it lets by, in at one face and out at the other: F08's light-tent checks
+    showed the tent behind a temple at about the tint, not its square; F06's pads, F08's temples; a grey or
+    an r, g, b)."""
     m = bpy.data.materials.new("clear acetate")
     m.use_nodes = True
     b = m.node_tree.nodes["Principled BSDF"]
-    b.inputs["Base Color"].default_value = (tint, tint, tint, 1)
+    rgb = tuple(float(v) for v in tint) if isinstance(tint, (list, tuple)) else (tint,) * 3
+    b.inputs["Base Color"].default_value = (*rgb, 1)
     b.inputs["Transmission Weight"].default_value = 1.0
     b.inputs["Roughness"].default_value = 0.05
     b.inputs["IOR"].default_value = 1.49
