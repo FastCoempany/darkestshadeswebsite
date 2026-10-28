@@ -29,8 +29,9 @@
   --ds-white: #FFFFFF;
   --ds-gradient-metal: linear-gradient(160deg, #634722 0%, #B68A4D 12%, #FFF2CD 25%, #EAC999 38%, #A77C46 50%, #CDA974 62%, #86653B 75%, #EDCFA0 88%, #5A442C 100%);
   --ds-gradient-onyx: linear-gradient(160deg, #2C2C2D 0%, #111214 25%, #050607 50%, #111214 75%, #000000 100%);
-  --font-family-display: 'Owners Wide', 'owners-wide', ui-sans-serif, system-ui, sans-serif;
-  --font-family-text: 'Stolzl', 'stolzl', ui-sans-serif, system-ui, sans-serif;
+  --font-family-display: 'Owners Wide', 'owners-wide', 'Mona Sans Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-family-text: 'Stolzl', 'stolzl', 'Urbanist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-variation-display: "wdth" 125, "wght" 640;
   --font-weight-light: 300;
   --font-weight-book: 350;
   --font-weight-regular: 400;

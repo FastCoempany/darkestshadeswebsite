@@ -1,16 +1,23 @@
 {
- "$description": "Darkest Shades non-color tokens. Type uses only Owners Wide and Stolzl. Sizes are fluid between 390px and 1440px viewports.",
+ "$description": "Darkest Shades non-color tokens. Type uses only Owners Wide and Stolzl; until they're licensed, open-licensed stand-ins render them (brand/fonts/README.md). Sizes are fluid between 390px and 1440px viewports.",
  "font": {
   "family": {
    "display": {
     "$type": "fontFamily",
-    "$value": "'Owners Wide', 'owners-wide', ui-sans-serif, system-ui, sans-serif",
-    "$description": "Owners Wide Medium. Display and headings only, uppercase by style."
+    "$value": "'Owners Wide', 'owners-wide', 'Mona Sans Variable', ui-sans-serif, system-ui, sans-serif",
+    "$description": "Owners Wide Medium. Display and headings only, uppercase by style. Stand-in until licensed: Mona Sans, tuned by font.variation.display."
    },
    "text": {
     "$type": "fontFamily",
-    "$value": "'Stolzl', 'stolzl', ui-sans-serif, system-ui, sans-serif",
-    "$description": "Stolzl Light/Book/Regular/Medium. Body, UI, labels."
+    "$value": "'Stolzl', 'stolzl', 'Urbanist Variable', ui-sans-serif, system-ui, sans-serif",
+    "$description": "Stolzl Light/Book/Regular/Medium. Body, UI, labels. Stand-in until licensed: Urbanist, whose weights line up with Stolzl's."
+   }
+  },
+  "variation": {
+   "display": {
+    "$type": "string",
+    "$value": "\"wdth\" 125, \"wght\" 640",
+    "$description": "Display text only. Sets the stand-in Mona Sans to its widest and to Owners Wide Medium's visual weight. Static Owners Wide files ignore it, so it can stay when the real font arrives."
    }
   },
   "weight": {

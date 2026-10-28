@@ -143,7 +143,7 @@ These are the rules to hold without asking. Most are in `CLAUDE.md`; the rest co
 - Raf Simons is never named, shown or quoted on the site, in metadata, alt text or shipped code.
 - Marks come only from the repo's brand folders. The nav and favicon use the angular brand mark, never the GCD. The GCD appears at most once per screen.
 - The Eclipse Silhouette and the old engraved wordmark never appear.
-- Fonts are Owners Wide and Stolzl only, and the font files are never committed: the repo is public.
+- Fonts are Owners Wide and Stolzl only, rendered by open-licensed stand-ins until they're licensed. Font files are never committed: the repo is public.
 - The app uses role color tokens only, with no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product images always sit on the stage color.
 
 **Honesty**
@@ -191,7 +191,7 @@ None of these blocks the build: each has a default the site uses until I decide.
 | A per-customer limit on a drop | No limit | Launch |
 | The list pop-up's early access: will the store really gate 24 hours for list members? | Ships the line without early access | Launch |
 | SMS provider: Shopify Messaging, Klaviyo, Postscript or Attentive | Provider-neutral consent wording | Launch |
-| Web licenses for Owners Wide and Stolzl: Adobe Fonts, or self-hosting licenses | Loads the fonts from an Adobe Fonts kit or a local folder that is never committed | Launch |
+| Web licenses for Owners Wide and Stolzl: Adobe Fonts, or self-hosting licenses | Renders with open-licensed stand-ins (Mona Sans for Owners Wide, Urbanist for Stolzl) until the real fonts load | Launch |
 | Factory sign-off on the GCD's metal and sizes, and each frame's size marking | Copy says "gold" as a color only; sizes are measured from the 1:1 drawings | Launch |
 
 ---
@@ -212,9 +212,10 @@ None of these blocks the build: each has a default the site uses until I decide.
 - **Marks:** `brand/marks/` (logo, stacked logo, brand mark; `web/` holds the currentColor SVGs; `favicon/` the icon set) and `brand/emblems/gcd/` (`svg/`, `png/`, `render/`).
 - **Products:** `content/products/f01.json` … `f09.json`, checked against `product.schema.json`, with `drawings/` (vector line art at 1:1 mm). Eight frames: F01–F06, F08, F09. There is no F07 (`00-decisions.md` #7), so look numbers skip 07. Drop membership comes from `content/drops/*.json`; each product's `drop` field stays `null`.
 - **Drop:** `content/drops/drop-001.json`: announced, all eight frames, every date and quantity `null`, early access off. With this data the site shows "Date to be announced", no countdown and no pair counts.
+- **Fonts:** the real Owners Wide and Stolzl aren't available to the build: there's no Adobe Fonts subscription, and Stolzl has no free or trial version. Until I license them, the open-licensed stand-ins in `brand/fonts/README.md` render them: Mona Sans and Urbanist, installed from npm (`00-decisions.md` #41). The token stacks already name them.
 - **Copy:** `content/copy/en.json`. Most sections carry a status: `draft` (entry, home, manifesto, drop, product, list, sms, questions, accessibility) or `placeholder` (care). Sections without one (meta, nav, bag, footer, notFound, alt) count as draft until I sign them off.
 - **Product photography is finished:** 56 finals (eight frames × A1–A6 and the hero H) in `assets/photography/` as AVIF, WebP and JPEG, at the widths in the manifest's `widths` column (up to 2048 px). `MANIFEST.csv` registers each one with its alt text and crop. The masters sit in `dam/product/` (0.8 GB); the app never reads `dam/`.
-- **No on-model pictures are in the repo.** `content/photography/people/*.json` lists 20 planned shots (cast member, scene, frame, angle, ratio, all `draft`). The portraits they start from live outside git, and `dam/people/` doesn't exist. Every cast and "Worn by" image is a labelled slot with the shot's id and ratio, for example `W2-S06-F09-A2 · 4:5`. If finals reach `main` during the run (a master in `dam/people/` plus manifest rows), wire them in. A people final's manifest id is the shot's `id` without `-vNN`, lowercased: `ds-cast-w1-s07-f02` (A1 shots carry no angle), `ds-cast-w2-s06-f09-a2`.
+- **On-model pictures:** nine are approved finals (`00-decisions.md` #42): masters and 16-bit cut-outs in `dam/people/`, web files and manifest rows (`ds-cast-…`, 640 to 1920 px) in `assets/photography/`. Every frame has at least one and F03 has two; they're worn by M1, M2, NB, W1 and W2. `content/photography/people/*.json` lists all 20 planned shots: the nine marked `final`, eleven still `draft`, including every M3 and W3 shot. A draft shot is a labelled slot with its id and ratio, for example `W3-S02-F09-A1 · 4:5`. If more finals reach `main` during the run, wire them in. A people final's manifest id is the shot's `id` without `-vNN`, lowercased: `ds-cast-w1-s07-f02` (A1 shots carry no angle), `ds-cast-w2-s06-f09-a2`.
 - **The cast:** seven, W1, W2, W3, M1, M2, M3 and NB (`reference/casting/`). The codes are internal labels, not names.
 - **Not part of this build:** `takes/` (a separate film project; nothing ships from it), `reference/` (study only), and the photography pipeline that other sessions run: `tools/blender/`, the existing tools in `tools/photo/`, `content/photography/`, `dam/` and `assets/photography/`. Read any of it; change none of it, apart from adding the entry-stills tool in phase 3.
 
@@ -268,14 +269,14 @@ Create `docs/build/PROGRESS.md` in phase 0, keep it current, and commit it with 
 - **Decision log:** date, decision, why, PR.
 - **Questions for Antaeus:** the question, the default in use, when I need to answer.
 - **Copy to sign off:** strings you added to `en.json`.
-- **Before launch:** what's left for me (copy sign-off, the drop plan, font licenses, the SMS provider, the early-access gate, cast finals, the store connection).
+- **Before launch:** what's left for me (copy sign-off, the drop plan, font licenses, the SMS provider, the early-access gate, the M3 and W3 pictures, the store connection).
 
 ## Verification
 
 - A phase is done when each of its done criteria (09's, plus the notes below) has been run and shown: the command, its exit status, the output that matters. "Should pass" isn't done.
-- **Look at your screenshots.** Open every page at 390 and 1440 before calling a phase done, and hold each one against Part 1 and the edge cases below: the night canvas (paper on the reading pages), products on the stage color, one gold element per view (focus rings excepted), Owners Wide and Stolzl at the sizes in `01-brand-system.md`, square corners, a lot of dark space, one idea per screen, no graphite `#545454` text on dark, nothing behind type.
+- **Look at your screenshots.** Open every page at 390 and 1440 before calling a phase done, and hold each one against Part 1 and the edge cases below: the night canvas (paper on the reading pages), products on the stage color, one gold element per view (focus rings excepted), the display and text faces (the stand-ins for now) at the sizes in `01-brand-system.md`, square corners, a lot of dark space, one idea per screen, no graphite `#545454` text on dark, nothing behind type.
 - Check 768, 1024 and 320 px and 200% zoom as well (`04`), even though the deliverables are 390 and 1440.
-- Visual tests run here, with Playwright against the app and Storybook. No Chromatic or other hosted service. Keep baselines lean: 1× pixel ratio, updated only for an intended change, and none committed while the fonts are missing.
+- Visual tests run here, with Playwright against the app and Storybook. No Chromatic or other hosted service. Keep baselines lean: 1× pixel ratio, updated only for an intended change (the real fonts arriving is one).
 
 ## Phase notes
 
@@ -289,15 +290,14 @@ Only what isn't in 09 or is easy to get wrong.
 - **The mock:** loaders read `app/lib/mock/`, built from `content/products/`, `content/drops/` and `assets/photography/MANIFEST.csv`, shaped like Storefront API responses, in one module to swap at launch. Loaders run in MiniOxygen, which has no file system, so the mock imports the JSON and CSV at build time. No store credentials; `.env.example` documents the variables. The cart is local state in the cart API's shape, and checkout stays disabled.
 - Keep `dam/`, `work/`, `takes/` and `reference/` out of the dev server's file watcher and out of the bundle.
 - **Tokens:** Tailwind v4 with its default palette off and `ds-` color names pointing at the role variables (09). Change tokens only through the tools; fixing a generator in `tools/` is fine, hand-editing `design/tokens/build/` isn't.
-- **Fonts:** try both routes in `brand/fonts/README.md` first: the Adobe kit in `PUBLIC_ADOBE_FONTS_KIT`, or files in `brand/fonts/private/`.
-  - The check must find a loaded `FontFace` for each family and weight (Owners Wide 500; Stolzl 300, 350, 400 and 500), accepting the kit's names `owners-wide` and `stolzl`. `document.fonts.check()` alone isn't enough: it returns true when no `@font-face` for the family exists.
-  - For the kit, add use.typekit.net and p.typekit.net to the Content-Security-Policy; the starter's policy blocks them.
-  - If neither route works, don't fetch the fonts from anywhere else and don't relax the check. Keep building, put "Fonts missing" at the top of PROGRESS.md and of every PR, commit no visual baselines, make the review sets with a separate script that stamps them "Fonts missing", and leave the font-gated tests red.
+- **Fonts:** install the stand-ins as `brand/fonts/README.md` says (`@fontsource-variable/mona-sans`, `@fontsource-variable/urbanist`), and have display text set `font-variation-settings: var(--font-variation-display)`.
+  - The check must find a loaded `FontFace` for each role and weight: Owners Wide 500 or the Mona Sans stand-in; Stolzl 300, 350, 400 and 500 or the Urbanist stand-in. It fails on system type. `document.fonts.check()` alone isn't enough: it returns true when no `@font-face` for the family exists.
+  - Put "Stand-in type" at the top of PROGRESS.md and in each checkpoint PR.
+  - If real font files or a kit appear (`brand/fonts/README.md`, routes A and B), they take over. Never fetch the real fonts from anywhere else.
 - **Playwright:** check `$PLAYWRIGHT_BROWSERS_PATH` before installing anything. Pin `@playwright/test` to the version that matches the installed browser or, with Full network access, install Chromium for the version you use. Point Lighthouse at a browser with `CHROME_PATH`.
 - **The draft-copy gate** (09): the production build refuses while any copy section is draft or placeholder, so it refuses today. Add a review build with production settings that allows drafts; Lighthouse and the review screenshots run on it. CI runs the review build, plus a test that the production build refuses with today's `en.json`.
 - **The CI string check** bans `Raf`, `Simons`, `Prada` and the rest of 09's list in `app/` and `content/copy/`. Keep the check's own source outside those folders so it doesn't flag itself. Match the names as whole words in any case, and don't call a `requestAnimationFrame` handle `raf`. Exclude Hydrogen's generated API types (they mention discounts) rather than loosening the check.
 - Prove `tools/flashcheck.py` before the entry exists: a synthetic 12-per-second white strobe must fail it, and a dark-graded one must pass.
-- If CI can't load the fonts, run the visual tests in-session, keep CI to the checks that don't need fonts, and say so in PROGRESS.md.
 - Add the app commands to the Commands section of `CLAUDE.md`.
 
 ### Phase 1 · Wireframes
@@ -321,7 +321,7 @@ Only what isn't in 09 or is easy to get wrong.
 
 ### Phase 4 · UI pages
 
-- Compose the pages from phases 2 and 3 with real copy and mock data. Product images come through the manifest: AVIF, then WebP, then JPEG, with srcset from the `widths` column and the manifest's alt text.
+- Compose the pages from phases 2 and 3 with real copy and mock data. Product and cast images come through the manifest: AVIF, then WebP, then JPEG, with srcset from the `widths` column and the manifest's alt text.
 - Review builds show the draft copy as it is. Its status lives in the data and the review notes, not as labels on the page.
 - **Policy pages:** the legal text comes from Shopify at launch. Until then each page shows its title, the settled promises where they apply (45-day exchange, 6-month warranty; `00-decisions.md` #26) and one draft line saying the full text is published at launch. Never draft legal terms.
 - **Missing copy.** An interface string `en.json` lacks (a label, a state line, a statement a page needs) goes into `en.json` in the voice of `08-copy.md`, marked for sign-off in PROGRESS.md. Never hard-code copy. Copy the data leaves `null` (the drop's statement, each product's `copy.line` and `copy.story`) stays empty and goes on the questions list; don't write it.
@@ -346,7 +346,7 @@ Log each in PROGRESS.md as a question for me.
 - **F08's detail hold.** F08's pictures show no GCD (`00-decisions.md` #34). Its page's detail hold uses the GCD's 3D render (`brand/emblems/gcd/render/`) instead of a photograph of F08. Never composite a GCD onto an F08 picture.
 - **The entry's stills** are graded black and white, so they leave the stage color. They aren't product presentations; the stage rule doesn't apply to them.
 - **Motion beyond the cuts.** The gallery swipes on a phone (`04`) and the bag drawer takes 120 ms on desktop (`05`). Those are the only exceptions.
-- **One picture per person on `/cast`:** their studio shot (`W1-S07-F02-A1`, `W2-S06-F03-A1`, `M1-S06-F04-A1`, `M2-S07-F01-A1`, `NB-S06-F06-A1`). M3 and W3 have no studio shot planned, so they get their grey-seamless shots (`M3-S02-F02-A1`, `W3-S02-F09-A1`).
+- **One picture per person on `/cast`:** their studio shot, all five of them finals (`W1-S07-F02-A1`, `W2-S06-F03-A1`, `M1-S06-F04-A1`, `M2-S07-F01-A1`, `NB-S06-F06-A1`). M3 and W3 have no pictures yet, so their grey-seamless shots (`M3-S02-F02-A1`, `W3-S02-F09-A1`) stay labelled slots.
 - **Disabled text.** Graphite `#545454` is never text on dark. Disabled controls use the disabled-text token (graphite-400, `#6B6B6C`), because WCAG exempts inactive controls from contrast.
 - **`{supportEmail}`** has no value yet, and an address is a fact you can't invent. The sentences that need it stay hidden until I give one.
 - **The drop line without a date** shows `drop.states.announcedNoDate`.
@@ -355,7 +355,7 @@ Log each in PROGRESS.md as a question for me.
 
 - Shopify calls of any kind (Storefront API, mock.shop, Admin API), checkout, payments, a store connection, an Oxygen deploy.
 - Image or video generation of any kind, including with Figma's included AI credits; paid tools, paid APIs or credits; hosted services beyond GitHub and the fonts kit.
-- Font files in git, or fonts from anywhere but the two routes in `brand/fonts/README.md`. No third-party scripts besides the fonts kit.
+- Font files in git, or fonts from anywhere but the routes in `brand/fonts/README.md`: the stand-ins now, the licensed fonts later. No third-party scripts besides a fonts kit.
 - A product fact, price, drop date, quantity or review that doesn't come from the data. Product JSON changes only with a source (the drawings, the factory, me); flag anything that looks wrong.
 - Raf Simons' or Prada's name in `app/`, `content/copy/`, metadata, alt text or shipped comments.
 - A copy of a digs component.
