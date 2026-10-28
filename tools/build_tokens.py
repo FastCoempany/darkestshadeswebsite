@@ -97,8 +97,9 @@ def main():
         t.append(f"  --text-{name.replace('font-size-', '')}: var(--{name});")
     for name, _ in leaves(base["space"], "space"):
         t.append(f"  --spacing-{name.replace('space-', '')}: var(--{name});")
-    for name, _ in leaves(base["breakpoint"], "breakpoint"):
-        t.append(f"  --breakpoint-{name.replace('breakpoint-', '')}: var(--{name});")
+    # Media queries can't read CSS variables, so the breakpoints go in as literal values.
+    for name, v in leaves(base["breakpoint"], "breakpoint"):
+        t.append(f"  --breakpoint-{name.replace('breakpoint-', '')}: {css(v)};")
     t += ["  --radius-none: 0;", "}"]
     (OUT / "theme.css").write_text("\n".join(t) + "\n")
     print("wrote", ", ".join(p.name for p in sorted(OUT.glob("*.css"))))

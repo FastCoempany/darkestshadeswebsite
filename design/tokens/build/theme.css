@@ -54,9 +54,9 @@
   --spacing-24: var(--space-24);
   --spacing-32: var(--space-32);
   --spacing-48: var(--space-48);
-  --breakpoint-sm: var(--breakpoint-sm);
-  --breakpoint-md: var(--breakpoint-md);
-  --breakpoint-lg: var(--breakpoint-lg);
-  --breakpoint-xl: var(--breakpoint-xl);
+  --breakpoint-sm: 390px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
   --radius-none: 0;
 }

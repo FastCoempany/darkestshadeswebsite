@@ -34,4 +34,6 @@ Stolzl-Light.woff2   Stolzl-Book.woff2   Stolzl-Regular.woff2   Stolzl-Medium.wo
 `app/styles/fonts.local.css` declares them as `'Owners Wide'` 500 and `'Stolzl'` 300 / 350 / 400 / 500 and is only included when the files exist. In a cloud session, add them through the environment's setup script from private storage, never from the repo.
 
 ## Checks
-A Playwright test asserts `document.fonts.check('500 16px "Owners Wide"')` and the four Stolzl weights before any screenshot is taken, so a missing font fails loudly instead of falling back to system type.
+Before any screenshot, a Playwright test checks that a loaded `FontFace` exists for Owners Wide 500 and for Stolzl 300, 350, 400 and 500 (the kit's family names `owners-wide` and `stolzl` count), so a missing font fails loudly instead of falling back to system type. `document.fonts.check('500 16px "Owners Wide"')` alone can't do this: it returns true when no `@font-face` for the family exists at all.
+
+With the Adobe kit, the app's Content-Security-Policy must allow `use.typekit.net` and `p.typekit.net`; Hydrogen's default policy blocks them.
