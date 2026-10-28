@@ -1,0 +1,221 @@
+{
+ "$comment": "Settings for tools/blender/wear3d.py: W2 in the S06 black studio, her head turned three-quarters to her left so her right temple, with the GCD, faces the camera (the founder, Oct 28 2026: F09 on W2 in this view, so its wide right temple and the GCD show; F09's front is F05's, which M2 already wears from the front). F09 rebuilt in 3D (tools/blender/frame3d.py). The portrait, the ear and the temple's shadow are set up as for F03 in the same view (W2-S06-F03-A2.json): her right ear faces the camera, the temple's neck rests on its root where the helix's top meets the head (ear_crease_px) and runs on 15 mm behind it, the ear laid over it along the helix's rim and its front edge (ear_occluders_px); its shadow on the side of her head is rendered on a sheet 12 mm inside it at the hinge (F09's 146 mm front against a head about 115 mm across the temples), closing to the ear, kept to 4% of the light at its darkest as the portrait's own shadows are (temple_sheet).",
+ "id": "DS-CAST-W2-S06-F09-A2-v01",
+ "cast": "W2",
+ "scene": "S06",
+ "frame": "F09",
+ "angle": "A2",
+ "wardrobe": "merino",
+ "format": "4:5",
+ "status": "draft",
+ "portrait": "work/people/raw/W2-S06-n45-2.png",
+ "portrait_source": {
+  "tool": "Figma generate_image",
+  "model": "gpt-image-2.5-sunburst",
+  "figma_file": "0aADcg6X248iXssGmxZ2jj",
+  "node": "45:2",
+  "size": [
+   960,
+   1280
+  ],
+  "generated": "2026-10-26",
+  "approved": "founder, Oct 26 2026 (paid generation)",
+  "prompt": "Studio portrait against a black backdrop. Head and shoulders, the head centered in the upper half of the frame. One hard key light from the front, a little to the camera's left and a little above eye level, no fill: the far side of the face falls into shadow. 85 mm lens, eye level.\nA 29-year-old West African woman, lean and long-necked. Very dark brown skin with a warm undertone and a soft natural sheen on the cheekbones and forehead. Natural hair cropped very close, about a centimeter long, following the round shape of the head; ears fully visible. Long oval face, very high sculpted cheekbones, a defined jaw, a broad nose, full wide lips in their natural deep color. No makeup, no jewelry. Composed and serious, mouth closed.\nWardrobe: a fine black merino crew-neck sweater, no logos.\nHead turned three-quarters to her left (toward the right edge of the picture), so her right cheek, right temple and right ear face the camera; chin level, eyes open, looking the way her head is turned.\nNo glasses or sunglasses, nothing on or near the face, temples and ears clear of hands and objects.\nPhotograph, natural skin texture, no retouching. No text, no logos."
+ },
+ "product_shot": "IMG_3383",
+ "pd_mm": 62,
+ "upscale": 2,
+ "lens_drop_mm": 3,
+ "vertex_mm": 12,
+ "light": {
+  "level": 1.0
+ },
+ "shadow": {
+  "offset_mm": 2.0,
+  "blur_mm": 0.4,
+  "strength": 0.6,
+  "contact": 0.2,
+  "contact_mm": 0.8
+ },
+ "reflection": {
+  "front_env": 0.04
+ },
+ "soften_px": 0.35,
+ "grade": {
+  "lift": 0.012,
+  "sat": 0.95,
+  "halation": 0.15,
+  "grain": 0.012
+ },
+ "eye_fill": 0.05,
+ "lens": {
+  "photo": 0.0,
+  "face_blur_mm": 0.3
+ },
+ "through_lens": 1.0,
+ "skin_albedo": 0.15,
+ "look3d": {
+  "hide_temples": [
+   "left"
+  ],
+  "ear_overrun_mm": 15.0,
+  "ear_occluders_px": [
+   [
+    [
+     395,
+     785
+    ],
+    [
+     400,
+     778
+    ],
+    [
+     405,
+     772
+    ],
+    [
+     410,
+     767
+    ],
+    [
+     415,
+     762.5
+    ],
+    [
+     420,
+     758.5
+    ],
+    [
+     425,
+     756.5
+    ],
+    [
+     430,
+     755
+    ],
+    [
+     435,
+     753.5
+    ],
+    [
+     440,
+     753
+    ],
+    [
+     445,
+     752
+    ],
+    [
+     450,
+     752
+    ],
+    [
+     455,
+     754
+    ],
+    [
+     460,
+     758
+    ],
+    [
+     465,
+     759
+    ],
+    [
+     470,
+     760
+    ],
+    [
+     480,
+     763
+    ],
+    [
+     490,
+     766
+    ],
+    [
+     500,
+     769
+    ],
+    [
+     510,
+     772
+    ],
+    [
+     520,
+     775
+    ],
+    [
+     530,
+     777.5
+    ],
+    [
+     540,
+     779.5
+    ],
+    [
+     550,
+     782
+    ],
+    [
+     553,
+     795
+    ],
+    [
+     550,
+     808
+    ],
+    [
+     545,
+     822
+    ],
+    [
+     538,
+     840
+    ],
+    [
+     530,
+     858
+    ],
+    [
+     522,
+     875
+    ],
+    [
+     515,
+     900
+    ],
+    [
+     380,
+     900
+    ],
+    [
+     376,
+     850
+    ],
+    [
+     380,
+     810
+    ],
+    [
+     388,
+     795
+    ]
+   ]
+  ],
+  "temple_sheet": {
+   "sides": [
+    "right"
+   ],
+   "gap_front_mm": 12.0,
+   "gap_ear_mm": 0.5,
+   "floor": 0.04
+  }
+ },
+ "ear_crease_px": {
+  "left": [
+   548,
+   760
+  ]
+ }
+}

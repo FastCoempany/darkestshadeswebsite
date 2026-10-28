@@ -129,6 +129,13 @@ MM = 0.001
 # joint, the top edge straight back to the bend while the bottom edge dips 2.8 mm 55-80 mm back and rises to
 # a 5.5 mm neck over the ear (`offsets`), 3.9 mm thick tapering to 2.1, edges rounded 1.4 mm; inside each a
 # textured metal core, seen through the acetate (`core`); the GCD on the right temple.
+# F09 (drawing 09, its cleaned shots, Oct 28 2026): F05's front (the two drawings' front, top and side views
+# lie on each other, and the front shots agree), built as F05's; gloss black acetate end blocks and wide
+# temples in place of F05's metal. The temples 15.4 mm tall at the joint (the GCD's 15 mm face, dimensioned),
+# their top edge level back to the bend while the bottom edge rises 67-102 mm back to a 4.65 mm neck over the
+# ear, the section's centre 5.37 mm higher there (`offsets`); 4 mm thick tapering to 1.55, edges rounded
+# 0.8 mm (side and top views); the joint 16.1 mm behind the bridge's face (top view); the GCD on the right
+# temple.
 FRAMES = {
     "F01": {"depth": 5.5, "edge_r": 2.4, "back_r": 1.0, "dome": 0.3,
             # a narrow bevel round each lens (drawing 01's double line, 0.6-0.85 mm out from the opening)
@@ -307,6 +314,43 @@ FRAMES = {
                        "core": {"heights": [(0, 6.4), (6.0, 6.4), (8.0, 4.6), (82.0, 4.6), (88.0, 0.3)],
                                 "ups": [(0, 0.0), (82.0, 0.0), (88.0, 2.15)],
                                 "thick": 0.6, "from": 0.3, "to": 88.0}},
+            "gcd": {"side": -1, "on": "temple"}},
+    "F09": {"depth": 7.5, "edge_r": 2.2, "back_r": 1.2, "dome": 0.9,
+            "bezel": {"kind": "well", "width": 3.4, "p": 2.5, "seam": 0.15, "blend": 0.6, "step": 0.0, "drop": 1.8},
+            "lip_r": 0.0, "mesh_step": 1, "edge_floor": 0.18, "exact_distance": True,
+            "trim_tips": (58.0, 53.0),
+            "lens": {"radius": 220.0, "thick": 1.6, "inset": 1.4},
+            "tilt": 10.0,
+            "pads": {"x": 10.0, "y": -5.0, "back": 3.5, "r": (1.6, 5.0, 3.0)},
+            # the joint 5 mm behind the end's face (top view), within the front's 7.5 mm depth: the front's end
+            # is cut at it (build) and the block lies inside the end (flared, its bottom stood out under the
+            # temple in a three-quarter view as a notch the frame does not have)
+            "endpiece": {"kind": "block", "back": 5.0, "inset": 0.03, "flare": 0.0, "into": 3.0},
+            "temple": {"kind": "acetate", "top_below": 14.05, "height": 15.4, "edge_r": 0.8,
+                       "heights": [(0, 15.4), (66.9, 15.4), (70.9, 15.25), (74.9, 13.4), (78.9, 10.05), (81.9, 8.2),
+                                   (83.9, 7.25), (85.9, 6.55), (87.9, 5.95), (89.9, 5.55), (91.9, 5.2), (93.9, 5.0),
+                                   (95.9, 4.85), (97.9, 4.75), (99.9, 4.7), (101.9, 4.65), (105.9, 4.65), (107.8, 4.8),
+                                   (109.9, 4.9), (111.9, 5.06), (113.9, 5.26), (116.0, 5.53), (118.1, 5.86),
+                                   (120.3, 6.32), (122.5, 6.98), (124.9, 7.65), (127.3, 8.32), (129.8, 8.93),
+                                   (132.3, 9.54), (134.8, 10.1), (137.3, 10.64), (139.8, 11.17), (142.4, 11.67),
+                                   (149.4, 11.8)],
+                       # the section's centre below the straight run (mm; up is negative): the bottom edge rising
+                       # to the neck, the top edge level; held there round the bend, the tip's mid-line drawn
+                       # that far under the drawing's (`tip_path`)
+                       "offsets": [(0, 0.0), (66.9, 0.0), (70.9, -0.07), (74.9, -1.0), (78.9, -2.68), (81.9, -3.6),
+                                   (83.9, -4.07), (85.9, -4.43), (87.9, -4.73), (89.9, -4.93), (91.9, -5.1),
+                                   (93.9, -5.2), (95.9, -5.27), (97.9, -5.32), (99.9, -5.35), (101.9, -5.37)],
+                       "thicks": [(0, 4.0), (8, 3.86), (13, 3.81), (23, 3.61), (33, 3.45), (43, 3.25), (53, 3.11),
+                                  (63, 2.91), (73, 2.76), (83, 2.56), (93, 2.35), (103, 2.19), (107.8, 2.14),
+                                  (112.9, 2.05), (118.1, 1.95), (123.7, 1.86), (129.8, 1.8), (136.0, 1.75),
+                                  (142.4, 1.64), (149.4, 1.55)],
+                       "straight": 107.85, "drop": 25.0, "round_end": 5.0,
+                       # the path beyond the straight run (mm back, mm down), side view: the drawing's mid-line
+                       # moved 5.37 mm off it, square to it, downward (the held offset puts the section back on it)
+                       "tip_path": [(0, 0), (1.6, 0.12), (3.29, 0.3), (4.92, 0.57), (6.49, 0.95), (8.04, 1.48),
+                                    (9.57, 2.17), (11.26, 3.11), (13.08, 4.25), (14.95, 5.5), (16.85, 6.85),
+                                    (18.79, 8.28), (20.74, 9.75), (22.68, 11.25), (24.63, 12.81), (26.91, 14.62),
+                                    (29.19, 16.46), (32.19, 18.78)]},
             "gcd": {"side": -1, "on": "temple"}},
 }
 
@@ -1004,6 +1048,23 @@ def build(frame, materials, tilt=None):
     xm, z = wrap_profile(frame)
     T = cfg["depth"]
     zf, zb = rim_fields(sh, cfg)
+    ep = cfg["endpiece"]
+    if ep.get("kind") == "block" and ep["back"] < T:
+        # the front's ends no deeper than the joint: built the same depth everywhere, the front ran on 2.5 mm
+        # past F09's joint (5 mm behind the end's face, the front 7.5 deep), and the temple's first
+        # millimetres lay inside the end, their faces crossing in a grainy band (its three-quarter check).
+        # In the end's last 6 mm the back is cut at the joint, upright as block_endpiece builds it
+        th_t = np.tan(np.radians(cfg["tilt"] if tilt is None else tilt))
+        out_, tp_ = sh["outline"], cfg["temple"]
+        yc_ = float(out_[:, 1].max()) - tp_["top_below"] - tp_["height"] / 2
+        ox_, oy_ = sh["origin_px"]
+        X = (np.arange(zb.shape[1]) - ox_) / sh["ppm"]
+        Y = (oy_ - np.arange(zb.shape[0])) / sh["ppm"]
+        xe_ = np.where(X < 0, out_[:, 0].min(), out_[:, 0].max())
+        zj = np.interp(xe_, xm, z) + yc_ * th_t - ep["back"]
+        floor = zj[None, :] - np.interp(X, xm, z)[None, :] + T / 2 - Y[:, None] * th_t
+        ends = (np.abs(X) >= np.abs(xe_) - 6.0)[None, :]
+        zb = np.where(ends, np.maximum(zb, floor), zb)
     front = field_mesh(f"{frame} front", sh["solid"], zf, zb, sh["origin_px"], sh["ppm"], step=cfg.get("mesh_step", 3))
     bend(front, xm, z, -T / 2)                        # the front's face at z = 0 at its most forward point
     front.data.materials.append(materials["acetate"])
@@ -1261,8 +1322,13 @@ def block_endpiece(frame, cfg, out, xm, z, side, th_t, materials):
     r = tp.get("edge_r", 0.9)
     fl = ep.get("flare", 0.0)
     rings = []
-    zs = (z_in, z_face - T, z_joint)
-    for zz, flare in zip(zs, (fl, fl * 0.6, 0.0)):
+    zs, fls = (z_in, z_face - T, z_joint), (fl, fl * 0.6, 0.0)
+    if z_face - T <= z_joint + 0.1:
+        # the joint within the front's depth (F09: 5 mm behind the end's face, the front 7.5 deep): straight
+        # from inside the end to the joint (through the front's back, the block folded back on itself and
+        # stood 2.5 mm past the joint, over the temple's start)
+        zs, fls = (z_in, z_joint), (fl, 0.0)
+    for zz, flare in zip(zs, fls):
         h = tp["height"] + flare
         prof = rounded_rect(th0, h, r)
         rings.append([(xc + x, yc - flare / 2 + y, zz) for x, y in prof])
@@ -1383,6 +1449,10 @@ def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0
                 P = np.vstack([h + np.outer(np.linspace(0, 1, 160), jt - h), tip[1:]])
             else:
                 e = np.asarray(ears[k], np.float64)
+                if t.get("offsets"):
+                    # the section's centre where it rests on the ear is the ear point: the path that far under
+                    # it as the offset there stands it above (F09's neck: 5.37 mm)
+                    e = e + np.array([0.0, 1.0, 0.0]) * table(t["offsets"])(float(np.linalg.norm(e - h)))
                 d = e - h
                 d /= np.linalg.norm(d)
                 down = np.array([0.0, -1.0, 0.0])
