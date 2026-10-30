@@ -1,10 +1,14 @@
 import type {Decorator, Preview} from '@storybook/react-vite';
 import {useEffect} from 'react';
+import {createMemoryRouter, RouterProvider} from 'react-router';
 import '../app/styles/tailwind.css';
 import '@fontsource-variable/mona-sans/standard.css';
 import '@fontsource-variable/urbanist/index.css';
 
 /** Mode and theme live on <html>, as in the app: data-mode="wire" for wireframes, data-theme for night or paper. */
+// Stories render against a fixed clock (fixtures.tsx STORY_NOW); countdowns must not tick in baselines.
+if (typeof window !== 'undefined') (window as Window & {__dsFreezeClock?: boolean}).__dsFreezeClock = true;
+
 function ModeAndTheme({mode, theme, children}: {mode?: string; theme?: string; children: React.ReactNode}) {
   useEffect(() => {
     const html = document.documentElement;
@@ -15,9 +19,17 @@ function ModeAndTheme({mode, theme, children}: {mode?: string; theme?: string; c
   return <>{children}</>;
 }
 
+/** A data router per story: pages use <Link>, <Form> and route hooks the way they do in the app. */
+function StoryRouter({children}: {children: React.ReactNode}) {
+  const router = createMemoryRouter([{path: '*', element: children, action: () => null}], {initialEntries: ['/']});
+  return <RouterProvider router={router} />;
+}
+
 const withModeAndTheme: Decorator = (Story, context) => (
   <ModeAndTheme mode={context.globals.mode as string | undefined} theme={context.globals.theme as string | undefined}>
-    <Story />
+    <StoryRouter>
+      <Story />
+    </StoryRouter>
   </ModeAndTheme>
 );
 

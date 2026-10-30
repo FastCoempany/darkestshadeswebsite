@@ -22,6 +22,11 @@
       "Reveal nothing."
     ],
     "skip": "Skip",
+    "burstLine": "{count} frames at {fps} a second, {layout}",
+    "layouts": {
+      "framed": "framed",
+      "bleed": "full bleed"
+    },
     "textEquivalent": "Opening sequence: black-and-white photographs of the frames and the cast, ending on the Darkest Shades emblem."
   },
   "home": {
@@ -57,6 +62,13 @@
   },
   "drop": {
     "status": "draft",
+    "heading": "Drop {number}",
+    "stateWords": {
+      "announced": "Announced",
+      "live": "Live",
+      "soldOut": "Sold out",
+      "ended": "Ended"
+    },
     "states": {
       "announced": "Drop {number}. {date}, {time} {timezone}.",
       "announcedNoDate": "Drop {number}. Date to be announced.",
@@ -66,6 +78,8 @@
     },
     "pairsLeft": "{left} of {total} pairs left",
     "pairsLeftNoTotal": "{left} pairs left",
+    "pairsPerFrame": "{pairs} pairs per frame",
+    "pairsTotal": "{total} pairs in all",
     "countdownLabel": {
       "toStart": "Opens in",
       "toEnd": "Closes in"
@@ -74,17 +88,27 @@
     "line": {
       "live": "Drop {number} · Open · {left} of {total} pairs left",
       "announced": "Drop {number} · {date}"
-    }
+    },
+    "archive": "Past drops"
   },
   "product": {
     "status": "draft",
     "addToBag": "Add to bag",
     "notify": "Get notified",
     "soldOut": "Sold out",
+    "availability": {
+      "inDrop": "In Drop {number}",
+      "soldOut": "Sold out",
+      "nextDrop": "Next drop"
+    },
     "nextLook": "Next look",
     "specsTitle": "Specs",
     "drawnTitle": "Drawn",
     "wornByTitle": "Worn by",
+    "galleryLabel": "Pictures of {name}",
+    "galleryCounter": "{index} / {total}",
+    "galleryPrevious": "Previous picture",
+    "galleryNext": "Next picture",
     "specLabels": {
       "size": "Size",
       "lensWidth": "Lens width",
@@ -98,12 +122,22 @@
       "protection": "Protection"
     },
     "sizeHelp": "Lens width □ bridge, then temple length, in millimetres.",
+    "drawnViews": {
+      "front": "Front",
+      "side": "Side",
+      "top": "Top"
+    },
     "gcdLine": "The God Cloud Device. Gold, black onyx inset.",
     "promises": [
       "45-day exchange",
       "6-month warranty"
     ],
     "imageDisclosure": "Images made with generated models and the real frame."
+  },
+  "frames": {
+    "status": "draft",
+    "title": "Frames",
+    "statement": "Eight frames. One price: $100."
   },
   "list": {
     "status": "draft",
@@ -137,7 +171,9 @@
     "manifesto": "Manifesto",
     "cast": "Cast",
     "bag": "Bag",
+    "bagWithCount": "Bag ({count})",
     "menu": "Menu",
+    "primaryLabel": "Primary",
     "close": "Close",
     "skipToContent": "Skip to content"
   },
@@ -146,6 +182,10 @@
     "empty": "Your bag is empty.",
     "subtotal": "Subtotal",
     "checkoutDisabled": "Checkout opens at launch",
+    "checkout": "Checkout",
+    "quantity": "Quantity",
+    "quantityFewer": "Fewer",
+    "quantityMore": "More",
     "remove": "Remove",
     "limit": "Limit {n} per customer for this drop."
   },
@@ -156,6 +196,7 @@
       "help": "Help",
       "legal": "Legal"
     },
+    "navLabel": "Footer links",
     "links": {
       "questions": "Questions",
       "care": "Care",
@@ -180,6 +221,7 @@
   },
   "questions": {
     "status": "draft",
+    "title": "Questions",
     "items": [
       {
         "q": "Are the lenses polarized?",
@@ -209,10 +251,12 @@
   },
   "care": {
     "status": "placeholder",
+    "title": "Care",
     "body": "Care instructions to be confirmed with the factory (lens coating, acetate, onyx setting)."
   },
   "accessibility": {
     "status": "draft",
+    "title": "Accessibility",
     "body": [
       "We build darkestshades.com to WCAG 2.2 AA.",
       "The opening sequence is optional. It never plays if your device asks for reduced motion, and you can skip it from its first frame. Its fast sequences are built to stay below the flash thresholds in WCAG 2.3.1.",
@@ -221,12 +265,46 @@
     "introToggle": {
       "label": "Opening sequence",
       "on": "On",
-      "off": "Off"
+      "off": "Off",
+      "saved": "Saved."
     }
+  },
+  "policies": {
+    "status": "draft",
+    "title": "Policies",
+    "pending": "The full text is published at launch.",
+    "items": {
+      "shipping": "Shipping",
+      "exchange": "Exchange",
+      "warranty": "Warranty",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "sms-terms": "SMS terms"
+    },
+    "lines": {
+      "exchange": "Exchange within 45 days.",
+      "warranty": "Six months of warranty against defects and scratches."
+    }
+  },
+  "account": {
+    "status": "draft",
+    "title": "Account",
+    "pending": "Accounts open at launch."
+  },
+  "cast": {
+    "status": "draft",
+    "title": "Cast"
   },
   "alt": {
     "stage": "{subject}, {angle}, on a light grey background.",
     "seal": "The God Cloud Device: a gold band set with black onyx.",
+    "lineDrawing": "Technical drawing of {subject}, {view}.",
+    "views": {
+      "front": "front view",
+      "side": "side view",
+      "top": "from above",
+      "iso": "three-quarter view"
+    },
     "subjects": {
       "$comment": "Each frame as a screen reader hears it, from its product facts (descriptor, front, temples, lens); the first letter is capitalized where the phrase starts the sentence.",
       "F01": "blue tortoise navigator sunglasses with light blue lenses",
