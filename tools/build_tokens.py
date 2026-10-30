@@ -70,12 +70,13 @@ def main():
         "surface-canvas": "#FFFFFF", "surface-base": "#FFFFFF", "surface-raised": "#F2F2F2", "surface-overlay": "#E6E6E6",
         "surface-inverse": "#1A1A1A", "surface-stage": "#DADADA",
         "text-primary": "#000000", "text-secondary": "#3D3D3D", "text-tertiary": "#5C5C5C", "text-disabled": "#8A8A8A",
-        "text-inverse": "#FFFFFF", "text-accent": "#000000", "text-editorial": "#000000",
+        "text-inverse": "#FFFFFF", "text-accent": "#000000", "text-editorial": "#000000", "text-on-stage": "#000000",
         "border-hairline": "#CCCCCC", "border-rule": "#999999", "border-control": "#6B6B6B", "focus-ring": "#000000",
         "action-primary-bg": "#1A1A1A", "action-primary-text": "#FFFFFF", "action-primary-bg-hover": "#000000",
         "action-secondary-border": "#1A1A1A", "action-secondary-text": "#1A1A1A",
         "action-quiet-text": "#3D3D3D", "action-quiet-text-hover": "#000000",
         "status-success": "#000000", "status-error": "#000000", "status-info": "#000000", "status-live": "#000000",
+        "status-error-stage": "#000000",
     }
     w = [HEAD, '[data-mode="wire"], [data-mode="wire"] [data-theme] {']
     w += [f"  --color-{k}: {v};" for k, v in wire.items()]

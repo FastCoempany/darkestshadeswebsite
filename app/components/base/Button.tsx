@@ -7,14 +7,15 @@ export type ButtonSize = 40 | 48 | 56;
 
 const VARIANT: Record<ButtonVariant, string> = {
   solid:
-    'bg-ds-action-primary-bg text-ds-action-primary-text hover:bg-ds-action-primary-bg-hover active:bg-ds-action-primary-bg uppercase tracking-micro text-micro',
+    'bg-ds-action-primary-bg text-ds-action-primary-text hover:bg-ds-action-primary-bg-hover active:bg-ds-action-primary-bg uppercase tracking-micro text-ui',
   outline:
-    'border border-ds-action-secondary-border text-ds-action-secondary-text hover:bg-ds-surface-raised active:bg-ds-surface-overlay uppercase tracking-micro text-micro',
+    'border border-ds-action-secondary-border text-ds-action-secondary-text hover:bg-ds-surface-raised active:bg-ds-surface-overlay uppercase tracking-micro text-ui',
   quiet: 'text-ds-action-quiet-text hover:text-ds-action-quiet-text-hover hover:underline underline-offset-3 text-ui',
 };
 
 const SIZE: Record<ButtonSize, string> = {
-  40: 'h-10 px-4',
+  // 40 px tall, with a 44 px hit area (05, Behavior rules).
+  40: "h-10 px-4 relative before:absolute before:-inset-y-0.5 before:inset-x-0 before:content-['']",
   48: 'h-12 px-6',
   56: 'h-14 px-8',
 };
@@ -41,21 +42,40 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     'inline-flex items-center justify-center gap-2 font-text font-medium leading-none rounded-none select-none',
     'transition-colors duration-(--motion-quick) motion-reduce:transition-none',
     'disabled:text-ds-text-disabled disabled:bg-ds-surface-raised disabled:border-ds-border-hairline disabled:cursor-not-allowed',
-    'aria-busy:cursor-progress aria-busy:opacity-80',
+    'aria-busy:cursor-progress',
     VARIANT[variant],
     variant === 'quiet' ? 'min-h-11 px-0' : SIZE[size],
     full && 'w-full',
     className,
   );
   if (to) {
+    const {onClick, ...anchorRest} = rest as React.AnchorHTMLAttributes<HTMLAnchorElement> & Record<string, unknown>;
+    // Another origin (the checkout at launch) is a plain anchor; the site's own paths are router links.
+    if (/^https?:\/\//.test(to)) {
+      return (
+        <a href={to} className={classes} aria-disabled={disabled || undefined} {...anchorRest}>
+          {children}
+        </a>
+      );
+    }
     return (
-      <Link to={to} className={classes} aria-disabled={disabled || undefined}>
+      <Link to={to} className={classes} aria-disabled={disabled || undefined} {...anchorRest}>
         {children}
       </Link>
     );
   }
+  // Busy keeps its place in the tab order: aria-disabled, clicks ignored.
   return (
-    <button ref={ref} type={type} className={classes} disabled={disabled || busy} aria-busy={busy || undefined} {...rest}>
+    <button
+      ref={ref}
+      type={type}
+      className={classes}
+      disabled={disabled}
+      aria-busy={busy || undefined}
+      aria-disabled={busy || undefined}
+      {...rest}
+      onClick={busy ? (e) => e.preventDefault() : rest.onClick}
+    >
       {children}
     </button>
   );

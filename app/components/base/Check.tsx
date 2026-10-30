@@ -15,7 +15,7 @@ export const Check = forwardRef<HTMLInputElement, CheckProps>(function Check({la
   const errorId = `${id}-error`;
   return (
     <div className={cx('grid gap-2', className)}>
-      <label htmlFor={id} className="grid grid-cols-[1.25rem_1fr] items-start gap-3">
+      <label htmlFor={id} className="grid min-h-11 grid-cols-[1.25rem_1fr] items-start gap-3 py-2">
         <input
           ref={ref}
           id={id}

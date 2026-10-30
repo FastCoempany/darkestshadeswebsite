@@ -1,5 +1,5 @@
 import {expect, test} from '@playwright/test';
-import {settle} from './helpers';
+import {expectScreenshot, settle} from './helpers';
 
 /** Phase 0's screenshot test: the token sheet at 390 and 1440 (the project viewports), in UI and wire mode. */
 test.describe('token sheet', () => {
@@ -10,7 +10,7 @@ test.describe('token sheet', () => {
       await settle(page);
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'night');
       if (mode === 'wire') await expect(page.locator('html')).toHaveAttribute('data-mode', 'wire');
-      await expect(page).toHaveScreenshot(`tokens-${mode}.png`, {fullPage: true});
+      await expectScreenshot(page, `tokens-${mode}.png`);
     });
   }
 });

@@ -18,7 +18,8 @@
   }
 
   /* Visible focus everywhere: a 2 px ring, 2 px off, gold on night and gold ink on paper (05-components.md). */
-  :focus-visible {
+  :focus-visible,
+  [data-force='focus-visible'] {
     outline: var(--border-focus) solid var(--color-focus-ring);
     outline-offset: var(--border-focus-offset);
   }

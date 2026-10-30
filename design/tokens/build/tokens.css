@@ -120,6 +120,7 @@
   --color-text-inverse: var(--ds-onyx-950);
   --color-text-accent: var(--ds-gold-500);
   --color-text-editorial: var(--ds-camel-500);
+  --color-text-on-stage: var(--ds-onyx-950);
   --color-border-hairline: var(--ds-onyx-700);
   --color-border-rule: var(--ds-graphite-500);
   --color-border-control: var(--ds-graphite-400);
@@ -135,6 +136,7 @@
   --color-status-error: var(--ds-error-300);
   --color-status-info: var(--ds-info-300);
   --color-status-live: var(--ds-gold-500);
+  --color-status-error-stage: var(--ds-error-700);
   color-scheme: dark;
 }
 [data-theme="paper"] {
@@ -151,6 +153,7 @@
   --color-text-inverse: var(--ds-bone-100);
   --color-text-accent: var(--ds-gold-700);
   --color-text-editorial: var(--ds-camel-700);
+  --color-text-on-stage: var(--ds-onyx-950);
   --color-border-hairline: var(--ds-ash-200);
   --color-border-rule: var(--ds-ash-400);
   --color-border-control: var(--ds-graphite-500);
@@ -166,6 +169,7 @@
   --color-status-error: var(--ds-error-700);
   --color-status-info: var(--ds-info-700);
   --color-status-live: var(--ds-gold-700);
+  --color-status-error-stage: var(--ds-error-700);
   color-scheme: light;
 }
 @media (prefers-reduced-motion: reduce) {

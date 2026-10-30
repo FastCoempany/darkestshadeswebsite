@@ -14,6 +14,7 @@
   --color-ds-text-inverse: var(--color-text-inverse);
   --color-ds-text-accent: var(--color-text-accent);
   --color-ds-text-editorial: var(--color-text-editorial);
+  --color-ds-text-on-stage: var(--color-text-on-stage);
   --color-ds-border-hairline: var(--color-border-hairline);
   --color-ds-border-rule: var(--color-border-rule);
   --color-ds-border-control: var(--color-border-control);
@@ -29,6 +30,7 @@
   --color-ds-status-error: var(--color-status-error);
   --color-ds-status-info: var(--color-status-info);
   --color-ds-status-live: var(--color-status-live);
+  --color-ds-status-error-stage: var(--color-status-error-stage);
   --default-font-family: var(--font-family-text);
   --font-display: var(--font-family-display);
   --font-display--font-variation-settings: var(--font-variation-display);

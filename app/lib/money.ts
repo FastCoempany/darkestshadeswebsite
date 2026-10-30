@@ -3,6 +3,7 @@ import type {MoneyV2} from '~/lib/mock/types';
 /** "$100" for 100.00 USD; cents only when there are any. Never hidden, never struck through. */
 export function formatMoney(money: MoneyV2): string {
   const amount = Number(money.amount);
+  if (!Number.isFinite(amount)) throw new Error(`Not a price: ${money.amount}`);
   const whole = Number.isInteger(amount);
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

@@ -7,6 +7,8 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 - **Stand-in type.** Owners Wide and Stolzl are not licensed yet (`00-decisions.md` #41, O8). Every screenshot and visual baseline in this run renders their open-licensed stand-ins, Mona Sans and Urbanist (`brand/fonts/README.md`). The font check passes on the stand-ins by design; baselines are remade when the real fonts arrive.
 - **The production build refuses by design.** `npm run build` fails the draft-copy gate while any section of `content/copy/en.json` is `draft` or `placeholder` (today: every section). This is the gate working, not a broken build. Review builds (`npm run build:review`) carry production settings and allow drafts; Lighthouse and the screenshots run on them.
 
+- **Pixel comparisons run on this VM, not on GitHub Actions.** The runner renders type differently (hinting, antialiasing), so its screenshots never match baselines made here. RUN.md keeps visual tests on this machine; the CI job runs the same Playwright suite, asserts everything else (fonts, axe, states, behaviour) and records its screenshots as an artifact instead of comparing them (`tests/e2e/helpers.ts`, `expectScreenshot`). The phase 0 merge's CI run failed on exactly these comparisons (and on the typegen bug in the copy gate, fixed in phase 1).
+
 (Anything else that cannot pass in this environment is listed here with its reason before a phase is called done.)
 
 ## Phases
@@ -15,7 +17,7 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 |---|---|---|---|---|
 | 0 Foundation | **done** | `build/phase-0-foundation` · PR #1 | See *Phase 0 evidence* below | Oct 30 |
 | 1 Wireframes | **done** (checkpoint PR #2) | `build/phase-1-wireframes` · PR #2 | See *Phase 1 evidence* below | Oct 30 |
-| 2 Base components | not started | | | |
+| 2 Base components | **done** | `build/phase-2-base` · PR #3 | See *Phase 2 evidence* below | Oct 30 |
 | 3 House layer | not started | | | |
 | 4 UI pages | not started | | | |
 | 5 Photography | not started | | | |
@@ -23,8 +25,20 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 
 ## Now and next
 
-- **Now:** phase 1 is done and merged (the first review checkpoint: PR #2 carries the review note). Phase 2 (base components) starts on `build/phase-2-base` from the new `main`.
-- **Next:** every base component in `05` with a story per state (hover, active and focus-visible forced for the stories), 390 and 1440, UI and wire, axe passing; unit tests for the bag math, the quantity limit and the price; then phase 3.
+- **Now:** phase 2 is done and merged. Phase 3 (the house layer) starts on `build/phase-3-house` from the new `main`.
+- **Next:** the entry with real stills (`tools/photo/entry_stills.py` → `assets/entry/`, the flash check on the real sequence), `Burst` and `Card`, the detail hold's scroll push, `DropStatus`/`Countdown`/`PairsLeft`/`DropLine` unit tests for every missing-data case, `ListOffer`'s 60% trigger, `FilmGrain`, the header's transparent-to-solid change, stories for every house component and state; then phase 4.
+
+### Phase 2 evidence (Oct 30)
+
+What was built: every component in the Base table of `05` with every variant and state, as stories (57 base stories) that render at 390 and 1440 in UI and wire mode; hover, active and focus-visible as forced states; the phone field's country select (E.164); the gallery's zoom, loading and single states; the sheet's opening, open and closing states with a working focus trap; `ShotSlot`'s loading, loaded, error, empty and sequence states; the bag line's unit price and parked "removing" state; the summary's checkout URL for launch; two color roles for labels on the stage; unit tests for money, the bag's per-customer limit, E.164 and drop times; a widths test (320, 720, 768, 1024, nine pages); CI records screenshots instead of comparing pixels.
+
+| Done criterion | Command | Result |
+|---|---|---|
+| Everything in the Base table, every state, both sizes, axe passing | `npm run storybook:build` then `npx playwright test` | 97 stories (57 Base, 13 House from phase 0, 27 Pages); **462 passed** against the committed baselines (97 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, the widths test on nine pages at four widths). No serious or critical axe issue |
+| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 31 unit tests; `tools/palette.py` passes with the two new roles (`failures: 0`) |
+| Independent review | a code review against `05`'s Base table, Behavior rules, `CLAUDE.md` and the done criterion | 4 blocking and 13 should-fix items, all fixed (decision log); its notes for phases 3–4 kept |
+
+Stand-in type throughout.
 
 ### Phase 1 evidence (Oct 30)
 
@@ -89,6 +103,17 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | Oct 30 | The drop page shows no drop line: its status block says the same thing in full. | Three statements of one fact in the first screen; `handle.dropLine` per route. | phase 1 |
 | Oct 30 | The photosensitivity notice reads Continue · Skip intro in that order; focus starts on Skip intro. | The order is the brief's (`03`, `08`); focusing Skip keeps the safer choice one keypress away. | phase 1 |
 | Oct 30 | The detail hold's picture is sized by the viewport height, so the long view fits one screen on desktop. | RUN Part 1: one long held view; a 4:5 picture at 768 px wide ran past a 900 px screen. | phase 1 |
+| Oct 30 | Hover, active and focus-visible are stories, through `@custom-variant` overrides that also match `data-force="hover"` and the like. | `05` asks for a story per state; a pseudo-class can't be set from a story, and duplicating hover styles would drift. | phase 2 |
+| Oct 30 | The phone field is a country select plus the national number; the form sends E.164 (`+14155550123`). | `05` Field: "phone (E.164 with country select)". Eighteen dial codes to start; the provider's list replaces it at launch. | phase 2 |
+| Oct 30 | The gallery zooms to 2x inside its frame on a tap or Enter (pan by scrolling); pinch zoom is the browser's. | `05` Gallery states include `zoomed`; a tap is the keyboard-reachable equivalent of a pinch. | phase 2 |
+| Oct 30 | `ShotSlot` has four states: loading (stage color, no label), loaded, error (the label in the error tone), empty (the label). A `sequence` variant labels a run of stills with its count. | `05` ShotSlot: image, sequence; loading, loaded, error, wire. | phase 2 |
+| Oct 30 | `Sheet` has opening, open and closing states; only the side sheet (the bag) moves, 120 ms on desktop; full and center cut. | `05` Sheet; `05` Behavior rules (the bag drawer 120 ms, everything else a cut). | phase 2 |
+| Oct 30 | `BagSummary` takes a `checkoutUrl`: null now (Checkout disabled, "Checkout opens at launch"), a live URL at launch. | `05` BagSummary states: default, checkout-disabled. | phase 2 |
+| Oct 30 | Pixel comparisons run here; CI records screenshots and asserts everything else. | GitHub's runner renders type differently; see the top of this file. | phase 2 |
+| Oct 30 | Two roles added through `tools/palette.py`: `text-on-stage` (onyx in both themes) for labels on the stage, and `status-error-stage` (error ink) for a failed picture's label. Both checked against the stage at 4.5:1. | The paper theme's `text-inverse` is bone, which would vanish on the stage; the night error tone fails AA on the light stage. | phase 2 |
+| Oct 30 | Hover styles apply only where a pointer can hover (`@media (hover: hover)`), with `data-force` for stories. | A tap on a touch screen would otherwise leave hover styles stuck. | phase 2 |
+| Oct 30 | Country names in the phone field come from `Intl.DisplayNames`; the component holds only codes and dial strings. | No English in components (CLAUDE.md); the provider's list replaces it at launch. | phase 2 |
+| Oct 30 | The phase 2 code review found 4 blocking items (story typing, two contrast failures, a load race that left product images invisible on fast loads, a focus trap that never engaged) and 13 should-fix items; all fixed in this phase. The reviewer's notes for phases 3–4 are kept in its report. | RUN.md, Orchestration. | phase 2 |
 | Oct 30 | The phase ends with an independent code review (an agent that did not build it) and a screenshot review; its findings are fixed before the PR. | RUN.md, Orchestration. The phase 1 code review found 5 blocking items (the phone header showing both marks, a `<p>` inside the spec `<dl>`, stories needing a data router, a hung image wait at 390, the missing review set) and 8 should-fix items (hard-coded aria labels, the bag line's price, 44 px targets, the sheet's focus effect, the entry's interval, a fixtures guard, 404 and accessibility stories, axe over every route); all fixed in this phase. The screenshot review found 3 must-fix items (the reading measure, the seal's wire label, the 404 shell), 11 should-fix items (the stretched status block, empty columns on live/sold-out/ended, the detail hold's height, floating drawing captions, the story clock at 390, overlay captures, the Drop nav state, Next look's heading, the cast page's top gap, a frame sold-out story) and 13 notes for phase 4; everything but the phase 4 notes fixed here. | phase 1 |
 
 ## Questions for Antaeus
@@ -98,6 +123,8 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | The drop line says "Open" (`drop.line.live`, from RUN Part 1) while the status word says "Live" (`drop.stateWords`, from `04`). Which word? | Both as drafted: "Open" in the one-line status, "Live" as the state word. | The UI pages review (phase 4) |
 | `accessibility.body[1]` says the opening never plays with reduced motion; `03` and the player show the text cards only. Reword, or make reduced motion skip the opening entirely? | The player shows cards only; the sentence stays as drafted for sign-off. | The UI pages review (phase 4) |
 | Does the header show "Bag (0)" or plain "Bag" when the bag is empty? | Plain "Bag" at zero. | The UI pages review (phase 4) |
+| `05` lists a 40 px button size and asks for 44 px targets. Keep the 40 px size? | Kept, with a 44 px hit area around it. | The UI pages review (phase 4) |
+| Is a drop's per-customer limit per frame or per order? | Per line (frame): the stepper and the bag clamp each line to the limit. | Launch (with the drop plan) |
 
 ## Copy to sign off
 
@@ -128,6 +155,9 @@ Strings added to `content/copy/en.json` during the build, by section.
 | `entry` | `burstLine`, `layouts` | {count} frames at {fps} a second, {layout} · framed, full bleed | The entry's frame list in wire mode. | 1 |
 | `footer` | `navLabel` | Footer links | The footer's link columns, for screen readers. | 1 |
 | `nav` | `primaryLabel` | Primary | The header's navigation, for screen readers (the menu sheet is "Menu"). | 1 |
+| `list` | `countryLabel` | Country | The phone field's country select, for screen readers. | 2 |
+| `product` | `galleryZoomIn`, `galleryZoomOut` | Zoom in · Zoom out | The gallery's zoom control, for screen readers. | 2 |
+| `nav` | `opensInNewTab` | Opens in a new tab | Read after external links (Instagram). | 2 |
 
 ## Before launch
 

@@ -15,10 +15,12 @@ export function formatDropTime(iso: string | null, timeZone: string): DropTime |
   const d = new Date(ms);
   const date = new Intl.DateTimeFormat('en-US', {timeZone, month: 'long', day: 'numeric', year: 'numeric'}).format(d);
   const parts = new Intl.DateTimeFormat('en-US', {timeZone, hour: 'numeric', minute: '2-digit', timeZoneName: 'short'}).formatToParts(d);
+  // Newer ICU puts a narrow no-break space before AM/PM; the site sets a plain space.
   const time = parts
     .filter((p) => ['hour', 'minute', 'literal', 'dayPeriod'].includes(p.type))
     .map((p) => p.value)
     .join('')
+    .replace(/[\u202f\u00a0]/g, ' ')
     .trim()
     .replace(/\s+$/, '');
   const timezone = parts.find((p) => p.type === 'timeZoneName')?.value ?? '';

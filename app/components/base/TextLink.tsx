@@ -1,5 +1,6 @@
 import type {ComponentProps} from 'react';
-import {Link, NavLink, useLocation} from 'react-router';
+import {Link, useLocation} from 'react-router';
+import {copy} from '~/lib/copy';
 import {cx} from '~/lib/cx';
 
 export type TextLinkVariant = 'inline' | 'nav' | 'footer';
@@ -23,23 +24,19 @@ export interface TextLinkProps extends Omit<ComponentProps<typeof Link>, 'classN
 export function TextLink({variant = 'inline', className, external = false, activePrefix, to, children, ...rest}: TextLinkProps) {
   const classes = cx('rounded-none', VARIANT[variant], className);
   const {pathname} = useLocation();
-  const prefixed = activePrefix ? pathname === activePrefix || pathname.startsWith(`${activePrefix}s/`) || pathname.startsWith(`${activePrefix}/`) : false;
+  const target = String(to);
+  const active = activePrefix ? pathname === activePrefix || pathname.startsWith(`${activePrefix}s/`) || pathname.startsWith(`${activePrefix}/`) : pathname === target;
   if (external) {
+    const {reloadDocument: _r, replace: _p, state: _s, preventScrollReset: _ps, relative: _rel, viewTransition: _v, ...anchorRest} = rest;
     return (
-      <a href={String(to)} className={classes} target="_blank" rel="noreferrer">
+      <a href={target} className={classes} target="_blank" rel="noreferrer" {...(anchorRest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
         {children}
+        <span className="sr-only"> ({copy.nav.opensInNewTab})</span>
       </a>
     );
   }
-  if (variant === 'nav') {
-    return (
-      <NavLink to={to} className={classes} aria-current={prefixed ? 'page' : undefined} {...rest}>
-        {children}
-      </NavLink>
-    );
-  }
   return (
-    <Link to={to} className={classes} {...rest}>
+    <Link to={to} className={classes} aria-current={variant === 'nav' && active ? 'page' : undefined} {...rest}>
       {children}
     </Link>
   );

@@ -33,7 +33,8 @@ export default defineConfig({
     },
     {
       name: 'app-1440',
-      testIgnore: /storybook/,
+      // The widths test sets its own viewports; one project runs it.
+      testIgnore: /storybook|widths/,
       use: {baseURL: APP, viewport: {width: 1440, height: 900}},
     },
     {
