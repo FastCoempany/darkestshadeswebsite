@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'build/**']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks, types, lint, unit tests, builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SHOPIFY_CLI_NO_ANALYTICS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: pip install --quiet pillow numpy
+      # Banned strings, hex colors in app/, product schema, the copy gate's report, base never imports house.
+      - run: npm run checks
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      # The flash check proves itself on synthetic strobes; with a sequence file it checks the real entry.
+      - run: python3 tools/flashcheck.py --self-test
+      - run: if [ -f assets/entry/sequence.json ]; then python3 tools/flashcheck.py; fi
+      # The production build must refuse while any copy section is draft or placeholder.
+      - name: Production build refuses draft copy
+        run: |
+          if npm run build > build.log 2>&1; then
+            if node checks/copy-gate.mjs --strict; then echo "copy approved: production build allowed"; else echo "::error::production build passed with draft copy"; exit 1; fi
+          else
+            grep -q "copy-gate" build.log && echo "refused as expected" || { cat build.log; exit 1; }
+          fi
+      - run: npm run build:review
+      - run: npm run storybook:build
+
+  e2e:
+    name: Playwright (fonts, screenshots, axe, Storybook matrix)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SHOPIFY_CLI_NO_ANALYTICS: '1'
+      CI: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run storybook:build
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
