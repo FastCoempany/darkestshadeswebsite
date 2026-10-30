@@ -173,6 +173,11 @@
     "title": "This page doesn't exist.",
     "link": "Back to Darkest Shades"
   },
+  "error": {
+    "status": "draft",
+    "title": "Something went wrong.",
+    "link": "Back to Darkest Shades"
+  },
   "questions": {
     "status": "draft",
     "items": [
@@ -221,6 +226,7 @@
   },
   "alt": {
     "stage": "{subject}, {angle}, on a light grey background.",
+    "seal": "The God Cloud Device: a gold band set with black onyx.",
     "subjects": {
       "$comment": "Each frame as a screen reader hears it, from its product facts (descriptor, front, temples, lens); the first letter is capitalized where the phrase starts the sentence.",
       "F01": "blue tortoise navigator sunglasses with light blue lenses",

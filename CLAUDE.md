@@ -55,7 +55,21 @@ python3 tools/blender/frame3d.py F04 --check --out /tmp/F04.png                 
 python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   # the cast member wearing the 3D frame in the scene's light → work/people/<id>-3d/ (depth model: work/models/, head3d.py)
 python3 tools/photo/cutout.py content/photography/people/M1-S06-F04-A1.json     # that picture cut out: the person wearing the frame on transparency → work/people/<id>-3d/cutout.png
 ```
-App commands (`npm run dev`, `npm run storybook`, `npm run test:visual`) are added in phase 0.
+App (phase 0 on; `npm install` first; Node 22):
+```
+npm run dev                       # Hydrogen dev server (MiniOxygen) on http://localhost:3000; /dev/tokens is the token sheet; ?mode=wire for wireframes
+npm run build                     # production build: refuses while any copy section is draft or placeholder (the draft-copy gate)
+npm run build:review              # production settings, drafts allowed: what Lighthouse and the review screenshots run on
+npm run preview:review -- --port 3000   # build:review, then serve it on :3000
+npm run typecheck && npm run lint # React Router typegen + tsc; ESLint
+npm test                          # Vitest: logic, honesty rules, the mock adapter
+npm run storybook                 # Storybook on :6006 (mode and theme in the toolbar); npm run storybook:build -> storybook-static/
+npm run test:e2e                  # Playwright: fonts, screenshots at 390 and 1440, axe, the Storybook matrix (starts the review build and Storybook itself)
+npm run checks                    # the CI checks: banned strings, hex colors in app/, product schema, the copy gate, base-never-imports-house
+npm run flashcheck -- --self-test # tools/flashcheck.py on the synthetic strobes; without flags it checks assets/entry/sequence.json
+npm run lighthouse                # Lighthouse mobile on the review build (needs preview:review running) -> docs/qa/lighthouse/
+npm run ci                        # everything above in CI order
+```
 
 ## When unsure
 If `00-decisions.md` doesn't answer it and it touches brand, product facts, money or legal copy, ask the founder. Otherwise make the call and note it in the PR.

@@ -1,0 +1,7 @@
+/* Darkest Shades styles: Tailwind v4 with its default palette off, then the generated tokens.
+   Colors reach components only as role tokens (bg-ds-surface-canvas, text-ds-text-primary): CLAUDE.md. */
+@import 'tailwindcss';
+@import '../../design/tokens/build/theme.css';
+@import '../../design/tokens/build/tokens.css';
+@import '../../design/tokens/build/wire.css';
+@import './base.css';
