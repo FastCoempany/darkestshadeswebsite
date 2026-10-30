@@ -56,3 +56,6 @@ Thumbs.db
 # Check output
 /docs/qa/lighthouse/*.html
 /.lighthouseci/
+
+# TypeScript incremental state
+tsconfig.tsbuildinfo

@@ -29,8 +29,16 @@ for (const file of walk(BASE)) {
     }
   });
 }
+// Fixture numbers (states today's data lacks) live in stories and tests only, never in a route or a
+// page component (docs/build/RUN.md, phase 1).
+for (const file of [...walk(join(ROOT, 'app/routes')), ...walk(join(ROOT, 'app/components'))]) {
+  if (file.includes('/stories/') || /\.stories\.tsx?$/.test(file)) continue;
+  readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
+    if (/from\s+['"][^'"]*mock\/fixtures['"]/.test(line)) findings.push(`${relative(ROOT, file)}:${i + 1}: imports mock/fixtures`);
+  });
+}
 if (findings.length) {
-  console.error(`[check:layers] base imports house:\n  ${findings.join('\n  ')}`);
+  console.error(`[check:layers] layer rule broken:\n  ${findings.join('\n  ')}`);
   process.exit(1);
 }
-console.log('[check:layers] ok: app/components/base imports nothing from app/components/house');
+console.log('[check:layers] ok: base imports nothing from house; no route or page component imports mock/fixtures');

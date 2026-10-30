@@ -81,8 +81,12 @@ def main():
     w += [f"  --color-{k}: {v};" for k, v in wire.items()]
     w += ["  --font-family-display: ui-sans-serif, system-ui, sans-serif;", "}",
           '[data-mode="wire"] img, [data-mode="wire"] video, [data-mode="wire"] canvas { visibility: hidden; }',
-          '[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid;',
-          '  place-items: center; font: 500 12px/1.2 ui-monospace, monospace; color: #3D3D3D; background:',
+          '/* Marks are drawings, not photographs: they stay, in greyscale. */',
+          '[data-mode="wire"] .ds-seal img { visibility: visible; filter: grayscale(1); }',
+          '[data-mode="wire"] [data-shot] { container-type: inline-size; }',
+          '[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid; place-items: center;',
+          '  padding: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;',
+          '  font: 500 clamp(7px, 9cqi, 12px)/1.2 ui-monospace, monospace; color: #3D3D3D; background:',
           '  repeating-linear-gradient(135deg, #EEEEEE 0 10px, #E2E2E2 10px 20px); border: 1px dashed #999999; }']
     (OUT / "wire.css").write_text("\n".join(w) + "\n")
 

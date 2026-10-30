@@ -81,9 +81,13 @@ function dsStaticAssets(): Plugin {
 function draftCopyGate(): Plugin {
   return {
     name: 'ds-draft-copy-gate',
-    // Runs before Rollup starts, so the refusal is the only error the build prints.
-    config(_config, {command}) {
-      if (command !== 'build') return;
+    // Rollup's first hook: before any plugin's buildStart, so the refusal is the one error the build
+    // prints (typegen only resolves the config and never gets here).
+    options() {
+      // Only a real build: the dev server, `react-router typegen` and the CLI's own config resolution
+      // also create environments and run this hook, with mode 'dev'.
+      if (this.environment?.mode !== 'build') return;
+      if (process.argv.some((a) => a.includes('typegen'))) return;
       const copy = JSON.parse(fs.readFileSync(path.join(root, 'content/copy/en.json'), 'utf8')) as Record<string, unknown>;
       const blocking = blockingSections(copy);
       if (!blocking.length) return;

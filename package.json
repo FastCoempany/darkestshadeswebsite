@@ -25,7 +25,9 @@
     "check:copy-gate": "node checks/copy-gate.mjs",
     "check:layers": "node checks/layers.mjs",
     "checks": "npm run check:strings && npm run check:hex && npm run check:schema && npm run check:copy-gate && npm run check:layers",
-    "ci": "npm run checks && npm run typecheck && npm run lint && npm run test && npm run build:review && npm run storybook:build && npm run test:e2e"
+    "ci": "npm run checks && npm run typecheck && npm run lint && npm run test && npm run build:review && npm run storybook:build && npm run test:e2e",
+    "capture:wire": "DS_CAPTURE=wire playwright test --project=capture",
+    "capture:ui": "DS_CAPTURE=ui playwright test --project=capture"
   },
   "prettier": "@shopify/prettier-config",
   "dependencies": {

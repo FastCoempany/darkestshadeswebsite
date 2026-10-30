@@ -41,6 +41,16 @@ export default defineConfig({
       testMatch: /storybook/,
       use: {baseURL: STORYBOOK, viewport: {width: 1440, height: 900}},
     },
+    // The review sets: `DS_CAPTURE=wire npx playwright test --project=capture` (docs/wireframes/) or `DS_CAPTURE=ui` (docs/ui/).
+    ...(process.env.DS_CAPTURE
+      ? [
+          {
+            name: 'capture',
+            testDir: 'tests/capture',
+            use: {baseURL: APP},
+          },
+        ]
+      : []),
   ],
   webServer: [
     {

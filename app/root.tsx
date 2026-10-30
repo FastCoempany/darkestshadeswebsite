@@ -19,7 +19,10 @@ import localFonts from '~/styles/fonts.local.css?url';
 import faviconSvg from '../brand/marks/favicon/favicon.svg?url';
 import faviconIco from '../brand/marks/favicon/favicon.ico?url';
 import appleTouch from '../brand/marks/favicon/apple-touch-icon.png?url';
-import {BrandMark} from '~/components/house/BrandMark';
+import {NotFoundPage} from '~/components/pages/NotFoundPage';
+import {PageShell} from '~/components/house/PageShell';
+import {CartProvider} from '~/lib/cart';
+import {currentDropView} from '~/lib/drop-view';
 import {copy, pageTitle} from '~/lib/copy';
 import {MODE_COOKIE, readCookie} from '~/lib/cookies';
 
@@ -54,11 +57,13 @@ export async function loader({request, context}: Route.LoaderArgs) {
     mode: wire ? ('wire' as const) : ('ui' as const),
     adobeFontsKit: context.settings.adobeFontsKit,
     reviewBuild: context.settings.reviewBuild,
+    drop: currentDropView(context),
+    year: context.now.getFullYear(),
   };
 }
 
 /** Routes opt into the paper theme for long reading with `export const handle = {theme: 'paper'}`. */
-export type RouteHandle = {theme?: 'night' | 'paper'};
+export type RouteHandle = {theme?: 'night' | 'paper'; headerSurface?: 'transparent' | 'solid'; footerList?: boolean; dropLine?: boolean};
 
 export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
@@ -94,24 +99,31 @@ export function Layout({children}: {children?: React.ReactNode}) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const data = useRouteLoaderData<RootLoader>('root');
+  const matches = useMatches();
+  const handles = matches.map((m) => m.handle as RouteHandle | undefined);
+  const headerSurface = [...handles].reverse().find((h) => h?.headerSurface)?.headerSurface ?? 'solid';
+  const footerList = [...handles].reverse().find((h) => h?.footerList !== undefined)?.footerList ?? true;
+  const dropLine = [...handles].reverse().find((h) => h?.dropLine !== undefined)?.dropLine ?? true;
+  return (
+    <CartProvider>
+      <PageShell drop={data?.drop ?? null} year={data?.year ?? 2026} headerSurface={headerSurface} showFooterList={footerList} showDropLine={dropLine}>
+        <Outlet />
+      </PageShell>
+    </CartProvider>
+  );
 }
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const data = useRouteLoaderData<RootLoader>('root');
   const status = isRouteErrorResponse(error) ? error.status : 500;
   if (!isRouteErrorResponse(error)) console.error(error);
-  const text = status === 404 ? copy.notFound : copy.error;
-
   return (
-    <main className="grid min-h-dvh place-items-center px-4 py-16 text-center">
-      <div className="grid justify-items-center gap-8">
-        <BrandMark height={40} />
-        <h1 className="ds-display text-h1 leading-heading tracking-heading">{text.title}</h1>
-        <a className="text-ui font-medium underline underline-offset-3" href="/">
-          {text.link}
-        </a>
-      </div>
-    </main>
+    <CartProvider>
+      <PageShell drop={data?.drop ?? null} year={data?.year ?? 2026}>
+        <NotFoundPage status={status} />
+      </PageShell>
+    </CartProvider>
   );
 }

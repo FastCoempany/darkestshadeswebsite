@@ -19,6 +19,7 @@ export function Seal({
   width = 96,
   surface = 'night',
   decorative = false,
+  priority = false,
   className,
 }: {
   /** Rendered width in CSS pixels. */
@@ -26,6 +27,8 @@ export function Seal({
   surface?: 'night' | 'paper';
   /** True when the seal repeats something already said in text next to it. */
   decorative?: boolean;
+  /** Eager for a seal in the first screen (the entry's end card). */
+  priority?: boolean;
   className?: string;
 }) {
   const height = Math.round(width * RATIO);
@@ -40,7 +43,7 @@ export function Seal({
     src = surface === 'paper' ? goldBlack : flatGold;
   }
   return (
-    <span className={cx('ds-seal relative inline-block', className)} data-shot="GCD seal" style={{width, height}}>
+    <span className={cx('ds-seal relative inline-block', className)} style={{width, height}}>
       <img
         className="block"
         src={src}
@@ -51,6 +54,7 @@ export function Seal({
         alt={decorative ? '' : copy.alt.seal}
         aria-hidden={decorative || undefined}
         decoding="async"
+        loading={priority ? 'eager' : 'lazy'}
       />
     </span>
   );
