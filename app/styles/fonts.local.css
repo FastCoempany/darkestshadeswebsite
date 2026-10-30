@@ -1,0 +1,37 @@
+/* Route B (brand/fonts/README.md): licensed or trial files in brand/fonts/private/, served at /fonts/.
+   Linked by app/root.tsx only when the files exist (vite.config.ts sets DS_LOCAL_FONTS). Never committed. */
+@font-face {
+  font-family: 'Owners Wide';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/OwnersWide-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Stolzl';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Stolzl-Light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Stolzl';
+  font-weight: 350;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Stolzl-Book.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Stolzl';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Stolzl-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Stolzl';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Stolzl-Medium.woff2') format('woff2');
+}

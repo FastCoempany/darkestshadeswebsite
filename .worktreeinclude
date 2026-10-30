@@ -1,0 +1,3 @@
+# Files Claude Code copies into each agent worktree even though git ignores them (docs/build/RUN.md).
+.env
+brand/fonts/private/

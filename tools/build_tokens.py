@@ -92,11 +92,25 @@ def main():
     t = [HEAD, "@theme inline {", "  --color-*: initial;"]
     for r in color["roles"]["night"]:
         t.append(f"  --color-ds-{r}: var(--color-{r});")
-    t += ["  --font-display: var(--font-family-display);", "  --font-text: var(--font-family-text);"]
+    # Families. `font-display` also sets the stand-in's variation axes (brand/fonts/README.md); a static
+    # Owners Wide ignores them. Tailwind's preflight reads --default-font-family for the page.
+    t += ["  --default-font-family: var(--font-family-text);",
+          "  --font-display: var(--font-family-display);",
+          "  --font-display--font-variation-settings: var(--font-variation-display);",
+          "  --font-text: var(--font-family-text);"]
+    for name, _ in leaves(base["font"]["weight"], "font-weight"):
+        t.append(f"  --font-weight-{name.replace('font-weight-', '')}: var(--{name});")
     for name, _ in leaves(base["font"]["size"], "font-size"):
         t.append(f"  --text-{name.replace('font-size-', '')}: var(--{name});")
+    for name, _ in leaves(base["font"]["leading"], "font-leading"):
+        t.append(f"  --leading-{name.replace('font-leading-', '')}: var(--{name});")
+    for name, _ in leaves(base["font"]["tracking"], "font-tracking"):
+        t.append(f"  --tracking-{name.replace('font-tracking-', '')}: var(--{name});")
     for name, _ in leaves(base["space"], "space"):
         t.append(f"  --spacing-{name.replace('space-', '')}: var(--{name});")
+    for name, _ in leaves(base["aspect"], "aspect"):
+        t.append(f"  --aspect-{name.replace('aspect-', '')}: var(--{name});")
+    t.append("  --ease-ds: var(--motion-ease);")
     # Media queries can't read CSS variables, so the breakpoints go in as literal values.
     for name, v in leaves(base["breakpoint"], "breakpoint"):
         t.append(f"  --breakpoint-{name.replace('breakpoint-', '')}: {css(v)};")

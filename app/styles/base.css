@@ -1,0 +1,64 @@
+/* Base rules on top of Tailwind's preflight. Role tokens only. */
+html {
+  background: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-book);
+  font-size: var(--font-size-body);
+  line-height: var(--font-leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+/* Display type: Owners Wide Medium, uppercase by style, never typed in caps (08-copy.md). */
+.ds-display {
+  font-family: var(--font-family-display);
+  font-variation-settings: var(--font-variation-display);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+}
+
+/* Visible focus everywhere: a 2 px ring, 2 px off, gold on night and gold ink on paper (05-components.md). */
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus-ring);
+  outline-offset: var(--border-focus-offset);
+}
+
+/* Figures line up in prices and specs. */
+.ds-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Long reading never runs past 68 characters (04-ia-and-pages.md). */
+.ds-measure {
+  max-width: var(--layout-measure);
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* The marks render inline SVG in the current text color. */
+.ds-mark > svg {
+  display: block;
+  height: 100%;
+  width: auto;
+  fill: currentColor;
+}
