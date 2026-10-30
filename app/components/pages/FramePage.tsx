@@ -39,7 +39,7 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
   return (
     <main id="main" data-page="frame" data-frame={product.ds.id}>
       <div className="grid gap-8 lg:grid-cols-[3fr_2fr] lg:gap-12 lg:px-10 xl:px-14">
-        <Gallery items={gallery} label={fill(copy.product.galleryLabel, {name: product.title}) ?? product.title} counter={(i, t) => fill(copy.product.galleryCounter, {index: i, total: t}) ?? `${i} / ${t}`} labels={{previous: copy.product.galleryPrevious, next: copy.product.galleryNext}} />
+        <Gallery items={gallery} label={fill(copy.product.galleryLabel, {name: product.title}) ?? product.title} counter={(i, t) => fill(copy.product.galleryCounter, {index: i, total: t}) ?? `${i} / ${t}`} labels={{previous: copy.product.galleryPrevious, next: copy.product.galleryNext, zoomIn: copy.product.galleryZoomIn, zoomOut: copy.product.galleryZoomOut}} />
         <aside className="grid content-start gap-6 px-4 md:px-6 lg:sticky lg:top-(--layout-header-lg) lg:self-start lg:px-0 lg:py-8" aria-label={product.title} data-buy-panel>
           <LookNumber number={product.ds.lookNumber} />
           <h1 className="ds-display text-h1 leading-heading tracking-heading">{product.title}</h1>

@@ -33,3 +33,17 @@ export async function settle(page: Page): Promise<void> {
     seen = count;
   }
 }
+
+/**
+ * Pixel comparisons run on this VM (docs/build/RUN.md, Verification: visual tests run here). GitHub's
+ * runner renders type differently, so in CI the same test records the screenshot (uploaded as an
+ * artifact on failure) and asserts everything else; it never compares pixels it cannot match.
+ */
+export async function expectScreenshot(page: Page, name: string, options: {fullPage?: boolean} = {}): Promise<void> {
+  if (process.env.CI) {
+    await page.screenshot({path: `test-results/ci-screenshots/${name}`, fullPage: options.fullPage ?? true});
+    return;
+  }
+  const {expect} = await import('@playwright/test');
+  await expect(page).toHaveScreenshot(name, {fullPage: options.fullPage ?? true});
+}

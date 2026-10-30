@@ -13,7 +13,7 @@ const TONE: Record<NoticeTone, string> = {
 export function Notice({tone = 'info', variant = 'inline', children, className}: {tone?: NoticeTone; variant?: 'inline' | 'toast'; children: ReactNode; className?: string}) {
   return (
     <p
-      role={tone === 'error' ? 'alert' : 'status'}
+      role="status"
       aria-live="polite"
       className={cx(
         'border-l-2 px-4 py-3 font-text text-small',

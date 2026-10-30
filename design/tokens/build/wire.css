@@ -13,6 +13,7 @@
   --color-text-inverse: #FFFFFF;
   --color-text-accent: #000000;
   --color-text-editorial: #000000;
+  --color-text-on-stage: #000000;
   --color-border-hairline: #CCCCCC;
   --color-border-rule: #999999;
   --color-border-control: #6B6B6B;
@@ -28,6 +29,7 @@
   --color-status-error: #000000;
   --color-status-info: #000000;
   --color-status-live: #000000;
+  --color-status-error-stage: #000000;
   --font-family-display: ui-sans-serif, system-ui, sans-serif;
 }
 [data-mode="wire"] img, [data-mode="wire"] video, [data-mode="wire"] canvas { visibility: hidden; }

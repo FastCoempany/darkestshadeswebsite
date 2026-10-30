@@ -17,7 +17,7 @@ export function Manifesto({lines, paragraphs = [], variant = 'home', className}:
         <p
           key={line}
           className={cx(
-            'ds-display text-manifesto leading-manifesto tracking-display text-ds-text-primary',
+            'ds-display text-manifesto leading-manifesto tracking-display text-ds-text-primary [overflow-wrap:anywhere]',
             variant === 'home' ? 'grid min-h-dvh place-items-center px-4 py-16 text-center md:px-6 lg:px-10 xl:px-14' : 'py-6',
           )}
         >

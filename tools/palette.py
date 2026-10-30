@@ -59,7 +59,7 @@ ROLES = {
         "surface-overlay": "onyx-800", "surface-inverse": "bone-100", "surface-stage": "stage",
         "text-primary": "bone-100", "text-secondary": "ash-300", "text-tertiary": "ash-400",
         "text-disabled": "graphite-400", "text-inverse": "onyx-950", "text-accent": "gold-500",
-        "text-editorial": "camel-500",
+        "text-editorial": "camel-500", "text-on-stage": "onyx-950",
         "border-hairline": "onyx-700", "border-rule": "graphite-500", "border-control": "graphite-400",
         "focus-ring": "gold-500",
         "action-primary-bg": "bone-100", "action-primary-text": "onyx-950",
@@ -67,14 +67,14 @@ ROLES = {
         "action-secondary-border": "bone-100", "action-secondary-text": "bone-100",
         "action-quiet-text": "ash-300", "action-quiet-text-hover": "bone-100",
         "status-success": "success-300", "status-error": "error-300", "status-info": "info-300",
-        "status-live": "gold-500",
+        "status-live": "gold-500", "status-error-stage": "error-700",
     },
     "paper": {
         "surface-canvas": "bone-50", "surface-base": "bone-50", "surface-raised": "white",
         "surface-overlay": "stage", "surface-inverse": "onyx-950", "surface-stage": "stage",
         "text-primary": "onyx-950", "text-secondary": "onyx-700", "text-tertiary": "graphite-500",
         "text-disabled": "ash-400", "text-inverse": "bone-100", "text-accent": "gold-700",
-        "text-editorial": "camel-700",
+        "text-editorial": "camel-700", "text-on-stage": "onyx-950",
         "border-hairline": "ash-200", "border-rule": "ash-400", "border-control": "graphite-500",
         "focus-ring": "gold-700",
         "action-primary-bg": "onyx-950", "action-primary-text": "bone-100",
@@ -82,7 +82,7 @@ ROLES = {
         "action-secondary-border": "onyx-950", "action-secondary-text": "onyx-950",
         "action-quiet-text": "onyx-700", "action-quiet-text-hover": "onyx-950",
         "status-success": "success-700", "status-error": "error-700", "status-info": "info-700",
-        "status-live": "gold-700",
+        "status-live": "gold-700", "status-error-stage": "error-700",
     },
 }
 
@@ -96,6 +96,8 @@ CHECKS = [
     ("status-info", "surface-canvas", 4.5), ("status-live", "surface-canvas", 4.5),
     ("border-control", "surface-canvas", 3.0), ("focus-ring", "surface-canvas", 3.0),
     ("action-primary-text", "action-primary-bg", 4.5),
+    ("text-on-stage", "surface-stage", 4.5),  # slot labels on the stage, in both themes
+    ("status-error-stage", "surface-stage", 4.5),  # a failed picture's label on the stage
     ("text-primary", "surface-stage", 0.0),  # informational: stage is light, text on it uses paper roles
 ]
 

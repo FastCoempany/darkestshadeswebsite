@@ -1,7 +1,7 @@
 import {useState, type FormEvent} from 'react';
 import {Button} from '~/components/base/Button';
 import {Check} from '~/components/base/Check';
-import {Field} from '~/components/base/Field';
+import {Field, toE164, type DialCode} from '~/components/base/Field';
 import {Notice} from '~/components/base/Notice';
 import {copy} from '~/lib/copy';
 import {cx} from '~/lib/cx';
@@ -35,7 +35,7 @@ export async function mockSubmit(s: ListSubmission): Promise<'success' | 'alread
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE = /^\+[1-9]\d{6,14}$/;
+const E164 = /^\+[1-9]\d{6,14}$/;
 
 export interface ListFormProps {
   scope?: 'footer' | 'offer' | 'drop';
@@ -54,6 +54,7 @@ export function ListForm({scope = 'footer', initialState = 'idle', submit = mock
   const [state, setState] = useState<ListState>(initialState);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState<DialCode>('US');
   const [consent, setConsent] = useState(false);
   const [errors, setErrors] = useState<{email?: string; phone?: string; consent?: string}>({});
 
@@ -61,8 +62,8 @@ export function ListForm({scope = 'footer', initialState = 'idle', submit = mock
     e.preventDefault();
     const next: typeof errors = {};
     if (!EMAIL.test(email.trim())) next.email = copy.list.invalidEmail;
-    const digits = phone.replace(/[\s().-]/g, '');
-    if (digits && !PHONE.test(digits)) next.phone = copy.list.invalidPhone;
+    const digits = toE164(phone, country);
+    if (digits && !E164.test(digits)) next.phone = copy.list.invalidPhone;
     if (digits && !consent) next.consent = copy.list.consentRequired;
     setErrors(next);
     if (Object.keys(next).length) return;
@@ -88,7 +89,7 @@ export function ListForm({scope = 'footer', initialState = 'idle', submit = mock
     <form onSubmit={(e) => void onSubmit(e)} noValidate className={cx('grid gap-5', className)} data-list-form={scope} data-state={state}>
       <Field label={copy.list.emailLabel} kind="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} hint={errors.email} invalid={Boolean(errors.email)} required />
       <p className="font-text text-small text-ds-text-tertiary">{copy.list.emailConsent}</p>
-      <Field label={copy.list.phoneLabel} kind="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} hint={errors.phone} invalid={Boolean(errors.phone)} />
+      <Field label={copy.list.phoneLabel} kind="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} hint={errors.phone} invalid={Boolean(errors.phone)} country={country} onCountryChange={setCountry} countryLabel={copy.list.countryLabel} />
       <Check variant="consent" name="sms" checked={consent} onChange={(e) => setConsent(e.target.checked)} label={copy.list.smsConsent} invalid={Boolean(errors.consent)} error={errors.consent} />
       {state === 'error' ? <Notice tone="error">{copy.list.error}</Notice> : null}
       <Button type="submit" variant="solid" size={48} busy={state === 'submitting'}>

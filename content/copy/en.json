@@ -109,6 +109,8 @@
     "galleryCounter": "{index} / {total}",
     "galleryPrevious": "Previous picture",
     "galleryNext": "Next picture",
+    "galleryZoomIn": "Zoom in",
+    "galleryZoomOut": "Zoom out",
     "specLabels": {
       "size": "Size",
       "lensWidth": "Lens width",
@@ -146,6 +148,7 @@
     "bodyNoEarlyAccess": "Drop dates and pair counts, before anyone else.",
     "emailLabel": "Email",
     "phoneLabel": "Mobile number (optional)",
+    "countryLabel": "Country",
     "submit": "Join the list",
     "dismiss": "Not now",
     "emailConsent": "Emails from Darkest Shades about drops. Unsubscribe any time. See our Privacy Policy.",
@@ -175,6 +178,7 @@
     "menu": "Menu",
     "primaryLabel": "Primary",
     "close": "Close",
+    "opensInNewTab": "Opens in a new tab",
     "skipToContent": "Skip to content"
   },
   "bag": {

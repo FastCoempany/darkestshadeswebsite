@@ -5,3 +5,17 @@
 @import '../../design/tokens/build/tokens.css';
 @import '../../design/tokens/build/wire.css';
 @import './base.css';
+
+/* Stories show hover, active and focus-visible as states: `data-force` stands in for the pseudo-class. */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+  &[data-force='hover'] {
+    @slot;
+  }
+}
+@custom-variant active (&:active, &[data-force='active']);
+@custom-variant focus-visible (&:focus-visible, &[data-force='focus-visible']);

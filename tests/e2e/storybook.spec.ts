@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 import {AxeBuilder} from '@axe-core/playwright';
 import {expect, test} from '@playwright/test';
-import {settle} from './helpers';
+import {expectScreenshot, settle} from './helpers';
 
 /**
  * The component matrix (05-components.md): every story at 390 and 1440, in UI and wire mode, with a
@@ -27,7 +27,7 @@ for (const story of stories) {
         await settle(page);
         await page.waitForTimeout(150);
         if (mode === 'wire') await expect(page.locator('html')).toHaveAttribute('data-mode', 'wire');
-        await expect(page).toHaveScreenshot(`${story.id}--${size.name}-${mode}.png`, {fullPage: true});
+        await expectScreenshot(page, `${story.id}--${size.name}-${mode}.png`);
         if (mode === 'ui') {
           const results = await new AxeBuilder({page}).include('#storybook-root').withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
           const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');

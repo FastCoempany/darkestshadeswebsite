@@ -210,6 +210,10 @@
         "ref": "camel-500",
         "value": "#BF835F"
       },
+      "text-on-stage": {
+        "ref": "onyx-950",
+        "value": "#050607"
+      },
       "border-hairline": {
         "ref": "onyx-700",
         "value": "#2C2C2D"
@@ -269,6 +273,10 @@
       "status-live": {
         "ref": "gold-500",
         "value": "#C6A36A"
+      },
+      "status-error-stage": {
+        "ref": "error-700",
+        "value": "#A3392C"
       }
     },
     "paper": {
@@ -323,6 +331,10 @@
       "text-editorial": {
         "ref": "camel-700",
         "value": "#7F5137"
+      },
+      "text-on-stage": {
+        "ref": "onyx-950",
+        "value": "#050607"
       },
       "border-hairline": {
         "ref": "ash-200",
@@ -383,6 +395,10 @@
       "status-live": {
         "ref": "gold-700",
         "value": "#7A5C2E"
+      },
+      "status-error-stage": {
+        "ref": "error-700",
+        "value": "#A3392C"
       }
     }
   }
