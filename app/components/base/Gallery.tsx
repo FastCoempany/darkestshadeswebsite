@@ -77,7 +77,8 @@ export function Gallery({items, label, counter, labels, slotState, initialZoom =
           return (
             <li key={item.shot} className="relative w-full shrink-0 snap-start">
               <ShotSlot shot={item.shot} ratio={item.ratio} image={item.image} state={slotState} priority={i === 0} sizes="(min-width: 1024px) 50vw, 100vw" zoom={isZoomed ? 2 : 1} zoomLabel={name} />
-              <button
+              {/* A labelled slot has nothing to zoom. */}
+              {item.image ? <button
                 type="button"
                 className="absolute right-2 bottom-2 grid size-11 place-items-center rounded-none bg-ds-surface-canvas/80 font-text text-ui text-ds-text-primary hover:bg-ds-surface-canvas"
                 data-zoomed={isZoomed}
@@ -86,7 +87,7 @@ export function Gallery({items, label, counter, labels, slotState, initialZoom =
                 onClick={() => setZoomed(isZoomed ? null : i)}
               >
                 {isZoomed ? '−' : '+'}
-              </button>
+              </button> : null}
             </li>
           );
         })}

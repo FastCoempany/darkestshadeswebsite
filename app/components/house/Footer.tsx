@@ -2,7 +2,7 @@ import {TextLink} from '~/components/base/TextLink';
 import {ListForm} from '~/components/house/ListForm';
 import {Logo} from '~/components/house/Logo';
 import {Seal} from '~/components/house/Seal';
-import {copy, fill} from '~/lib/copy';
+import {copy, fill, instagramUrl} from '~/lib/copy';
 
 const COLUMNS = [
   {title: copy.footer.columns.shop, links: [{to: '/drop', label: copy.nav.drop}, {to: '/frames', label: copy.nav.frames}]},
@@ -58,7 +58,7 @@ export function Footer({year, showList = true}: {year: number; showList?: boolea
       </nav>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="grid gap-2">
-          <TextLink to="https://instagram.com/darkestshades" variant="footer" external>
+          <TextLink to={instagramUrl()} variant="footer" external>
             {copy.meta.instagram}
           </TextLink>
           <p className="font-text text-micro text-ds-text-tertiary">{fill(copy.footer.copyright, {year})}</p>

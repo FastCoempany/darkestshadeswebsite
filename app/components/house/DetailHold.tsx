@@ -52,8 +52,8 @@ export function DetailHold({shot, image, ratio = 'stage', line, renderSrc, class
     <section ref={ref} className={cx('grid gap-6 py-16 md:py-24', className)} data-detail-hold={state}>
       <div className={cx('mx-auto w-full overflow-hidden', renderSrc || ratio === 'hero-landscape' ? 'max-w-[min(48rem,105dvh)]' : 'max-w-[min(48rem,56dvh)]')}>
         {renderSrc ? (
-          <ShotSlot shot="GCD-3D-YAW35" ratio="hero-landscape" surface="canvas" image={null}>
-            <img src={renderSrc} alt="" className="absolute inset-0 m-auto w-1/2 origin-center [transform:scale(calc(1+(var(--motion-push)-1)*var(--detail-progress,0)))]" loading="lazy" decoding="async" data-detail-image />
+          <ShotSlot shot="GCD-3D-YAW35" ratio="hero-landscape" surface="bare" image={null} state="loaded">
+            <img src={renderSrc} alt="" className="absolute inset-0 m-auto w-[70%] origin-center [transform:scale(calc(1+(var(--motion-push)-1)*var(--detail-progress,0)))]" loading="lazy" decoding="async" data-detail-image />
           </ShotSlot>
         ) : (
           <ShotSlot shot={shot} ratio={ratio} image={image} sizes="(min-width: 768px) 768px, 100vw" imgClassName="origin-center [transform:scale(calc(1+(var(--motion-push)-1)*var(--detail-progress,0)))] will-change-transform" />

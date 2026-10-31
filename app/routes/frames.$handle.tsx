@@ -1,13 +1,13 @@
 import type {Route} from './+types/frames.$handle';
 import gcdRender from '../../brand/emblems/gcd/render/gcd-3d-yaw35-1024.png?url';
 import {FramePage} from '~/components/pages/FramePage';
-import {copy, fill, pageTitle} from '~/lib/copy';
+import {copy, fill, pageMeta} from '~/lib/copy';
+import {formatMoney} from '~/lib/money';
 import {currentDropView} from '~/lib/drop-view';
 
-export const meta: Route.MetaFunction = ({data}) => [
-  {title: pageTitle(data?.product.title)},
-  {name: 'description', content: data ? fill(copy.alt.stage, {subject: copy.alt.subjects[data.product.ds.id], angle: copy.alt.angles.A1}) : copy.meta.defaultDescription},
-];
+/** Name, descriptor and price from the data. A missing frame is titled by the root's meta. */
+export const meta: Route.MetaFunction = ({data}) =>
+  pageMeta(data?.product.title, data ? fill(copy.meta.frameDescription, {name: data.product.title, descriptor: data.product.ds.descriptor, price: formatMoney(data.product.priceRange.minVariantPrice)}) : null);
 
 export const handle = {listOffer: true};
 

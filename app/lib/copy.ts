@@ -29,6 +29,19 @@ export function pageTitle(page?: string | null): string {
   return page ? (fill(en.meta.titleTemplate, {page}) ?? en.meta.brand) : en.meta.brand;
 }
 
+/**
+ * A route's `meta`: the title from the template and a description, the site's own when the page has none.
+ * React Router keeps only the leaf's descriptors, so every route sets both.
+ */
+export function pageMeta(page?: string | null, description?: string | null): {title?: string; name?: string; content?: string}[] {
+  return [{title: pageTitle(page)}, {name: 'description', content: description ?? en.meta.defaultDescription}];
+}
+
+/** The Instagram profile, from the handle in the copy. */
+export function instagramUrl(): string {
+  return `https://instagram.com/${en.meta.instagram.replace(/^@/, '')}`;
+}
+
 export type CopyStatus = 'draft' | 'placeholder' | 'approved' | 'unknown';
 
 /** A section's sign-off status. Sections without one count as draft (RUN.md). */

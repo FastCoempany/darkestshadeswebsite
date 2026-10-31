@@ -2,6 +2,7 @@ import {Button} from '~/components/base/Button';
 import {Sheet} from '~/components/base/Sheet';
 import {ListForm, type ListState} from '~/components/house/ListForm';
 import {copy} from '~/lib/copy';
+import {listBody} from '~/lib/list-offer';
 
 export interface ListOfferProps {
   open: boolean;
@@ -15,7 +16,7 @@ export interface ListOfferProps {
 
 /** The 60% scroll pop-up: information and access, never money. Closes with Esc, the button, or a click outside. */
 export function ListOffer({open, onClose, onSignedUp, earlyAccess, formState}: ListOfferProps) {
-  const body = earlyAccess?.enabled && earlyAccess.hours ? copy.list.body.replace('{hours}', String(earlyAccess.hours)) : copy.list.bodyNoEarlyAccess;
+  const body = listBody(earlyAccess);
   return (
     <Sheet open={open} onClose={onClose} variant="center" title={copy.list.title} closeLabel={copy.nav.close} className="z-(--z-offer)">
       <div className="grid gap-6 py-2">

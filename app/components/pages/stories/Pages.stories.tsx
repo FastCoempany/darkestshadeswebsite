@@ -47,6 +47,31 @@ export const HomeAfterTheCut: Story = {
   ),
 };
 
+export const HomeLive: Story = {
+  name: 'Home · the drop live, after its cut',
+  render: () => (
+    <Page headerSurface="transparent" footerList={false} drop={drops.live}>
+      <HomePage products={products} drop={drops.live} cast={cast} detail={store.images.forShot('F09', 'A6')} dropHero={store.images.forShot('F09', 'H')} cut />
+    </Page>
+  ),
+};
+export const HomeSoldOut: Story = {
+  name: 'Home · the drop sold out, after its cut',
+  render: () => (
+    <Page headerSurface="transparent" footerList={false} drop={drops.soldOut}>
+      <HomePage products={products} drop={drops.soldOut} cast={cast} detail={store.images.forShot('F09', 'A6')} dropHero={store.images.forShot('F09', 'H')} cut />
+    </Page>
+  ),
+};
+export const HomeEnded: Story = {
+  name: 'Home · the drop ended, after its cut',
+  render: () => (
+    <Page headerSurface="transparent" footerList={false} drop={drops.ended}>
+      <HomePage products={products} drop={drops.ended} cast={cast} detail={store.images.forShot('F09', 'A6')} dropHero={store.images.forShot('F09', 'H')} cut />
+    </Page>
+  ),
+};
+
 export const DropAnnouncedNoDate: Story = {
   name: 'Drop · announced, no date (today)',
   render: () => (
@@ -84,6 +109,14 @@ export const DropEnded: Story = {
   render: () => (
     <Page drop={drops.ended} footerList={false} dropLine={false}>
       <DropPage drop={drops.ended} products={products} />
+    </Page>
+  ),
+};
+export const DropWithArchive: Story = {
+  name: 'Drop · announced, with a past drop in the archive',
+  render: () => (
+    <Page drop={drops.announcedWithDate} footerList={false} dropLine={false}>
+      <DropPage drop={{...drops.announcedWithDate, number: '002'}} products={products} others={[{number: '001', state: 'ended'}]} />
     </Page>
   ),
 };
@@ -128,11 +161,43 @@ export const FrameSoldOut: Story = {
     </Page>
   ),
 };
+export const FrameEnded: Story = {
+  name: 'Frame · F01, drop ended (the next drop line)',
+  render: () => (
+    <Page drop={drops.ended}>
+      <FramePage product={f01} drop={drops.ended} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+    </Page>
+  ),
+};
+export const FrameNoDrop: Story = {
+  name: 'Frame · F01, no drop',
+  render: () => (
+    <Page drop={null}>
+      <FramePage product={f01} drop={null} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+    </Page>
+  ),
+};
 export const FramesSoldOut: Story = {
   name: 'Frames · drop sold out',
   render: () => (
     <Page drop={drops.soldOut}>
       <FramesPage products={products} drop={drops.soldOut} />
+    </Page>
+  ),
+};
+export const FramesEnded: Story = {
+  name: 'Frames · drop ended (the next drop word)',
+  render: () => (
+    <Page drop={drops.ended}>
+      <FramesPage products={products} drop={drops.ended} />
+    </Page>
+  ),
+};
+export const FramesNoDrop: Story = {
+  name: 'Frames · no drop',
+  render: () => (
+    <Page drop={null}>
+      <FramesPage products={products} drop={null} />
     </Page>
   ),
 };
@@ -193,6 +258,24 @@ export const PolicyExchange: Story = {
     </Page>
   ),
 };
+export const PolicyWarranty: Story = {
+  name: 'Policy · warranty',
+  globals: {theme: 'paper'},
+  render: () => (
+    <Page>
+      <PolicyPage handle="warranty" />
+    </Page>
+  ),
+};
+export const PolicyPrivacy: Story = {
+  name: 'Policy · privacy (no settled promise: the title and the pending line)',
+  globals: {theme: 'paper'},
+  render: () => (
+    <Page>
+      <PolicyPage handle="privacy" />
+    </Page>
+  ),
+};
 export const Accessibility: Story = {
   globals: {theme: 'paper'},
   render: () => (
@@ -215,6 +298,14 @@ export const NotFound: Story = {
   render: () => (
     <Page>
       <NotFoundPage />
+    </Page>
+  ),
+};
+export const ServerError: Story = {
+  name: '500 (any failure)',
+  render: () => (
+    <Page>
+      <NotFoundPage status={500} />
     </Page>
   ),
 };

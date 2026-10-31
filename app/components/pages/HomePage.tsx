@@ -10,6 +10,8 @@ import {SensoryNotice} from '~/components/house/SensoryNotice';
 import {ShotSlot} from '~/components/base/ShotSlot';
 import {StageCard} from '~/components/house/StageCard';
 import {copy} from '~/lib/copy';
+import {cx} from '~/lib/cx';
+import {listBody} from '~/lib/list-offer';
 import {entryCookie} from '~/lib/entry';
 import type {CastMember, StorefrontImage, StorefrontProduct} from '~/lib/mock/types';
 
@@ -55,7 +57,7 @@ export function HomePage({products, drop, cast, detail, dropHero, showEntry = fa
       {entry === 'playing' ? <Entry reducedMotion={reducedMotion} onDone={finish} /> : null}
       {wire && showEntry ? <Entry wire onDone={() => undefined} /> : null}
 
-      <Manifesto lines={copy.home.manifesto} variant="home" />
+      <Manifesto lines={copy.home.manifesto} variant="home" heading />
 
       <DetailHold shot="F09-A6" image={detail} line={copy.home.detail} />
 
@@ -85,15 +87,17 @@ export function HomePage({products, drop, cast, detail, dropHero, showEntry = fa
         <h2 id="home-cast" className="ds-display px-4 text-h2 leading-heading tracking-heading md:px-0">
           {copy.home.castTitle}
         </h2>
-        <ul className="grid gap-12 md:grid-cols-2 md:gap-6 lg:grid-cols-4">
-          {cast.map((m) =>
+        {/* Seven portraits: two across with the seventh centred, four across with the last three centred (no empty cell). */}
+        <ul className="grid gap-12 md:grid-cols-4 md:gap-6 lg:grid-cols-8">
+          {cast.map((m, i) =>
             m.portrait ? (
-              <li key={m.id}>
+              <li key={m.id} className={cx('md:col-span-2', i === 4 && 'lg:col-start-2', i === 6 && 'md:col-start-2 lg:col-start-auto')}>
                 <CastFrame shot={m.portrait} product={byId.get(m.portrait.frame) ?? null} variant="card" />
               </li>
             ) : null,
           )}
         </ul>
+        <p className="px-4 font-text text-small text-ds-text-tertiary md:px-0">{copy.product.imageDisclosure}</p>
       </section>
 
       <section aria-labelledby="home-promises" className="grid gap-8 px-4 py-16 md:px-6 lg:grid-cols-2 lg:px-10 xl:px-14">
@@ -114,7 +118,7 @@ export function HomePage({products, drop, cast, detail, dropHero, showEntry = fa
           {copy.list.title}
         </h2>
         <div className="grid gap-4">
-          <p className="font-text text-body text-ds-text-secondary">{copy.list.bodyNoEarlyAccess}</p>
+          <p className="font-text text-body text-ds-text-secondary">{listBody(drop ? {enabled: drop.earlyAccess.enabled, hours: drop.earlyAccess.hoursBeforePublic} : undefined)}</p>
           <ListForm scope="footer" />
         </div>
       </section>

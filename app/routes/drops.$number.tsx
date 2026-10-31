@@ -1,9 +1,11 @@
 import type {Route} from './+types/drops.$number';
 import {DropPage} from '~/components/pages/DropPage';
-import {copy, fill, pageTitle} from '~/lib/copy';
+import {dropSentence} from '~/components/house/DropStatus';
+import {copy, fill, pageMeta} from '~/lib/copy';
 import {dropView} from '~/lib/drop-view';
 
-export const meta: Route.MetaFunction = ({data}) => [{title: pageTitle(data ? fill(copy.drop.heading, {number: data.drop.number}) : copy.nav.drop)}];
+/** The drop's own sentence (state, date, numbers) is its description. A missing drop is titled by the root's meta. */
+export const meta: Route.MetaFunction = ({data}) => pageMeta(data ? fill(copy.drop.heading, {number: data.drop.number}) : copy.nav.drop, data ? dropSentence(data.drop) : null);
 
 /** The drop page carries its own status block and, while announced, its own sign-up: no drop line, no footer list. */
 export const handle = {footerList: false, dropLine: false, listOffer: true};

@@ -60,6 +60,14 @@
     max-width: var(--layout-measure);
   }
 
+  /* A manifesto line: the token's size, capped at 10cqi of its container so the widest word fits at 320 px
+     ("PERFORMANCE." is 8.9 em in the stand-in display face). The second declaration is dropped by browsers
+     without container units, which then keep the token's size. */
+  .ds-manifesto-line {
+    font-size: var(--font-size-manifesto);
+    font-size: min(var(--font-size-manifesto), 10cqi);
+  }
+
   /* The marks render inline SVG in the current text color. */
   .ds-mark > svg {
     display: block;

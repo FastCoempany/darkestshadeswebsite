@@ -1,15 +1,12 @@
 import {isbot} from 'isbot';
 import type {Route} from './+types/_index';
 import {HomePage} from '~/components/pages/HomePage';
-import {copy, pageTitle} from '~/lib/copy';
+import {pageMeta} from '~/lib/copy';
 import {currentDropView} from '~/lib/drop-view';
 import {shouldShowEntry} from '~/lib/entry';
 import {MODE_COOKIE, readCookie} from '~/lib/cookies';
 
-export const meta: Route.MetaFunction = () => [
-  {title: pageTitle()},
-  {name: 'description', content: copy.meta.defaultDescription},
-];
+export const meta: Route.MetaFunction = () => pageMeta();
 
 /** The home page has its own list section, so the footer's is left out. */
 export const handle = {headerSurface: 'transparent', footerList: false, listOffer: true};

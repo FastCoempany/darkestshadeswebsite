@@ -1,7 +1,13 @@
 import {useEffect, useState} from 'react';
 import {readCookie} from '~/lib/cookies';
+import {copy, fill} from '~/lib/copy';
 
 export const OFFER_COOKIE = 'ds_offer';
+
+/** The list's one sentence: early access only when the store really gates the drop (08-copy.md, 00-decisions.md O6). */
+export function listBody(earlyAccess?: {enabled: boolean; hours: number | null}): string {
+  return (earlyAccess?.enabled && earlyAccess.hours ? fill(copy.list.body, {hours: earlyAccess.hours}) : null) ?? copy.list.bodyNoEarlyAccess;
+}
 
 /** `closed`: 30 days. `joined`: a year (04, Overlays). */
 export function offerCookie(value: 'closed' | 'joined'): string {
@@ -20,6 +26,8 @@ export function useListOffer(enabled: boolean): {open: boolean; close: () => voi
 
   useEffect(() => {
     if (!enabled || spent) return;
+    // Screenshot runs and stories are still: no pop-up on a scripted scroll.
+    if ((window as Window & {__dsStatic?: boolean}).__dsStatic) return;
     if (readCookie(document.cookie, OFFER_COOKIE)) {
       setSpent(true);
       return;

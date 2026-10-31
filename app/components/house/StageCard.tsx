@@ -53,7 +53,8 @@ export function StageCard({product, drop, priority = false, sizes = '(min-width:
       <div className="grid gap-1">
         <LookNumber number={product.ds.lookNumber} />
         <Heading className="font-text text-body text-ds-text-primary">
-          <Link to={`/frames/${product.handle}`} className="hover:underline underline-offset-3">
+          {/* A 44 px hit area (05 Accessibility) that costs the card no height: the padding is given back by the margins. */}
+          <Link to={`/frames/${product.handle}`} className="inline-block py-2.5 -my-2.5 hover:underline underline-offset-3">
             {product.title}
           </Link>
         </Heading>

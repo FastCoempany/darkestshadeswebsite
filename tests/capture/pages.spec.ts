@@ -47,6 +47,7 @@ test.describe(`capture ${MODE}`, () => {
         const context = await browser.newContext({viewport: {width: size.width, height: size.height}, deviceScaleFactor: 1, colorScheme: 'dark'});
         await context.addCookies([
           {name: 'ds_entry', value: 'seen', url: APP},
+          {name: 'ds_offer', value: 'closed', url: APP},
           ...(MODE === 'wire' ? [{name: 'ds_mode', value: 'wire', url: APP}] : []),
         ]);
         const page = await context.newPage();

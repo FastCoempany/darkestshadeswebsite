@@ -1,4 +1,3 @@
-import {Link} from 'react-router';
 import {Button} from '~/components/base/Button';
 import {Gallery} from '~/components/base/Gallery';
 import {Price} from '~/components/base/Price';
@@ -9,6 +8,7 @@ import {LineDrawing} from '~/components/house/LineDrawing';
 import {LookNumber} from '~/components/house/LookNumber';
 import {PairsLeft} from '~/components/house/PairsLeft';
 import {SpecSheet} from '~/components/house/SpecSheet';
+import {StageCard} from '~/components/house/StageCard';
 import {lineFor, useCart} from '~/lib/cart';
 import {copy, fill} from '~/lib/copy';
 import type {CastShot, StorefrontProduct} from '~/lib/mock/types';
@@ -34,7 +34,6 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
   const left = drop?.inventory?.[product.ds.id] ?? null;
   const soldOut = drop?.state === 'sold-out' || (drop?.state === 'live' && left === 0);
   const a6 = product.images.nodes.find((i) => i.ds.angle === 'A6') ?? null;
-  const subject = copy.alt.subjects[product.ds.id];
 
   return (
     <main id="main" data-page="frame" data-frame={product.ds.id}>
@@ -44,6 +43,8 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
           <LookNumber number={product.ds.lookNumber} />
           <h1 className="ds-display text-h1 leading-heading tracking-heading">{product.title}</h1>
           <p className="font-text text-body text-ds-text-secondary">{product.ds.descriptor}</p>
+          {/* The frame's one line (02 §1) lands here when the founder writes it; null renders nothing. */}
+          {product.ds.copy.line ? <p className="font-text text-body-lg font-book leading-body text-ds-text-primary">{product.ds.copy.line}</p> : null}
           <Price money={product.priceRange.minVariantPrice} className="text-body-lg" />
           {drop && inDrop ? (
             <div className="grid gap-2">
@@ -75,6 +76,13 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
       </div>
 
       <DetailHold shot={`${product.ds.id}-A6`} image={detailRender ? null : a6} renderSrc={detailRender} line={copy.product.gcdLine} />
+
+      {/* The product story (01 Type, body large) lands here when written; null renders nothing. */}
+      {product.ds.copy.story ? (
+        <section aria-label={product.title} className="px-4 py-12 md:px-6 lg:px-10 xl:px-14" data-frame-story>
+          <p className="ds-measure mx-auto font-text text-body-lg font-book leading-body text-ds-text-primary">{product.ds.copy.story}</p>
+        </section>
+      ) : null}
 
       <section aria-labelledby="frame-specs" className="grid gap-6 px-4 py-12 md:px-6 lg:grid-cols-[1fr_2fr] lg:px-10 xl:px-14">
         <h2 id="frame-specs" className="ds-display text-h2 leading-heading tracking-heading">
@@ -109,14 +117,7 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
           <h2 id="frame-next" className="ds-display text-h2 leading-heading tracking-heading">
             {copy.product.nextLook}
           </h2>
-          <Link to={`/frames/${next.handle}`} className="grid max-w-sm gap-3 rounded-none">
-            <ShotSlot shot={`${next.ds.id}-A1`} ratio="stage" image={next.featuredImage} sizes="384px" />
-            <span className="flex items-baseline gap-3">
-              <LookNumber number={next.ds.lookNumber} />
-              <span className="font-text text-body text-ds-text-primary">{next.title}</span>
-            </span>
-            <span className="sr-only">{subject}</span>
-          </Link>
+          <StageCard product={next} drop={drop} heading="h3" sizes="(min-width: 768px) 384px, 100vw" className="max-w-sm" />
         </section>
       ) : null}
     </main>

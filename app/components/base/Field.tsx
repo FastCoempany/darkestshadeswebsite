@@ -78,7 +78,8 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
       <label htmlFor={id} className="font-text text-small font-medium text-ds-text-secondary">
         {label}
       </label>
-      <div className={cx('grid', kind === 'phone' ? 'grid-cols-[9rem_1fr] gap-2' : 'grid-cols-1')}>
+      {/* The select takes the width of its longest option, so no country name is ever cut; under 360 px the number goes beneath it. */}
+      <div className={cx('grid gap-2', kind === 'phone' ? 'grid-cols-1 min-[360px]:grid-cols-[auto_1fr]' : 'grid-cols-1')}>
         {kind === 'phone' ? (
           <select
             aria-label={countryLabel ?? label}

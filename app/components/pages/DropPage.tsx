@@ -25,7 +25,7 @@ export function DropPage({drop, products, others = []}: DropPageProps) {
         {drop.statement ? <p className="ds-measure font-text text-body-lg font-book text-ds-text-secondary">{drop.statement}</p> : null}
       </header>
 
-      <section aria-label={copy.drop.stateWords[drop.state === 'sold-out' ? 'soldOut' : drop.state]} className={drop.state === 'announced' ? 'grid gap-8 lg:grid-cols-2' : 'grid gap-8'}>
+      <section aria-label={copy.drop.stateWords[drop.state === 'sold-out' ? 'soldOut' : drop.state]} className={drop.state === 'announced' ? 'grid gap-12 lg:grid-cols-2 lg:gap-8' : 'grid gap-8'}>
         <DropStatus drop={drop} variant="block" />
         {drop.state === 'announced' ? (
           <div className="grid gap-4">
@@ -43,7 +43,7 @@ export function DropPage({drop, products, others = []}: DropPageProps) {
             return (
               <li key={p.id} className="grid gap-4">
                 <StageCard product={p} drop={drop} priority={i < 2} heading="h2" />
-                {drop.state === 'live' ? (
+                {drop.state === 'live' || drop.state === 'sold-out' ? (
                   <Button variant="outline" size={48} disabled={soldOut} onClick={() => add(lineFor(p, p.variants.nodes[0]), drop.limitPerCustomer)}>
                     {soldOut ? copy.product.soldOut : copy.product.addToBag}
                   </Button>

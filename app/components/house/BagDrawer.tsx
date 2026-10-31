@@ -7,10 +7,11 @@ import {copy, fill} from '~/lib/copy';
 
 /** The bag as a side sheet on every page. Lines, $100, the exchange and warranty lines, Checkout disabled. */
 export function BagDrawer({limit = null}: {limit?: number | null}) {
-  const {cart, isOpen, close, setQuantity, remove} = useCart();
+  const {cart, ready, isOpen, close, setQuantity, remove} = useCart();
   return (
     <Sheet open={isOpen} onClose={close} variant="side" title={copy.bag.title} closeLabel={copy.nav.close}>
-      <BagContents cart={cart} limit={limit} onQuantity={setQuantity} onRemove={remove} />
+      {/* Nothing until the stored bag is read: the server never knows the lines, so it never says the bag is empty. */}
+      {ready ? <BagContents cart={cart} limit={limit} onQuantity={setQuantity} onRemove={remove} /> : null}
     </Sheet>
   );
 }
@@ -32,7 +33,7 @@ export function BagContents({
     return (
       <div className="grid justify-items-start gap-4 py-8">
         <p className="font-text text-body text-ds-text-secondary">{copy.bag.empty}</p>
-        <TextLink to="/frames" variant="nav">
+        <TextLink to="/frames" variant="nav" className="underline">
           {copy.nav.frames}
         </TextLink>
       </div>

@@ -44,9 +44,9 @@ export interface ShotSlotProps {
   sizes?: string;
   /** Load eagerly and at high priority (the first image on the page). */
   priority?: boolean;
-  /** Products sit on the stage color; photographs of people sit on the canvas. */
-  surface?: 'stage' | 'canvas';
-  /** Forces a state (stories): `loading` before the picture arrives, `error` when it fails. */
+  /** Products sit on the stage color; photographs of people on the base surface; `bare` paints nothing (a render set straight on the canvas). */
+  surface?: 'stage' | 'canvas' | 'bare';
+  /** Forces a state: `loading` before the picture arrives, `error` when it fails (stories); `loaded` when the children are the picture. */
   state?: ShotState;
   /** 1 (default) or 2: the picture at twice its size inside the frame, panned by scrolling (the gallery's zoom). */
   zoom?: 1 | 2;
@@ -112,7 +112,7 @@ export function ShotSlot({
         'relative',
         zoom > 1 ? 'overflow-auto overscroll-contain' : 'overflow-hidden',
         RATIO_CLASS[ratio],
-        surface === 'stage' ? 'bg-ds-surface-stage' : 'bg-ds-surface-base',
+        surface === 'stage' ? 'bg-ds-surface-stage' : surface === 'canvas' ? 'bg-ds-surface-base' : null,
         className,
       )}
       data-shot={label}
