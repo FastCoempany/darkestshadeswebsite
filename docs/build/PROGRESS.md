@@ -19,7 +19,7 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 | 1 Wireframes | **done** (checkpoint PR #2) | `build/phase-1-wireframes` · PR #2 | See *Phase 1 evidence* below | Oct 30 |
 | 2 Base components | **done** | `build/phase-2-base` · PR #3 | See *Phase 2 evidence* below | Oct 30 |
 | 3 House layer | **done** | `build/phase-3-house` · PR #4 | See *Phase 3 evidence* below | Oct 31 |
-| 4 UI pages | not started | | | |
+| 4 UI pages | in progress | `build/phase-4-ui` | (filled when done) | Oct 31 |
 | 5 Photography | not started | | | |
 | 6 QA and hand-off | not started | | | |
 

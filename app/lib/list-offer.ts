@@ -20,6 +20,8 @@ export function useListOffer(enabled: boolean): {open: boolean; close: () => voi
 
   useEffect(() => {
     if (!enabled || spent) return;
+    // Screenshot runs and stories are still: no pop-up on a scripted scroll.
+    if ((window as Window & {__dsStatic?: boolean}).__dsStatic) return;
     if (readCookie(document.cookie, OFFER_COOKIE)) {
       setSpent(true);
       return;
