@@ -2,6 +2,8 @@ import {describe, expect, it} from 'vitest';
 import {createStore, effectiveState, store} from '~/lib/mock';
 import {dropAnnouncedWithDate, dropEnded, dropLive} from '~/lib/mock/fixtures';
 import {parseCsv} from '~/lib/mock/csv';
+import manifestCsv from '../../assets/photography/MANIFEST.csv?raw';
+import {readdirSync, readFileSync} from 'node:fs';
 
 describe('products', () => {
   it('lists the eight frames by look number, with no 07', () => {
@@ -41,8 +43,12 @@ describe('products', () => {
 });
 
 describe('images', () => {
-  it('reads every manifest row', () => {
-    expect(store.images.all()).toHaveLength(65);
+  it('turns every final row for a frame it sells into a picture, and nothing else', () => {
+    const sold = new Set(store.products.all().map((p) => p.ds.id));
+    const rows = parseCsv(manifestCsv);
+    const finals = rows.filter((r) => r.status === 'final' && sold.has(r.frame));
+    expect(finals.length).toBeGreaterThan(0);
+    expect(store.images.all().map((i) => i.ds.manifestId).sort()).toEqual(finals.map((r) => r.id).sort());
   });
 
   it('orders a frame gallery A1 to A6 then the hero', () => {
@@ -55,9 +61,9 @@ describe('images', () => {
     const a1 = store.images.byId('ds-f01-a1')!;
     expect(a1.ds.widths).toEqual([640, 960, 1440, 2048]);
     expect(a1.ds.srcset.avif).toBe(
-      '/photography/ds-f01-a1-640.avif 640w, /photography/ds-f01-a1-960.avif 960w, /photography/ds-f01-a1-1440.avif 1440w, /photography/ds-f01-a1-2048.avif 2048w',
+      '/photography/ds-f01-a1-640.avif?v=v01 640w, /photography/ds-f01-a1-960.avif?v=v01 960w, /photography/ds-f01-a1-1440.avif?v=v01 1440w, /photography/ds-f01-a1-2048.avif?v=v01 2048w',
     );
-    expect(a1.url).toBe('/photography/ds-f01-a1-2048.jpg');
+    expect(a1.url).toBe('/photography/ds-f01-a1-2048.jpg?v=v01');
     expect(a1.altText).toMatch(/front view, on a light grey background\.$/);
   });
 
@@ -71,11 +77,17 @@ describe('images', () => {
 });
 
 describe('cast', () => {
-  it('knows the twenty planned pictures: nine finals, eleven drafts', () => {
+  it('knows every planned picture: a final has its export, a draft stays a labelled slot', () => {
+    const dir = 'content/photography/people';
+    const planned = readdirSync(dir).filter((f) => f.endsWith('.json'));
+    const files = Object.fromEntries(planned.map((f) => [f.replace(/\.json$/, ''), JSON.parse(readFileSync(`${dir}/${f}`, 'utf8')) as {status: string}]));
     const shots = store.cast.shots();
-    expect(shots).toHaveLength(20);
-    expect(shots.filter((s) => s.status === 'final')).toHaveLength(9);
-    expect(shots.filter((s) => s.status === 'draft')).toHaveLength(11);
+    expect(shots.map((s) => s.code).sort()).toEqual(Object.keys(files).sort());
+    for (const s of shots) {
+      expect(s.status).toBe(files[s.code].status === 'final' ? 'final' : 'draft');
+      expect(s.image !== null).toBe(s.status === 'final');
+    }
+    expect(shots.filter((s) => s.status === 'final').length).toBeGreaterThan(0);
   });
 
   it('maps a final to its manifest id without the version', () => {
@@ -86,12 +98,14 @@ describe('cast', () => {
     expect(w2.image?.ds.manifestId).toBe('ds-cast-w2-s06-f09-a2');
   });
 
-  it('gives every person a portrait slot; M3 and W3 stay drafts', () => {
+  it('gives every person a portrait: a picture when its export exists, a labelled slot until then', () => {
     const members = store.cast.members();
     expect(members.map((m) => m.id)).toEqual(['W1', 'W2', 'W3', 'M1', 'M2', 'M3', 'NB']);
-    expect(members.find((m) => m.id === 'W3')?.portrait?.status).toBe('draft');
-    expect(members.find((m) => m.id === 'M3')?.portrait?.image).toBeNull();
-    expect(members.find((m) => m.id === 'M1')?.portrait?.image?.ds.manifestId).toBe('ds-cast-m1-s06-f04');
+    for (const m of members) {
+      expect(m.portrait).not.toBeNull();
+      expect(m.portrait!.image !== null).toBe(m.portrait!.status === 'final');
+      if (m.portrait!.image) expect(m.portrait!.image.ds.manifestId).toBe(m.portrait!.manifestId);
+    }
   });
 
   it('gives every frame at least one on-model final, F03 two', () => {
