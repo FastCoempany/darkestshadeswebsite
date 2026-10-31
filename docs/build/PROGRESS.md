@@ -29,25 +29,52 @@ Each phase's evidence below is as recorded at that phase's merge (its counts of 
 
 ## Now and next
 
-- **Now:** the run is complete. Phases 0–6 are done and merged (PRs #1–#7); the final pass on the final code ran every check and is recorded below (*Final pass*); PR #8 carries this record and the Lighthouse reports of the final tree.
+- **Now:** the run is complete. Phases 0–6 are done and merged (PRs #1–#7); the final pass ran every check on the final tree and is recorded below (*Final pass*); PRs #8 and #9 carry the record and the Lighthouse reports.
 - **Next:** the founder's part, in "Before launch": the questions, the copy sign-off, the fonts, the drop plan, the store connection.
 
 ### Final pass (Oct 31)
 
-Run on the final code (`build/phase-6-qa` at its merge), in CI order, each with its exit status:
+One pass, on commit `65503ca` (the final code; the only commits after it are this record and the Lighthouse reports it produced), every check in CI order, each with its exit status. The output as printed:
 
-| Check | Command | Result |
-|---|---|---|
-| The CI checks | `npm run checks` | exit 0: no banned strings in `app/` or `content/copy/`; no hex colors in `app/`; the 8 product files match the schema; the copy gate lists 21 unapproved sections (by design, see the top of this file); the copy audit ok with 7 notes; base imports nothing from house, no route or page imports mock fixtures; the flash check on `sequence.json` passes at 1024×768 and 390×844 (max 1 flash in any second) |
-| Types | `npm run typecheck` | exit 0 |
-| Lint | `npm run lint` | exit 0 |
-| Unit tests | `npm test` | exit 0: 5 files, 59 passed (the honesty rules, the mock adapter, the manifest, the copy gate and page meta) |
-| The flash check's self-test and the real sequence | `python3 tools/flashcheck.py --self-test`; `python3 tools/flashcheck.py --report docs/qa/flashcheck.json` | exit 0 both: the white strobe fails as it must (6 flashes a second), the dark strobe passes; the real sequence passes at both viewports |
-| The production build refuses | `npm run build` | refused by the copy gate (21 sections unapproved), as designed |
-| The review build and Storybook | `npm run build:review`; `npm run storybook:build` | exit 0 both |
-| axe, on its own | `npx playwright test tests/e2e/axe.spec.ts` (16 routes at 390 and 1440, WCAG 2.2 AA tags, the home page with the notice, a frame page, F08's page, the paper pages, the bag, the token sheet, a 404) | exit 0: 32 passed, no violation of any impact logged (the spec fails on serious or critical and prints the rest; it printed none). axe also runs on every story in UI mode inside the Storybook matrix below |
-| Playwright, with axe | `npx playwright test` | exit 0: **883 passed, 3 skipped by design** (31.7 min): every story at 390 and 1440 in UI and wire mode against the committed baselines with axe in UI mode, the fonts, the token sheet, axe on 16 routes at two widths, the widths, the opening, the house behaviours, the 404 titles, the keyboard pass. A first run of this pass had one failure, a race inside the reduced-motion opening test (fixed: the test reads the entry's state in one step; the opening's spec then passed three runs in a row and the whole suite again) |
-| Lighthouse | `npm run preview:review -- --port 3000`, then `npm run lighthouse` | exit 0 on the final tree (the committed reports): home (first visit) 100, home (returning visitor) 100, frames 98, a frame page 90 on performance; 100 on accessibility, best practices and SEO throughout. The scores move between runs on this machine (simulated throttling on a shared VM): across the runs of this pass the frame page scored 96, 95, 96, 96 and 90 and frames 93, 97, 93 and 98. Before the drawings moved to the server the frame page swung from 98 to 80 and 77, which is why they moved |
+```
+--- npm run checks ---                                                        exit 0
+[check:strings] ok: none of 10 banned strings in app, content/copy
+[check:hex] ok: no hex colors in app/
+[check:schema] ok: 8 product files match product.schema.json
+[copy-gate] 21 section(s) of content/copy/en.json are not approved (by design; see the top of this file)
+[copy-audit] 7 note(s); ok: no exclamation marks, hype, gendered address or name-dropping; the fixed names and the tagline exact; the price written $100
+[check:layers] ok: base imports nothing from house; no route or page component imports mock/fixtures
+[flashcheck] sequence.json 1024x768: 40 states over 12.2s, max 1 flashes in any second (pass)
+[flashcheck] sequence.json 390x844: 40 states over 12.2s, max 1 flashes in any second (pass)
+--- npm run typecheck (react-router typegen && tsc --noEmit) ---              exit 0
+--- npm run lint (eslint .) ---                                               exit 0
+--- npm test ---                                                              exit 0
+ Test Files  5 passed (5)
+      Tests  59 passed (59)
+--- python3 tools/flashcheck.py --self-test ---                               exit 0
+[flashcheck] white-strobe: max 6 flashes in any second (FAIL) at both viewports, as it must
+[flashcheck] dark-strobe: max 0 flashes in any second (pass) at both viewports, as it must
+[flashcheck] self-test: white-strobe failed as it must; dark-strobe passed as it must -> OK
+--- python3 tools/flashcheck.py --report docs/qa/flashcheck.json ---          exit 0
+[flashcheck] sequence.json 1024x768 and 390x844: max 1 flashes in any second (pass)
+--- npm run build (must refuse) ---                                           refused, as designed
+[copy-gate] production build refused: 21 section(s) of content/copy/en.json are not approved
+--- npm run build:review ---                                                  exit 0  (✓ built)
+--- npm run storybook:build ---                                               exit 0  (Storybook build completed successfully)
+--- npx playwright test tests/e2e/axe.spec.ts (16 routes × 390 and 1440) --- exit 0
+  32 passed (49.8s); axe violation lines logged: 0
+--- npx playwright test ---                                                   exit 0
+  883 passed, 3 skipped by design (32.3m): every story at 390 and 1440 in UI and wire mode against the
+  committed baselines with axe in UI mode, the fonts, the token sheet, axe on 16 routes, the widths,
+  the opening, the house behaviours, the 404 titles, the keyboard pass
+--- npm run lighthouse (asserting, on the review build) ---                   exit 0
+[lighthouse] / (first visit: the notice over the page): performance 100, accessibility 100, best-practices 100, seo 100 | LCP 1.1 s, CLS 0.002, 312 KiB
+[lighthouse] / (returning visitor): performance 100, accessibility 100, best-practices 100, seo 100 | LCP 1.1 s, CLS 0.001, 311 KiB
+[lighthouse] /frames: performance 93, accessibility 100, best-practices 100, seo 100 | LCP 3.2 s, CLS 0.001, 375 KiB
+[lighthouse] /frames/lou-went-underground: performance 96, accessibility 100, best-practices 100, seo 100 | LCP 2.6 s, CLS 0.002, 446 KiB
+```
+
+Lighthouse's performance scores move between runs on this shared machine (simulated throttling): across the passes of this day the frame page scored 96, 95, 96, 96, 90 and 96, and frames 93, 97, 93, 98 and 93; before the drawings moved to the server (phase 6) the frame page swung from 98 to 80 and 77, which is why they moved. The three skipped Playwright tests are the phone-only menu and gallery tests at 1440 and the desktop header test at 390. An earlier run of this pass, before the final tree, had one failure, a race inside the reduced-motion opening test, fixed in `4f53bef` (the test reads the entry's state in one step; the assertions are unchanged).
 
 ### Phase 6 evidence (Oct 31)
 
