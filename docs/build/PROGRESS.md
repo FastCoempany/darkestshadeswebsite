@@ -20,13 +20,26 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 | 2 Base components | **done** | `build/phase-2-base` · PR #3 | See *Phase 2 evidence* below | Oct 30 |
 | 3 House layer | **done** | `build/phase-3-house` · PR #4 | See *Phase 3 evidence* below | Oct 31 |
 | 4 UI pages | **done** | `build/phase-4-ui` · PR #5 | See *Phase 4 evidence* below | Oct 31 |
-| 5 Photography | not started | | | |
+| 5 Photography | **done** | `build/phase-5-photography` · PR #6 | See *Phase 5 evidence* below | Oct 31 |
 | 6 QA and hand-off | not started | | | |
 
 ## Now and next
 
-- **Now:** phase 4 is done: the checkpoint PR #5 and its merge, then phase 5 (photography) on `build/phase-5-photography` from the new `main`.
-- **Next:** phase 5 proves the site reads `MANIFEST.csv` (a unit test with a synthetic manifest row), wires any cast final that reached `main` (none new so far), keeps every draft a labelled slot; then phase 6 (Lighthouse on the review build, the keyboard pass, the copy audit, README "Start here", the "Before launch" list).
+- **Now:** phase 5 is done: the checkpoint PR #6 and its merge, then phase 6 (QA and hand-off) on `build/phase-6-qa` from the new `main`.
+- **Next:** phase 6: Lighthouse mobile on the review build (home, frames, a frame page; ≥ 90), the keyboard pass as a Playwright spec, the copy audit as a check, the honesty tests and visual baselines confirmed, README "Start here" with how to run the app, the "Before launch" list; then the final pass (every check with its output, PROGRESS complete, every PR merged, git clean and pushed).
+
+### Phase 5 evidence (Oct 31)
+
+What was built: the manifest reader is one function of the CSV text (`imagesFromManifest` in `app/lib/mock/manifest.ts`), so a new or replaced final needs no code change and the reader can be tested with rows that do not exist yet; no image or video was generated, no person composited, and the manifest was not hand-edited. No new final reached `main` since phase 4 (the last photography commit is "Cast: the nine approved on-model pictures in the image library"), so nothing new was wired: the 65 rows of `MANIFEST.csv` (56 product finals, 9 cast finals) are the library, and the 11 draft cast shots stay labelled slots.
+
+| Done criterion | Command | Result |
+|---|---|---|
+| The site reads `MANIFEST.csv`; a new or replaced final needs no code change | `npm test` (`tests/unit/manifest.test.ts`) | A synthetic product row becomes the picture with its AVIF, WebP and JPEG sets from the `widths` column, its alt text, its shot code and ratio; a synthetic cast row becomes the shot code the slots use; a row for a frame the site does not sell stays out; every committed row is a final (65) |
+| Cast finals that reached `main` are wired; everything else a labelled slot | the same test; `git log origin/main -- assets/photography content/photography dam` | Nine cast pictures wired (W1-S07-F02-A1, W2-S06-F03-A1, W2-S06-F03-A2, W2-S06-F09-A2, M1-S06-F04-A1, M1-S06-F08-A1, M2-S07-F01-A1, M2-S07-F05-A1, NB-S06-F06-A1); the five studio portraits on `/cast` with M3 and W3 as labelled slots; eleven draft shots as slots; no new commit under the photography paths since the run began |
+| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 57 unit tests |
+| The pages | unchanged in this phase | the phase 4 baselines and review sets stand (862 Playwright tests at the phase 4 merge) |
+
+Stand-in type throughout.
 
 ### Phase 4 evidence (Oct 31)
 
@@ -181,6 +194,8 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | Oct 31 | `/drops` redirects to `/drop`; the list's sentence comes from one helper (`listBody`); the Instagram link is built from `meta.instagram`. | No dead URL under a live one; one source for the early-access rule (`08`, O6); one source for the handle. | phase 4 |
 | Oct 31 | The review set stays at 390 and 1440 (RUN.md); no product grid has three columns at any width, so the three black squares never share a row of three; 1024 is covered by the widths test. | `06` "Telling the three black squares apart"; RUN.md "the review set at 390 and 1440". | phase 4 |
 | Oct 31 | The phase 4 code review found 3 blocking items (the Next look link naming the wrong frame, no h1 on home, the bookkeeping) and 8 should-fix items; the screenshot review found 3 must-fix items (the broken tagline on the manifesto page, the F08 hold's label and size, the clipped country select), 5 should-fix items and 11 notes. Every A and B item is fixed in this phase; the fixes were then verified by an adversarial pass (one skeptic per group of fixes and a completeness critic) before the checkpoint PR. The notes for phases 5–6 are kept in the reports and the questions below. | RUN.md, Orchestration. | phase 4 |
+| Oct 31 | The manifest reader is a function of the CSV text (`imagesFromManifest`); the module reads the committed manifest through it. | RUN.md phase 5: the site reads `MANIFEST.csv`; a test can prove a row that does not exist yet becomes a picture. | phase 5 |
+| Oct 31 | Phase 5 wires nothing new: no final reached `main` since the run began, and the build makes no pictures of its own. | RUN.md phase 5: track 2 is not the build's to make; `tools/photo/export_web.py` writes the manifest. | phase 5 |
 
 ## Questions for Antaeus
 

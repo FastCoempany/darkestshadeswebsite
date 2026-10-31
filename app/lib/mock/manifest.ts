@@ -59,8 +59,14 @@ function toImage(row: Record<string, string>): StorefrontImage | null {
   };
 }
 
-const rows = parseCsv(manifestCsv);
-export const images: StorefrontImage[] = rows.map(toImage).filter((i): i is StorefrontImage => i !== null);
+/** The one reader: the manifest's CSV text in, the image library out (a row for a frame the site does not sell stays out). */
+export function imagesFromManifest(csv: string): StorefrontImage[] {
+  return parseCsv(csv)
+    .map(toImage)
+    .filter((i): i is StorefrontImage => i !== null);
+}
+
+export const images: StorefrontImage[] = imagesFromManifest(manifestCsv);
 const byId = new Map(images.map((i) => [i.ds.manifestId, i]));
 
 export function imageById(manifestId: string): StorefrontImage | null {
