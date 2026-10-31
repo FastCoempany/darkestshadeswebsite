@@ -23,7 +23,7 @@ This repo holds the brief, the assets and the app (`app/`, a Hydrogen storefront
 
 ### Run the app
 
-Node 22, Python 3 with Pillow and NumPy (the flash check), and Playwright's Chromium (the end-to-end suite):
+Node 22, Python 3 with Pillow and NumPy (the flash check), and Playwright's Chromium (the end-to-end suite). On Windows, run these in PowerShell one line at a time (its built-in version does not accept `&&` between commands):
 
 ```bash
 npm install                                    # also brings the font stand-ins (Mona Sans, Urbanist); nothing else until the real fonts are licensed
