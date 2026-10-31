@@ -16,7 +16,7 @@ export async function loader({request}: Route.LoaderArgs) {
 export async function action({request}: Route.ActionArgs) {
   const form = await request.formData();
   const value = form.get('intro') === 'off' ? 'off' : 'on';
-  return data({saved: true, introOn: value === 'on'}, {headers: {'Set-Cookie': entryCookie(value)}});
+  return data({saved: true, introOn: value === 'on'}, {headers: {'Set-Cookie': entryCookie(value, new URL(request.url).protocol === 'https:')}});
 }
 
 export default function Accessibility({loaderData, actionData}: Route.ComponentProps) {

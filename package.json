@@ -18,7 +18,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build --quiet",
     "flashcheck": "python3 tools/flashcheck.py",
-    "lighthouse": "node checks/lighthouse.mjs",
+    "lighthouse": "node checks/lighthouse.mjs --assert",
     "check:strings": "node checks/strings.mjs",
     "check:hex": "node checks/hex.mjs",
     "check:schema": "node checks/schema.mjs",

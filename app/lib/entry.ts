@@ -1,4 +1,4 @@
-import {ENTRY_COOKIE, readCookie} from '~/lib/cookies';
+import {ENTRY_COOKIE, readCookie, cookieFlags} from '~/lib/cookies';
 
 /**
  * When the opening plays (docs/brief/03-references.md): the first visit to `/` only. Never on a deep
@@ -17,7 +17,7 @@ export function shouldShowEntry(request: Request, isBot: boolean): boolean {
 }
 
 /** The cookie that remembers a finished or skipped opening for 30 days, or `off` from the Accessibility page. */
-export function entryCookie(value: 'seen' | 'off' | 'on'): string {
+export function entryCookie(value: 'seen' | 'off' | 'on', secure?: boolean): string {
   const maxAge = value === 'on' ? 0 : value === 'off' ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30;
-  return `${ENTRY_COOKIE}=${value === 'on' ? '' : value}; Path=/; Max-Age=${maxAge}; SameSite=Lax`;
+  return `${ENTRY_COOKIE}=${value === 'on' ? '' : value}; Max-Age=${maxAge}; ${cookieFlags(secure)}`;
 }

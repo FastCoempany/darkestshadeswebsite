@@ -51,7 +51,9 @@ export const meta: Route.MetaFunction = ({error}) =>
 export async function loader({request, context}: Route.LoaderArgs) {
   const url = new URL(request.url);
   const cookie = request.headers.get('Cookie');
-  const wire = url.searchParams.get('mode') === 'wire' || readCookie(cookie, MODE_COOKIE) === 'wire';
+  // Wire mode is a review tool: the dev server and review builds only, never production.
+  const wireAllowed = import.meta.env.DEV || context.settings.reviewBuild;
+  const wire = wireAllowed && (url.searchParams.get('mode') === 'wire' || readCookie(cookie, MODE_COOKIE) === 'wire');
   return {
     mode: wire ? ('wire' as const) : ('ui' as const),
     adobeFontsKit: context.settings.adobeFontsKit,

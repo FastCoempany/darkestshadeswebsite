@@ -29,6 +29,7 @@ jobs:
       - run: npm ci
       - run: pip install --quiet pillow numpy
       # Banned strings, hex colors in app/, product schema, the copy gate's report, base never imports house.
+      # Banned strings, hex colors, the product schema, the copy gate, the copy audit, the layer rule, the flash check.
       - run: npm run checks
       - run: npm run typecheck
       - run: npm run lint

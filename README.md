@@ -2,7 +2,7 @@
 
 The website for **Darkest Shades** (darkestshades.com · [@darkestshades](https://instagram.com/darkestshades)): a Shopify Hydrogen storefront for eight frames, $100 each, released in drops. **See Everything. Reveal Nothing.**
 
-This repo holds the plan and the assets the build starts from. The app itself (`app/`) is scaffolded in phase 0 (`docs/brief/09-build-plan.md`).
+This repo holds the brief, the assets and the app (`app/`, a Hydrogen storefront built through the phases in `docs/brief/09-build-plan.md`; `docs/build/PROGRESS.md` says where it stands).
 
 ## Start here
 - **`CLAUDE.md`**: the rules for anyone (human or agent) building this.
@@ -23,10 +23,12 @@ This repo holds the plan and the assets the build starts from. The app itself (`
 
 ### Run the app
 
-Node 22 and Python 3 (the tools). Then:
+Node 22, Python 3 with Pillow and NumPy (the flash check), and Playwright's Chromium (the end-to-end suite):
 
 ```bash
-npm install
+npm install                                    # also brings the font stand-ins (Mona Sans, Urbanist); nothing else until the real fonts are licensed
+python3 -m pip install pillow numpy
+npx playwright install chromium
 npm run dev            # http://localhost:3000 (MiniOxygen); ?mode=wire for the wireframes; /dev/tokens for the token sheet
 npm run storybook      # http://localhost:6006: every component and page state, UI and wire mode, 390 and 1440 in the toolbar
 ```
@@ -34,13 +36,15 @@ npm run storybook      # http://localhost:6006: every component and page state, 
 Before a pull request:
 
 ```bash
-npm run checks         # banned strings, hex colors in app/, the product schema, the copy gate, the layer rule, the flash check
+npm run checks         # banned strings, hex colors in app/, the product schema, the copy gate, the copy audit, the layer rule, the flash check
 npm run typecheck && npm run lint && npm test
-npm run test:e2e       # Playwright: fonts, screenshots at 390 and 1440 against the committed baselines, axe, the Storybook matrix
-npm run preview:review -- --port 3000   # then, in another shell: npm run lighthouse
+npm run test:e2e       # Playwright: fonts, screenshots at 390 and 1440, axe, the keyboard pass, the Storybook matrix
+npm run preview:review -- --port 3000   # then, in another shell: npm run lighthouse (fails under 90; CHROME_PATH points at a Chrome binary when it is not the Playwright one)
 ```
 
-`npm run build` refuses while any section of `content/copy/en.json` is `draft` or `placeholder` (every section today): that is the copy gate, not a broken build. `npm run build:review` is the same build with drafts allowed; Lighthouse and the review screenshots run on it. The review sets are in `docs/wireframes/` (wire mode) and `docs/ui/` (UI mode); `docs/build/PROGRESS.md` is where the build stands, with the questions for the founder and the copy awaiting sign-off.
+The screenshots compare against baselines made on the build machine; on another machine set `CI=1` so they are recorded instead of compared. `npm run capture:wire` and `npm run capture:ui` remake the review sets in `docs/wireframes/` and `docs/ui/`.
+
+`npm run build` refuses while any section of `content/copy/en.json` is `draft` or `placeholder` (every section today): that is the copy gate, not a broken build. `npm run build:review` is the same build with drafts allowed; Lighthouse and the review screenshots run on it. `docs/build/PROGRESS.md` is where the build stands, with the questions for the founder, the copy awaiting sign-off and the "Before launch" list.
 
 ## What's here
 - `brand/marks/`: Anastasiia's logo, stacked logo and brand mark (masters, web SVGs, favicon set).
