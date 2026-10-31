@@ -27,8 +27,24 @@ Running the final pass here: free ports 3000 and 6006 first (Playwright reuses w
 
 ## Now and next
 
-- **Now:** phase 6 is done and reviewed; PR #7 (phase 6 alone, PR #6 having merged first) and its merge, then the final pass (every check with its output, PROGRESS complete, every PR merged, git clean and pushed).
-- **Next:** the founder's part: the questions below, the copy sign-off, the fonts, the drop plan, the store connection ("Before launch").
+- **Now:** the run is complete. Phases 0–6 are done and merged (PRs #1–#7); the final pass on the final code ran every check and is recorded below (*Final pass*).
+- **Next:** the founder's part, in "Before launch": the questions, the copy sign-off, the fonts, the drop plan, the store connection.
+
+### Final pass (Oct 31)
+
+Run on the final code (`build/phase-6-qa` at its merge), in CI order, each with its exit status:
+
+| Check | Command | Result |
+|---|---|---|
+| The CI checks | `npm run checks` | exit 0: no banned strings in `app/` or `content/copy/`; no hex colors in `app/`; the 8 product files match the schema; the copy gate lists 21 unapproved sections (by design, see the top of this file); the copy audit ok with 7 notes; base imports nothing from house, no route or page imports mock fixtures; the flash check on `sequence.json` passes at 1024×768 and 390×844 (max 1 flash in any second) |
+| Types | `npm run typecheck` | exit 0 |
+| Lint | `npm run lint` | exit 0 |
+| Unit tests | `npm test` | exit 0: 5 files, 59 passed (the honesty rules, the mock adapter, the manifest, the copy gate and page meta) |
+| The flash check's self-test and the real sequence | `python3 tools/flashcheck.py --self-test`; `python3 tools/flashcheck.py --report docs/qa/flashcheck.json` | exit 0 both: the white strobe fails as it must (6 flashes a second), the dark strobe passes; the real sequence passes at both viewports |
+| The production build refuses | `npm run build` | refused by the copy gate (21 sections unapproved), as designed |
+| The review build and Storybook | `npm run build:review`; `npm run storybook:build` | exit 0 both |
+| Playwright, with axe | `npx playwright test` | exit 0: **883 passed, 3 skipped by design** (31.7 min): every story at 390 and 1440 in UI and wire mode against the committed baselines with axe in UI mode, the fonts, the token sheet, axe on 16 routes at two widths, the widths, the opening, the house behaviours, the 404 titles, the keyboard pass. A first run of this pass had one failure, a race inside the reduced-motion opening test (fixed: the test reads the entry's state in one step; the opening's spec then passed three runs in a row and the whole suite again) |
+| Lighthouse | `npm run preview:review -- --port 3000`, then `npm run lighthouse` | exit 0: home (first visit) 100, home (returning visitor) 100, frames 93, a frame page 96 on performance; 100 on accessibility, best practices and SEO throughout (`docs/qa/lighthouse/summary.json`) |
 
 ### Phase 6 evidence (Oct 31)
 
@@ -36,9 +52,9 @@ What was done: Lighthouse mobile on the review build (`checks/lighthouse.mjs`, r
 
 | Done criterion | Command | Result |
 |---|---|---|
-| axe: no serious or critical issues | `npx playwright test` (axe on 16 routes at 390 and 1440; every story in UI mode) | {AXE} |
-| Keyboard pass: the entry, menu, bag, gallery, pop-up, sign-up | `npx playwright test tests/e2e/keyboard.spec.ts` | {KEYBOARD}: the notice (Skip intro focused first, Tab wrapping, Enter skipping, Esc skipping), Continue by Enter into the sequence with Skip focused, Tab staying on Skip and Enter skipping from the first frame; the skip link, mark, links and bag by Tab on desktop; the menu opening on Enter, wrapping both ways (Shift+Tab from Close to the last link, Tab from it back to Close), closing on Esc with focus back on its button; the bag from the header (focus inside, Esc, focus back) and a line's quantity up and down and removal by Enter; the gallery's arrow keys on a phone and the zoom control at both widths; the pop-up keeping focus inside, Not now reached by Tab, Esc, focus left on the page, the cookie; the sign-up filled, the consent checked by Space, every stop reached by Tab, sent by Enter |
-| Lighthouse mobile ≥ 90 on Home, Frames and a frame page, with real images | `npm run preview:review -- --port 3000`, then `npm run lighthouse` (asserts) | {LIGHTHOUSE} Home is measured twice: as a first visit, where the photosensitivity notice sits over the page and the opening (which plays only after Continue) is not measured, and as a returning visitor (`ds_entry=seen`), the page every deep link and later visit gets. Reports under `docs/qa/lighthouse/` |
+| axe: no serious or critical issues | `npx playwright test` (axe on 16 routes at 390 and 1440; every story in UI mode) | no serious or critical issue in the final pass: 883 passed, 3 skipped by design (31.7m), every story at 390 and 1440 in UI and wire mode against the committed baselines, the fonts, the token sheet, the widths, the opening, the house behaviours, the 404 titles and the keyboard pass |
+| Keyboard pass: the entry, menu, bag, gallery, pop-up, sign-up | `npx playwright test tests/e2e/keyboard.spec.ts` | 21 passed, 3 skipped by design (the phone-only menu and gallery tests at 1440, the desktop header test at 390): the notice (Skip intro focused first, Tab wrapping, Enter skipping, Esc skipping), Continue by Enter into the sequence with Skip focused, Tab staying on Skip and Enter skipping from the first frame; the skip link, mark, links and bag by Tab on desktop; the menu opening on Enter, wrapping both ways (Shift+Tab from Close to the last link, Tab from it back to Close), closing on Esc with focus back on its button; the bag from the header (focus inside, Esc, focus back) and a line's quantity up and down and removal by Enter; the gallery's arrow keys on a phone and the zoom control at both widths; the pop-up keeping focus inside, Not now reached by Tab, Esc, focus left on the page, the cookie; the sign-up filled, the consent checked by Space, every stop reached by Tab, sent by Enter |
+| Lighthouse mobile ≥ 90 on Home, Frames and a frame page, with real images | `npm run preview:review -- --port 3000`, then `npm run lighthouse` (asserts) | home, first visit: performance 100, accessibility 100, best practices 100, SEO 100 (LCP 1.1 s, CLS 0.002, 312 KiB); home, returning visitor: performance 100, accessibility 100, best practices 100, SEO 100 (LCP 1.1 s, CLS 0.001, 311 KiB); /frames: performance 93, accessibility 100, best practices 100, SEO 100 (LCP 3.2 s, CLS 0.001, 375 KiB); /frames/lou-went-underground: performance 96, accessibility 100, best practices 100, SEO 100 (LCP 2.7 s, CLS 0.002, 446 KiB). Home is measured twice: as a first visit, where the photosensitivity notice sits over the page and the opening (which plays only after Continue) is not measured, and as a returning visitor (`ds_entry=seen`), the page every deep link and later visit gets. Reports under `docs/qa/lighthouse/` |
 | Entry assets under 1.5 MB | `du -b assets/entry`; the candidate sets from `sequence.json` | 627 KB on disk for every size and format of the 17 stills (69 files); a phone fetches one candidate per still: 93 KB with the smallest AVIFs, 208 KB with the largest AVIFs, 223 KB with the largest WebPs; the flash check on the same sequence passes (`docs/qa/flashcheck.json`) |
 | Copy audit against `08` | `npm run check:copy-audit` | ok: no exclamation marks, hype, gendered address or name-dropping; the fixed names and the tagline exact; the price written $100; 7 notes (the S01 scene's "runway", a logged question; six sections without a status, which the gate counts as draft) |
 | Honesty tests green; visual baselines committed | `npm test`; `git status` | 59 unit tests (every missing-data case of the drop components, the availability word, the spec sheet, the stage card's pairs, the manifest); 189 stories × 390/1440 × UI/wire baselines committed |
