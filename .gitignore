@@ -54,7 +54,9 @@ Thumbs.db
 .claude/settings.local.json
 
 # Check output
-/docs/qa/lighthouse/*.html
+# Lighthouse: the summary and the HTML reports are committed as evidence; the raw JSON is not.
+/docs/qa/lighthouse/*.json
+!/docs/qa/lighthouse/summary.json
 /.lighthouseci/
 
 # TypeScript incremental state

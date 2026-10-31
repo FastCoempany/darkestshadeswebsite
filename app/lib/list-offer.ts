@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {readCookie} from '~/lib/cookies';
+import {cookieFlags, readCookie} from '~/lib/cookies';
 import {copy, fill} from '~/lib/copy';
 
 export const OFFER_COOKIE = 'ds_offer';
@@ -10,9 +10,9 @@ export function listBody(earlyAccess?: {enabled: boolean; hours: number | null})
 }
 
 /** `closed`: 30 days. `joined`: a year (04, Overlays). */
-export function offerCookie(value: 'closed' | 'joined'): string {
+export function offerCookie(value: 'closed' | 'joined', secure?: boolean): string {
   const maxAge = value === 'joined' ? 60 * 60 * 24 * 365 : 60 * 60 * 24 * 30;
-  return `${OFFER_COOKIE}=${value}; Path=/; Max-Age=${maxAge}; SameSite=Lax`;
+  return `${OFFER_COOKIE}=${value}; Max-Age=${maxAge}; ${cookieFlags(secure)}`;
 }
 
 /**

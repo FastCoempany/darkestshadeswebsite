@@ -11,6 +11,7 @@ import {SpecSheet} from '~/components/house/SpecSheet';
 import {StageCard} from '~/components/house/StageCard';
 import {lineFor, useCart} from '~/lib/cart';
 import {copy, fill} from '~/lib/copy';
+import type {Drawings} from '~/lib/drawings';
 import type {CastShot, StorefrontProduct} from '~/lib/mock/types';
 
 export interface FramePageProps {
@@ -18,12 +19,14 @@ export interface FramePageProps {
   drop: DropView | null;
   castShots: CastShot[];
   next: StorefrontProduct | null;
+  /** This frame's three drawings as SVG text (read on the server). */
+  drawings: Drawings;
   /** The GCD's 3D render for F08, whose pictures show no GCD (00-decisions.md #34). */
   detailRender?: string | null;
 }
 
 /** Gallery beside a sticky buy panel, then the detail hold, specs, the drawings, worn by, next look (04). */
-export function FramePage({product, drop, castShots, next, detailRender = null}: FramePageProps) {
+export function FramePage({product, drop, castShots, next, drawings, detailRender = null}: FramePageProps) {
   const {add} = useCart();
   const angles = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6'];
   const gallery = [
@@ -95,7 +98,7 @@ export function FramePage({product, drop, castShots, next, detailRender = null}:
         <h2 id="frame-drawn" className="ds-display text-h2 leading-heading tracking-heading">
           {copy.product.drawnTitle}
         </h2>
-        <LineDrawing product={product} />
+        <LineDrawing product={product} drawings={drawings} />
       </section>
 
       <section aria-labelledby="frame-worn" className="grid gap-6 px-4 py-12 md:px-6 lg:px-10 xl:px-14">

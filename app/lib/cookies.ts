@@ -11,4 +11,9 @@ export function readCookie(header: string | null, name: string): string | null {
 /** The entry's "seen" cookie: set for 30 days when the opening is skipped or finished (03-references.md). */
 export const ENTRY_COOKIE = 'ds_entry';
 /** Wire mode on the whole site: `ds_mode=wire` (phase 1 wireframes). */
+/** `Secure` on every cookie the site writes when the page is served over https (localhost stays plain). */
+export function cookieFlags(secure: boolean = typeof location !== 'undefined' && location.protocol === 'https:'): string {
+  return `Path=/; SameSite=Lax${secure ? '; Secure' : ''}`;
+}
+
 export const MODE_COOKIE = 'ds_mode';

@@ -3,6 +3,7 @@ import gcdRender from '../../brand/emblems/gcd/render/gcd-3d-yaw35-1024.png?url'
 import {FramePage} from '~/components/pages/FramePage';
 import {copy, fill, pageMeta} from '~/lib/copy';
 import {formatMoney} from '~/lib/money';
+import {drawingsFor} from '~/lib/drawings';
 import {currentDropView} from '~/lib/drop-view';
 
 /** Name, descriptor and price from the data. A missing frame is titled by the root's meta. */
@@ -19,6 +20,8 @@ export async function loader({params, context}: Route.LoaderArgs) {
     drop: currentDropView(context),
     castShots: context.store.cast.shotsForFrame(product.ds.id),
     next: context.store.products.next(product.ds.id),
+    // Only this frame's three drawings travel; the client chunk carries none (app/lib/drawings.ts).
+    drawings: await drawingsFor(product.ds.id),
     // F08's pictures show no GCD: its detail hold uses the emblem's render (RUN.md, Edge cases).
     detailRender: product.ds.id === 'F08' ? gcdRender : null,
   };

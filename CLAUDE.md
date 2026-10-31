@@ -54,7 +54,7 @@ python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json      #
 python3 tools/blender/frame3d.py F04 --check --out /tmp/F04.png                 # a frame rebuilt in 3D from its drawings, upright in a light tent
 python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   # the cast member wearing the 3D frame in the scene's light → work/people/<id>-3d/ (depth model: work/models/, head3d.py)
 python3 tools/photo/cutout.py content/photography/people/M1-S06-F04-A1.json     # that picture cut out: the person wearing the frame on transparency → work/people/<id>-3d/cutout.png
-python3 tools/photo/entry_stills.py --check                                     # the entry's black-and-white stills from the finals -> assets/entry/ + sequence.json (burst 1 under luminance 0.09); then python3 tools/flashcheck.py
+python3 tools/photo/entry_stills.py --check                                     # remakes the entry's black-and-white stills from the finals -> assets/entry/ + sequence.json, verifying the decoded files (burst 1 under luminance 0.09); then python3 tools/flashcheck.py
 ```
 App (phase 0 on; `npm install` first; Node 22):
 ```
@@ -68,7 +68,7 @@ npm run storybook                 # Storybook on :6006 (mode and theme in the to
 npm run test:e2e                  # Playwright: fonts, screenshots at 390 and 1440, axe, the Storybook matrix (starts the review build and Storybook itself)
 npm run checks                    # the CI checks: banned strings, hex colors in app/, product schema, the copy gate, base-never-imports-house
 npm run flashcheck -- --self-test # tools/flashcheck.py on the synthetic strobes; without flags it checks assets/entry/sequence.json
-npm run lighthouse                # Lighthouse mobile on the review build (needs preview:review running) -> docs/qa/lighthouse/
+npm run lighthouse                # Lighthouse mobile on the review build (needs preview:review running; fails under 90) -> docs/qa/lighthouse/
 npm run ci                        # everything above in CI order
 ```
 

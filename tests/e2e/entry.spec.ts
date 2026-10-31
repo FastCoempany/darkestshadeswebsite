@@ -65,10 +65,10 @@ test.describe('the opening', () => {
     await page.getByRole('button', {name: 'Continue'}).click();
     const seen = new Set<string>();
     for (let i = 0; i < 40; i++) {
-      const entry = page.locator('[data-entry]');
-      if ((await entry.count()) === 0) break;
-      const kind = await entry.first().getAttribute('data-entry');
-      if (kind) seen.add(kind);
+      // One read: the opening can end between a count and a second query, and a locator read would then wait for it.
+      const kind = await page.evaluate(() => document.querySelector('[data-entry]')?.getAttribute('data-entry') ?? null);
+      if (kind === null) break;
+      seen.add(kind);
       await page.waitForTimeout(250);
     }
     expect(seen.has('burst')).toBe(false);
