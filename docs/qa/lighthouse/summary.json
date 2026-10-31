@@ -1,0 +1,48 @@
+{
+ "base": "http://localhost:3000",
+ "date": "2026-10-31T04:18:39.203Z",
+ "pages": [
+  {
+   "path": "/",
+   "scores": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+   },
+   "lcp": 1113.7494,
+   "cls": 0.002055978858867524,
+   "tbt": 114.5,
+   "bytes": 318535
+  },
+  {
+   "path": "/frames",
+   "scores": {
+    "performance": 93,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+   },
+   "lcp": 3226.6615500000007,
+   "cls": 0.0010179583305976608,
+   "tbt": 0,
+   "bytes": 382984
+  },
+  {
+   "path": "/frames/lou-went-underground",
+   "scores": {
+    "performance": 98,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100,
+    "agentic-browsing": 100
+   },
+   "lcp": 2217.8467,
+   "cls": 0.001823873477094359,
+   "tbt": 104.07664999999997,
+   "bytes": 858982
+  }
+ ]
+}

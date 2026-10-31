@@ -21,12 +21,29 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 | 3 House layer | **done** | `build/phase-3-house` · PR #4 | See *Phase 3 evidence* below | Oct 31 |
 | 4 UI pages | **done** | `build/phase-4-ui` · PR #5 | See *Phase 4 evidence* below | Oct 31 |
 | 5 Photography | **done** | `build/phase-5-photography` · PR #6 | See *Phase 5 evidence* below | Oct 31 |
-| 6 QA and hand-off | not started | | | |
+| 6 QA and hand-off | **done** | `build/phase-6-qa` · PR #7 | See *Phase 6 evidence* below | Oct 31 |
 
 ## Now and next
 
-- **Now:** phase 5 is done: the checkpoint PR #6 and its merge, then phase 6 (QA and hand-off) on `build/phase-6-qa` from the new `main`.
-- **Next:** phase 6: Lighthouse mobile on the review build (home, frames, a frame page; ≥ 90), the keyboard pass as a Playwright spec, the copy audit as a check, the honesty tests and visual baselines confirmed, README "Start here" with how to run the app, the "Before launch" list; then the final pass (every check with its output, PROGRESS complete, every PR merged, git clean and pushed).
+- **Now:** phase 6 is done: the checkpoint PR #7 and its merge, then the final pass (every check with its output, PROGRESS complete, every PR merged, git clean and pushed).
+- **Next:** the founder's part: the questions below, the copy sign-off, the fonts, the drop plan, the store connection ("Before launch").
+
+### Phase 6 evidence (Oct 31)
+
+What was done: Lighthouse mobile on the review build (`checks/lighthouse.mjs`, reports in `docs/qa/lighthouse/`), the keyboard pass as a Playwright spec (`tests/e2e/keyboard.spec.ts`), the copy audit as a check (`checks/copy-audit.mjs`, in `npm run checks`), the honesty tests and the visual baselines confirmed, README "Start here" with how to run the app, and the "Before launch" list below.
+
+| Done criterion | Command | Result |
+|---|---|---|
+| axe: no serious or critical issues | `npx playwright test` (axe on 16 routes at 390 and 1440; every story in UI mode) | no serious or critical issue (862 tests at the phase 4 merge; the phase 6 confirm run in the final pass) |
+| Keyboard pass: the entry, menu, bag, gallery, pop-up, sign-up | `npx playwright test tests/e2e/keyboard.spec.ts` | 12 passed, 2 skipped by design (the phone-only menu and gallery tests at 1440): the notice's Skip intro focused first, Tab wrapping inside it, Enter skipping to the page with the cookie set; the skip link first, then the header; the menu opening on Enter, wrapping, closing on Esc with focus back on its button; the bag opening from the header, keeping focus inside, closing on Esc with focus back; a bag line's quantity up and down by Enter on More and Fewer (the Storybook story with two lines); the gallery moving with the arrow keys and zooming on Enter; the pop-up keeping focus inside and closing on Not now with its cookie; the sign-up form filled, reached and submitted by keys |
+| Lighthouse mobile ≥ 90 on Home, Frames and a frame page, with real images | `npm run preview:review -- --port 3000`, then `node checks/lighthouse.mjs --assert` | `/` performance 99, accessibility 100, best practices 100, SEO 100 (LCP 1.1 s, CLS 0.002, 311 KiB); `/frames` performance 93, accessibility 100, best practices 100, SEO 100 (LCP 3.2 s, CLS 0.001, 374 KiB); `/frames/lou-went-underground` performance 98, accessibility 100, best practices 100, SEO 100 (LCP 2.2 s, CLS 0.002, 839 KiB) |
+| Entry assets under 1.5 MB | `python3 tools/photo/entry_stills.py --check` (phase 3) | the phone set 91 KB, every file 748 KB |
+| Copy audit against `08` | `npm run check:copy-audit` | ok: no exclamation marks, hype, gendered address or name-dropping; the fixed names and the tagline exact; the price written $100; 7 notes (the S01 scene's "runway", a logged question; six sections without a status, which the gate counts as draft) |
+| Honesty tests green; visual baselines committed | `npm test`; `git status` | 59 unit tests (every missing-data case of the drop components, the availability word, the spec sheet, the stage card's pairs, the manifest); 189 stories × 390/1440 × UI/wire baselines committed |
+| README "Start here" | `README.md` | how to run the app, Storybook, the checks, the review build and Lighthouse; the copy gate explained |
+| "Before launch" | this file | the list below |
+
+Stand-in type throughout.
 
 ### Phase 5 evidence (Oct 31)
 
@@ -36,7 +53,7 @@ What was built: the manifest reader is one function of the CSV text (`imagesFrom
 |---|---|---|
 | The site reads `MANIFEST.csv`; a new or replaced final needs no code change | `npm test` (`tests/unit/manifest.test.ts`) | A synthetic product row becomes the picture with its AVIF, WebP and JPEG sets from the `widths` column (unsorted widths sorted), its alt text, shot code, ratio and version; a synthetic cast row becomes the shot code the slots use; a draft row and a row for a frame the site does not sell stay out; an unknown angle sorts after the hero; a missing column is named; the folder and the manifest name exactly the same files (777 today) |
 | Cast finals that reached `main` are wired; everything else a labelled slot | the same test; `git log origin/main -- assets/photography content/photography dam` | Nine cast pictures wired (W1-S07-F02-A1, W2-S06-F03-A1, W2-S06-F03-A2, W2-S06-F09-A2, M1-S06-F04-A1, M1-S06-F08-A1, M2-S07-F01-A1, M2-S07-F05-A1, NB-S06-F06-A1); the five studio portraits on `/cast` with M3 and W3 as labelled slots; eleven draft shots as slots; no new commit under the photography paths since RUN.md's Oct 28 baseline (the last is 0ed3270, the nine approved on-model pictures) |
-| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 57 unit tests |
+| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 59 unit tests |
 | The pages | unchanged in this phase | the phase 4 baselines and review sets stand (862 Playwright tests at the phase 4 merge) |
 
 Stand-in type throughout.
@@ -197,6 +214,9 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | Oct 31 | The manifest reader is a function of the CSV text (`imagesFromManifest`); the module reads the committed manifest through it. | RUN.md phase 5: the site reads `MANIFEST.csv`; a test can prove a row that does not exist yet becomes a picture. | phase 5 |
 | Oct 31 | Phase 5 wires nothing new: no final reached `main` since RUN.md's Oct 28 baseline, and the build makes no pictures of its own. | RUN.md phase 5: track 2 is not the build's to make; `tools/photo/export_web.py` writes the manifest. | phase 5 |
 | Oct 31 | The reader keeps only `final` rows of the frames the site sells, puts an angle it does not know after the hero (never first, so a new angle cannot become a frame's featured picture), carries the manifest's `version` as a cache key on every URL (`?v=v02`, so a replaced final reaches a returning visitor through the immutable cache), and names a missing column. The tests state invariants (a final has its export, a draft stays a slot, the folder and the manifest name the same files) instead of pinning counts and codes that the next export would break. | The phase 5 review: "a new or replaced final needs no code change" has to hold for the tests too; `CLAUDE.md` Imagery (until finals land, every image is a labelled slot). | phase 5 |
+| Oct 31 | The copy audit is a check (`checks/copy-audit.mjs`, in `npm run checks`): it fails on exclamation marks, hype, gendered address, name-dropping, lorem ipsum, a price not written "$100", "ultra-dark" as a spec, Title Case runs, and the fixed names or tagline wrong; a string with a logged question is noted, not failed, until the founder answers; sections without a status are the gate's business and appear as notes. | `08` Voice and Fixed names; `09` phase 6 "copy audit against 08"; RUN.md: never weaken a check (so the audit fails on real violations and notes the rest). | phase 6 |
+| Oct 31 | The keyboard pass is a Playwright spec that runs with the suite (`tests/e2e/keyboard.spec.ts`): the opening's notice, the menu, the bag (from the header and a line's quantity), the gallery, the pop-up and the sign-up by keys alone. | `09` phase 6. | phase 6 |
+| Oct 31 | Lighthouse runs against the review build with `checks/lighthouse.mjs` (mobile, simulated throttling); the summary and the HTML reports are committed under `docs/qa/lighthouse/`. | RUN.md phase 6: the review build carries production settings and allows drafts. | phase 6 |
 
 ## Questions for Antaeus
 
@@ -265,4 +285,16 @@ Strings added to `content/copy/en.json` during the build, by section.
 
 ## Before launch
 
-Filled in during phase 6.
+What the founder and the launch wiring still need, in order. Nothing here is a code defect; each is a decision, a credential or a provider.
+
+1. **Copy sign-off.** Every section of `content/copy/en.json` is `draft` or `placeholder` (and six carry no status): `npm run build` refuses until each is `approved`. The words the data still lacks: the drop's statement, each frame's `copy.line` and `copy.story`, the care page (a placeholder today), the support address (`{supportEmail}`), the S01 scene's alt text. The table "Copy to sign off" lists every string the build added.
+2. **The questions above**, each with a default in use (Open vs Live, the drop line on the drop page, the gold element on a live drop, the manifesto's seventh paragraph, the A6 twice on a frame page, the bag line's two prices, the reading columns, the list sentence in two places, the gallery's cast cells, the detail hold's grade, burst 2's bright frames, the per-customer limit).
+3. **Fonts** (`00-decisions.md` O8): Owners Wide and Stolzl through an Adobe Fonts kit (`PUBLIC_ADOBE_FONTS_KIT`) or the git-ignored local folder (`brand/fonts/README.md`). Then re-measure the manifesto's widest word for the 10cqi cap, re-record the baselines and the review sets.
+4. **The drop plan** (O2): `content/drops/drop-001.json` (dates in `America/Chicago`, pairs per frame, the per-customer limit), the pairs-left threshold (`PUBLIC_PAIRS_LEFT_THRESHOLD`, `null` today), and whether the early window is real (O6: the customer-tag gate, else the list keeps its no-early-access sentence).
+5. **The store connection.** `createHydrogenContext` and Hydrogen's request handler replace `server.ts`'s plain handler; Storefront API queries replace `app/lib/mock/` in the same shapes (products with `ds.*` metafields, the `drop` metaobject, per-variant inventory as the only source of pairs left, the `manifesto`, `list_offer`, `notice` and `promise` metaobjects); the bag becomes the cart API with the checkout URL on `BagSummary`; `/account/*` goes to Shopify accounts; Shopify's policy pages replace the placeholders; the image library moves to the Shopify CDN (the `/photography/` static route swaps for the CDN URLs the manifest ids map to).
+6. **Email and SMS** (O7): `ListForm` posts to the provider instead of the `ds_list` mock (clear it), double opt-in and the `sms.*` templates with the provider's required wording, the support address in the HELP reply.
+7. **Pictures.** M3's and W3's portraits and the eleven draft cast shots through `tools/photo/export_web.py` (the manifest carries them; nothing in the app changes); the GCD's metal and sizes from the factory (O4) in the copy and the product data; cast stills for the entry's bursts once cast finals exist, then `python3 tools/photo/entry_stills.py --check` and `python3 tools/flashcheck.py` again.
+8. **Cookies and privacy.** `Secure` on `ds_entry`, `ds_offer` and `ds_mode` (`app/lib/entry.ts`, `app/lib/list-offer.ts`, `app/lib/cookies.ts`); the privacy and SMS terms from Shopify; no analytics is installed, so no consent banner exists yet (add one with the first script).
+9. **Production only.** Wire mode (`?mode=wire`, `ds_mode`) and `/dev/tokens` are review tools: keep them off production (`/dev/tokens` already 404s there; gate the mode on `reviewBuild`). The root's `shouldRevalidate` must revalidate when the search changes or a drop has times (today's data has none).
+10. **Performance before launch.** Lighthouse mobile is 99 / 93 / 98 today on the review build; the frame page's chunk carries all 32 drawings (serve per frame if the score slips), the stage card's hover picture is lazy (preload on the first cards), and two cards below the first screen are marked priority.
+11. **The last checks.** `npm run ci` green on the production build (the gate passes once the copy is approved), Lighthouse ≥ 90 on the production URL, axe, the flash check on the final sequence, the real fonts on the review sets. Pixel comparisons stay on this machine (top of this file).

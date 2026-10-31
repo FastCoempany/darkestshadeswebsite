@@ -24,7 +24,8 @@
     "check:schema": "node checks/schema.mjs",
     "check:copy-gate": "node checks/copy-gate.mjs",
     "check:layers": "node checks/layers.mjs",
-    "checks": "npm run check:strings && npm run check:hex && npm run check:schema && npm run check:copy-gate && npm run check:layers && python3 tools/flashcheck.py",
+    "check:copy-audit": "node checks/copy-audit.mjs",
+    "checks": "npm run check:strings && npm run check:hex && npm run check:schema && npm run check:copy-gate && npm run check:copy-audit && npm run check:layers && python3 tools/flashcheck.py",
     "ci": "npm run checks && npm run typecheck && npm run lint && npm run test && npm run build:review && npm run storybook:build && npm run test:e2e",
     "capture:wire": "DS_CAPTURE=wire playwright test --project=capture",
     "capture:ui": "DS_CAPTURE=ui playwright test --project=capture"

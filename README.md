@@ -21,6 +21,27 @@ This repo holds the plan and the assets the build starts from. The app itself (`
 | `08-copy.md` | Voice, honesty rules, consent and safety copy |
 | `09-build-plan.md` | Stack, workspace setup, phases, checks |
 
+### Run the app
+
+Node 22 and Python 3 (the tools). Then:
+
+```bash
+npm install
+npm run dev            # http://localhost:3000 (MiniOxygen); ?mode=wire for the wireframes; /dev/tokens for the token sheet
+npm run storybook      # http://localhost:6006: every component and page state, UI and wire mode, 390 and 1440 in the toolbar
+```
+
+Before a pull request:
+
+```bash
+npm run checks         # banned strings, hex colors in app/, the product schema, the copy gate, the layer rule, the flash check
+npm run typecheck && npm run lint && npm test
+npm run test:e2e       # Playwright: fonts, screenshots at 390 and 1440 against the committed baselines, axe, the Storybook matrix
+npm run preview:review -- --port 3000   # then, in another shell: npm run lighthouse
+```
+
+`npm run build` refuses while any section of `content/copy/en.json` is `draft` or `placeholder` (every section today): that is the copy gate, not a broken build. `npm run build:review` is the same build with drafts allowed; Lighthouse and the review screenshots run on it. The review sets are in `docs/wireframes/` (wire mode) and `docs/ui/` (UI mode); `docs/build/PROGRESS.md` is where the build stands, with the questions for the founder and the copy awaiting sign-off.
+
 ## What's here
 - `brand/marks/`: Anastasiia's logo, stacked logo and brand mark (masters, web SVGs, favicon set).
 - `brand/emblems/gcd/`: the God Cloud Device as vector masters, PNGs and 3D renders.
