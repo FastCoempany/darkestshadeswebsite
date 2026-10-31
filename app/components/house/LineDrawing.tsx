@@ -36,7 +36,7 @@ export function LineDrawing({product, views = ['front', 'side', 'top'], variant 
     m.templeLength !== null ? `${copy.product.specLabels.templeLength} ${m.templeLength} mm` : null,
   ].filter(Boolean);
   return (
-    <div className={cx('grid items-start gap-8', variant === 'triptych' && 'lg:grid-cols-3', className)} data-line-drawing={product.ds.id}>
+    <div className={cx('grid items-end gap-8', variant === 'triptych' && 'lg:grid-cols-3', className)} data-line-drawing={product.ds.id}>
       {views.map((view) => {
         const svg = svgFor(product.ds.id, view);
         if (!svg) return null;

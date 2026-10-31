@@ -43,3 +43,29 @@ describe('fill', () => {
     expect(pageTitle()).toBe('Darkest Shades');
   });
 });
+
+describe('page meta', () => {
+  it('always ships a description: the page’s own, else the site’s', async () => {
+    const {pageMeta, instagramUrl} = await import('~/lib/copy');
+    expect(pageMeta()).toEqual([{title: 'Darkest Shades'}, {name: 'description', content: copy.meta.defaultDescription}]);
+    expect(pageMeta('Cast')).toEqual([{title: 'Cast · Darkest Shades'}, {name: 'description', content: copy.meta.defaultDescription}]);
+    expect(pageMeta('Frames', 'Eight frames.')[1]).toEqual({name: 'description', content: 'Eight frames.'});
+    expect(pageMeta('Frames', null)[1].content).toBe(copy.meta.defaultDescription);
+    expect(instagramUrl()).toBe('https://instagram.com/darkestshades');
+  });
+
+  it('fills a frame’s description from its data and the price', () => {
+    expect(fill(copy.meta.frameDescription, {name: 'Lou Went Underground', descriptor: 'Blue navigator', price: '$100'})).toBe('Lou Went Underground. Blue navigator. $100. Released in drops.');
+    expect(fill(copy.meta.frameDescription, {name: 'Lou Went Underground', descriptor: null, price: '$100'})).toBeNull();
+  });
+});
+
+describe('the list’s sentence', () => {
+  it('promises early access only when the store really gates the drop', async () => {
+    const {listBody} = await import('~/lib/list-offer');
+    expect(listBody()).toBe(copy.list.bodyNoEarlyAccess);
+    expect(listBody({enabled: false, hours: 24})).toBe(copy.list.bodyNoEarlyAccess);
+    expect(listBody({enabled: true, hours: null})).toBe(copy.list.bodyNoEarlyAccess);
+    expect(listBody({enabled: true, hours: 24})).toBe(copy.list.body.replace('{hours}', '24'));
+  });
+});

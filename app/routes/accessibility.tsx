@@ -2,10 +2,10 @@ import {data} from 'react-router';
 import type {Route} from './+types/accessibility';
 import {AccessibilityPage} from '~/components/pages/AccessibilityPage';
 import {ENTRY_COOKIE, readCookie} from '~/lib/cookies';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 import {entryCookie} from '~/lib/entry';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle(copy.accessibility.title)}];
+export const meta: Route.MetaFunction = () => pageMeta(copy.accessibility.title);
 export const handle = {theme: 'paper'};
 
 export async function loader({request}: Route.LoaderArgs) {

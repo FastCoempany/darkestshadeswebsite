@@ -1,8 +1,8 @@
 import type {Route} from './+types/dev.tokens';
 import {TokenSheet} from '~/components/dev/TokenSheet';
-import {pageTitle} from '~/lib/copy';
+import {pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle('Tokens')}, {name: 'robots', content: 'noindex'}];
+export const meta: Route.MetaFunction = () => [...pageMeta('Tokens'), {name: 'robots', content: 'noindex'}];
 
 /** The token test page (09-build-plan.md, phase 0). Dev server and review builds only; a production build 404s it. */
 export async function loader({context}: Route.LoaderArgs) {

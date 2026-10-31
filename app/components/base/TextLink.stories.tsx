@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react-vite';
-import {copy} from '~/lib/copy';
+import {copy, instagramUrl} from '~/lib/copy';
 import {TextLink} from './TextLink';
 
 function Sheet({force}: {force?: 'hover' | 'focus-visible'}) {
@@ -15,7 +15,7 @@ function Sheet({force}: {force?: 'hover' | 'focus-visible'}) {
       </nav>
       <ul className="grid gap-2">
         <li><TextLink to="/questions" variant="footer" data-force={force}>{copy.footer.links.questions}</TextLink></li>
-        <li><TextLink to="https://instagram.com/darkestshades" variant="footer" external>{copy.meta.instagram}</TextLink></li>
+        <li><TextLink to={instagramUrl()} variant="footer" external>{copy.meta.instagram}</TextLink></li>
       </ul>
     </div>
   );

@@ -23,7 +23,7 @@ import {NotFoundPage} from '~/components/pages/NotFoundPage';
 import {PageShell} from '~/components/house/PageShell';
 import {CartProvider} from '~/lib/cart';
 import {currentDropView} from '~/lib/drop-view';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 import {MODE_COOKIE, readCookie} from '~/lib/cookies';
 
 export type RootLoader = typeof loader;
@@ -44,10 +44,9 @@ export function links() {
   ];
 }
 
-export const meta: Route.MetaFunction = () => [
-  {title: pageTitle()},
-  {name: 'description', content: copy.meta.defaultDescription},
-];
+/** The root's meta is the only one that runs when a loader throws (the matches stop at the boundary), so it titles the 404 and the error page. */
+export const meta: Route.MetaFunction = ({error}) =>
+  error ? pageMeta(isRouteErrorResponse(error) && error.status === 404 ? copy.notFound.title : copy.error.title) : pageMeta();
 
 export async function loader({request, context}: Route.LoaderArgs) {
   const url = new URL(request.url);

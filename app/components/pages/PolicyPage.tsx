@@ -25,10 +25,10 @@ export function PolicyPage({handle}: {handle: PolicyHandle}) {
 export function PoliciesIndexPage() {
   return (
     <ReadingPage title={copy.policies.title}>
-      <ul className="grid gap-3">
+      <ul className="grid gap-1">
         {(Object.keys(copy.policies.items) as PolicyHandle[]).map((h) => (
           <li key={h}>
-            <Link to={`/policies/${h}`} className="underline underline-offset-3">
+            <Link to={`/policies/${h}`} className="inline-flex min-h-11 items-center underline underline-offset-3">
               {copy.policies.items[h]}
             </Link>
           </li>

@@ -1,8 +1,8 @@
 import type {Route} from './+types/care';
 import {CarePage} from '~/components/pages/CarePage';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle(copy.care.title)}];
+export const meta: Route.MetaFunction = () => pageMeta(copy.care.title);
 export const handle = {theme: 'paper'};
 
 export default function Care() {

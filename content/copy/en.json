@@ -7,7 +7,8 @@
     "hashtag": "#DarkestShades",
     "tagline": "See Everything. Reveal Nothing.",
     "titleTemplate": "{page} · Darkest Shades",
-    "defaultDescription": "Sunglasses for people who decide what gets seen. $100. Released in drops."
+    "defaultDescription": "Sunglasses for people who decide what gets seen. $100. Released in drops.",
+    "frameDescription": "{name}. {descriptor}. {price}. Released in drops."
   },
   "entry": {
     "status": "draft",

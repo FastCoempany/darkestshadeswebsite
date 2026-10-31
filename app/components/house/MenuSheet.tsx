@@ -3,7 +3,7 @@ import {Sheet} from '~/components/base/Sheet';
 import {TextLink} from '~/components/base/TextLink';
 import {DropLine} from '~/components/house/DropLine';
 import type {DropView} from '~/lib/drop-view';
-import {copy} from '~/lib/copy';
+import {copy, instagramUrl} from '~/lib/copy';
 
 export interface MenuSheetProps {
   open: boolean;
@@ -46,7 +46,7 @@ export function MenuSheet({open, onClose, drop}: MenuSheetProps) {
             </TextLink>
           </li>
           <li>
-            <TextLink to="https://instagram.com/darkestshades" variant="footer" external>
+            <TextLink to={instagramUrl()} variant="footer" external>
               {copy.meta.instagram}
             </TextLink>
           </li>

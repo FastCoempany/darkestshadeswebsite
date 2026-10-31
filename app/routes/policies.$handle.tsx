@@ -1,8 +1,8 @@
 import type {Route} from './+types/policies.$handle';
 import {isPolicyHandle, PolicyPage} from '~/components/pages/PolicyPage';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = ({data}) => [{title: pageTitle(data ? copy.policies.items[data.handle] : copy.policies.title)}];
+export const meta: Route.MetaFunction = ({data}) => pageMeta(data ? copy.policies.items[data.handle] : copy.policies.title);
 export const handle = {theme: 'paper'};
 
 export async function loader({params}: Route.LoaderArgs) {

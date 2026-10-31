@@ -1,8 +1,8 @@
 import type {Route} from './+types/cart';
 import {BagPage} from '~/components/pages/BagPage';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle(copy.bag.title)}];
+export const meta: Route.MetaFunction = () => pageMeta(copy.bag.title);
 
 export async function loader({context}: Route.LoaderArgs) {
   return {limit: context.store.drops.current()?.limitPerCustomer ?? null};

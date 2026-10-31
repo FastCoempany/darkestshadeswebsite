@@ -91,3 +91,15 @@ test.describe('house behaviours', () => {
     expect(stored).toContain('name@example.com');
   });
 });
+
+/** A missing path, frame, drop or policy is a 404 titled as one: only the root's meta runs when a loader throws. */
+test.describe('404 titles', () => {
+  for (const path of ['/nothing-here', '/frames/nothing-here', '/drops/999', '/policies/nothing']) {
+    test(`${path} is titled as the 404`, async ({page}) => {
+      const response = await page.goto(path);
+      expect(response?.status()).toBe(404);
+      await expect(page).toHaveTitle(/This page doesn't exist\. · Darkest Shades/);
+      await expect(page.locator('[data-page="not-found"][data-status="404"]')).toHaveCount(1);
+    });
+  }
+});

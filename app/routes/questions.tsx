@@ -1,8 +1,8 @@
 import type {Route} from './+types/questions';
 import {QuestionsPage} from '~/components/pages/QuestionsPage';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle(copy.questions.title)}];
+export const meta: Route.MetaFunction = () => pageMeta(copy.questions.title);
 export const handle = {theme: 'paper'};
 
 export default function Questions() {

@@ -1,8 +1,8 @@
 import type {Route} from './+types/cast';
 import {CastPage} from '~/components/pages/CastPage';
-import {copy, pageTitle} from '~/lib/copy';
+import {copy, pageMeta} from '~/lib/copy';
 
-export const meta: Route.MetaFunction = () => [{title: pageTitle(copy.cast.title)}];
+export const meta: Route.MetaFunction = () => pageMeta(copy.cast.title);
 
 export async function loader({context}: Route.LoaderArgs) {
   return {members: context.store.cast.members(), products: context.store.products.all()};
