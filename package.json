@@ -7,9 +7,9 @@
   "scripts": {
     "dev": "shopify hydrogen dev",
     "build": "shopify hydrogen build",
-    "build:review": "DS_REVIEW_BUILD=1 shopify hydrogen build",
+    "build:review": "cross-env DS_REVIEW_BUILD=1 shopify hydrogen build",
     "preview": "shopify hydrogen preview",
-    "preview:review": "DS_REVIEW_BUILD=1 shopify hydrogen preview --build",
+    "preview:review": "cross-env DS_REVIEW_BUILD=1 shopify hydrogen preview --build",
     "typecheck": "react-router typegen && tsc --noEmit",
     "lint": "eslint --no-error-on-unmatched-pattern .",
     "test": "vitest run",
@@ -27,8 +27,8 @@
     "check:copy-audit": "node checks/copy-audit.mjs",
     "checks": "npm run check:strings && npm run check:hex && npm run check:schema && npm run check:copy-gate && npm run check:copy-audit && npm run check:layers && python3 tools/flashcheck.py",
     "ci": "npm run checks && npm run typecheck && npm run lint && npm run test && npm run build:review && npm run storybook:build && npm run test:e2e",
-    "capture:wire": "DS_CAPTURE=wire playwright test --project=capture",
-    "capture:ui": "DS_CAPTURE=ui playwright test --project=capture"
+    "capture:wire": "cross-env DS_CAPTURE=wire playwright test --project=capture",
+    "capture:ui": "cross-env DS_CAPTURE=ui playwright test --project=capture"
   },
   "prettier": "@shopify/prettier-config",
   "dependencies": {
@@ -67,6 +67,7 @@
     "@vitejs/plugin-react": "^5.0.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
+    "cross-env": "^10.1.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-typescript": "^3.7.0",
