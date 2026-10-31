@@ -14,7 +14,7 @@ import {PoliciesIndexPage, PolicyPage} from '~/components/pages/PolicyPage';
 import {QuestionsPage} from '~/components/pages/QuestionsPage';
 import gcdRender from '../../../../brand/emblems/gcd/render/gcd-3d-yaw35-1024.png?url';
 import {store} from '~/lib/mock';
-import {cast, drops, fullBag, Page, products} from './fixtures';
+import {cast, drops, fullBag, Page, products, storyDrawings} from './fixtures';
 
 /**
  * Every template in 04-ia-and-pages.md, in every state a page can be in. The drop states that today's
@@ -141,7 +141,7 @@ export const Frame: Story = {
   name: 'Frame · F01',
   render: () => (
     <Page>
-      <FramePage product={f01} drop={drops.announcedNoDate} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+      <FramePage product={f01} drawings={storyDrawings(f01.ds.id)} drop={drops.announcedNoDate} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
     </Page>
   ),
 };
@@ -149,7 +149,7 @@ export const FrameLive: Story = {
   name: 'Frame · F01, drop live',
   render: () => (
     <Page drop={drops.live}>
-      <FramePage product={f01} drop={drops.live} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+      <FramePage product={f01} drawings={storyDrawings(f01.ds.id)} drop={drops.live} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
     </Page>
   ),
 };
@@ -157,7 +157,7 @@ export const FrameSoldOut: Story = {
   name: 'Frame · F01, sold out',
   render: () => (
     <Page drop={drops.soldOut}>
-      <FramePage product={f01} drop={drops.soldOut} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+      <FramePage product={f01} drawings={storyDrawings(f01.ds.id)} drop={drops.soldOut} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
     </Page>
   ),
 };
@@ -165,7 +165,7 @@ export const FrameEnded: Story = {
   name: 'Frame · F01, drop ended (the next drop line)',
   render: () => (
     <Page drop={drops.ended}>
-      <FramePage product={f01} drop={drops.ended} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+      <FramePage product={f01} drawings={storyDrawings(f01.ds.id)} drop={drops.ended} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
     </Page>
   ),
 };
@@ -173,7 +173,7 @@ export const FrameNoDrop: Story = {
   name: 'Frame · F01, no drop',
   render: () => (
     <Page drop={null}>
-      <FramePage product={f01} drop={null} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
+      <FramePage product={f01} drawings={storyDrawings(f01.ds.id)} drop={null} castShots={store.cast.shotsForFrame('F01')} next={store.products.next('F01')} />
     </Page>
   ),
 };
@@ -205,7 +205,7 @@ export const FrameF08: Story = {
   name: 'Frame · F08 (the GCD render in the detail hold)',
   render: () => (
     <Page>
-      <FramePage product={f08} drop={drops.announcedNoDate} castShots={store.cast.shotsForFrame('F08')} next={store.products.next('F08')} detailRender={gcdRender} />
+      <FramePage product={f08} drawings={storyDrawings(f08.ds.id)} drop={drops.announcedNoDate} castShots={store.cast.shotsForFrame('F08')} next={store.products.next('F08')} detailRender={gcdRender} />
     </Page>
   ),
 };

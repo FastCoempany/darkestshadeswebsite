@@ -1,9 +1,21 @@
 import type {ReactNode} from 'react';
+import type {Drawings} from '~/lib/drawings';
 import {toDropView, type DropView} from '~/lib/drop-view';
 import {PageShell} from '~/components/house/PageShell';
 import {CartProvider, emptyCart, lineFor, type Cart} from '~/lib/cart';
 import {store} from '~/lib/mock';
 import {dropAnnouncedNoDate, dropAnnouncedWithDate, dropEnded, dropLive, dropSoldOut, inventoryLive, inventorySoldOut} from '~/lib/mock/fixtures';
+
+/** Stories read every drawing eagerly (the app reads one frame's on the server, app/lib/drawings.ts). */
+const drawingFiles = import.meta.glob('../../../../content/products/drawings/*.svg', {query: '?raw', import: 'default', eager: true}) as Record<string, string>;
+export function storyDrawings(frame: string): Drawings {
+  const out: Drawings = {};
+  for (const view of ['front', 'side', 'top', 'iso'] as const) {
+    const key = Object.keys(drawingFiles).find((k) => k.endsWith(`/${frame}-${view}.svg`));
+    if (key) out[view] = drawingFiles[key];
+  }
+  return out;
+}
 
 /** A fixed clock for stories, so countdowns and dates render the same every time. */
 export const STORY_NOW = new Date('2027-03-01T18:00:00Z');
