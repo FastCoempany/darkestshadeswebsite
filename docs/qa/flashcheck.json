@@ -1,0 +1,50 @@
+{
+ "threshold": {
+  "change": 0.1,
+  "dark_below": 0.8,
+  "area": 0.25,
+  "max_flashes_per_second": 3
+ },
+ "viewports": [
+  "1024x768",
+  "390x844"
+ ],
+ "window_px": [
+  341,
+  256
+ ],
+ "runs": {
+  "assets/entry/sequence.json": [
+   {
+    "viewport": "1024x768",
+    "seconds": 12.21,
+    "frames": 40,
+    "max_flashes_in_any_second": 1.0,
+    "where": {
+     "second_from": 7.958,
+     "window_px": [
+      0,
+      0
+     ]
+    },
+    "window_changes": 302,
+    "pass": true
+   },
+   {
+    "viewport": "390x844",
+    "seconds": 12.21,
+    "frames": 40,
+    "max_flashes_in_any_second": 1.0,
+    "where": {
+     "second_from": 7.958,
+     "window_px": [
+      0,
+      0
+     ]
+    },
+    "window_changes": 47,
+    "pass": true
+   }
+  ]
+ }
+}

@@ -12,7 +12,7 @@ export const meta: Route.MetaFunction = () => [
 ];
 
 /** The home page has its own list section, so the footer's is left out. */
-export const handle = {headerSurface: 'transparent', footerList: false};
+export const handle = {headerSurface: 'transparent', footerList: false, listOffer: true};
 
 export async function loader({request, context}: Route.LoaderArgs) {
   const {store} = context;

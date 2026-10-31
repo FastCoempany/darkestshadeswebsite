@@ -37,6 +37,7 @@
   --color-surface-overlay: var(--ds-onyx-800);
   --color-surface-inverse: var(--ds-bone-100);
   --color-surface-stage: var(--ds-stage);
+  --color-surface-entry: var(--ds-black);
   --color-text-primary: var(--ds-bone-100);
   --color-text-secondary: var(--ds-ash-300);
   --color-text-tertiary: var(--ds-ash-400);
@@ -69,6 +70,7 @@
   --color-surface-overlay: var(--ds-stage);
   --color-surface-inverse: var(--ds-onyx-950);
   --color-surface-stage: var(--ds-stage);
+  --color-surface-entry: var(--ds-black);
   --color-text-primary: var(--ds-onyx-950);
   --color-text-secondary: var(--ds-onyx-700);
   --color-text-tertiary: var(--ds-graphite-500);

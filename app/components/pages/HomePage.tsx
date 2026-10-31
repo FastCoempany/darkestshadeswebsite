@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {CastFrame} from '~/components/house/CastFrame';
 import {DetailHold} from '~/components/house/DetailHold';
 import {DropStatus, type DropView} from '~/components/house/DropStatus';
-import {Entry, type EntrySequence} from '~/components/house/Entry';
+import {Entry} from '~/components/house/Entry';
 import {ListForm} from '~/components/house/ListForm';
 import {Manifesto} from '~/components/house/Manifesto';
 import {ScaleCut} from '~/components/house/ScaleCut';
@@ -25,16 +25,24 @@ export interface HomePageProps {
   showEntry?: boolean;
   /** Wire mode shows the opening as a frame list at the top of the page. */
   wire?: boolean;
-  sequence?: EntrySequence;
+  /** Stories: the drop section after its cut. */
+  cut?: boolean;
 }
 
 /** Home, in order (03-references.md): manifesto, the detail, the drop, the cast, the promises, the list. */
-export function HomePage({products, drop, cast, detail, dropHero, showEntry = false, wire = false, sequence}: HomePageProps) {
+export function HomePage({products, drop, cast, detail, dropHero, showEntry = false, wire = false, cut = false}: HomePageProps) {
   const [entry, setEntry] = useState<'notice' | 'playing' | 'done'>(showEntry && !wire ? 'notice' : 'done');
   const [reducedMotion, setReducedMotion] = useState(false);
   useEffect(() => {
     setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }, []);
+  useEffect(() => {
+    if (entry === 'done') delete document.documentElement.dataset.opening;
+    else document.documentElement.dataset.opening = 'playing';
+    return () => {
+      delete document.documentElement.dataset.opening;
+    };
+  }, [entry]);
   const finish = () => {
     document.cookie = entryCookie('seen');
     setEntry('done');
@@ -44,15 +52,15 @@ export function HomePage({products, drop, cast, detail, dropHero, showEntry = fa
   return (
     <main id="main" data-page="home">
       {entry === 'notice' ? <SensoryNotice onContinue={() => setEntry('playing')} onSkip={finish} /> : null}
-      {entry === 'playing' ? <Entry sequence={sequence} reducedMotion={reducedMotion} onDone={finish} /> : null}
-      {wire && showEntry ? <Entry sequence={sequence} wire onDone={() => undefined} /> : null}
+      {entry === 'playing' ? <Entry reducedMotion={reducedMotion} onDone={finish} /> : null}
+      {wire && showEntry ? <Entry wire onDone={() => undefined} /> : null}
 
       <Manifesto lines={copy.home.manifesto} variant="home" />
 
       <DetailHold shot="F09-A6" image={detail} line={copy.home.detail} />
 
       <ScaleCut
-        initial={wire ? 'bleed' : 'small'}
+        initial={wire || cut ? 'bleed' : 'small'}
         small={
           <div className="grid w-full max-w-sm justify-items-center gap-8">
             <ShotSlot shot="F09-H" ratio="hero-landscape" image={dropHero} sizes="384px" className="w-full" />

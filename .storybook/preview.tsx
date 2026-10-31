@@ -6,16 +6,20 @@ import '@fontsource-variable/mona-sans/standard.css';
 import '@fontsource-variable/urbanist/index.css';
 
 /** Mode and theme live on <html>, as in the app: data-mode="wire" for wireframes, data-theme for night or paper. */
-// Stories render against a fixed clock (fixtures.tsx STORY_NOW); countdowns must not tick in baselines.
-if (typeof window !== 'undefined') (window as Window & {__dsFreezeClock?: boolean}).__dsFreezeClock = true;
+// Stories are still: no clocks tick and no scroll-driven state changes (countdowns, the scale cut).
+if (typeof window !== 'undefined') (window as Window & {__dsStatic?: boolean}).__dsStatic = true;
+
+function applyModeAndTheme(mode?: string, theme?: string) {
+  const html = document.documentElement;
+  if (mode === 'wire') html.dataset.mode = 'wire';
+  else delete html.dataset.mode;
+  html.dataset.theme = theme === 'paper' ? 'paper' : 'night';
+}
 
 function ModeAndTheme({mode, theme, children}: {mode?: string; theme?: string; children: React.ReactNode}) {
-  useEffect(() => {
-    const html = document.documentElement;
-    if (mode === 'wire') html.dataset.mode = 'wire';
-    else delete html.dataset.mode;
-    html.dataset.theme = theme === 'paper' ? 'paper' : 'night';
-  }, [mode, theme]);
+  // Before the story renders, so components that read the mode on mount see it; again after, for changes.
+  applyModeAndTheme(mode, theme);
+  useEffect(() => applyModeAndTheme(mode, theme), [mode, theme]);
   return <>{children}</>;
 }
 

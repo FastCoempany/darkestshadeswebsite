@@ -17,7 +17,9 @@ export interface DropView extends Drop {
 
 export function toDropView(drop: Drop | null, now: Date, inventory: Record<FrameId, number> | null, threshold: number | null): DropView | null {
   if (!drop) return null;
-  const pairsLeft = inventory ? drop.frames.reduce((sum, f) => sum + (inventory[f] ?? 0), 0) : null;
+  // A count only when every frame in the drop has a number; a partial record is no total (honesty).
+  const complete = inventory !== null && drop.frames.every((f) => Number.isFinite(inventory[f]));
+  const pairsLeft = complete ? drop.frames.reduce((sum, f) => sum + inventory![f], 0) : null;
   const pairsTotal = drop.pairsPerFrame !== null ? drop.pairsPerFrame * drop.frames.length : null;
   return {...drop, now: now.toISOString(), inventory, pairsLeft, pairsTotal, threshold};
 }

@@ -29,7 +29,9 @@ Sequence file (written by tools/photo/entry_stills.py, played by app/components/
     {"type": "burst", "layout": "bleed", "fps": 3, "frames": [...]},
     {"type": "end",   "seconds": 1.6}]}
 Grounds are role tokens from design/tokens/tokens.color.json (night theme); a frame may also be
-{"color": "#RRGGBB"} for synthetic tests. Paths are relative to the repo root.
+{"color": "#RRGGBB"} for synthetic tests. Paths are relative to the repo root. A frame may also be the
+id of an entry in the file's `stills` table (what tools/photo/entry_stills.py writes); its smallest
+WebP is rendered.
 """
 import argparse
 import json
@@ -72,11 +74,12 @@ def luminance(img):
 
 
 class Renderer:
-    def __init__(self, width, height, roles, prim):
+    def __init__(self, width, height, roles, prim, stills=None):
         self.W, self.H = width // SCALE, height // SCALE
         self.roles, self.prim = roles, prim
         self.font = ImageFont.load_default(size=max(6, self.H // 40))
         self.cache = {}
+        self.stills = stills or {}
 
     def ground(self, step):
         name = step.get("ground", "surface-overlay")
@@ -116,6 +119,8 @@ class Renderer:
     def source(self, frame):
         if isinstance(frame, dict) and "color" in frame:
             return Image.new("RGB", (4, 3), hex_to_rgb(frame["color"]))
+        if isinstance(frame, str) and frame in self.stills:
+            frame = self.stills[frame]["sources"]["webp"][0]
         path = ROOT / frame
         if path not in self.cache:
             self.cache[path] = Image.open(path).convert("RGB")
@@ -257,7 +262,7 @@ def run(sequence, label):
     results = []
     ok = True
     for (w, h) in VIEWPORTS:
-        states = timeline(sequence, Renderer(w, h, roles, prim))
+        states = timeline(sequence, Renderer(w, h, roles, prim, sequence.get("stills")))
         worst, where, total = analyse(states, (w, h))
         passed = worst <= MAX_FLASHES_PER_SECOND
         ok = ok and passed

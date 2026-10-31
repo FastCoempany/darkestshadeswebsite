@@ -18,15 +18,31 @@ The memory of the build run (`docs/build/RUN.md`). Re-read after every compactio
 | 0 Foundation | **done** | `build/phase-0-foundation` · PR #1 | See *Phase 0 evidence* below | Oct 30 |
 | 1 Wireframes | **done** (checkpoint PR #2) | `build/phase-1-wireframes` · PR #2 | See *Phase 1 evidence* below | Oct 30 |
 | 2 Base components | **done** | `build/phase-2-base` · PR #3 | See *Phase 2 evidence* below | Oct 30 |
-| 3 House layer | not started | | | |
+| 3 House layer | **done** | `build/phase-3-house` · PR #4 | See *Phase 3 evidence* below | Oct 31 |
 | 4 UI pages | not started | | | |
 | 5 Photography | not started | | | |
 | 6 QA and hand-off | not started | | | |
 
 ## Now and next
 
-- **Now:** phase 2 is done and merged. Phase 3 (the house layer) starts on `build/phase-3-house` from the new `main`.
-- **Next:** the entry with real stills (`tools/photo/entry_stills.py` → `assets/entry/`, the flash check on the real sequence), `Burst` and `Card`, the detail hold's scroll push, `DropStatus`/`Countdown`/`PairsLeft`/`DropLine` unit tests for every missing-data case, `ListOffer`'s 60% trigger, `FilmGrain`, the header's transparent-to-solid change, stories for every house component and state; then phase 4.
+- **Now:** phase 3 is done and merged. Phase 4 (UI pages) starts on `build/phase-4-ui` from the new `main`.
+- **Next:** the pages in UI mode held against Part 1 at 390 and 1440 (night canvas, products on the stage, one gold element per view, the type scale, square corners, dark space), `npm run capture:ui` → `docs/ui/`, the screenshot and code reviews, the checkpoint PR; then phase 5.
+
+### Phase 3 evidence (Oct 31)
+
+What was built: the opening from real stills (`tools/photo/entry_stills.py` → `assets/entry/`, 17 stills, 69 files, 748 KB, `sequence.json`), `Entry`, `Burst` and `Card` on a frame clock with the notice and skip rules, the detail hold's scroll push, the scale cut's one move, the header's transparent-to-solid change, the list pop-up's trigger and cookies, the list form's mock, film grain over cast photographs, the `surface-entry` role, stories for every house component and state, unit tests for every missing-data case, and Playwright specs for the opening and the house behaviours.
+
+| Done criterion | Command | Result |
+|---|---|---|
+| The entry with the notice and the flash check | `python3 tools/photo/entry_stills.py --check` then `python3 tools/flashcheck.py --report docs/qa/flashcheck.json` | 17 stills, 28 + 8 cuts, 12.2 s; the phone set 91 KB (budget 1.5 MB); every dark file decodes under the ceiling (brightest pixel sRGB 77, relative luminance 0.074; the rule: 84, 0.09); flash check: max 1 flash in any second at 1024×768 and 390×844, exit 0 |
+| The opening's behaviour | `npx playwright test tests/e2e/entry.spec.ts` | first visit: notice → cards → burst (a `/entry/b1-…` still) → logo → burst → end → the home page, cookie `ds_entry=seen`; Esc skips from the first frame; Skip intro; never on `?utm_source`, on `/frames`, or with the cookie; reduced motion shows cards only; the Accessibility page's Off sets the cookie for a year. 12 passed at 390 and 1440 |
+| Honesty under unit test | `npm test` | 49 passed: `PairsLeft` (null, undefined, NaN, negative, threshold, no total), `Countdown` (no time, passed, invalid, undefined), `DropStatus` (no drop, no date, with a date, live with and without inventory, pairs made but inventory unknown, sold out, ended), `DropLine` (hidden states, real numbers only, the threshold), the availability word, the spec sheet's null rows, the stage card's pairs, a partial inventory is no total |
+| House behaviours | `npx playwright test tests/e2e/behaviour.spec.ts` | the detail hold's `--detail-progress` and scale; the header transparent over the manifesto and solid past it; the pop-up at 60% scroll on a frame page and on home, never on a policy page, closed with Esc, `ds_offer=closed`; the bag drawer's focus trap and return; the list form's validation, consent and mock record. 12 passed at 390 and 1440 |
+| Every house component and state as stories, at 390 and 1440, UI and wire, axe passing | `npm run storybook:build` then `npx playwright test` | 177 stories (57 Base, 92 House, 28 Pages); **806 passed** against the committed baselines (177 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, widths on nine pages at four widths, the opening and house-behaviour specs at two widths). No serious or critical axe issue |
+| Types, lint, checks | `npm run typecheck`, `npm run lint`, `npm run checks` | all exit 0; `checks` now ends with the flash check |
+| Independent review | a code review against `05`'s House table, `03`, `01`, `04`, `08`, CLAUDE.md | 4 blocking and 16 should-fix items, all fixed (decision log); its notes for phases 4–6 kept |
+
+Stand-in type throughout.
 
 ### Phase 2 evidence (Oct 30)
 
@@ -113,6 +129,21 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | Oct 30 | Two roles added through `tools/palette.py`: `text-on-stage` (onyx in both themes) for labels on the stage, and `status-error-stage` (error ink) for a failed picture's label. Both checked against the stage at 4.5:1. | The paper theme's `text-inverse` is bone, which would vanish on the stage; the night error tone fails AA on the light stage. | phase 2 |
 | Oct 30 | Hover styles apply only where a pointer can hover (`@media (hover: hover)`), with `data-force` for stories. | A tap on a touch screen would otherwise leave hover styles stuck. | phase 2 |
 | Oct 30 | Country names in the phone field come from `Intl.DisplayNames`; the component holds only codes and dial strings. | No English in components (CLAUDE.md); the provider's list replaces it at launch. | phase 2 |
+| Oct 30 | The entry's stills come from `tools/photo/entry_stills.py`: 17 black-and-white stills from the finals (the eight frames at three-quarter plus F09's hero for burst 1; three cast finals and five product pictures for burst 2), AVIF and WebP at two sizes, into `assets/entry/` with `sequence.json`. Burst 1 is graded so no pixel passes relative luminance 0.09; burst 2 alternates one bright frame with two dark ones at 3 a second. | `03`, Assets and Safety; RUN.md phase 3 notes. The phone set is 51 KB (the budget is 1.5 MB). `tools/flashcheck.py` reads the same file: max 1 flash in any second at both viewports. | phase 3 |
+| Oct 30 | The sequence file is imported at build time and the files served from `/entry/` (the static plugin and Storybook's static dirs). | MiniOxygen has no file system; the player, the flash check and the stories read one source. | phase 3 |
+| Oct 30 | The entry's grounds use the role `surface-entry` (pure black), added through the palette tool. | `01`: pure black is kept for the logo and the entry; the canvas is onyx. | phase 3 |
+| Oct 30 | The detail hold's push is `scale(1 + (push − 1) × progress)`, with the section's progress through the viewport set as a CSS variable and the push token 1 under reduced motion. | `03` reference 2 (1.00 to 1.06, scroll-linked); `05` Behavior rules (no push under reduced motion) with no JavaScript check of the preference. | phase 3 |
+| Oct 30 | The list pop-up is a hook (`useListOffer`) in the page shell, enabled by the route handle on home, drop and frame pages: once per visitor, at 60% scroll past the first screen, never while the opening plays (`<html data-opening="playing">`), 30 days after closing, a year after signing up. | `04` Overlays; `08` honesty. | phase 3 |
+| Oct 30 | Film grain is an SVG noise layer at 3.5% inside the slot of a cast photograph only, hidden under `prefers-reduced-transparency`; product pictures carry none. | `01` patina: over photography only, never the interface, off for product cut-outs. | phase 3 |
+| Oct 30 | The luminance ceiling is verified on the files the browser decodes, not on the frames in memory; dark stills are graded with headroom (brightest pixel at 0.06) and encoded near-losslessly, WebP falling back to lossless; a failure writes no sequence and exits 1. | The phase 3 review measured the first lossy files at sRGB 85–108 (ringing). The shipped set now peaks at sRGB 77, relative luminance 0.074 (the rule: 84, 0.09). | phase 3 |
+| Oct 30 | The notice and the opening are modal layers: Tab stays within them (Skip intro · Continue; Skip alone), the page behind does not scroll, Esc skips. | `05` Accessibility: the skip control first in the tab order; `03` skip from the first frame. | phase 3 |
+| Oct 30 | A card's words come from `en.json` by index; the sequence file keeps the text for the flash check only. | CLAUDE.md: all copy from `en.json`; a sign-off edit must not wait for the stills tool to run again. | phase 3 |
+| Oct 30 | The stills are preloaded with the same `srcset` and `sizes` the bursts render, so 2× screens fetch the candidates they will show. | `03` Assets: preloaded during the first card. | phase 3 |
+| Oct 30 | The scale cut arms when the small composition is at least 90% on screen and the scroll has settled for 300 ms; the next scroll, swipe, key or tap cuts. | `03` reference 3 and RUN Part 1 "Feel": stillness, then one cut, on the visitor's move inside it. | phase 3 |
+| Oct 30 | The header turns solid once the manifesto's bottom has passed the top of the screen. | `04` Navigation: transparent over the entry end card and the manifesto, night surface after. | phase 3 |
+| Oct 30 | The drop line applies the pairs-left threshold like `PairsLeft`; a partial inventory record is no total; when a countdown reaches zero the loaders run again and the state comes from data, never flipped client-side. | `05` honesty rules; RUN phase 3 (the threshold); `05` Countdown "stops at zero and switches the state". | phase 3 |
+| Oct 30 | The consent texts link to the Privacy and SMS terms pages under the checkbox. | `05` ListForm "consent checkbox and terms link"; `08`. | phase 3 |
+| Oct 30 | The phase 3 code review found 4 blocking items (the ceiling verified on the wrong artifact, no focus containment on the overlays, two missing stories, the burst bypassing a labelled slot) and 16 should-fix items; all fixed in this phase. Its notes for phases 4–6 are kept in its report. | RUN.md, Orchestration. | phase 3 |
 | Oct 30 | The phase 2 code review found 4 blocking items (story typing, two contrast failures, a load race that left product images invisible on fast loads, a focus trap that never engaged) and 13 should-fix items; all fixed in this phase. The reviewer's notes for phases 3–4 are kept in its report. | RUN.md, Orchestration. | phase 2 |
 | Oct 30 | The phase ends with an independent code review (an agent that did not build it) and a screenshot review; its findings are fixed before the PR. | RUN.md, Orchestration. The phase 1 code review found 5 blocking items (the phone header showing both marks, a `<p>` inside the spec `<dl>`, stories needing a data router, a hung image wait at 390, the missing review set) and 8 should-fix items (hard-coded aria labels, the bag line's price, 44 px targets, the sheet's focus effect, the entry's interval, a fixtures guard, 404 and accessibility stories, axe over every route); all fixed in this phase. The screenshot review found 3 must-fix items (the reading measure, the seal's wire label, the 404 shell), 11 should-fix items (the stretched status block, empty columns on live/sold-out/ended, the detail hold's height, floating drawing captions, the story clock at 390, overlay captures, the Drop nav state, Next look's heading, the cast page's top gap, a frame sold-out story) and 13 notes for phase 4; everything but the phase 4 notes fixed here. | phase 1 |
 
@@ -125,6 +156,8 @@ Screenshots looked at (stand-in type): the token sheet at 390 and 1440 in UI and
 | Does the header show "Bag (0)" or plain "Bag" when the bag is empty? | Plain "Bag" at zero. | The UI pages review (phase 4) |
 | `05` lists a 40 px button size and asks for 44 px targets. Keep the 40 px size? | Kept, with a 44 px hit area around it. | The UI pages review (phase 4) |
 | Is a drop's per-customer limit per frame or per order? | Per line (frame): the stepper and the bag clamp each line to the limit. | Launch (with the drop plan) |
+| The detail hold shows F09's A6 as it is (a lit print on the dark canvas); `03` describes a dim screen with the GCD as the only warm color. A darker grade would come from the photo pipeline. | The unaltered A6 final on its stage color. | The UI pages review (phase 4) |
+| Burst 2's bright frames are the three cast finals on black (W1, M1, W2); the two cast pictures on white backdrops read very bright in black and white. Keep them, or grade them darker? | Kept as graded (one bright frame a second, as `03` allows). | The UI pages review (phase 4) |
 
 ## Copy to sign off
 

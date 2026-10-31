@@ -14,7 +14,10 @@ const config: StorybookConfig = {
     disableWhatsNewNotifications: true,
     builder: {name: '@storybook/builder-vite', options: {viteConfigPath: '.storybook/vite.config.ts'}},
   },
-  staticDirs: [{from: '../assets/photography', to: '/photography'}],
+  staticDirs: [
+    {from: '../assets/photography', to: '/photography'},
+    {from: '../assets/entry', to: '/entry'},
+  ],
 };
 
 export default config;

@@ -3,6 +3,7 @@ import {Button} from '~/components/base/Button';
 import {Check} from '~/components/base/Check';
 import {Field, toE164, type DialCode} from '~/components/base/Field';
 import {Notice} from '~/components/base/Notice';
+import {TextLink} from '~/components/base/TextLink';
 import {copy} from '~/lib/copy';
 import {cx} from '~/lib/cx';
 
@@ -91,6 +92,14 @@ export function ListForm({scope = 'footer', initialState = 'idle', submit = mock
       <p className="font-text text-small text-ds-text-tertiary">{copy.list.emailConsent}</p>
       <Field label={copy.list.phoneLabel} kind="phone" name="phone" value={phone} onChange={(e) => setPhone(e.target.value)} hint={errors.phone} invalid={Boolean(errors.phone)} country={country} onCountryChange={setCountry} countryLabel={copy.list.countryLabel} />
       <Check variant="consent" name="sms" checked={consent} onChange={(e) => setConsent(e.target.checked)} label={copy.list.smsConsent} invalid={Boolean(errors.consent)} error={errors.consent} />
+      <p className="flex flex-wrap gap-x-4 font-text text-small">
+        <TextLink to="/policies/privacy" variant="footer">
+          {copy.footer.links.privacy}
+        </TextLink>
+        <TextLink to="/policies/sms-terms" variant="footer">
+          {copy.footer.links.smsTerms}
+        </TextLink>
+      </p>
       {state === 'error' ? <Notice tone="error">{copy.list.error}</Notice> : null}
       <Button type="submit" variant="solid" size={48} busy={state === 'submitting'}>
         {copy.list.submit}

@@ -23,7 +23,8 @@ for (const story of stories) {
       test(`${story.title} / ${story.name} @ ${size.name} ${mode}`, async ({page}) => {
         await page.setViewportSize({width: size.width, height: size.height});
         await page.goto(`/iframe.html?id=${story.id}&viewMode=story&globals=mode:${mode}`);
-        await page.waitForSelector('#storybook-root > *', {state: 'attached'});
+        // Storybook marks the body once the story has rendered; a story may legitimately render nothing.
+        await page.waitForSelector('body.sb-show-main', {state: 'attached'});
         await settle(page);
         await page.waitForTimeout(150);
         if (mode === 'wire') await expect(page.locator('html')).toHaveAttribute('data-mode', 'wire');

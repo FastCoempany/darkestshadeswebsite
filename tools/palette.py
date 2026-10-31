@@ -57,6 +57,7 @@ ROLES = {
     "night": {
         "surface-canvas": "onyx-950", "surface-base": "onyx-900", "surface-raised": "onyx-850",
         "surface-overlay": "onyx-800", "surface-inverse": "bone-100", "surface-stage": "stage",
+        "surface-entry": "black",
         "text-primary": "bone-100", "text-secondary": "ash-300", "text-tertiary": "ash-400",
         "text-disabled": "graphite-400", "text-inverse": "onyx-950", "text-accent": "gold-500",
         "text-editorial": "camel-500", "text-on-stage": "onyx-950",
@@ -72,6 +73,7 @@ ROLES = {
     "paper": {
         "surface-canvas": "bone-50", "surface-base": "bone-50", "surface-raised": "white",
         "surface-overlay": "stage", "surface-inverse": "onyx-950", "surface-stage": "stage",
+        "surface-entry": "black",
         "text-primary": "onyx-950", "text-secondary": "onyx-700", "text-tertiary": "graphite-500",
         "text-disabled": "ash-400", "text-inverse": "bone-100", "text-accent": "gold-700",
         "text-editorial": "camel-700", "text-on-stage": "onyx-950",

@@ -7,6 +7,7 @@
   --color-ds-surface-overlay: var(--color-surface-overlay);
   --color-ds-surface-inverse: var(--color-surface-inverse);
   --color-ds-surface-stage: var(--color-surface-stage);
+  --color-ds-surface-entry: var(--color-surface-entry);
   --color-ds-text-primary: var(--color-text-primary);
   --color-ds-text-secondary: var(--color-text-secondary);
   --color-ds-text-tertiary: var(--color-text-tertiary);

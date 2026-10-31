@@ -9,6 +9,8 @@ export const meta: Route.MetaFunction = ({data}) => [
   {name: 'description', content: data ? fill(copy.alt.stage, {subject: copy.alt.subjects[data.product.ds.id], angle: copy.alt.angles.A1}) : copy.meta.defaultDescription},
 ];
 
+export const handle = {listOffer: true};
+
 export async function loader({params, context}: Route.LoaderArgs) {
   const product = context.store.products.byHandle(params.handle);
   if (!product) throw new Response('Not found', {status: 404});

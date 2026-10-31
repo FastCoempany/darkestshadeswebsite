@@ -68,7 +68,7 @@ def main():
     # Wireframe mode: greyscale roles, no gold, no camel, media slots labelled by ShotSlot.
     wire = {
         "surface-canvas": "#FFFFFF", "surface-base": "#FFFFFF", "surface-raised": "#F2F2F2", "surface-overlay": "#E6E6E6",
-        "surface-inverse": "#1A1A1A", "surface-stage": "#DADADA",
+        "surface-inverse": "#1A1A1A", "surface-stage": "#DADADA", "surface-entry": "#FFFFFF",
         "text-primary": "#000000", "text-secondary": "#3D3D3D", "text-tertiary": "#5C5C5C", "text-disabled": "#8A8A8A",
         "text-inverse": "#FFFFFF", "text-accent": "#000000", "text-editorial": "#000000", "text-on-stage": "#000000",
         "border-hairline": "#CCCCCC", "border-rule": "#999999", "border-control": "#6B6B6B", "focus-ring": "#000000",

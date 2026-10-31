@@ -38,6 +38,15 @@ export const Home: Story = {
   ),
 };
 
+export const HomeAfterTheCut: Story = {
+  name: 'Home · the drop after its cut',
+  render: () => (
+    <Page headerSurface="transparent" footerList={false}>
+      <HomePage products={products} drop={drops.announcedNoDate} cast={cast} detail={store.images.forShot('F09', 'A6')} dropHero={store.images.forShot('F09', 'H')} cut />
+    </Page>
+  ),
+};
+
 export const DropAnnouncedNoDate: Story = {
   name: 'Drop · announced, no date (today)',
   render: () => (

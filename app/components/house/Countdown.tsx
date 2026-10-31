@@ -19,8 +19,8 @@ export function Countdown({to, now, label, onReached, className}: CountdownProps
   const left = remaining(to ?? null, current);
 
   useEffect(() => {
-    // Stories and screenshot runs freeze the clock (window.__dsFreezeClock) so baselines stay still.
-    if (!to || (window as Window & {__dsFreezeClock?: boolean}).__dsFreezeClock) return;
+    // Stories and screenshot runs are still (window.__dsStatic): the clock does not tick.
+    if (!to || (window as Window & {__dsStatic?: boolean}).__dsStatic) return;
     const id = window.setInterval(() => setCurrent(new Date()), 1000);
     return () => window.clearInterval(id);
   }, [to]);

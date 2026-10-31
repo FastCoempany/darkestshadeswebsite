@@ -1,5 +1,6 @@
 import {Link} from 'react-router';
 import {ShotSlot} from '~/components/base/ShotSlot';
+import {FilmGrain} from '~/components/house/FilmGrain';
 import {LookNumber} from '~/components/house/LookNumber';
 import {cx} from '~/lib/cx';
 import type {CastShot, StorefrontProduct} from '~/lib/mock/types';
@@ -17,7 +18,9 @@ export interface CastFrameProps {
 export function CastFrame({shot, product, variant = 'card', priority = false, className}: CastFrameProps) {
   return (
     <figure className={cx('grid gap-3', variant === 'bleed' && 'min-h-dvh content-center', className)} data-cast-frame={shot.code}>
-      <ShotSlot shot={shot.code} ratio="stage" image={shot.image} surface="canvas" priority={priority} sizes={variant === 'bleed' ? '100vw' : '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'} />
+      <ShotSlot shot={shot.code} ratio="stage" image={shot.image} surface="canvas" priority={priority} sizes={variant === 'bleed' ? '100vw' : '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw'}>
+        {shot.image ? <FilmGrain /> : null}
+      </ShotSlot>
       {product ? (
         <figcaption className="flex items-baseline gap-3 px-4 md:px-0">
           <LookNumber number={product.ds.lookNumber} />
