@@ -29,25 +29,52 @@ Each phase's evidence below is as recorded at that phase's merge (its counts of 
 
 ## Now and next
 
-- **Now:** the run is complete. Phases 0–6 are done and merged (PRs #1–#7); the final pass on the final code ran every check and is recorded below (*Final pass*); PR #8 carries this record and the Lighthouse reports of the final tree.
+- **Now:** the run is complete. Phases 0–6 are done and merged (PRs #1–#7); the final pass ran every check on the final tree and is recorded below (*Final pass*); PRs #8 and #9 carry the record and the Lighthouse reports.
 - **Next:** the founder's part, in "Before launch": the questions, the copy sign-off, the fonts, the drop plan, the store connection.
 
 ### Final pass (Oct 31)
 
-Run on the final code (`build/phase-6-qa` at its merge), in CI order, each with its exit status:
+One pass, on commit `65503ca` (the final code; the only commits after it are this record and the Lighthouse reports it produced), every check in CI order, each with its exit status. The output as printed:
 
-| Check | Command | Result |
-|---|---|---|
-| The CI checks | `npm run checks` | exit 0: no banned strings in `app/` or `content/copy/`; no hex colors in `app/`; the 8 product files match the schema; the copy gate lists 21 unapproved sections (by design, see the top of this file); the copy audit ok with 7 notes; base imports nothing from house, no route or page imports mock fixtures; the flash check on `sequence.json` passes at 1024×768 and 390×844 (max 1 flash in any second) |
-| Types | `npm run typecheck` | exit 0 |
-| Lint | `npm run lint` | exit 0 |
-| Unit tests | `npm test` | exit 0: 5 files, 59 passed (the honesty rules, the mock adapter, the manifest, the copy gate and page meta) |
-| The flash check's self-test and the real sequence | `python3 tools/flashcheck.py --self-test`; `python3 tools/flashcheck.py --report docs/qa/flashcheck.json` | exit 0 both: the white strobe fails as it must (6 flashes a second), the dark strobe passes; the real sequence passes at both viewports |
-| The production build refuses | `npm run build` | refused by the copy gate (21 sections unapproved), as designed |
-| The review build and Storybook | `npm run build:review`; `npm run storybook:build` | exit 0 both |
-| axe, on its own | `npx playwright test tests/e2e/axe.spec.ts` (16 routes at 390 and 1440, WCAG 2.2 AA tags, the home page with the notice, a frame page, F08's page, the paper pages, the bag, the token sheet, a 404) | exit 0: 32 passed, no violation of any impact logged (the spec fails on serious or critical and prints the rest; it printed none). axe also runs on every story in UI mode inside the Storybook matrix below |
-| Playwright, with axe | `npx playwright test` | exit 0: **883 passed, 3 skipped by design** (31.7 min): every story at 390 and 1440 in UI and wire mode against the committed baselines with axe in UI mode, the fonts, the token sheet, axe on 16 routes at two widths, the widths, the opening, the house behaviours, the 404 titles, the keyboard pass. A first run of this pass had one failure, a race inside the reduced-motion opening test (fixed: the test reads the entry's state in one step; the opening's spec then passed three runs in a row and the whole suite again) |
-| Lighthouse | `npm run preview:review -- --port 3000`, then `npm run lighthouse` | exit 0 on the final tree (the committed reports): home (first visit) 100, home (returning visitor) 100, frames 98, a frame page 90 on performance; 100 on accessibility, best practices and SEO throughout. The scores move between runs on this machine (simulated throttling on a shared VM): across the runs of this pass the frame page scored 96, 95, 96, 96 and 90 and frames 93, 97, 93 and 98. Before the drawings moved to the server the frame page swung from 98 to 80 and 77, which is why they moved |
+```
+--- npm run checks ---                                                        exit 0
+[check:strings] ok: none of 10 banned strings in app, content/copy
+[check:hex] ok: no hex colors in app/
+[check:schema] ok: 8 product files match product.schema.json
+[copy-gate] 21 section(s) of content/copy/en.json are not approved (by design; see the top of this file)
+[copy-audit] 7 note(s); ok: no exclamation marks, hype, gendered address or name-dropping; the fixed names and the tagline exact; the price written $100
+[check:layers] ok: base imports nothing from house; no route or page component imports mock/fixtures
+[flashcheck] sequence.json 1024x768: 40 states over 12.2s, max 1 flashes in any second (pass)
+[flashcheck] sequence.json 390x844: 40 states over 12.2s, max 1 flashes in any second (pass)
+--- npm run typecheck (react-router typegen && tsc --noEmit) ---              exit 0
+--- npm run lint (eslint .) ---                                               exit 0
+--- npm test ---                                                              exit 0
+ Test Files  5 passed (5)
+      Tests  59 passed (59)
+--- python3 tools/flashcheck.py --self-test ---                               exit 0
+[flashcheck] white-strobe: max 6 flashes in any second (FAIL) at both viewports, as it must
+[flashcheck] dark-strobe: max 0 flashes in any second (pass) at both viewports, as it must
+[flashcheck] self-test: white-strobe failed as it must; dark-strobe passed as it must -> OK
+--- python3 tools/flashcheck.py --report docs/qa/flashcheck.json ---          exit 0
+[flashcheck] sequence.json 1024x768 and 390x844: max 1 flashes in any second (pass)
+--- npm run build (must refuse) ---                                           refused, as designed
+[copy-gate] production build refused: 21 section(s) of content/copy/en.json are not approved
+--- npm run build:review ---                                                  exit 0  (✓ built)
+--- npm run storybook:build ---                                               exit 0  (Storybook build completed successfully)
+--- npx playwright test tests/e2e/axe.spec.ts (16 routes × 390 and 1440) --- exit 0
+  32 passed (49.8s); axe violation lines logged: 0
+--- npx playwright test ---                                                   exit 0
+  883 passed, 3 skipped by design (32.3m): every story at 390 and 1440 in UI and wire mode against the
+  committed baselines with axe in UI mode, the fonts, the token sheet, axe on 16 routes, the widths,
+  the opening, the house behaviours, the 404 titles, the keyboard pass
+--- npm run lighthouse (asserting, on the review build) ---                   exit 0
+[lighthouse] / (first visit: the notice over the page): performance 100, accessibility 100, best-practices 100, seo 100 | LCP 1.1 s, CLS 0.002, 312 KiB
+[lighthouse] / (returning visitor): performance 100, accessibility 100, best-practices 100, seo 100 | LCP 1.1 s, CLS 0.001, 311 KiB
+[lighthouse] /frames: performance 93, accessibility 100, best-practices 100, seo 100 | LCP 3.2 s, CLS 0.001, 375 KiB
+[lighthouse] /frames/lou-went-underground: performance 96, accessibility 100, best-practices 100, seo 100 | LCP 2.6 s, CLS 0.002, 446 KiB
+```
+
+Lighthouse's performance scores move between runs on this shared machine (simulated throttling): across the passes of this day the frame page scored 96, 95, 96, 96, 90 and 96, and frames 93, 97, 93, 98 and 93; before the drawings moved to the server (phase 6) the frame page swung from 98 to 80 and 77, which is why they moved. The three skipped Playwright tests are the phone-only menu and gallery tests at 1440 and the desktop header test at 390. An earlier run of this pass, before the final tree, had one failure, a race inside the reduced-motion opening test, fixed in `4f53bef` (the test reads the entry's state in one step; the assertions are unchanged).
 
 ### Phase 6 evidence (Oct 31)
 
@@ -60,7 +87,7 @@ What was done: Lighthouse mobile on the review build (`checks/lighthouse.mjs`, r
 | Lighthouse mobile ≥ 90 on Home, Frames and a frame page, with real images | `npm run preview:review -- --port 3000`, then `npm run lighthouse` (asserts) | On the final tree: home, first visit: performance 100, accessibility 100, best practices 100, SEO 100 (LCP 1.1 s, CLS 0.002, 312 KiB); home, returning visitor: 100, 100, 100, 100 (LCP 1.1 s, CLS 0.001, 311 KiB); /frames: 98, 100, 100, 100 (LCP 2.4 s, CLS 0.001, 375 KiB); /frames/lou-went-underground: 90, 100, 100, 100 (LCP 3.6 s, CLS 0.002, 446 KiB); the frame page's score ranged 90–96 over five runs of this pass. Home is measured twice: as a first visit, where the photosensitivity notice sits over the page and the opening (which plays only after Continue) is not measured, and as a returning visitor (`ds_entry=seen`), the page every deep link and later visit gets. Reports under `docs/qa/lighthouse/` |
 | Entry assets under 1.5 MB | `du -b assets/entry`; the candidate sets from `sequence.json` | 627 KB on disk for every size and format of the 17 stills (69 files); a phone fetches one candidate per still: 93 KB with the smallest AVIFs, 208 KB with the largest AVIFs, 223 KB with the largest WebPs; the flash check on the same sequence passes (`docs/qa/flashcheck.json`) |
 | Copy audit against `08` | `npm run check:copy-audit` | ok: no exclamation marks, hype, gendered address or name-dropping; the fixed names and the tagline exact; the price written $100; 7 notes (the S01 scene's "runway", a logged question; six sections without a status, which the gate counts as draft) |
-| Honesty tests green; visual baselines committed | `npm test`; `git status` | 59 unit tests (every missing-data case of the drop components, the availability word, the spec sheet, the stage card's pairs, the manifest); 189 stories × 390/1440 × UI/wire baselines committed |
+| Honesty tests green; visual baselines committed | `npm test`; `git status` | 59 unit tests (the final pass's count too) (every missing-data case of the drop components, the availability word, the spec sheet, the stage card's pairs, the manifest); 189 stories × 390/1440 × UI/wire baselines committed |
 | README "Start here" | `README.md` | how to run the app, Storybook, the checks, the review build and Lighthouse; the copy gate explained |
 | "Before launch" | this file | the list below |
 
@@ -75,7 +102,7 @@ What was built: the manifest reader is one function of the CSV text (`imagesFrom
 | The site reads `MANIFEST.csv`; a new or replaced final needs no code change | `npm test` (`tests/unit/manifest.test.ts`) | A synthetic product row becomes the picture with its AVIF, WebP and JPEG sets from the `widths` column (unsorted widths sorted), its alt text, shot code, ratio and version; a synthetic cast row becomes the shot code the slots use; a draft row and a row for a frame the site does not sell stay out; an unknown angle sorts after the hero; a missing column is named; the folder and the manifest name exactly the same files (777 today) |
 | Cast finals that reached `main` are wired; everything else a labelled slot | the same test; `git log origin/main -- assets/photography content/photography dam` | Nine cast pictures wired (W1-S07-F02-A1, W2-S06-F03-A1, W2-S06-F03-A2, W2-S06-F09-A2, M1-S06-F04-A1, M1-S06-F08-A1, M2-S07-F01-A1, M2-S07-F05-A1, NB-S06-F06-A1); the five studio portraits on `/cast` with M3 and W3 as labelled slots; eleven draft shots as slots; no new commit under the photography paths since RUN.md's Oct 28 baseline (the last is 0ed3270, the nine approved on-model pictures) |
 | Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 59 unit tests |
-| The pages | unchanged in this phase | the phase 4 baselines and review sets stand (862 Playwright tests at the phase 4 merge) |
+| The pages | unchanged in this phase | the phase 4 baselines and review sets stand (862 Playwright tests at the phase 4 merge; 883 in the final pass) |
 
 Stand-in type throughout.
 
@@ -87,8 +114,8 @@ What was built: every template in `04` composed from the phase 2 and 3 component
 |---|---|---|
 | Every page at 390 and 1440 in UI mode, every state | `npm run capture:ui` | `docs/ui/`: 30 page captures (home, drop, frames, frame F01, frame F08, manifesto, cast, questions, care, policies, policy exchange, accessibility, bag, account, 404 at 390 and 1440) and `docs/ui/states/`: 86 state captures from the Pages and Overlays stories (the drop announced without and with a date, live, sold out, ended, with an archive; frames with a live and a sold-out drop; the frame page live, sold out, ended, without a drop, F08; the bag empty and full as page and drawer; the menu, the pop-up, the notice, the entry's frame list; the paper pages; 404 and 500) |
 | Pictures through the manifest | `npm test` (`tests/unit/mock.test.ts`) and a read of the HTML | 65 manifest rows become `StorefrontImage`s with `srcset` per format from the `widths` column and the manifest's alt; every `<picture>` on the pages carries AVIF, WebP, then JPEG |
-| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 52 unit tests (page meta, the frame description, the list's sentence and the Instagram link added); the copy gate lists the 21 unapproved sections as designed; the flash check passes |
-| Every story at 390 and 1440, UI and wire, axe passing; the fonts, tokens, widths, opening and house-behaviour specs | `npm run storybook:build` then `npx playwright test` | 189 stories (57 Base, 89 House, 43 Pages); **862 passed** against the committed baselines (100 baselines re-recorded for this phase's changes and 48 recorded for the twelve new stories); no serious or critical axe issue; no page overflows at 320, 720, 768 or 1024 |
+| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 52 unit tests at the phase 4 merge (59 in the final pass; page meta, the frame description, the list's sentence and the Instagram link added); the copy gate lists the 21 unapproved sections as designed; the flash check passes |
+| Every story at 390 and 1440, UI and wire, axe passing; the fonts, tokens, widths, opening and house-behaviour specs | `npm run storybook:build` then `npx playwright test` | 189 stories (57 Base, 89 House, 43 Pages); **862 passed** at the phase 4 merge (883 in the final pass, after phases 5 and 6 added the keyboard pass and the 404-title tests) against the committed baselines (100 baselines re-recorded for this phase's changes and 48 recorded for the twelve new stories); no serious or critical axe issue; no page overflows at 320, 720, 768 or 1024 |
 | Independent reviews | a code review against the done criteria, a screenshot review of every capture against Part 1, `01`, `02`, `04`, `06` | code: 3 blocking and 8 should-fix items; screenshots: 3 must-fix, 5 should-fix and 11 notes; every A and B item fixed (decision log), the notes logged as questions or kept for phases 5–6 |
 | Verification of the fixes | an adversarial pass: eight skeptics over the groups of fixes and a completeness critic (a workflow of nine agents) | Four residuals found and fixed: the 404 title branches in the leaf routes were dead code (only the root's meta runs when a loader throws; the title now comes from the root, with an end-to-end test over four missing paths), the cast page's `sizes` named 1280 px where this theme's `xl` is 1440, the next-look card inherited the grid's `sizes`, and the stage card's 44 px name link had loosened every card (now padding the margins give back). The critic's items done: the six remaining edge-case questions logged, slots for the frame's line and story, stories for home with a live, sold-out and ended drop and for frames ended and without a drop, the review sets re-captured after every fix, the redirect and the new baselines tracked |
 | Screenshots looked at | the captures above, and ad-hoc screenshots at 320, 768 and 1024 against the review build | No horizontal overflow on any page at 320, 768 or 1024; the manifesto line whole at every width; the cast rows with no empty cell at 768, 1024 and 1440; the F08 hold on the canvas; the country select whole at 320 and 390 (the number beneath it under 360 px); the drawings bottom-aligned; the next look a full card |
@@ -105,7 +132,7 @@ What was built: the opening from real stills (`tools/photo/entry_stills.py` → 
 | The opening's behaviour | `npx playwright test tests/e2e/entry.spec.ts` | first visit: notice → cards → burst (a `/entry/b1-…` still) → logo → burst → end → the home page, cookie `ds_entry=seen`; Esc skips from the first frame; Skip intro; never on `?utm_source`, on `/frames`, or with the cookie; reduced motion shows cards only; the Accessibility page's Off sets the cookie for a year. 12 passed at 390 and 1440 |
 | Honesty under unit test | `npm test` | 49 passed: `PairsLeft` (null, undefined, NaN, negative, threshold, no total), `Countdown` (no time, passed, invalid, undefined), `DropStatus` (no drop, no date, with a date, live with and without inventory, pairs made but inventory unknown, sold out, ended), `DropLine` (hidden states, real numbers only, the threshold), the availability word, the spec sheet's null rows, the stage card's pairs, a partial inventory is no total |
 | House behaviours | `npx playwright test tests/e2e/behaviour.spec.ts` | the detail hold's `--detail-progress` and scale; the header transparent over the manifesto and solid past it; the pop-up at 60% scroll on a frame page and on home, never on a policy page, closed with Esc, `ds_offer=closed`; the bag drawer's focus trap and return; the list form's validation, consent and mock record. 12 passed at 390 and 1440 |
-| Every house component and state as stories, at 390 and 1440, UI and wire, axe passing | `npm run storybook:build` then `npx playwright test` | 177 stories (57 Base, 92 House, 28 Pages); **806 passed** against the committed baselines (177 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, widths on nine pages at four widths, the opening and house-behaviour specs at two widths). No serious or critical axe issue |
+| Every house component and state as stories, at 390 and 1440, UI and wire, axe passing | `npm run storybook:build` then `npx playwright test` | at the phase 3 merge (the final pass: 189 stories, 883 passed): 177 stories (57 Base, 92 House, 28 Pages); **806 passed** against the committed baselines (177 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, widths on nine pages at four widths, the opening and house-behaviour specs at two widths). No serious or critical axe issue |
 | Types, lint, checks | `npm run typecheck`, `npm run lint`, `npm run checks` | all exit 0; `checks` now ends with the flash check |
 | Independent review | a code review against `05`'s House table, `03`, `01`, `04`, `08`, CLAUDE.md | 4 blocking and 16 should-fix items, all fixed (decision log); its notes for phases 4–6 kept |
 
@@ -117,8 +144,8 @@ What was built: every component in the Base table of `05` with every variant and
 
 | Done criterion | Command | Result |
 |---|---|---|
-| Everything in the Base table, every state, both sizes, axe passing | `npm run storybook:build` then `npx playwright test` | 97 stories (57 Base, 13 House from phase 0, 27 Pages); **462 passed** against the committed baselines (97 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, the widths test on nine pages at four widths). No serious or critical axe issue |
-| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 31 unit tests; `tools/palette.py` passes with the two new roles (`failures: 0`) |
+| Everything in the Base table, every state, both sizes, axe passing | `npm run storybook:build` then `npx playwright test` | at the phase 2 merge (the final pass: 189 stories, 883 passed): 97 stories (57 Base, 13 House from phase 0, 27 Pages); **462 passed** against the committed baselines (97 × 390/1440 × UI/wire with axe in UI mode, the font check, the token sheet, axe on 16 routes at two widths, the widths test on nine pages at four widths). No serious or critical axe issue |
+| Types, lint, unit tests, checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 31 unit tests at the phase 2 merge (59 in the final pass); `tools/palette.py` passes with the two new roles (`failures: 0`) |
 | Independent review | a code review against `05`'s Base table, Behavior rules, `CLAUDE.md` and the done criterion | 4 blocking and 13 should-fix items, all fixed (decision log); its notes for phases 3–4 kept |
 
 Stand-in type throughout.
@@ -132,8 +159,8 @@ What was built: the page shell (`PageShell`: skip link, `Header` per breakpoint,
 | Every template in `04` at 390 and 1440 in wire mode, every image a labelled `ShotSlot` | `npm run capture:wire` (Playwright project `capture`, against the review build and the static Storybook) | 92 captures: `docs/wireframes/{page}-{390,1440}.png` for home, drop, frames, frame (F01), frame (F08, the GCD render in the detail hold), manifesto, cast, questions, care, policies, policy (exchange), accessibility, bag, account, 404; and `docs/wireframes/states/` for every Pages story: the drop announced without a date (today's data), announced with a date, live, sold out, ended; frames with a live drop; the frame page with a live drop and sold out; frames with a sold-out drop; the bag empty and with two lines (page and drawer); the menu sheet; the list pop-up; the photosensitivity notice; the entry as a frame list; accessibility with the intro on and off; 404 |
 | Real copy and real product data from the start | the routes read `context.store` and `content/copy/en.json` only | numbers for states today's data lacks live in `app/lib/mock/fixtures.ts`, imported by stories and tests only (`checks/layers.mjs` enforces it) |
 | A Storybook "Pages" section | `npm run storybook:build` | 44 stories: Pages/Templates (25), Pages/Overlays (6), the phase 0 components (13) |
-| Checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0; 24 unit tests; the copy gate reports 21 unapproved sections (every new section is marked draft) |
-| Playwright | `npx playwright test` | **214 passed** (and a second run against the committed baselines: 214 passed): the font check; the token sheet at 390 and 1440 in UI and wire; axe on 16 routes (every template) at 390 and 1440, no serious or critical issues; 44 stories × 390/1440 × UI/wire with axe in UI mode. Baselines in `tests/e2e/__screenshots__/` (1×, stand-in type) |
+| Checks | `npm run typecheck`, `npm run lint`, `npm test`, `npm run checks` | all exit 0 at the phase 1 merge; 24 unit tests then (59 in the final pass); the copy gate reports 21 unapproved sections (every new section is marked draft) |
+| Playwright | `npx playwright test` | **214 passed** at the phase 1 merge (883 in the final pass; and a second run that day against the committed baselines: 214 passed): the font check; the token sheet at 390 and 1440 in UI and wire; axe on 16 routes (every template) at 390 and 1440, no serious or critical issues; 44 stories × 390/1440 × UI/wire with axe in UI mode. Baselines in `tests/e2e/__screenshots__/` (1×, stand-in type) |
 | Independent review | two agents that did not build it: a code review against `CLAUDE.md`, `00-decisions.md`, RUN Part 1 and the done criteria; a screenshot review of the whole set side by side | findings fixed in this phase (see the decision log); the PR carries the review note |
 
 Screenshots looked at: every page at 390 and 1440 in wire mode, and the states above. Header and footer the same on every page; the drop line on every page while announced; one statement per first screen; products on labelled 4:5 slots, heroes 3:2; the frames and drop grids 1 across at 390 and 4 at 1440 with look numbers 01–09 and no 07.
@@ -146,7 +173,7 @@ What was built: Hydrogen (create-hydrogen 5.0.40 starter: TypeScript, Tailwind v
 |---|---|---|
 | Dev server shows the token page with both fonts loaded | `npm run dev` → `/dev/tokens` | 200; the Playwright font test logs every role rendered by `Mona Sans Variable 200–900` (display) and `Urbanist Variable 100–900` (text, weights 300/350/400/500); no system type |
 | Storybook runs | `npm run storybook:build` | 13 stories (Logo ×3, BrandMark ×2, Seal ×4, ShotSlot ×4), `storybook-static/` 42 MB |
-| One screenshot test passes at both sizes | `npx playwright test` | **64 passed**: `tokens.spec.ts` at 390 and 1440 in UI and wire mode; `fonts.spec.ts`; `axe.spec.ts` on `/`, `/dev/tokens`, the 404 (no serious or critical issues); `storybook.spec.ts`, 13 stories × 390/1440 × UI/wire with axe in UI mode. 56 baselines in `tests/e2e/__screenshots__/` (1×, stand-in type) |
+| One screenshot test passes at both sizes | `npx playwright test` | **64 passed** at the phase 0 merge (883 in the final pass): `tokens.spec.ts` at 390 and 1440 in UI and wire mode; `fonts.spec.ts`; `axe.spec.ts` on `/`, `/dev/tokens`, the 404 (no serious or critical issues); `storybook.spec.ts`, 13 stories × 390/1440 × UI/wire with axe in UI mode. 56 baselines in `tests/e2e/__screenshots__/` (1×, stand-in type) |
 | Flash check | `python3 tools/flashcheck.py --self-test` | white strobe at 12/s: 6 flashes in a second at both viewports, **fails as it must**; dark strobe (every frame under 0.09): 0 flashes, passes → `OK`, exit 0. Without a sequence file it exits 2 and says the stills arrive in phase 3 |
 | CI checks | `npm run checks` | strings ok (10 banned patterns over `app/`, `content/copy/`), hex ok, schema ok (8 product files), copy gate reports 17 unapproved sections, layers ok |
 | Draft-copy gate | `npm run build` / `npm run build:review` | production build **refused** with `[copy-gate] production build refused: 17 section(s) … not approved`, exit 1; review build exit 0, `dist/client` 35 MB with `/photography/` copied in (777 files) |
