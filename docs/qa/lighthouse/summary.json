@@ -1,6 +1,6 @@
 {
  "base": "http://localhost:3000",
- "date": "2026-10-31T05:24:09.262Z",
+ "date": "2026-10-31T06:39:07.804Z",
  "note": "Mobile, simulated throttling, against the review build (production settings, drafts allowed). Home as a first visit shows the photosensitivity notice; the opening plays only after Continue and is not measured. Home as a returning visitor is the page every deep link and later visit gets.",
  "pages": [
   {
@@ -13,10 +13,10 @@
     "seo": 100,
     "agentic-browsing": 100
    },
-   "lcp": 1079.7226,
+   "lcp": 1114.8589,
    "cls": 0.002055978858867524,
    "tbt": 0,
-   "bytes": 319008
+   "bytes": 319005
   },
   {
    "path": "/",
@@ -28,40 +28,40 @@
     "seo": 100,
     "agentic-browsing": 100
    },
-   "lcp": 1081.3561,
+   "lcp": 1093.1006,
    "cls": 0.0006466945122123296,
    "tbt": 0,
-   "bytes": 318752
+   "bytes": 318750
   },
   {
    "path": "/frames",
    "state": "deep link",
    "scores": {
-    "performance": 93,
+    "performance": 98,
     "accessibility": 100,
     "best-practices": 100,
     "seo": 100,
     "agentic-browsing": 100
    },
-   "lcp": 3157.492350000001,
+   "lcp": 2389.3503,
    "cls": 0.0010179583305976608,
-   "tbt": 7.000000000000455,
-   "bytes": 383713
+   "tbt": 0,
+   "bytes": 383710
   },
   {
    "path": "/frames/lou-went-underground",
    "state": "deep link",
    "scores": {
-    "performance": 96,
+    "performance": 90,
     "accessibility": 100,
     "best-practices": 100,
     "seo": 100,
     "agentic-browsing": 100
    },
-   "lcp": 2715.5133749999995,
+   "lcp": 3564.7666499999996,
    "cls": 0.001823873477094359,
-   "tbt": 19.5,
-   "bytes": 456811
+   "tbt": 0,
+   "bytes": 456815
   }
  ]
 }
