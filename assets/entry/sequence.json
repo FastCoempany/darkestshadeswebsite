@@ -1,0 +1,509 @@
+{
+ "version": 1,
+ "$comment": "Made by tools/photo/entry_stills.py from the finals in assets/photography. The player and tools/flashcheck.py read this file.",
+ "stills": {
+  "b1-f09-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F09-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f09-a2-480.avif",
+     "assets/entry/b1-f09-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f09-a2-480.webp",
+     "assets/entry/b1-f09-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f01-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F01-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f01-a2-480.avif",
+     "assets/entry/b1-f01-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f01-a2-480.webp",
+     "assets/entry/b1-f01-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f02-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F02-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f02-a2-480.avif",
+     "assets/entry/b1-f02-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f02-a2-480.webp",
+     "assets/entry/b1-f02-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f03-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F03-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f03-a2-480.avif",
+     "assets/entry/b1-f03-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f03-a2-480.webp",
+     "assets/entry/b1-f03-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f04-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F04-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f04-a2-480.avif",
+     "assets/entry/b1-f04-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f04-a2-480.webp",
+     "assets/entry/b1-f04-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f05-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F05-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f05-a2-480.avif",
+     "assets/entry/b1-f05-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f05-a2-480.webp",
+     "assets/entry/b1-f05-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f06-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F06-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f06-a2-480.avif",
+     "assets/entry/b1-f06-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f06-a2-480.webp",
+     "assets/entry/b1-f06-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f08-a2": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F08-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f08-a2-480.avif",
+     "assets/entry/b1-f08-a2-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f08-a2-480.webp",
+     "assets/entry/b1-f08-a2-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b1-f09-h": {
+   "ratio": "3:4",
+   "bright": false,
+   "shot": "F09-H",
+   "sources": {
+    "avif": [
+     "assets/entry/b1-f09-h-480.avif",
+     "assets/entry/b1-f09-h-720.avif"
+    ],
+    "webp": [
+     "assets/entry/b1-f09-h-480.webp",
+     "assets/entry/b1-f09-h-720.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 480,
+     "height": 640
+    },
+    {
+     "width": 720,
+     "height": 960
+    }
+   ]
+  },
+  "b2-cast-w1-s07-f02": {
+   "ratio": "4:5",
+   "bright": true,
+   "shot": "W1-S07-F02-A1",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-cast-w1-s07-f02-720.avif",
+     "assets/entry/b2-cast-w1-s07-f02-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-cast-w1-s07-f02-720.webp",
+     "assets/entry/b2-cast-w1-s07-f02-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-f02-a1": {
+   "ratio": "4:5",
+   "bright": false,
+   "shot": "F02-A1",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-f02-a1-720.avif",
+     "assets/entry/b2-f02-a1-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-f02-a1-720.webp",
+     "assets/entry/b2-f02-a1-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-f02-a6": {
+   "ratio": "4:5",
+   "bright": false,
+   "shot": "F02-A6",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-f02-a6-720.avif",
+     "assets/entry/b2-f02-a6-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-f02-a6-720.webp",
+     "assets/entry/b2-f02-a6-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-cast-m1-s06-f04": {
+   "ratio": "4:5",
+   "bright": true,
+   "shot": "M1-S06-F04-A1",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-cast-m1-s06-f04-720.avif",
+     "assets/entry/b2-cast-m1-s06-f04-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-cast-m1-s06-f04-720.webp",
+     "assets/entry/b2-cast-m1-s06-f04-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-f04-a1": {
+   "ratio": "4:5",
+   "bright": false,
+   "shot": "F04-A1",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-f04-a1-720.avif",
+     "assets/entry/b2-f04-a1-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-f04-a1-720.webp",
+     "assets/entry/b2-f04-a1-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-f04-a6": {
+   "ratio": "4:5",
+   "bright": false,
+   "shot": "F04-A6",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-f04-a6-720.avif",
+     "assets/entry/b2-f04-a6-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-f04-a6-720.webp",
+     "assets/entry/b2-f04-a6-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-cast-w2-s06-f09-a2": {
+   "ratio": "4:5",
+   "bright": true,
+   "shot": "W2-S06-F09-A2",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-cast-w2-s06-f09-a2-720.avif",
+     "assets/entry/b2-cast-w2-s06-f09-a2-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-cast-w2-s06-f09-a2-720.webp",
+     "assets/entry/b2-cast-w2-s06-f09-a2-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  },
+  "b2-f09-a6": {
+   "ratio": "4:5",
+   "bright": false,
+   "shot": "F09-A6",
+   "sources": {
+    "avif": [
+     "assets/entry/b2-f09-a6-720.avif",
+     "assets/entry/b2-f09-a6-1440.avif"
+    ],
+    "webp": [
+     "assets/entry/b2-f09-a6-720.webp",
+     "assets/entry/b2-f09-a6-1440.webp"
+    ]
+   },
+   "sizes": [
+    {
+     "width": 720,
+     "height": 900
+    },
+    {
+     "width": 1440,
+     "height": 1800
+    }
+   ]
+  }
+ },
+ "steps": [
+  {
+   "type": "card",
+   "card": 0,
+   "text": "See everything.",
+   "seconds": 1.2,
+   "ground": "surface-overlay"
+  },
+  {
+   "type": "burst",
+   "layout": "framed",
+   "fps": 12,
+   "ground": "surface-canvas",
+   "frames": [
+    "b1-f09-a2",
+    "b1-f01-a2",
+    "b1-f09-a2",
+    "b1-f02-a2",
+    "b1-f09-a2",
+    "b1-f03-a2",
+    "b1-f09-a2",
+    "b1-f04-a2",
+    "b1-f05-a2",
+    "b1-f06-a2",
+    "b1-f05-a2",
+    "b1-f06-a2",
+    "b1-f05-a2",
+    "b1-f06-a2",
+    "b1-f09-a2",
+    "b1-f08-a2",
+    "b1-f09-a2",
+    "b1-f09-h",
+    "b1-f09-a2",
+    "b1-f01-a2",
+    "b1-f02-a2",
+    "b1-f03-a2",
+    "b1-f02-a2",
+    "b1-f03-a2",
+    "b1-f09-a2",
+    "b1-f04-a2",
+    "b1-f09-a2",
+    "b1-f09-a2"
+   ]
+  },
+  {
+   "type": "card",
+   "card": 1,
+   "text": "Reveal nothing.",
+   "seconds": 2.0,
+   "ground": "surface-overlay"
+  },
+  {
+   "type": "logo",
+   "seconds": 2.4,
+   "ground": "surface-overlay"
+  },
+  {
+   "type": "burst",
+   "layout": "bleed",
+   "fps": 3,
+   "ground": "black",
+   "frames": [
+    "b2-cast-w1-s07-f02",
+    "b2-f02-a1",
+    "b2-f02-a6",
+    "b2-cast-m1-s06-f04",
+    "b2-f04-a1",
+    "b2-f04-a6",
+    "b2-cast-w2-s06-f09-a2",
+    "b2-f09-a6"
+   ]
+  },
+  {
+   "type": "end",
+   "seconds": 1.6,
+   "ground": "black"
+  }
+ ]
+}

@@ -63,7 +63,7 @@ export async function loader({request, context}: Route.LoaderArgs) {
 }
 
 /** Routes opt into the paper theme for long reading with `export const handle = {theme: 'paper'}`. */
-export type RouteHandle = {theme?: 'night' | 'paper'; headerSurface?: 'transparent' | 'solid'; footerList?: boolean; dropLine?: boolean};
+export type RouteHandle = {theme?: 'night' | 'paper'; headerSurface?: 'transparent' | 'solid'; footerList?: boolean; dropLine?: boolean; listOffer?: boolean};
 
 export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
@@ -105,9 +105,10 @@ export default function App() {
   const headerSurface = [...handles].reverse().find((h) => h?.headerSurface)?.headerSurface ?? 'solid';
   const footerList = [...handles].reverse().find((h) => h?.footerList !== undefined)?.footerList ?? true;
   const dropLine = [...handles].reverse().find((h) => h?.dropLine !== undefined)?.dropLine ?? true;
+  const listOffer = [...handles].reverse().find((h) => h?.listOffer !== undefined)?.listOffer ?? false;
   return (
     <CartProvider>
-      <PageShell drop={data?.drop ?? null} year={data?.year ?? 2026} headerSurface={headerSurface} showFooterList={footerList} showDropLine={dropLine}>
+      <PageShell drop={data?.drop ?? null} year={data?.year ?? 2026} headerSurface={headerSurface} showFooterList={footerList} showDropLine={dropLine} listOffer={listOffer}>
         <Outlet />
       </PageShell>
     </CartProvider>

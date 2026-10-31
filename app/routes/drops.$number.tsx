@@ -6,7 +6,7 @@ import {dropView} from '~/lib/drop-view';
 export const meta: Route.MetaFunction = ({data}) => [{title: pageTitle(data ? fill(copy.drop.heading, {number: data.drop.number}) : copy.nav.drop)}];
 
 /** The drop page carries its own status block and, while announced, its own sign-up: no drop line, no footer list. */
-export const handle = {footerList: false, dropLine: false};
+export const handle = {footerList: false, dropLine: false, listOffer: true};
 
 export async function loader({params, context}: Route.LoaderArgs) {
   const drop = context.store.drops.byNumber(params.number);

@@ -50,6 +50,10 @@ test.describe(`capture ${MODE}`, () => {
           ...(MODE === 'wire' ? [{name: 'ds_mode', value: 'wire', url: APP}] : []),
         ]);
         const page = await context.newPage();
+        // Captures are still: no clocks, no scroll-driven cuts.
+        await page.addInitScript(() => {
+          (window as Window & {__dsStatic?: boolean}).__dsStatic = true;
+        });
         const response = await page.goto(`${APP}${path}`);
         expect(response?.status(), `${path} responds`).toBeLessThan(500);
         await settle(page);
@@ -68,7 +72,8 @@ test.describe(`capture ${MODE}`, () => {
         const context = await browser.newContext({viewport: {width: size.width, height: size.height}, deviceScaleFactor: 1, colorScheme: 'dark'});
         const page = await context.newPage();
         await page.goto(`${STORYBOOK}/iframe.html?id=${story.id}&viewMode=story&globals=mode:${MODE}`);
-        await page.waitForSelector('#storybook-root > *', {state: 'attached'});
+        // Storybook marks the body once the story has rendered; a story may legitimately render nothing.
+        await page.waitForSelector('body.sb-show-main', {state: 'attached'});
         await settle(page);
         const slug = story.id.replace(/^pages-/, '');
         // Overlays (the menu, the bag drawer, the pop-up, the notice) are what the viewport shows; pages are captured whole.

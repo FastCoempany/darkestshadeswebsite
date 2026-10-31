@@ -21,6 +21,8 @@ export default defineConfig({
   use: {
     deviceScaleFactor: 1,
     colorScheme: 'dark',
+    // Headless Chrome's own user agent reads as a crawler, and the opening never plays for crawlers (03).
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
     locale: 'en-US',
     timezoneId: 'America/Chicago',
     trace: 'retain-on-failure',
@@ -29,7 +31,7 @@ export default defineConfig({
     {
       name: 'app-390',
       testIgnore: /storybook/,
-      use: {baseURL: APP, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true},
+      use: {baseURL: APP, viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true, userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1'},
     },
     {
       name: 'app-1440',

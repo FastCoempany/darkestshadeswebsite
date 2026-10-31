@@ -1,3 +1,4 @@
+import {useRevalidator} from 'react-router';
 import {Countdown} from '~/components/house/Countdown';
 import {PairsLeft} from '~/components/house/PairsLeft';
 import {copy, fill} from '~/lib/copy';
@@ -39,6 +40,7 @@ export interface DropStatusProps {
  * and a countdown only to a real start or end. Renders nothing without a drop (docs/brief/05, 08).
  */
 export function DropStatus({drop, variant = 'block', className}: DropStatusProps) {
+  const revalidator = useRevalidator();
   if (!drop) return null;
   const sentence = dropSentence(drop);
   const perFrame = fill(copy.drop.pairsPerFrame, {pairs: drop.pairsPerFrame});
@@ -55,7 +57,7 @@ export function DropStatus({drop, variant = 'block', className}: DropStatusProps
         <p className="ds-tabular font-text text-small text-ds-text-secondary">{[perFrame, total].filter(Boolean).join(' · ')}</p>
       ) : null}
       <PairsLeft left={drop.pairsLeft} total={drop.pairsTotal} threshold={drop.threshold} />
-      <Countdown to={countdownTo} now={drop.now} label={countdownLabel} />
+      <Countdown to={countdownTo} now={drop.now} label={countdownLabel} onReached={() => void revalidator.revalidate()} />
     </div>
   );
 }

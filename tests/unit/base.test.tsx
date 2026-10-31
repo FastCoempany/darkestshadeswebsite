@@ -1,5 +1,7 @@
-import {describe, expect, it} from 'vitest';
-import {act, render, renderHook, screen} from '@testing-library/react';
+import {afterEach, describe, expect, it} from 'vitest';
+import {act, cleanup, render, renderHook, screen} from '@testing-library/react';
+
+afterEach(cleanup);
 import {toE164} from '~/components/base/Field';
 import {Price} from '~/components/base/Price';
 import {CartProvider, emptyCart, lineFor, useCart} from '~/lib/cart';
