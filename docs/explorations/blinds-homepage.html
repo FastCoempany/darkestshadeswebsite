@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive Blinds</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: #101113;
+    color: #edeae3;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  /* Preview selector. Remove this nav for homepage integration. */
+  .concept-picker {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: #111214;
+  }
+
+  .concept-picker button {
+    border: 1px solid #45464a;
+    border-radius: 30px;
+    padding: 10px 16px;
+    background: transparent;
+    color: #d8d6d1;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+  }
+
+  .concept-picker button[aria-pressed="true"] {
+    background: #e9e5dc;
+    border-color: #e9e5dc;
+    color: #191919;
+  }
+
+  /* Change these variables to adjust the palette. */
+  .blinds-hero {
+    --backdrop: #101214;
+    --ink: #eeeae1;
+    --slat-left: #141618;
+    --slat-middle: #282b2e;
+    --slat-right: #111315;
+    --edge: rgba(255,255,255,.15);
+    --product-edge: #a2aaa9;
+    --product-body: #252c2e;
+
+    position: relative;
+    isolation: isolate;
+    min-height: 580px;
+    height: calc(100svh - 70px);
+    max-height: 1100px;
+    overflow: hidden;
+    background: var(--backdrop);
+    color: var(--ink);
+    touch-action: pan-y;
+    outline: none;
+  }
+
+  .blinds-hero:focus-visible {
+    outline: 2px solid #c7b58c;
+    outline-offset: -5px;
+  }
+
+  .blinds-hero[data-look="daylight"] {
+    --backdrop: #242724;
+    --ink: #f6eedf;
+    --slat-left: #a39c90;
+    --slat-middle: #ded7c9;
+    --slat-right: #aaa294;
+    --edge: rgba(255,255,255,.5);
+    --product-edge: #b3b2a0;
+    --product-body: #3c413b;
+  }
+
+  .blinds-hero[data-look="glimpse"] {
+    --backdrop: #13151a;
+    --ink: #e5e6e9;
+    --slat-left: #181b20;
+    --slat-middle: #30343a;
+    --slat-right: #15171b;
+    --product-edge: #929bab;
+  }
+
+  .blinds-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse at 50% 55%,
+        rgba(130,145,143,.10), transparent 62%),
+      var(--backdrop);
+  }
+
+  .blinds-hero[data-look="daylight"] .blinds-backdrop {
+    background:
+      radial-gradient(ellipse at 65% 35%,
+        rgba(208,188,143,.12), transparent 65%),
+      var(--backdrop);
+  }
+
+  .blinds-copy {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 5%;
+    pointer-events: none;
+    transform: translateY(-7%);
+  }
+
+  .blinds-message {
+    grid-area: 1 / 1;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    font-size: clamp(58px, 10vw, 170px);
+    line-height: .94;
+    font-weight: 500;
+    letter-spacing: -.075em;
+    visibility: hidden;
+  }
+
+  .blinds-message span { display: block; }
+
+  .blinds-message.is-active {
+    visibility: visible;
+    animation: blinds-type-in 280ms ease-out both;
+  }
+
+  @keyframes blinds-type-in {
+    from {
+      clip-path: inset(12% 0 12% 0);
+      transform: translateY(7px);
+    }
+    to {
+      clip-path: inset(0);
+      transform: translateY(0);
+    }
+  }
+
+  .blinds-hero[data-look="daylight"] .blinds-message {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 400;
+    letter-spacing: -.065em;
+  }
+
+  .blinds-hero[data-look="glimpse"] .blinds-message {
+    font-size: clamp(60px, 11vw, 180px);
+    font-weight: 600;
+  }
+
+  /*
+    PRODUCT LAYER:
+    Replace the SVG below with your transparent product image.
+    Keep this wrapper so the product stays behind the blinds.
+    Increase opacity slightly if your product image is very dark.
+  */
+  .blinds-product {
+    position: absolute;
+    z-index: 1;
+    width: min(66%, 800px);
+    left: 50%;
+    top: 67%;
+    transform: translate(-50%, -50%) rotate(-5deg);
+    opacity: .47;
+    pointer-events: none;
+  }
+
+  .blinds-product svg,
+  .blinds-product img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .product-body { fill: var(--product-body); }
+
+  .product-outline {
+    fill: none;
+    stroke: var(--product-edge);
+    stroke-width: 2;
+    opacity: .72;
+  }
+
+  .blinds-hero[data-look="daylight"] .blinds-product {
+    opacity: .57;
+    transform: translate(-50%, -50%) rotate(3deg);
+  }
+
+  .blinds-hero[data-look="glimpse"] .blinds-product {
+    width: min(76%, 900px);
+    opacity: .52;
+  }
+
+  /* Foreground: all content above remains physically behind slats. */
+  .blinds-slats {
+    position: absolute;
+    z-index: 3;
+    inset: -3px;
+    display: flex;
+    pointer-events: none;
+  }
+
+  .blind-slot {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    perspective: 1100px;
+  }
+
+  .blind {
+    position: absolute;
+    inset: 0 -1px;
+    transform-origin: 50% 50%;
+    backface-visibility: hidden;
+    background: linear-gradient(
+      90deg,
+      var(--slat-left),
+      var(--slat-middle) 46%,
+      var(--slat-right)
+    );
+    border-left: 1px solid var(--edge);
+    box-shadow:
+      inset -2px 0 5px rgba(0,0,0,.24),
+      7px 0 20px rgba(0,0,0,.18);
+    will-change: transform;
+  }
+
+  /*
+    TITANIUM:
+    Base = a curved metal slat lit from the left (cool grey with a
+    faint blue cast). ::before adds the brushed grain that runs the
+    length of each slat plus a sharp specular line where the curve
+    catches the light. Each look sets its own alloy below.
+  */
+  .blind {
+    --ti-shadow: #2b2f33;
+    --ti-low: #5d6368;
+    --ti-mid: #8d949a;
+    --ti-high: #c9cfd3;
+    --ti-spec: rgba(255,255,255,.75);
+    background:
+      linear-gradient(
+        90deg,
+        var(--ti-shadow) 0%,
+        var(--ti-low) 9%,
+        var(--ti-mid) 24%,
+        var(--ti-high) 38%,
+        var(--ti-mid) 50%,
+        var(--ti-low) 72%,
+        var(--ti-shadow) 100%
+      );
+    border-left: 1px solid rgba(255,255,255,.22);
+    border-right: 1px solid rgba(0,0,0,.45);
+  }
+
+  .blind::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      /* specular line on the crown of the slat */
+      linear-gradient(90deg,
+        transparent 33%, var(--ti-spec) 37.5%, transparent 42%),
+      /* brushed grain along the slat */
+      repeating-linear-gradient(90deg,
+        rgba(255,255,255,.07) 0 1px,
+        rgba(0,0,0,.06) 1px 2px,
+        transparent 2px 3px,
+        rgba(255,255,255,.04) 3px 5px,
+        rgba(0,0,0,.05) 5px 6px),
+      /* soft vertical falloff, like an overhead light */
+      linear-gradient(180deg,
+        rgba(255,255,255,.10), transparent 30%,
+        transparent 65%, rgba(0,0,0,.28));
+    mix-blend-mode: overlay;
+    opacity: .9;
+  }
+
+  .blinds-hero[data-look="midnight"] .blind {
+    /* black (PVD) titanium */
+    --ti-shadow: #0d0f11;
+    --ti-low: #1f2327;
+    --ti-mid: #363c42;
+    --ti-high: #5c646b;
+    --ti-spec: rgba(220,230,238,.55);
+  }
+
+  .blinds-hero[data-look="daylight"] .blind {
+    /* bright polished titanium */
+    --ti-shadow: #6e7378;
+    --ti-low: #9ea4a9;
+    --ti-mid: #c3c8cc;
+    --ti-high: #eef1f2;
+    --ti-spec: rgba(255,255,255,.95);
+  }
+
+  .blinds-hero[data-look="glimpse"] .blind {
+    /* raw grade-5 titanium, slightly warm */
+    --ti-shadow: #24272a;
+    --ti-low: #4b4f52;
+    --ti-mid: #74787b;
+    --ti-high: #a7aaab;
+    --ti-spec: rgba(255,250,240,.6);
+  }
+
+  .blind::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #0c1014;
+    opacity: var(--shade, 0);
+  }
+
+  .blinds-vignette {
+    position: absolute;
+    z-index: 4;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 140px rgba(0,0,0,.24);
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,.1),
+      transparent 25%,
+      transparent 70%,
+      rgba(0,0,0,.25)
+    );
+  }
+
+  .blinds-controls {
+    position: absolute;
+    z-index: 5;
+    inset: auto 0 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .blinds-hint {
+    color: #f1ede5;
+    background: rgba(14,16,18,.82);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 30px;
+    padding: 10px 15px;
+    font-size: 11px;
+    letter-spacing: .09em;
+  }
+
+  .blinds-arrow {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.32);
+    background: rgba(14,16,18,.86);
+    color: #f1ede5;
+    font: inherit;
+    font-size: 19px;
+    cursor: pointer;
+  }
+
+  button:focus-visible {
+    outline: 2px solid #e4c891;
+    outline-offset: 4px;
+  }
+
+  .blinds-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .concept-picker {
+      gap: 6px;
+      padding: 10px 6px;
+    }
+
+    .concept-picker button {
+      font-size: 10px;
+      padding: 9px 10px;
+    }
+
+    .blinds-hero {
+      height: calc(100svh - 58px);
+      min-height: 480px;
+    }
+
+    .blinds-message {
+      font-size: clamp(52px, 14vw, 84px);
+    }
+
+    .blinds-hero[data-look="glimpse"] .blinds-message {
+      font-size: clamp(54px, 14.5vw, 88px);
+    }
+
+    .blinds-product,
+    .blinds-hero[data-look="glimpse"] .blinds-product {
+      width: 94%;
+      top: 65%;
+    }
+
+    .blinds-controls {
+      bottom: 20px;
+      gap: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blinds-message.is-active { animation: none; }
+  }
+</style>
+</head>
+
+<body>
+<nav class="concept-picker" aria-label="Choose a blinds concept">
+  <button type="button" data-concept="midnight" aria-pressed="true">
+    01 · Midnight
+  </button>
+  <button type="button" data-concept="daylight" aria-pressed="false">
+    02 · Daylight / After Dark
+  </button>
+  <button type="button" data-concept="glimpse" aria-pressed="false">
+    03 · Passing Glimpse
+  </button>
+</nav>
+
+<!--
+  DEFAULT DESIGN:
+  Set data-look to "midnight", "daylight", or "glimpse".
+  You can remove the preview nav above for a single-design homepage.
+-->
+<section
+  class="blinds-hero"
+  data-look="midnight"
+  tabindex="0"
+  aria-label="Interactive sunglasses reveal"
+  aria-describedby="blinds-instructions"
+>
+  <div class="blinds-backdrop" aria-hidden="true"></div>
+
+  <div class="blinds-copy" aria-hidden="true">
+    <div class="blinds-message is-active" data-message="right">
+      <span>see</span>
+      <span>everything</span>
+    </div>
+    <div class="blinds-message" data-message="left">
+      <span>reveal</span>
+      <span>nothing</span>
+    </div>
+  </div>
+
+  <h1 class="blinds-sr">see everything. reveal nothing.</h1>
+
+  <div class="blinds-product" aria-hidden="true">
+    <!-- Replace this SVG with: <img src="your-sunglasses.png" alt=""> -->
+    <svg viewBox="0 0 800 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="lens-fill" x1="0" y1="0" x2=".3" y2="1">
+          <stop offset="0" stop-color="#414a4c"/>
+          <stop offset=".5" stop-color="#151c1f"/>
+          <stop offset="1" stop-color="#0b1013"/>
+        </linearGradient>
+
+        <linearGradient id="lens-reflection" x1="0" x2="1">
+          <stop offset="0" stop-color="#bbc7c9" stop-opacity="0"/>
+          <stop offset=".45" stop-color="#bbc7c9" stop-opacity=".25"/>
+          <stop offset="1" stop-color="#bbc7c9" stop-opacity="0"/>
+        </linearGradient>
+
+        <clipPath id="lens-clip">
+          <path d="M105 91 Q197 63 323 91 L307 179
+                   Q298 207 252 209 L153 205
+                   Q124 201 117 170 Z"/>
+          <path d="M477 91 Q603 63 695 91 L683 170
+                   Q676 201 647 205 L548 209
+                   Q502 207 493 179 Z"/>
+        </clipPath>
+      </defs>
+
+      <!-- Temples -->
+      <path
+        d="M92 92 L36 72 L26 91 L91 129
+           M708 92 L764 72 L774 91 L709 129"
+        class="product-body"
+      />
+
+      <!-- Frame, including bridge -->
+      <path
+        class="product-body"
+        fill-rule="evenodd"
+        d="M78 76
+           Q188 39 339 73
+           Q400 92 461 73
+           Q612 39 722 76
+           L708 178 Q697 226 650 230
+           L548 234 Q490 233 474 194
+           L453 122 Q400 101 347 122
+           L326 194 Q310 233 252 234
+           L150 230 Q103 226 92 178 Z
+
+           M105 91 Q197 63 323 91
+           L307 179 Q298 207 252 209
+           L153 205 Q124 201 117 170 Z
+
+           M477 91 Q603 63 695 91
+           L683 170 Q676 201 647 205
+           L548 209 Q502 207 493 179 Z"
+      />
+
+      <!-- Lenses -->
+      <path
+        fill="url(#lens-fill)"
+        d="M105 91 Q197 63 323 91 L307 179
+           Q298 207 252 209 L153 205
+           Q124 201 117 170 Z
+           M477 91 Q603 63 695 91 L683 170
+           Q676 201 647 205 L548 209
+           Q502 207 493 179 Z"
+      />
+
+      <g clip-path="url(#lens-clip)" opacity=".65">
+        <path
+          d="M70 60 L220 60 L360 240 L210 240 Z
+             M450 60 L550 60 L690 240 L590 240 Z"
+          fill="url(#lens-reflection)"
+        />
+      </g>
+
+      <!-- Restrained edge highlights -->
+      <path
+        class="product-outline"
+        d="M81 77 Q190 42 339 76
+           Q400 95 461 76 Q610 42 719 77
+           M109 91 Q202 67 320 92
+           M480 92 Q598 67 691 91"
+      />
+
+      <path
+        d="M350 117 Q400 99 450 117"
+        fill="none"
+        stroke="#aab4b3"
+        stroke-width="3"
+        opacity=".37"
+      />
+    </svg>
+  </div>
+
+  <div class="blinds-slats" aria-hidden="true"></div>
+  <div class="blinds-vignette" aria-hidden="true"></div>
+
+  <div class="blinds-controls">
+    <button
+      class="blinds-arrow"
+      type="button"
+      data-reveal="-1"
+      aria-label="Reveal nothing, move blinds left"
+    >←</button>
+
+    <span class="blinds-hint" aria-hidden="true">move left or right</span>
+
+    <button
+      class="blinds-arrow"
+      type="button"
+      data-reveal="1"
+      aria-label="See everything, move blinds right"
+    >→</button>
+  </div>
+
+  <p id="blinds-instructions" class="blinds-sr">
+    Move the pointer or swipe horizontally.
+    Right reveals see everything. Left reveals reveal nothing.
+    You can also use the arrow buttons or focus this area
+    and press the left and right arrow keys.
+  </p>
+
+  <p class="blinds-sr" aria-live="polite" id="blinds-status"></p>
+</section>
+
+<script>
+(() => {
+  const hero = document.querySelector(".blinds-hero");
+  const slatLayer = hero.querySelector(".blinds-slats");
+  const messages = [...hero.querySelectorAll(".blinds-message")];
+  const status = hero.querySelector("#blinds-status");
+  const picker = [...document.querySelectorAll("[data-concept]")];
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+  /*
+    TUNING:
+    More slats = finer blinds.
+    Increase openAngle toward 90 for a clearer reveal.
+    Increase response for faster motion.
+    Glimpse radius controls the opening around the pointer.
+  */
+  const settings = {
+    midnight: { count: 24, openAngle: 87, response: 10 },
+    daylight: { count: 22, openAngle: 85.5, response: 8 },
+    glimpse:  { count: 42, openAngle: 87, response: 12 }
+  };
+
+  let look = hero.dataset.look;
+  let slats = [];
+  let direction = 1;
+  let messageDirection = 1;
+  let pointerX = .5;
+  let pointerInside = false;
+  let lastClientX = null;
+  let movement = 0;
+  let lastMovementSign = 0;
+  let triggered = false;
+  let waveStarted = 0;
+  let autoSweep = null;
+  let animationFrame = null;
+  let lastTime = 0;
+
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  function announce(dir) {
+    status.textContent = dir > 0 ? "see everything" : "reveal nothing";
+  }
+
+  function setMessage(dir) {
+    if (messageDirection === dir) return;
+    messageDirection = dir;
+
+    messages.forEach(el => {
+      const active = el.dataset.message === (dir > 0 ? "right" : "left");
+      el.classList.toggle("is-active", active);
+    });
+  }
+
+  function buildSlats() {
+    slatLayer.replaceChildren();
+    slats = [];
+
+    const count = settings[look].count;
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i++) {
+      const slot = document.createElement("div");
+      slot.className = "blind-slot";
+
+      const blind = document.createElement("div");
+      blind.className = "blind";
+      slot.appendChild(blind);
+      fragment.appendChild(slot);
+
+      const x = (i + .5) / count;
+      const initial = 7 + 10 * Math.exp(-Math.pow((x - .5) / .2, 2));
+
+      blind.style.transform = `rotateY(${initial}deg)`;
+
+      slats.push({
+        element: blind,
+        x,
+        angle: initial,
+        shade: 0,
+        from: initial,
+        openedAt: -10000,
+        previousTarget: initial
+      });
+    }
+
+    slatLayer.appendChild(fragment);
+  }
+
+  function startWave(dir, now) {
+    direction = dir;
+    triggered = true;
+    waveStarted = now;
+
+    slats.forEach(slat => {
+      slat.from = slat.angle;
+    });
+  }
+
+  function wake() {
+    if (animationFrame === null) {
+      lastTime = performance.now();
+      animationFrame = requestAnimationFrame(frame);
+    }
+  }
+
+  function chooseLook(next) {
+    if (!settings[next]) return;
+
+    look = next;
+    hero.dataset.look = next;
+    triggered = false;
+    pointerInside = false;
+    lastClientX = null;
+    movement = 0;
+    lastMovementSign = 0;
+    autoSweep = null;
+    direction = 1;
+    setMessage(1);
+    status.textContent = "";
+
+    picker.forEach(button => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.concept === next)
+      );
+    });
+
+    buildSlats();
+    wake();
+  }
+
+  function receiveMovement(event) {
+    if (event.target.closest("button")) return;
+
+    const rect = hero.getBoundingClientRect();
+    const nextX = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+
+    pointerInside = true;
+    autoSweep = null;
+
+    if (lastClientX === null) {
+      lastClientX = event.clientX;
+      pointerX = nextX;
+      wake();
+      return;
+    }
+
+    const dx = event.clientX - lastClientX;
+    lastClientX = event.clientX;
+    pointerX = nextX;
+
+    if (Math.abs(dx) < .5) return;
+
+    const sign = Math.sign(dx);
+    if (sign !== lastMovementSign) movement = 0;
+
+    lastMovementSign = sign;
+    movement += Math.abs(dx);
+
+    // Require meaningful travel before switching phrases.
+    if (movement >= 12) {
+      const now = performance.now();
+
+      if (!triggered || sign !== direction) {
+        startWave(sign, now);
+      }
+
+      setMessage(sign);
+      triggered = true;
+    }
+
+    wake();
+  }
+
+  function triggerAccessibleReveal(dir) {
+    const now = performance.now();
+
+    setMessage(dir);
+    announce(dir);
+    startWave(dir, now);
+
+    if (look === "glimpse" && !reducedMotion.matches) {
+      pointerInside = false;
+      autoSweep = { start: now, duration: 2200, direction: dir };
+    }
+
+    wake();
+  }
+
+  function frame(now) {
+    animationFrame = null;
+
+    const dt = clamp((now - lastTime) / 1000, .001, .05);
+    lastTime = now;
+
+    const config = settings[look];
+    const reduce = reducedMotion.matches;
+    const ease = reduce ? 1 : 1 - Math.exp(-config.response * dt);
+    let unsettled = false;
+    let sweepActive = false;
+
+    if (autoSweep) {
+      const progress = clamp((now - autoSweep.start) / autoSweep.duration, 0, 1);
+      const eased = progress * progress * (3 - 2 * progress);
+
+      pointerX = autoSweep.direction > 0 ? eased : 1 - eased;
+      sweepActive = true;
+
+      if (progress >= 1) autoSweep = null;
+    }
+
+    slats.forEach(slat => {
+      let target = 7 + 10 * Math.exp(-Math.pow((slat.x - .5) / .2, 2));
+
+      if (triggered && (look !== "glimpse" || reduce)) {
+        const order = direction > 0 ? slat.x : 1 - slat.x;
+        const delay = reduce ? 0 : order * 280;
+        const progress = reduce
+          ? 1
+          : clamp((now - waveStarted - delay) / 600, 0, 1);
+
+        const waveEase = 1 - Math.pow(1 - progress, 3);
+        target = slat.from +
+          (direction * config.openAngle - slat.from) * waveEase;
+
+        if (progress < 1) unsettled = true;
+      }
+
+      if (look === "glimpse" && !reduce && triggered) {
+        const distance = Math.abs(slat.x - pointerX);
+        const active = pointerInside || sweepActive;
+
+        // Fully open a local window, taper its edges.
+        const radius = .21;
+        let local = 0;
+
+        if (active && distance < radius) {
+          local = clamp((radius - distance) / .065, 0, 1);
+          slat.openedAt = now;
+        }
+
+        // Brief trailing memory, constrained near the cursor.
+        const age = now - slat.openedAt;
+        const spatialTrail = clamp((.34 - distance) / .13, 0, 1);
+        const memory = clamp(1 - age / 900, 0, 1) * spatialTrail;
+        const opening = Math.max(local, memory);
+
+        target = direction * (7 + opening * 80);
+
+        if (age >= 0 && age < 900) unsettled = true;
+      }
+
+      slat.angle += (target - slat.angle) * ease;
+
+      if (Math.abs(target - slat.angle) < .015) {
+        slat.angle = target;
+      } else {
+        unsettled = true;
+      }
+
+      // Daylight version turns toward a darker slat face on left sweeps.
+      const shadeTarget =
+        look === "daylight" && triggered && direction < 0 ? .72 : 0;
+
+      slat.shade += (shadeTarget - slat.shade) * ease;
+
+      if (Math.abs(shadeTarget - slat.shade) > .005) {
+        unsettled = true;
+      }
+
+      slat.element.style.transform = `rotateY(${slat.angle.toFixed(3)}deg)`;
+      slat.element.style.setProperty("--shade", slat.shade.toFixed(3));
+    });
+
+    if (unsettled || autoSweep) {
+      animationFrame = requestAnimationFrame(frame);
+    }
+  }
+
+  picker.forEach(button => {
+    button.addEventListener("click", () => {
+      chooseLook(button.dataset.concept);
+    });
+  });
+
+  hero.addEventListener("pointerenter", event => {
+    if (event.pointerType !== "mouse") return;
+    pointerInside = true;
+    lastClientX = event.clientX;
+
+    const rect = hero.getBoundingClientRect();
+    pointerX = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+    wake();
+  });
+
+  hero.addEventListener("pointerdown", event => {
+    if (event.target.closest("button")) return;
+
+    pointerInside = true;
+    lastClientX = event.clientX;
+    movement = 0;
+    lastMovementSign = 0;
+
+    const rect = hero.getBoundingClientRect();
+    pointerX = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+  });
+
+  hero.addEventListener("pointermove", receiveMovement);
+
+  function leave() {
+    pointerInside = false;
+    lastClientX = null;
+    movement = 0;
+    lastMovementSign = 0;
+    wake();
+  }
+
+  hero.addEventListener("pointerleave", leave);
+  hero.addEventListener("pointercancel", leave);
+
+  hero.addEventListener("pointerup", event => {
+    if (event.pointerType !== "mouse") leave();
+  });
+
+  hero.querySelectorAll("[data-reveal]").forEach(button => {
+    button.addEventListener("click", () => {
+      triggerAccessibleReveal(Number(button.dataset.reveal));
+    });
+  });
+
+  hero.addEventListener("keydown", event => {
+    if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+    event.preventDefault();
+    triggerAccessibleReveal(event.key === "ArrowRight" ? 1 : -1);
+  });
+
+  reducedMotion.addEventListener("change", () => {
+    autoSweep = null;
+    wake();
+  });
+
+  chooseLook(look);
+})();
+</script>
+</body>
+</html>
