@@ -1,0 +1,128 @@
+[
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/motion/shot01.mp4",
+  "in_frame": 0,
+  "out_frame": 31,
+  "place_at": 0,
+  "label": "shot 01 SUV arrives (motion: parallax on s01)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/motion/shot02.mp4",
+  "in_frame": 0,
+  "out_frame": 23,
+  "place_at": 31,
+  "label": "shot 02 lever (motion: parallax on cleaned c02 f0)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/motion/shot03.mp4",
+  "in_frame": 0,
+  "out_frame": 37,
+  "place_at": 54,
+  "label": "shot 03 hand into pocket (motion: cleaned c02 f0-20 retimed + parallax)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/motion/shot04.mp4",
+  "in_frame": 0,
+  "out_frame": 24,
+  "place_at": 91,
+  "label": "shot 04 emblem macro (motion: real A6 master, light band)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/fix3/shot05.mp4",
+  "in_frame": 0,
+  "out_frame": 19,
+  "place_at": 115,
+  "label": "shot 05 man exits, back view (c04 f0-9 retimed)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/cut/derived/c05-shot06-retimed.mp4",
+  "in_frame": 0,
+  "out_frame": 29,
+  "place_at": 134,
+  "label": "shot 06 wife in the car, punch-in (comp c05 f0-12 retimed 12->29, 1.2x crop)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/comp/c05-0-55.mp4",
+  "in_frame": 12,
+  "out_frame": 53,
+  "place_at": 163,
+  "label": "shot 07 wife rises (comp c05 f12-53, real F02)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/cut/derived/c05-shot08-tail.mp4",
+  "in_frame": 0,
+  "out_frame": 26,
+  "place_at": 204,
+  "label": "shot 08 empty SUV door after they walk off (c05 f101-120 retimed 20->26)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c06.mp4",
+  "in_frame": 8,
+  "out_frame": 44,
+  "place_at": 230,
+  "label": "shot 09 corridor (c06 f8-44, backs)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/cut/conformed/c06.mp4",
+  "in_frame": 44,
+  "out_frame": 78,
+  "place_at": 266,
+  "label": "shot 10 approach podium (c06 f44-78, backs)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/motion/shot11.mp4",
+  "in_frame": 0,
+  "out_frame": 26,
+  "place_at": 300,
+  "label": "shot 11 remote slide (motion: parallax on s07)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/comp/c08-0-60.mp4",
+  "in_frame": 0,
+  "out_frame": 34,
+  "place_at": 326,
+  "label": "shot 12 settle (comp c08 f0-34, real F05 + F02)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/cut/derived/c08-shot13-hold.mp4",
+  "in_frame": 0,
+  "out_frame": 29,
+  "place_at": 360,
+  "label": "shot 13 lean (comp c08 f34-60 + 3 hold)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/comp/c09-74-119.mp4",
+  "in_frame": 0,
+  "out_frame": 45,
+  "place_at": 389,
+  "label": "shot 14 tooth pickup (comp c09 f74-119, real F05)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/fix3/shot15.mp4",
+  "in_frame": 0,
+  "out_frame": 36,
+  "place_at": 434,
+  "label": "shot 15 tooth test insert below the glasses (c10 f0-36)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/fix3/shot16.mp4",
+  "in_frame": 0,
+  "out_frame": 27,
+  "place_at": 470,
+  "label": "shot 16 hand and remote insert (c10 f80-107)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/cut/derived/shot17-wear.mp4",
+  "in_frame": 0,
+  "out_frame": 122,
+  "place_at": 497,
+  "label": "shot 17 blast (motion pressure warp re-applied to the composited s11, real F05 + F02)"
+ },
+ {
+  "clip": "/tmp/claude-0/-home-user/0e9ced3d-e246-500c-b664-667606002ea8/scratchpad/film/v2/comp/c12-0-121.mp4",
+  "in_frame": 80,
+  "out_frame": 114,
+  "place_at": 619,
+  "label": "shot 18 impact close-up (comp c12 f80-114, real F05 A2, hero)"
+ }
+]
