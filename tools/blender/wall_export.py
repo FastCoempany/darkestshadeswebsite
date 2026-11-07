@@ -247,8 +247,18 @@ def cmd_env(a):
     src = WORK / "env" / "drawer.hdr"
     shutil.copyfile(src, out_dir / "drawer.hdr")
     size = os.path.getsize(out_dir / "drawer.hdr")
+    width = 1024
+    if size > BUDGET["env"](1024):
+        # the RGBE file at 1024 x 512 runs over the 600 KB budget: the map goes down to 768 x 384 (the live frame
+        # filters it to a PMREM anyway), and the manifest records the size it shipped at
+        import cv2
+        env = cv2.imread(str(src), cv2.IMREAD_UNCHANGED)
+        small = cv2.resize(env, (768, 384), interpolation=cv2.INTER_AREA)
+        cv2.imwrite(str(out_dir / "drawer.hdr"), small)
+        size = os.path.getsize(out_dir / "drawer.hdr")
+        width = 768
     put(m, {"id": "env/drawer", "kind": "env", "files": ["env/drawer.hdr"], "status": a.status,
-            "tool": "tools/blender/drawer_wall.py", "command": "drawer_wall.py env", "sourceCommit": commit, "width": 1024, "height": 512,
+            "tool": "tools/blender/drawer_wall.py", "command": "drawer_wall.py env; wall_export.py env", "sourceCommit": commit, "width": width, "height": width // 2,
             "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024)}})
     save_manifest(m)
     print(f"env exported: {size // KB} KB", flush=True)

@@ -3,6 +3,1005 @@
   "renderSet": "wall-v1",
   "assets": [
     {
+      "id": "camera/inspect",
+      "kind": "camera",
+      "files": [
+        "camera/inspect.json"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py cameras",
+      "sourceCommit": "9eafd34f4f8c"
+    },
+    {
+      "id": "camera/open",
+      "kind": "camera",
+      "files": [
+        "camera/open.json"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py cameras",
+      "sourceCommit": "9eafd34f4f8c"
+    },
+    {
+      "id": "env/drawer",
+      "kind": "env",
+      "files": [
+        "env/drawer.hdr"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py env; wall_export.py env",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 768,
+      "height": 384,
+      "checks": {
+        "bytes": 383685,
+        "withinBudget": true
+      }
+    },
+    {
+      "id": "seq/base/1200/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/000.avif",
+        "seq/base/1200/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77052,
+        "webpBytes": 71042,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/001.avif",
+        "seq/base/1200/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78161,
+        "webpBytes": 72316,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/002.avif",
+        "seq/base/1200/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77125,
+        "webpBytes": 69378,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/003.avif",
+        "seq/base/1200/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 75132,
+        "webpBytes": 69176,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/004.avif",
+        "seq/base/1200/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78834,
+        "webpBytes": 70308,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/005.avif",
+        "seq/base/1200/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78906,
+        "webpBytes": 67348,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/006.avif",
+        "seq/base/1200/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 81746,
+        "webpBytes": 68950,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/007.avif",
+        "seq/base/1200/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79243,
+        "webpBytes": 70116,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/008.avif",
+        "seq/base/1200/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 61582,
+        "webpBytes": 68318,
+        "avifQuality": 58,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/009.avif",
+        "seq/base/1200/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 81019,
+        "webpBytes": 69066,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/010.avif",
+        "seq/base/1200/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80388,
+        "webpBytes": 69726,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/011.avif",
+        "seq/base/1200/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79913,
+        "webpBytes": 69806,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/012.avif",
+        "seq/base/1200/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 60387,
+        "webpBytes": 67592,
+        "avifQuality": 58,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/013.avif",
+        "seq/base/1200/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80506,
+        "webpBytes": 67696,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/014.avif",
+        "seq/base/1200/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78138,
+        "webpBytes": 67296,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/015.avif",
+        "seq/base/1200/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 81053,
+        "webpBytes": 65854,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/016.avif",
+        "seq/base/1200/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 58970,
+        "webpBytes": 65234,
+        "avifQuality": 58,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/017.avif",
+        "seq/base/1200/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80331,
+        "webpBytes": 61792,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/018.avif",
+        "seq/base/1200/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79259,
+        "webpBytes": 63122,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/019.avif",
+        "seq/base/1200/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77529,
+        "webpBytes": 61188,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/020.avif",
+        "seq/base/1200/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77185,
+        "webpBytes": 60666,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/021.avif",
+        "seq/base/1200/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 76667,
+        "webpBytes": 62266,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/022.avif",
+        "seq/base/1200/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78860,
+        "webpBytes": 62228,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/1200/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/1200/023.avif",
+        "seq/base/1200/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79539,
+        "webpBytes": 61910,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/000.avif",
+        "seq/base/720/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45050,
+        "webpBytes": 38942,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/001.avif",
+        "seq/base/720/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44944,
+        "webpBytes": 37004,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/002.avif",
+        "seq/base/720/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44404,
+        "webpBytes": 38492,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/003.avif",
+        "seq/base/720/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 32547,
+        "webpBytes": 38116,
+        "avifQuality": 64,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/004.avif",
+        "seq/base/720/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45104,
+        "webpBytes": 38260,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/005.avif",
+        "seq/base/720/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45113,
+        "webpBytes": 36930,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/006.avif",
+        "seq/base/720/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44925,
+        "webpBytes": 37612,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/007.avif",
+        "seq/base/720/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44412,
+        "webpBytes": 38106,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/008.avif",
+        "seq/base/720/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45984,
+        "webpBytes": 38130,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/009.avif",
+        "seq/base/720/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44975,
+        "webpBytes": 38190,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/010.avif",
+        "seq/base/720/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44457,
+        "webpBytes": 38678,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/011.avif",
+        "seq/base/720/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44434,
+        "webpBytes": 38014,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/012.avif",
+        "seq/base/720/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45372,
+        "webpBytes": 38262,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/013.avif",
+        "seq/base/720/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44813,
+        "webpBytes": 38318,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/014.avif",
+        "seq/base/720/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44986,
+        "webpBytes": 36692,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/015.avif",
+        "seq/base/720/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44583,
+        "webpBytes": 36502,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/016.avif",
+        "seq/base/720/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44686,
+        "webpBytes": 36162,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/017.avif",
+        "seq/base/720/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44106,
+        "webpBytes": 35980,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/018.avif",
+        "seq/base/720/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43922,
+        "webpBytes": 34720,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/019.avif",
+        "seq/base/720/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43217,
+        "webpBytes": 34922,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/020.avif",
+        "seq/base/720/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43614,
+        "webpBytes": 34958,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/021.avif",
+        "seq/base/720/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 42436,
+        "webpBytes": 34902,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/022.avif",
+        "seq/base/720/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43134,
+        "webpBytes": 35720,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
+      "id": "seq/base/720/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/base/720/023.avif",
+        "seq/base/720/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
+      "sourceCommit": "9eafd34f4f8c",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 42538,
+        "webpBytes": 34574,
+        "avifQuality": 70,
+        "grade": "cool"
+      }
+    },
+    {
       "id": "wall/landscape/black-relief/bay-00-dark",
       "kind": "wall-dark",
       "files": [

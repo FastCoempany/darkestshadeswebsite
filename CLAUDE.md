@@ -62,7 +62,18 @@ npm run lighthouse                # Lighthouse mobile on the built wall: perform
 npm run assets                    # the zoom images from dam/ into wall/public/zoom/ (D4; never committed)
 npm run all                       # check, test, build, test:e2e, lighthouse, in that order
 ```
-The Blender tools of D3 and D4 (`drawer_wall.py`, `frame_glb.py`, `render_queue.py`) are listed here as they land.
+```
+python3 tools/blender/drawer_wall.py wall --layout portrait --knob black-relief --variant lit   # the wall plate render → work/wall/ (and --variant dark, --layout landscape)
+python3 tools/blender/drawer_wall.py sequence --frames 24 [--frame F09 --region --tint r g b]   # the drawer view's 24 frames (the base, or a frame's region renders)
+python3 tools/blender/drawer_wall.py knob --knob gold                                           # a knob close-up for O15
+python3 tools/blender/drawer_wall.py cameras; python3 tools/blender/drawer_wall.py env           # camera/open.json, inspect.json; the drawer's HDR
+python3 tools/blender/drawer_wall.py lifted --frame F09 --tint r g b                             # a lifted still
+python3 tools/blender/drawer_wall.py check --layout portrait --knob black-relief                 # rects, dark crops, scene black, the 30 mm knob GCD
+python3 tools/photo/grade_scene.py in.png out.avif --look cool --width 1170 --exposure 0.3 --toe 0.004   # the one grade (wall_export passes these)
+python3 tools/blender/wall_export.py wall --layout portrait | sequence [--frame F09] | cameras | env | r1   # the web outputs + manifest entries
+bash tools/blender/queue_d3.sh; python3 tools/blender/render_queue.py run d3 --minutes 95        # the D3 render queue, in chunks (status d3)
+```
+The D4 tools (`frame_glb.py`, `optimize.mjs`, `lens_tints.py`, `zoom_export.py`, `queue_d4.sh`) are listed here as they land.
 
 ## When unsure
 If `00-decisions.md` doesn't answer it and it touches brand, product facts, money or legal copy, ask the founder. Otherwise make the call and note it in the PR.

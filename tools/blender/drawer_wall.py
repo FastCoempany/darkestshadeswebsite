@@ -687,12 +687,13 @@ def write_cameras(sc, cam, root, centre, outdir):
     zb = cz - DRAWER_H * MM / 2 + 10 * MM
     frame_loc = Vector((cx, -FULL_EXT * MM + t + BOX_DEPTH * MM / 2, zb))
     open_m = Matrix.Translation(frame_loc) @ Euler((math.radians(90), 0, 0)).to_matrix().to_4x4()
-    # the lifted pose: up and toward the camera, turned 35 degrees so the wearer's right (the GCD) faces the camera
+    # the lifted pose: up and toward the camera, turned 35 degrees about the vertical so the wearer's right (the GCD,
+    # the frame's -x) comes toward the camera: Rz(+35) takes (-1, 0, 0) to (-0.82, -0.57, 0), toward -y
     toward = (cam.location - frame_loc)
     toward.z = 0
     toward.normalize()
     lift_loc = frame_loc + Vector((0, 0, 0.13)) + toward * 0.12
-    lift_m = Matrix.Translation(lift_loc) @ Euler((math.radians(90), 0, math.radians(-35))).to_matrix().to_4x4()
+    lift_m = Matrix.Translation(lift_loc) @ Euler((math.radians(90), 0, math.radians(35))).to_matrix().to_4x4()
     (outdir / "open.json").write_text(json.dumps({
         "camera": camj,
         "frame": {"note": "the frame rig's origin: midway between the lens centres on the front's face, resting on the suede; Blender Z up",
@@ -812,6 +813,14 @@ def cmd_lifted(a):
     m = Matrix([row[:] for row in inspect["frame"]["matrix_blender"]])
     rig.matrix_world = m
     bpy.context.view_layer.update()
+    # the still is the frame alone on transparency, over the view's dimmed drawer: the cabinet and the drawers stay
+    # for the light they reflect and bounce but are invisible to the camera
+    sc.render.film_transparent = True
+    sc.render.image_settings.color_mode = "RGBA"
+    frame_names = {p.name for p in parts}
+    for ob in bpy.data.objects:
+        if ob.type == "MESH" and ob.name not in frame_names:
+            ob.visible_camera = False
     # the lifted frame is what the camera focuses on
     centre = m @ Vector(((lo[0] + hi[0]) / 2, 0, (hi[2] - lo[2]) / 2))
     cam.data.dof.focus_distance = (centre - cam.location).length
