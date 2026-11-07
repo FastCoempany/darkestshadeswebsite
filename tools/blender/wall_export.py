@@ -32,7 +32,12 @@ MANIFEST = ASSETS / "manifest.json"
 KB = 1024
 BUDGET = {"wall-plate": lambda w: 380 * KB if w >= 2000 else 160 * KB, "wall-dark": lambda w: 60 * KB,
           "sequence-frame": lambda w: 80 * KB if w >= 1000 else 45 * KB, "still": lambda w: 200 * KB, "env": lambda w: 600 * KB}
-LOOK = {"wall": "cool", "sequence": "warm", "still": "warm", "knob": "cool"}
+# One grade for every image of the wall (DRAWER-WALL.md, The look: identical on every asset): the cool cast, the
+# exposure that puts the leather where the founder-reviewed prototype still has it (about 36/255; measured Nov 7
+# 2026), a low toe so the room falls to black. The drawer's warmth comes from the scene's own light, so the drawer
+# view continues the wall at its first frame without a shift.
+LOOK = {"wall": "cool", "sequence": "cool", "still": "cool", "knob": "cool"}
+GRADE = {"exposure": 0.3, "toe": 0.004}
 
 
 def git_commit():
@@ -62,11 +67,11 @@ def encode_within(src, out, look, width, budget, seed, crop=None, crop_after=Non
     while True:
         if crop_after:
             # grade the whole image at the plate's size and seed, then cut the crop: the grain lines up with the plate
-            s = grade_scene.grade(grade_scene.load(src) if width is None else resized(src, width), look, seed=seed, **extra)
+            s = grade_scene.grade(grade_scene.load(src) if width is None else resized(src, width), look, seed=seed, **GRADE, **extra)
             x0, y0, x1, y1 = crop_after
             grade_scene.save(s[y0:y1, x0:x1], out, q)
         else:
-            grade_scene.process(src, out, look, crop, width, None, q, seed=seed, **extra)
+            grade_scene.process(src, out, look, crop, width, None, q, seed=seed, **GRADE, **extra)
         size = os.path.getsize(out)
         if size <= budget or q <= 30:
             return q, size
@@ -104,10 +109,10 @@ def cmd_wall(a):
     put(m, {"id": f"wall/{a.layout}/{a.knob}/plate-lit", "kind": "wall-plate", "files": files, "status": a.status,
             "tool": "tools/blender/drawer_wall.py", "command": f"drawer_wall.py wall --layout {a.layout} --knob {a.knob} --variant lit; wall_export.py wall",
             "sourceCommit": commit, "layout": a.layout, "knob": a.knob, "width": width, "height": height,
-            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "grade": LOOK["wall"]}})
+            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "grade": f"{LOOK['wall']} e{GRADE['exposure']} toe{GRADE['toe']}"}})
     # the dark render graded whole with the plate's seed (kept in work/ for the check), then each drawer's crop
     graded_dark = WORK / f"{a.layout}-{a.knob}-dark.graded.png"
-    s = grade_scene.grade(resized(dark, width), LOOK["wall"], seed=seed)
+    s = grade_scene.grade(resized(dark, width), LOOK["wall"], seed=seed, **GRADE)
     grade_scene.save(s, graded_dark)
     for d in rects["drawers"]:
         c = d["crop"]
@@ -139,11 +144,60 @@ def cmd_wall(a):
     print(f"wall {a.layout} {a.knob}: {len(rects['drawers'])} dark crops, rects.json, manifest updated", flush=True)
 
 
+def composite_regions(frame):
+    """A frame's sequence from its region renders (DRAWER-WALL.md, The drawer view): each region, rendered with the
+    frame in the drawer, laid over the base frame with an 8 px feather at its edges; frames before the interior
+    shows are the base frames themselves. Writes work/wall/seq/<frame>/NNN.png next to the regions."""
+    import cv2
+    import numpy as np
+    base_dir = WORK / "seq" / "base"
+    src_dir = WORK / "seq" / frame
+    made = 0
+    for base in sorted(base_dir.glob("[0-9][0-9][0-9].png")):
+        i = int(base.stem)
+        region = src_dir / f"{i:03d}.region.png"
+        meta = src_dir / f"{i:03d}.region.json"
+        out = src_dir / f"{i:03d}.png"
+        if out.exists() and (not region.exists() or out.stat().st_mtime >= region.stat().st_mtime):
+            continue
+        b = cv2.imread(str(base), cv2.IMREAD_UNCHANGED)
+        if not region.exists() or not meta.exists():
+            cv2.imwrite(str(out), b)
+            made += 1
+            continue
+        r = cv2.imread(str(region), cv2.IMREAD_UNCHANGED)
+        x0, y0, x1, y1 = json.loads(meta.read_text())["border"]
+        H, W = b.shape[:2]
+        px0, py0 = int(round(x0 * W)), int(round(y0 * H))
+        px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
+        if px1 > W or py1 > H:
+            r = r[: H - py0, : W - px0]
+            px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
+        # the feather: 8 px of ramp inside the region's edges, except along the frame's own edges
+        fh, fw = r.shape[:2]
+        f = 8
+        yy, xx = np.mgrid[0:fh, 0:fw].astype(np.float32)
+        ramp = np.ones((fh, fw), np.float32)
+        if px0 > 0: ramp = np.minimum(ramp, np.clip((xx + 1) / f, 0, 1))
+        if px1 < W: ramp = np.minimum(ramp, np.clip((fw - xx) / f, 0, 1))
+        if py0 > 0: ramp = np.minimum(ramp, np.clip((yy + 1) / f, 0, 1))
+        if py1 < H: ramp = np.minimum(ramp, np.clip((fh - yy) / f, 0, 1))
+        patch = b[py0:py1, px0:px1].astype(np.float32)
+        rr = r[..., :3].astype(np.float32)
+        b[py0:py1, px0:px1] = (rr * ramp[..., None] + patch[..., :3] * (1 - ramp[..., None])).astype(b.dtype) if b.shape[-1] == 3 else \
+            np.dstack([(rr * ramp[..., None] + patch[..., :3] * (1 - ramp[..., None])), patch[..., 3:4]]).astype(b.dtype)
+        cv2.imwrite(str(out), b)
+        made += 1
+    print(f"composited {made} frames for {frame}", flush=True)
+
+
 def cmd_sequence(a):
     m = load_manifest()
     commit = git_commit()
     name = a.frame or "base"
     src_dir = WORK / "seq" / name
+    if a.frame:
+        composite_regions(a.frame)
     frames = sorted(src_dir.glob("[0-9][0-9][0-9].png"))
     if not frames:
         raise SystemExit(f"no frames in {src_dir}")
@@ -206,8 +260,68 @@ def cmd_knobs(a):
     for knob in ("black-relief", "gold", "plain"):
         src = WORK / f"knob-{knob}.png"
         if src.exists():
-            grade_scene.process(src, out_dir / f"knob-{knob}.jpg", LOOK["knob"], None, 1024, None, 86)
+            grade_scene.process(src, out_dir / f"knob-{knob}.jpg", LOOK["knob"], None, 1024, None, 86, **GRADE)
             print("knob", knob, flush=True)
+
+
+def cmd_r1(a):
+    """R1, the founder's first look (DRAWER-WALL.md, D3): docs/build/drawer-wall/review/R1/ with a contact sheet of
+    both walls lit and dark, the view's frames 0, 8, 16 and 23, the three knob close-ups and one lifted still, each
+    graded as the wall is, plus the pieces as single JPEGs and an index.md."""
+    from PIL import Image, ImageDraw
+    out_dir = ROOT / "docs" / "build" / "drawer-wall" / "review" / "R1"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    pieces = []
+    for layout in ("portrait", "landscape"):
+        for variant in ("lit", "dark"):
+            src = WORK / f"{layout}-black-relief-{variant}.png"
+            if src.exists():
+                out = out_dir / f"wall-{layout}-{variant}.jpg"
+                grade_scene.process(src, out, LOOK["wall"], None, 1170 if layout == "portrait" else 1600, None, 84, seed=grade_scene.seed_for(f"plate-{layout}-black-relief"), **GRADE)
+                pieces.append((f"The {layout} wall, every drawer {variant}", out))
+    for i in (0, 8, 16, 23):
+        src = WORK / "seq" / "base" / f"{i:03d}.png"
+        if src.exists():
+            out = out_dir / f"view-{i:02d}.jpg"
+            grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for(f"seq-base-{i:03d}"), **GRADE)
+            pieces.append((f"The drawer view, frame {i} of 24", out))
+    for knob in ("black-relief", "gold", "plain"):
+        src = WORK / f"knob-{knob}.png"
+        if src.exists():
+            out = out_dir / f"knob-{knob}.jpg"
+            grade_scene.process(src, out, LOOK["knob"], None, 900, None, 86, **GRADE)
+            pieces.append((f"The knob, {knob} (O15)", out))
+    src = WORK / "stills" / "F09-lifted.png"
+    if src.exists():
+        out = out_dir / "lifted-F09.jpg"
+        grade_scene.process(src, out, LOOK["still"], None, 900, None, 84, seed=grade_scene.seed_for("stills-F09-lifted"), **GRADE)
+        pieces.append(("F09 lifted into the light (the still; the live frame takes this pose)", out))
+    # the contact sheet: every piece scaled into a 3-wide grid on black, labelled
+    cell_w, pad = 600, 24
+    thumbs = []
+    for label, path in pieces:
+        im = Image.open(path).convert("RGB")
+        k = cell_w / im.size[0]
+        thumbs.append((label, im.resize((cell_w, int(im.size[1] * k)), Image.LANCZOS)))
+    cols = 3
+    rows = [thumbs[i:i + cols] for i in range(0, len(thumbs), cols)]
+    row_h = [max(t.size[1] for _, t in r) + 40 for r in rows]
+    sheet = Image.new("RGB", (cols * (cell_w + pad) + pad, sum(row_h) + pad * (len(rows) + 1)), (0, 0, 0))
+    d = ImageDraw.Draw(sheet)
+    y = pad
+    for r, rh in zip(rows, row_h):
+        x = pad
+        for label, t in r:
+            sheet.paste(t, (x, y))
+            d.text((x, y + t.size[1] + 10), label, fill=(166, 165, 161))
+            x += cell_w + pad
+        y += rh + pad
+    sheet.save(out_dir / "contact-sheet.jpg", quality=82)
+    lines = ["# R1 · the founder's first look", "", "Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the D3 pull request.", "", "![contact sheet](contact-sheet.jpg)", ""]
+    for label, path in pieces:
+        lines.append(f"- {label}: `{path.name}`")
+    (out_dir / "index.md").write_text("\n".join(lines) + "\n")
+    print(f"R1: {len(pieces)} pieces and the contact sheet in {out_dir.relative_to(ROOT)}", flush=True)
 
 
 def cmd_prune(a):
@@ -233,11 +347,12 @@ def main():
         p = sub.add_parser(name)
         p.add_argument("--status", default="mockup", choices=["prototype", "mockup", "final"])
     sub.add_parser("knobs")
+    sub.add_parser("r1")
     sub.add_parser("prune")
     a = ap.parse_args()
     if a.cmd == "sequence" and not a.width:
         a.width = [720, 1200]
-    {"wall": cmd_wall, "sequence": cmd_sequence, "cameras": cmd_cameras, "env": cmd_env, "knobs": cmd_knobs, "prune": cmd_prune}[a.cmd](a)
+    {"wall": cmd_wall, "sequence": cmd_sequence, "cameras": cmd_cameras, "env": cmd_env, "knobs": cmd_knobs, "r1": cmd_r1, "prune": cmd_prune}[a.cmd](a)
 
 
 if __name__ == "__main__":

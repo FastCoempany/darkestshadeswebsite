@@ -1,5 +1,202 @@
 {
   "$schema": "./manifest.schema.json",
   "renderSet": "wall-v1",
-  "assets": []
+  "assets": [
+    {
+      "id": "wall/portrait/black-relief/bay-00-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-00-dark.avif",
+        "wall/portrait/black-relief/bay-00-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 20346,
+        "webpBytes": 11120
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-01-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-01-dark.avif",
+        "wall/portrait/black-relief/bay-01-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 20209,
+        "webpBytes": 11330
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-02-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-02-dark.avif",
+        "wall/portrait/black-relief/bay-02-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 317,
+      "checks": {
+        "avifBytes": 22449,
+        "webpBytes": 13174
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-03-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-03-dark.avif",
+        "wall/portrait/black-relief/bay-03-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 317,
+      "checks": {
+        "avifBytes": 22433,
+        "webpBytes": 13104
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-04-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-04-dark.avif",
+        "wall/portrait/black-relief/bay-04-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 23070,
+        "webpBytes": 13408
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-05-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-05-dark.avif",
+        "wall/portrait/black-relief/bay-05-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 23186,
+        "webpBytes": 12984
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-06-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-06-dark.avif",
+        "wall/portrait/black-relief/bay-06-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 21963,
+        "webpBytes": 12486
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/bay-07-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/portrait/black-relief/bay-07-dark.avif",
+        "wall/portrait/black-relief/bay-07-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 538,
+      "height": 318,
+      "checks": {
+        "avifBytes": 21818,
+        "webpBytes": 12386
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/plate-lit",
+      "kind": "wall-plate",
+      "files": [
+        "wall/portrait/black-relief/plate-lit.avif",
+        "wall/portrait/black-relief/plate-lit.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit; wall_export.py wall",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 1170,
+      "height": 1983,
+      "checks": {
+        "avifBytes": 159455,
+        "webpBytes": 137218,
+        "grade": "cool e0.3 toe0.004"
+      }
+    },
+    {
+      "id": "wall/portrait/black-relief/rects",
+      "kind": "rects",
+      "files": [
+        "wall/portrait/black-relief/rects.json"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit",
+      "sourceCommit": "d63af37bbde5",
+      "layout": "portrait",
+      "knob": "black-relief",
+      "width": 1170,
+      "height": 1983
+    }
+  ]
 }

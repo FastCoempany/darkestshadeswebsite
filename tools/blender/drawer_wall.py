@@ -594,6 +594,8 @@ def cmd_sequence(a):
     slot = a.slot
     W_m, H_m = [v * MM for v in cabinet_size(layout)]
     frames = list(range(a.frames)) if not a.only else [int(x) for x in a.only.split(",")]
+    if a.mesh_step and a.frame:
+        frame3d.FRAMES[a.frame]["mesh_step"] = a.mesh_step
     for i in frames:
         t = i / (a.frames - 1)
         ext = FULL_EXT * smoothstep(t)
@@ -601,13 +603,18 @@ def cmd_sequence(a):
         sc = new_scene(a.samples, size, denoise=True)
         mats = Materials(a.knob)
         frame_parts = None
-        if a.frame:
+        if a.frame and not a.dry:
             rig, lo, hi, parts = build_frame(a.frame, tuple(a.tint))
             frame_parts = (rig, lo, hi)
         exts = [0.0] * n
         exts[slot] = ext
-        roots, slots, (W, H) = build_cabinet(layout, mats, [True] * n, a.knob, exts, frame_parts, slot)
-        room_lights(W_m, H_m, a.light)
+        if a.dry:
+            # nothing built: the camera and the region come from the slot's geometry alone
+            slots = [slot_centre(layout, c, r) for r in range(L["rows"]) for c in range(L["cols"])]
+            roots = [None] * n
+        else:
+            roots, slots, (W, H) = build_cabinet(layout, mats, [True] * n, a.knob, exts, frame_parts, slot)
+            room_lights(W_m, H_m, a.light)
         cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam"))
         sc.collection.objects.link(cam)
         sc.camera = cam
@@ -625,7 +632,7 @@ def cmd_sequence(a):
         if a.dry:
             print(f"frame {i:03d}: ext {ext:.1f} mm, lens {cam.data.lens:.0f} mm, f/{cam.data.dof.aperture_fstop:.1f}, cam {tuple(round(v, 3) for v in cam.location)}, border {border}")
             continue
-        render(sc, out / f"{i:03d}.png", border)
+        render(sc, out / (f"{i:03d}.region.png" if border else f"{i:03d}.png"), border)
         if i == a.frames - 1 and not a.frame:
             write_cameras(sc, cam, roots[slot], slots[slot], out.parent)
 
@@ -799,6 +806,8 @@ def cmd_lifted(a):
     sc.camera = cam
     view_camera(sc, 1.0, slots[a.slot])
     inspect = json.loads((pathlib.Path(a.cameras) / "inspect.json").read_text())
+    if a.mesh_step:
+        frame3d.FRAMES[a.frame]["mesh_step"] = a.mesh_step
     rig, lo, hi, parts = build_frame(a.frame, tuple(a.tint))
     m = Matrix([row[:] for row in inspect["frame"]["matrix_blender"]])
     rig.matrix_world = m
@@ -938,6 +947,7 @@ def main():
     p.add_argument("--samples", type=int, default=48)
     p.add_argument("--only", default=None, help="frame indices to render, comma-separated")
     p.add_argument("--size", type=int, default=None, help="the view's width in px (1200 by default)")
+    p.add_argument("--mesh-step", type=int, default=4, help="frame3d's front grid for the frame in the drawer (4: a 0.2 mm grid, as the GLB)")
     p.add_argument("--out", default=None)
     p.add_argument("--dry", action="store_true")
     p = sub.add_parser("knob")
@@ -963,6 +973,7 @@ def main():
     p.add_argument("--samples", type=int, default=64)
     p.add_argument("--size", type=int, default=1200)
     p.add_argument("--light", type=float, default=1.0)
+    p.add_argument("--mesh-step", type=int, default=4)
     p.add_argument("--out", default=None)
     p = sub.add_parser("cameras")
     p.add_argument("--knob", choices=["black-relief", "gold", "plain"], default="black-relief")

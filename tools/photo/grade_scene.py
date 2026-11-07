@@ -67,7 +67,7 @@ def edge_mask(h, w):
     return t * t * (3 - 2 * t)
 
 
-def grade(img, look="warm", light=(0.25, 0.15), vignette=0.55, grain=0.028, halation=0.10, exposure=1.0, seed=7, soften=0.55):
+def grade(img, look="warm", light=(0.25, 0.15), vignette=0.55, grain=0.028, halation=0.10, exposure=1.0, seed=7, soften=0.55, toe=0.012):
     h, w = img.shape[:2]
     x = img * exposure
     black = (x.max(-1) <= 1e-6)                           # what the render left black stays black
@@ -101,7 +101,7 @@ def grade(img, look="warm", light=(0.25, 0.15), vignette=0.55, grain=0.028, hala
     bright = np.clip(x - 0.35, 0, None)
     glow = gaussian_filter(bright, sigma=(w * 0.012, w * 0.012, 0))
     x = x + glow * halation * np.array([1.0, 0.85, 0.7], np.float32)
-    x = filmic(x)
+    x = filmic(x, toe=toe)
     x = x + shadow_tint * (1 - np.clip(lum[..., None] * 6, 0, 1))
     edge = edge_mask(h, w)
     keep = edge * (~black)                                # exact black where the render was black, and at the edges
@@ -145,7 +145,7 @@ def save(s, out, quality=82):
 
 
 def process(src, out, look="warm", crop=None, width=None, height=None, quality=82, light=(0.25, 0.15), vignette=0.55,
-            grain=0.028, halation=0.10, exposure=1.0, soften=0.55, seed=None):
+            grain=0.028, halation=0.10, exposure=1.0, soften=0.55, seed=None, toe=0.012):
     img = load(src)
     if crop:
         x0, y0, x1, y1 = crop
@@ -158,7 +158,7 @@ def process(src, out, look="warm", crop=None, width=None, height=None, quality=8
             width = int(round(w * height / h))
         interp = cv2.INTER_AREA if img.shape[1] > width else cv2.INTER_CUBIC
         img = cv2.resize(img, (width, height), interpolation=interp)
-    s = grade(img, look, light, vignette, grain, halation, exposure, seed_for(out) if seed is None else seed, soften)
+    s = grade(img, look, light, vignette, grain, halation, exposure, seed_for(out) if seed is None else seed, soften, toe)
     save(s, out, quality)
     return s.shape
 
@@ -179,9 +179,10 @@ def main(argv=None):
     ap.add_argument("--exposure", type=float, default=1.0)
     ap.add_argument("--soften", type=float, default=0.55)
     ap.add_argument("--seed", type=int, default=None, help="the grain's seed; by default from the output file's name")
+    ap.add_argument("--toe", type=float, default=0.012, help="the lifted blacks of the film curve (the prototype's 0.012; the wall uses 0.004)")
     a = ap.parse_args(argv)
     shape = process(a.src, a.out, a.look, a.crop, a.width, a.height, a.quality, tuple(a.light), a.vignette, a.grain,
-                    a.halation, a.exposure, a.soften, a.seed)
+                    a.halation, a.exposure, a.soften, a.seed, a.toe)
     print(a.out, shape[1], "x", shape[0], file=sys.stderr)
 
 
