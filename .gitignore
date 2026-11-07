@@ -23,6 +23,10 @@ brand/fonts/private/
 node_modules/
 /dist/
 /build/
+wall/dist/
+wall/public/zoom/
+wall/test-results/
+wall/playwright-report/
 app/build/
 app/dist/
 .cache/

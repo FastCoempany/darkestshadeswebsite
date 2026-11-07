@@ -51,7 +51,18 @@ python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   
 python3 tools/photo/cutout.py content/photography/people/M1-S06-F04-A1.json     # that picture cut out: the person wearing the frame on transparency → work/people/<id>-3d/cutout.png
 python3 docs/build/drawer-wall/prototype/drawer_scene.py --ext 0,0.25 --outdir work/drawer-proto --samples 40 --size 760   # the founder-reviewed drawer prototype
 ```
-The wall's own commands (`cd wall && npm run dev`, `build`, `test`, `test:e2e`, `check`, `lighthouse`, `all`) and the new Blender tools are added by the run (`DRAWER-WALL.md`, D1–D4); list them here as they land.
+```
+cd wall && npm install            # once; the stack is pinned in wall/package.json (Playwright 1.63.0 matches the VM's browsers)
+npm run dev                       # the wall at http://127.0.0.1:5173/ (index.html; states.html is the states sheet)
+npm run build                     # type-check, then the static wall in wall/dist/ (relative paths, noindex)
+npm run test                      # Vitest: the logic
+npm run test:e2e                  # Playwright: wall-pixel (Chromium as a Pixel), wall-iphone (WebKit as an iPhone), wall-desktop
+npm run check                     # banned strings, literal colors, the record and manifest schemas, the asset budgets
+npm run lighthouse                # Lighthouse mobile on the built wall: performance >= 90, LCP, CLS, TBT
+npm run assets                    # the zoom images from dam/ into wall/public/zoom/ (D4; never committed)
+npm run all                       # check, test, build, test:e2e, lighthouse, in that order
+```
+The Blender tools of D3 and D4 (`drawer_wall.py`, `frame_glb.py`, `render_queue.py`) are listed here as they land.
 
 ## When unsure
 If `00-decisions.md` doesn't answer it and it touches brand, product facts, money or legal copy, ask the founder. Otherwise make the call and note it in the PR.

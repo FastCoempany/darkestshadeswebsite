@@ -1,0 +1,62 @@
+/* The wall's base: the tokens (design/tokens/build/tokens.css), the scene on black, type that recedes.
+   Role tokens only: no literal color anywhere in wall/src (checks/colors.mjs). */
+@import '../../../design/tokens/build/tokens.css';
+
+:root {
+  color-scheme: dark;
+  font-family: var(--font-family-text);
+  font-weight: var(--font-weight-light);
+  font-size: 100%;
+  line-height: var(--font-leading-body);
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-surface-scene);
+  color: var(--color-text-primary);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:focus-visible {
+  outline: var(--border-focus) solid var(--color-focus-ring);
+  outline-offset: var(--border-focus-offset);
+}
+
+/* the page's only heading, for screen readers (wall.title) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* D1's labelled placeholders, where the wall will be: gone when the elements land (D5, D6) */
+[data-placeholder] {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+  margin: var(--space-4);
+  border: var(--border-hairline) dashed var(--color-border-rule);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-micro);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--font-tracking-micro);
+  text-transform: uppercase;
+  text-align: center;
+  padding: var(--space-4);
+}
+[data-placeholder]::before { content: attr(data-placeholder); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

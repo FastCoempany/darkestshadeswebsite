@@ -1,0 +1,44 @@
+name: wall
+
+# The drawer wall's checks (wall/, DRAWER-WALL.md D1): npm run all without the pixel comparisons.
+on:
+  push:
+    branches: [main, 'wall/**']
+    paths: ['wall/**', 'design/tokens/**', 'content/**', '.github/workflows/wall.yml']
+  pull_request:
+    paths: ['wall/**', 'design/tokens/**', 'content/**', '.github/workflows/wall.yml']
+
+jobs:
+  all:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: wall
+    env:
+      CI: 1
+      WALL_NO_PIXELS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: wall/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run check
+      - run: npm run test
+      - run: npm run build
+      - run: npm run test:e2e
+      - run: npm run lighthouse
+        env:
+          CHROME_PATH: ''
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wall-test-results
+          path: |
+            wall/test-results
+            wall/playwright-report
+          if-no-files-found: ignore
