@@ -1,0 +1,243 @@
+{
+  "$schema": "./wall.schema.json",
+  "records": [
+    {
+      "id": "bay_wall/frames",
+      "handle": "frames",
+      "type": "bay_wall",
+      "fields": [
+        {
+          "key": "bays",
+          "type": "list.metaobject_reference",
+          "value": "[\"drawer_bay/f01\", \"drawer_bay/f02\", \"drawer_bay/f03\", \"drawer_bay/f04\", \"drawer_bay/f05\", \"drawer_bay/f06\", \"drawer_bay/f08\", \"drawer_bay/f09\"]"
+        },
+        {
+          "key": "knob_style",
+          "type": "single_line_text_field",
+          "value": "black-relief"
+        },
+        {
+          "key": "render_set",
+          "type": "single_line_text_field",
+          "value": "wall-v1"
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f01",
+      "handle": "f01",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F01"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f02",
+      "handle": "f02",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F02"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f03",
+      "handle": "f03",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F03"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f04",
+      "handle": "f04",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F04"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f05",
+      "handle": "f05",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F05"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f06",
+      "handle": "f06",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F06"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f08",
+      "handle": "f08",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F08"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "drawer_bay/f09",
+      "handle": "f09",
+      "type": "drawer_bay",
+      "fields": [
+        {
+          "key": "frame",
+          "type": "single_line_text_field",
+          "value": "F09"
+        },
+        {
+          "key": "state",
+          "type": "single_line_text_field",
+          "value": "available"
+        },
+        {
+          "key": "light",
+          "type": "single_line_text_field",
+          "value": "auto"
+        },
+        {
+          "key": "note",
+          "type": "multi_line_text_field",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

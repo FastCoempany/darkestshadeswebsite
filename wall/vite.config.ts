@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { copyFrom, framesFrom } from './src/data/extract';
 
 // The wall, alone: two pages (the wall and the states sheet), relative paths so the built folder works from any host
 // (a private Artifact, a folder on a phone, GitHub Pages), `noindex` in the pages themselves. three.js never joins the
@@ -59,9 +60,34 @@ function fontsKit(): Plugin {
   };
 }
 
+/** `virtual:wall-frames` and `virtual:wall-copy`: the eight frames' facts from content/products/ and the copy deck's
+ * wall section from content/copy/en.json, extracted at build time so the wall ships only what it shows. */
+function wallData(): Plugin {
+  const PRODUCTS = resolve(__dirname, '../content/products');
+  const DECK = resolve(__dirname, '../content/copy/en.json');
+  const ids: Record<string, string> = { 'virtual:wall-frames': '\0wall-frames', 'virtual:wall-copy': '\0wall-copy' };
+  return {
+    name: 'wall-data',
+    resolveId(source) { return ids[source] ?? null; },
+    load(id) {
+      if (id === '\0wall-frames') {
+        const files = readdirSync(PRODUCTS).filter((f) => /^f0[1-9]\.json$/.test(f));
+        for (const f of files) this.addWatchFile(resolve(PRODUCTS, f));
+        const products = files.map((f) => JSON.parse(readFileSync(resolve(PRODUCTS, f), 'utf8')));
+        return `export default ${JSON.stringify(framesFrom(products))};`;
+      }
+      if (id === '\0wall-copy') {
+        this.addWatchFile(DECK);
+        return `export default ${JSON.stringify(copyFrom(JSON.parse(readFileSync(DECK, 'utf8'))))};`;
+      }
+      return null;
+    },
+  };
+}
+
 export default defineConfig({
   base: './',
-  plugins: [fontsLocal(), fontsKit()],
+  plugins: [fontsLocal(), fontsKit(), wallData()],
   publicDir: 'public',
   build: {
     outDir: 'dist',
