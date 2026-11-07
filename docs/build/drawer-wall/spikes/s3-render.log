@@ -1,0 +1,5 @@
+# S3: one drawer-view frame at final settings (Nov 7 2026, 4 CPUs, nice 19). The command, then Blender's log, then the wall time:
+# cd <repo> && START=$(date +%s); nice -n 19 python3 docs/build/drawer-wall/prototype/drawer_scene.py --ext 0.25 --outdir work/s3 --samples 48 --size 1200; echo WALL=$(( $(date +%s) - START ))s
+02:36.533  render           | Saved: 'work/s3/d00.png'
+wrote work/s3/d00.png 0.25
+EXIT=0 WALL=158s

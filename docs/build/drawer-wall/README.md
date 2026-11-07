@@ -11,6 +11,7 @@ The run itself is `docs/build/DRAWER-WALL.md`: the drawer wall alone, built in `
 | `prototype/interaction/pull.src.html` | The first touch prototype: pull the frame toward you out of the dark into the light (the dark and lit pair, cross-faded and scaled). |
 | `prototype/stills/` | Reference stills from those renders: the drawer shut, half open and open; the lift pair; the rim-lit front. |
 | `research-2026-11-06.md` | The research behind the stack, the mechanics and the budgets, with where the run departs from it. |
+| `spikes/` | D0's spikes as run (Nov 7 2026): S1 (`s1_blender.py`, `s1-three.html`, `s1-render.mjs`, `s1-compare.py`, the side-by-side `s1-f09-cycles-vs-three.jpg`), S2 (`s2-index.html`, `s2-probe.js`, the test Artifact's page) and S4 (`s4-touch.mjs`). Their numbers are in `WALL-PROGRESS.md`. Working scripts, not tools, written for the scratchpad they ran in (their paths say so); the tools they led to live in `tools/`. The logs as run: `s3-render.log`, `s1-blender.log`, `s1-sweep.sh`. |
 | `usability.md` | Written in D7: the five-person test. |
 | `review/R1` … `R4` | The review sets the run publishes for the founder. |
 | `launch.md` | Written in D9: how the wall goes into a store later (the metaobject definitions, the adapter, placing `<drawer-wall>`), how to change a drawer, add a frame, swap in a reshoot or a scanned leather. |

@@ -1,0 +1,54 @@
+<title>Wall test page</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="noindex">
+<style>
+/* layout: one quiet column on black, the result first, the raw report under it */
+:root { --bg: #000000; --fg: #e8e4dc; --quiet: #a6a5a1; --panel: #131416; --ok: #8db596; --bad: #e0796a; color-scheme: dark; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #000000; --fg: #e8e4dc; --quiet: #a6a5a1; --panel: #131416; --ok: #8db596; --bad: #e0796a; color-scheme: dark; } }
+:root[data-theme="light"] { --bg: #000000; --fg: #e8e4dc; --quiet: #a6a5a1; --panel: #131416; --ok: #8db596; --bad: #e0796a; color-scheme: dark; }
+body { background: var(--bg); color: var(--fg); font: 300 16px/1.5 system-ui, sans-serif; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px; }
+main { max-width: 640px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-size: 22px; font-weight: 300; margin: 0; text-wrap: balance; }
+p { color: var(--quiet); margin: 0; }
+pre { white-space: pre-wrap; word-break: break-word; font: 12px/1.5 ui-monospace, monospace; background: var(--panel); padding: 12px; border-radius: 4px; margin: 0; min-width: 0; }
+canvas { display: block; width: 100%; max-width: 100%; height: auto; background: var(--panel); }
+.ok { color: var(--ok); } .bad { color: var(--bad); }
+button { font: inherit; color: var(--fg); background: none; border: 1px solid var(--quiet); padding: 6px 12px; border-radius: 4px; justify-self: start; }
+button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+</style>
+<main>
+<h1>Wall test page</h1>
+<p>Spike S2 of the drawer wall's run. This page loads a JavaScript module, fetches a GLB, decodes a WebP and an AVIF, and probes WebGL 2. The result below is what this browser can do.</p>
+<p id="status">Loading the module…</p>
+<canvas id="c" width="16" height="16"></canvas>
+<button type="button" id="copy">Copy the report</button>
+<pre id="out"></pre>
+<noscript><p>JavaScript is off: the module did not run.</p></noscript>
+</main>
+<script type="module">
+  const status = document.getElementById('status');
+  const out = document.getElementById('out');
+  document.getElementById('copy').addEventListener('click', () => {
+    navigator.clipboard?.writeText(out.textContent).catch(() => { const r = document.createRange(); r.selectNodeContents(out); getSelection().removeAllRanges(); getSelection().addRange(r); });
+  });
+  try {
+    const m = await import('./probe.js');
+    status.textContent = 'Module loaded. Probing…';
+    await m.run((res) => {
+      const yes = (ok) => (ok ? 'yes' : 'no');
+      const parts = [
+        'module yes',
+        'GLB fetch ' + yes(res.glb?.magic === 'glTF'),
+        'WebP decode ' + yes(res.webp?.width > 0),
+        'AVIF decode ' + yes(res.avif?.width > 0),
+        'WebGL 2 ' + yes(res.webgl2?.ok),
+      ];
+      const good = res.glb?.magic === 'glTF' && res.webp?.width > 0;
+      status.textContent = (good ? 'Pass' : 'Fail') + ': ' + parts.join(' · ') + '.';
+      status.className = good ? 'ok' : 'bad';
+      out.textContent = JSON.stringify(res, null, 1);
+    });
+  } catch (e) {
+    status.textContent = 'The module failed to load: ' + e; status.className = 'bad';
+  }
+</script>
