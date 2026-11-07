@@ -21,5 +21,6 @@ for i in $(seq 0 23); do
 done
 $Q cameras --outputs work/wall/camera/open.json work/wall/camera/inspect.json -- python3 tools/blender/drawer_wall.py cameras
 $Q env --outputs work/wall/env/drawer.hdr -- python3 tools/blender/drawer_wall.py env --samples 48 --cameras work/wall/camera
-$Q lifted-F09 --outputs work/wall/stills/F09-lifted.png -- python3 tools/blender/drawer_wall.py lifted --frame F09 --samples 64
+# F09's lifted still for R1, with its measured lens tint (tools/photo/lens_tints.py; D4 renders all eight from wall/assets/lens-tints.json)
+$Q lifted-F09 --outputs work/wall/stills/F09-lifted.png -- python3 tools/blender/drawer_wall.py lifted --frame F09 --tint 0.0443 0.0444 0.0567 --samples 64
 python3 tools/blender/render_queue.py status d3

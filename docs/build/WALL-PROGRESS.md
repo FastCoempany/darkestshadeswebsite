@@ -7,7 +7,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 | What | Where | Since |
 |---|---|---|
 | **The phone build (R2)** | not yet (D7) | |
-| **The R1 review set** | not yet (D3) | |
+| **The R1 review set** | https://claude.ai/artifact/XWxD3uvM97E3hqgJdEUtUt (private; the same twelve pieces and the contact sheet in `docs/build/drawer-wall/review/R1/`) | Nov 7 2026, D3 |
 
 ## Checks failing for environment reasons
 
@@ -22,7 +22,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 | D0 · Start | done | `wall/d0-start` → PR #11 | the four spikes, with numbers, in "D0 · Start" below; `frame_texture.py --from-dam` run for F01 and F02 | Nov 7 2026 |
 | D1 · The project | done | `wall/d1-project` → PR #12 | `npm run all` exit 0 on the empty project (check, Vitest 2/2, build, Playwright 22 passed and 8 skipped across the three projects, Lighthouse 100); the four screens shown in the session; in "D1 · The project" below | Nov 7 2026 |
 | D2 · Records and logic | done | `wall/d2-records` → PR #13 | Vitest 286 tests in 9 files (every resolver case, missing and unknown value, every machine transition and every impossible one); `npm run check` validates `data/wall.json` and the manifest; `npm run all` exit 0; in "D2 · Records and logic" below | Nov 7 2026 |
-| D3 · The wall and the drawer | in progress | `wall/d3-wall` | lookdev done against the prototype stills; the queue running (below) | Nov 7 2026 |
+| D3 · The wall and the drawer | done | `wall/d3-wall` → PR (number below) | `drawer_wall.py check` 0 failures for both layouts; every asset within budget (`npm run check`); the R1 set published; in "D3 · The wall and the drawer" below | Nov 7 2026 |
 | D4 · The frames | not started | | | |
 | D5 · The elements | not started | | | |
 | D6 · The wall, together | not started | | | |
@@ -75,11 +75,16 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 
 **Lookdev** (`work/wall/lookdev*.png`, against `prototype/stills/`): the room's light brought down to the prototype's level; the seam glow as a thin amber line; the drawer's suede darkened to brown-black with a warm pool on its floor; the view's end pose moved back so the cabinet shows above the open drawer. The grade measured against the founder-reviewed still: its cabinet sits at about 36/255, so the wall's grade is the cool cast at exposure 0.3 with a 0.004 toe (the leather lands at 38/255); one grade for every image, the drawer's warmth from the scene's own light so the view continues the wall at its first frame. The portrait rail went from 96 to 114 mm after the first wall build showed a two-line name pushing its price into the drawer below at 390 px.
 
-**Exit evidence (Nov 7 2026):** (filled in as the queue lands)
+**The queue** (`work/queue/d3.json`, 34 jobs, 95 min on 4 CPUs at nice 19, 0 failures): the portrait wall lit 227 s and dark 273 s at 1170 px, the landscape 458 s and 350 s at 2880 px, the three knob close-ups 144 to 160 s, the 24 base frames 135 to 156 s each (about 2.4 min a frame at 1200 × 1500, 48 samples, denoised), cameras 2 s, the environment map 26 s, the F09 lifted still 198 s. A second chunk (`d3b`, 16 min) re-rendered the two knob close-ups made before the rail change and the portrait wall with its 114 mm rail; a third (`d3c`) the lifted still with its turn fixed and the frame alone on transparency.
+
+**Exit evidence (Nov 7 2026):**
+- `python3 tools/blender/drawer_wall.py check --layout portrait --knob black-relief` → `check portrait black-relief: 0 failures`, exit 0; `--layout landscape` → `0 failures`, exit 0. The checks: every drawer's face, knob, label and crop rect in `rects.json` within 0.05% of the geometry rebuilt; the knob GCD 30.00 mm on all eight knobs; the plate's outermost 2% within 1/255 of scene black; each dark crop's outer ring within 2/255 of the lit plate and its body within 2.5/255 of the graded dark render. (A first landscape check caught the AVIF leaving one pixel at 2/255 in the top row at quality 82: the export now lowers the quality until the edge is clean, and the grade's exact-black margin is 3.5%.)
+- **Budgets** (`wall/assets/manifest.json`, `npm run check` → `assets: 71 entries, 137 files listed, 137 files on disk, 0 failures`): portrait plate AVIF 159 KB at quality 70 (≤ 160), WebP 137 KB; landscape plate AVIF 354 KB at quality 80 (≤ 380), WebP 215 KB; the sixteen dark crops 12 to 24 KB; the base sequence 41 to 44 KB a frame at 720 px (≤ 45) and 73 to 79 KB at 1200 px (≤ 80), WebP below both; `env/drawer.hdr` 374 KB at 768 × 384 (≤ 600; 1024 × 512 came to 662 KB); `camera/open.json` 1.4 KB, `inspect.json` 1.7 KB.
+- **R1 published:** `docs/build/drawer-wall/review/R1/` (the contact sheet and twelve pieces, `index.md`) and the Artifact https://claude.ai/artifact/XWxD3uvM97E3hqgJdEUtUt (private), linked at the top of this file and in the D3 pull request.
 
 ## Now and next
 
-- D2 done; D3 next: `tools/blender/drawer_wall.py` (the cabinet, the drawer, the walls, the sequence, `--check`), `tools/photo/grade_scene.py`, `tools/blender/render_queue.py`; lookdev on one drawer against the prototype stills, then the walls, the base sequence, `open.json`, `inspect.json`, the environment map; the R1 set.
+- D3 done; D4 next: `lens_tints.py` (the sample boxes are committed in `content/photography/lens-samples.json`), the eight GLBs through `frame_glb.py --check` and `optimize.mjs`, the eight frame sequences as region renders and the eight lifted stills through `queue_d4.sh` (F09 first), `zoom_export.py`; then `npm run check`. The D5 elements are drafted on the `wip/d5-elements` branch (the store, the six elements, the shared pieces, the states sheet, the flow specs) and come in as D5 once D4's assets exist.
 
 ## Render queue
 
@@ -87,18 +92,18 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 
 | Job | State | Time | Notes |
 |---|---|---|---|
-| wall portrait lit, dark (1170 px, 64 samples) | running | | `drawer_wall.py wall` |
-| wall landscape lit, dark (2880 px) | queued | | |
-| knob close-ups: black-relief, gold, plain (1024 px, 96 samples) | queued | | for O15 (R1) |
-| base sequence, 24 frames (1200 × 1500, 48 samples, denoised) | queued | about 2 min a frame from S3 | one job per frame |
-| cameras (open.json, inspect.json), env (1024 × 512), the F09 lifted still | queued | | |
-| the eight frame sequences, region renders | D4 | | |
+| wall portrait lit, dark (1170 px, 64 samples) | done, twice (the rail) | 227 s, 273 s; 238 s, 232 s | `drawer_wall.py wall` |
+| wall landscape lit, dark (2880 px) | done | 458 s, 350 s | |
+| knob close-ups: black-relief, gold, plain (1024 px, 96 samples) | done | 144 to 295 s | for O15 (R1) |
+| base sequence, 24 frames (1200 × 1500, 48 samples, denoised) | done | 135 to 156 s a frame | one job per frame |
+| cameras (open.json, inspect.json), env (1024 × 512), the F09 lifted still | done | 2 s, 26 s, 198 s | |
+| the eight frame sequences, region renders; the eight lifted stills | D4 (`queue_d4.sh`) | | |
 
 ## Review gates
 
 | Gate | When | Where | Antaeus's answer |
 |---|---|---|---|
-| R1 | D3 | | |
+| R1 | Nov 7 2026, D3 | The Artifact above and `docs/build/drawer-wall/review/R1/`; linked in the D3 pull request. Asked: the look of the leather, the seam light and the room; O15 (black relief, gold or plain); the view's framing at its first and last frame and the pool of light; anything unlike the Nov 5 prototype | awaited, as a comment on the D3 pull request |
 | R2 | D7 | | |
 | R3 | run 2 | | |
 | R4 | run 2 | | |

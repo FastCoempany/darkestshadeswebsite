@@ -25,6 +25,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "tools" / "photo"))
 import grade_scene  # noqa: E402
+import render_queue  # noqa: E402
 
 WORK = ROOT / "work" / "wall"
 ASSETS = ROOT / "wall" / "assets"
@@ -38,13 +39,44 @@ BUDGET = {"wall-plate": lambda w: 380 * KB if w >= 2000 else 160 * KB, "wall-dar
 # view continues the wall at its first frame without a shift.
 LOOK = {"wall": "cool", "sequence": "cool", "still": "cool", "knob": "cool"}
 GRADE = {"exposure": 0.3, "toe": 0.004}
+# The edge band, fractions of the width (grade_scene.edge_mask): the plates are black to 2% and at full level from
+# 3.2%, inside the 3.27% room round the cabinet, so no drawer is touched; the drawer view's frames and the knob
+# close-ups, full-screen pictures of a drawer in the dark, fade over 2% to 6%, the vignette the prototype had
+EDGE = {"wall": (0.02, 0.032), "sequence": (0.02, 0.06), "still": (0.02, 0.032), "knob": (0.02, 0.06)}
+
+
+def grade_for(part):
+    return {**GRADE, "edge": EDGE[part]}
+TOOLS_HASH = render_queue.tools_hash()     # a stamp of the tool files every entry was made with (see render_queue.TOOLS)
+
+
+def grade_note(part="wall"):
+    return f"grade {LOOK[part]} exposure {GRADE['exposure']} toe {GRADE['toe']}, edge black to {EDGE[part][0]} and full from {EDGE[part][1]} of the width"
 
 
 def git_commit():
+    """The code the file was made with: HEAD's short hash, and -dirty when the tools or the exporter had uncommitted
+    changes at export time (the entry's toolsHash stamps the tool files themselves)."""
     try:
-        return subprocess.check_output(["git", "rev-parse", "--short=12", "HEAD"], cwd=ROOT, text=True).strip()
+        head = subprocess.check_output(["git", "rev-parse", "--short=12", "HEAD"], cwd=ROOT, text=True).strip()
+        dirty = subprocess.check_output(["git", "status", "--porcelain", "--", "tools/blender", "tools/photo"], cwd=ROOT, text=True).strip()
+        return head + ("-dirty" if dirty else "")
     except Exception:
         return "0000000"
+
+
+def queue_cmd(job_id, fallback):
+    """The exact command the render queue ran for a job (work/queue/*.json, the flags included), or `fallback`."""
+    qdir = ROOT / "work" / "queue"
+    for q in sorted(qdir.glob("*.json")) if qdir.exists() else []:
+        try:
+            jobs = json.loads(q.read_text())
+        except Exception:
+            continue
+        for j in jobs:
+            if isinstance(j, dict) and j.get("id") == job_id and j.get("cmd"):
+                return " ".join(j["cmd"]).replace("python3 tools/blender/", "")
+    return fallback
 
 
 def load_manifest():
@@ -57,19 +89,24 @@ def save_manifest(m):
 
 
 def put(m, entry):
+    entry["toolsHash"] = TOOLS_HASH
     m["assets"] = [e for e in m["assets"] if e["id"] != entry["id"]] + [entry]
 
 
-def edge_ok(path, band=0.02, limit=1):
-    """Scene black is exact (DRAWER-WALL.md, Assets): the outermost `band` of the encoded file within `limit`/255 of
-    black. The lossy encoders can leave a stray level at an edge; the export lowers the quality until none is left."""
+def edge_max(path, band=0.02):
+    """The highest level in the outermost `band` of the width, on every side, of an encoded file (0 is scene black)."""
     import numpy as np
     from PIL import Image
     import pillow_avif  # noqa: F401
     a = np.asarray(Image.open(path).convert("RGB")).astype(int)
-    h, w = a.shape[:2]
-    mx, my = max(1, int(round(band * w))), max(1, int(round(band * h)))
-    return max(a[:my].max(), a[-my:].max(), a[:, :mx].max(), a[:, -mx:].max()) <= limit
+    mm = max(1, int(round(band * a.shape[1])))
+    return int(max(a[:mm].max(), a[-mm:].max(), a[:, :mm].max(), a[:, -mm:].max()))
+
+
+def edge_ok(path, band=0.02, limit=1):
+    """Scene black is exact (DRAWER-WALL.md, Assets): the outermost `band` of the width within `limit`/255 of black.
+    The lossy encoders can leave a stray level at an edge; the export lowers the quality until none is left."""
+    return edge_max(path, band) <= limit
 
 
 def encode_within(src, out, look, width, budget, seed, crop=None, crop_after=None, quality=82, extra=None, check_edge=True):
@@ -121,17 +158,23 @@ def cmd_wall(a):
     files = []
     for ext in ("avif", "webp"):
         out = out_dir / f"plate-lit.{ext}"
-        q, size = encode_within(lit, out, LOOK["wall"], width, BUDGET["wall-plate"](width), seed)
+        q, size = encode_within(lit, out, LOOK["wall"], width, BUDGET["wall-plate"](width), seed, extra={"edge": EDGE["wall"]})
         report[ext] = {"quality": q, "bytes": size}
         files.append(f"wall/{a.layout}/{a.knob}/plate-lit.{ext}")
     print(f"plate-lit {a.layout} {a.knob}: {report}", flush=True)
+    render_cmd = {v: queue_cmd(f"wall-{a.layout}-{v}", f"drawer_wall.py wall --layout {a.layout} --knob {a.knob} --variant {v}") for v in ("lit", "dark")}
+    export_cmd = f"wall_export.py wall --layout {a.layout} --knob {a.knob} ({grade_note('wall')})"
     put(m, {"id": f"wall/{a.layout}/{a.knob}/plate-lit", "kind": "wall-plate", "files": files, "status": a.status,
-            "tool": "tools/blender/drawer_wall.py", "command": f"drawer_wall.py wall --layout {a.layout} --knob {a.knob} --variant lit; wall_export.py wall",
+            "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['lit']}; {export_cmd}",
             "sourceCommit": commit, "layout": a.layout, "knob": a.knob, "width": width, "height": height,
-            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "grade": f"{LOOK['wall']} e{GRADE['exposure']} toe{GRADE['toe']}"}})
-    # the dark render graded whole with the plate's seed (kept in work/ for the check), then each drawer's crop
+            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "avifQuality": report["avif"]["quality"],
+                       "edgeBlackMaxAvif": edge_max(out_dir / "plate-lit.avif"), "edgeBlackMaxWebp": edge_max(out_dir / "plate-lit.webp"),
+                       "grade": f"{LOOK['wall']} e{GRADE['exposure']} toe{GRADE['toe']}"}})
+    # both renders graded whole with the plate's seed, kept in work/ for the check (drawer_wall.py check compares the
+    # dark crops with the dark one, and the lit with the dark outside the crops); then each drawer's crop of the dark
+    grade_scene.save(grade_scene.grade(resized(lit, width), LOOK["wall"], seed=seed, **grade_for("wall")), WORK / f"{a.layout}-{a.knob}-lit.graded.png")
     graded_dark = WORK / f"{a.layout}-{a.knob}-dark.graded.png"
-    s = grade_scene.grade(resized(dark, width), LOOK["wall"], seed=seed, **GRADE)
+    s = grade_scene.grade(resized(dark, width), LOOK["wall"], seed=seed, **grade_for("wall"))
     grade_scene.save(s, graded_dark)
     for d in rects["drawers"]:
         c = d["crop"]
@@ -152,13 +195,14 @@ def cmd_wall(a):
             rep[ext] = size
             files.append(f"wall/{a.layout}/{a.knob}/bay-{d['index']:02d}-dark.{ext}")
         put(m, {"id": f"wall/{a.layout}/{a.knob}/bay-{d['index']:02d}-dark", "kind": "wall-dark", "files": files, "status": a.status,
-                "tool": "tools/blender/drawer_wall.py", "command": f"drawer_wall.py wall --layout {a.layout} --knob {a.knob} --variant dark; wall_export.py wall",
+                "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['dark']}; {export_cmd}",
                 "sourceCommit": commit, "layout": a.layout, "knob": a.knob, "width": x1 - x0, "height": y1 - y0,
-                "checks": {"avifBytes": rep["avif"], "webpBytes": rep["webp"]}})
+                "checks": {"avifBytes": rep["avif"], "webpBytes": rep["webp"], "cropPx": f"{x0},{y0},{x1 - x0},{y1 - y0}", "seed": "the plate's (graded whole, then cut)"}})
     (out_dir / "rects.json").write_text(json.dumps(rects, indent=1) + "\n")
     put(m, {"id": f"wall/{a.layout}/{a.knob}/rects", "kind": "rects", "files": [f"wall/{a.layout}/{a.knob}/rects.json"], "status": a.status,
-            "tool": "tools/blender/drawer_wall.py", "command": f"drawer_wall.py wall --layout {a.layout} --knob {a.knob} --variant lit", "sourceCommit": commit,
-            "layout": a.layout, "knob": a.knob, "width": width, "height": height})
+            "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['lit']} (writes the rects); {export_cmd}", "sourceCommit": commit,
+            "layout": a.layout, "knob": a.knob, "width": width, "height": height,
+            "checks": {"drawers": len(rects["drawers"]), "verifiedBy": f"drawer_wall.py check --layout {a.layout} --knob {a.knob}"}})
     save_manifest(m)
     print(f"wall {a.layout} {a.knob}: {len(rects['drawers'])} dark crops, rects.json, manifest updated", flush=True)
 
@@ -228,13 +272,19 @@ def cmd_sequence(a):
             files, rep = [], {}
             for ext in ("avif", "webp"):
                 out = out_dir / f"{i:03d}.{ext}"
-                q, size = encode_within(f, out, LOOK["sequence"], width, BUDGET["sequence-frame"](width), grade_scene.seed_for(f"seq-{name}-{i:03d}"))
+                q, size = encode_within(f, out, LOOK["sequence"], width, BUDGET["sequence-frame"](width), grade_scene.seed_for(f"seq-{name}-{i:03d}"), extra={"edge": EDGE["sequence"]})
                 rep[ext] = {"quality": q, "bytes": size}
                 files.append(f"seq/{name}/{width}/{i:03d}.{ext}")
+            render_cmd = queue_cmd(f"seq-{name}-{i:03d}", f"drawer_wall.py sequence --frames {len(frames)} --only {i}{' --frame ' + a.frame + ' --region' if a.frame else ''}")
+            if a.frame and i < 3:
+                render_cmd = queue_cmd(f"seq-base-{i:03d}", f"drawer_wall.py sequence --frames {len(frames)} --only {i}") + " (the base frame: the interior does not show yet)"
+            elif a.frame:
+                render_cmd += f" over {queue_cmd(f'seq-base-{i:03d}', 'the base frame')} (an 8 px feather)"
             entry = {"id": f"seq/{name}/{width}/{i:03d}", "kind": "sequence-frame", "files": files, "status": a.status,
-                     "tool": "tools/blender/drawer_wall.py", "command": f"drawer_wall.py sequence --frames {len(frames)}{' --frame ' + a.frame + ' --region' if a.frame else ''}; wall_export.py sequence --width {width}",
+                     "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd}; wall_export.py sequence{' --frame ' + a.frame if a.frame else ''} --width {width} ({grade_note('sequence')})",
                      "sourceCommit": commit, "width": width, "height": int(round(width * 1500 / 1200)),
-                     "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "grade": LOOK["sequence"]}}
+                     "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"],
+                                "edgeBlackMaxAvif": edge_max(out_dir / f"{i:03d}.avif"), "edgeBlackMaxWebp": edge_max(out_dir / f"{i:03d}.webp"), "grade": LOOK["sequence"]}}
             if a.frame:
                 entry["frame"] = a.frame
             put(m, entry)
@@ -252,8 +302,10 @@ def cmd_cameras(a):
         if not src.exists():
             src = WORK / "seq" / f"{name}.json"
         shutil.copyfile(src, out_dir / f"{name}.json")
+        data = json.loads((out_dir / f"{name}.json").read_text())
         put(m, {"id": f"camera/{name}", "kind": "camera", "files": [f"camera/{name}.json"], "status": a.status,
-                "tool": "tools/blender/drawer_wall.py", "command": "drawer_wall.py cameras", "sourceCommit": commit})
+                "tool": "tools/blender/drawer_wall.py", "command": f"{queue_cmd('cameras', 'drawer_wall.py cameras')}; wall_export.py cameras", "sourceCommit": commit,
+                "checks": {"frames": ",".join(sorted(data.get("frames", {}))), "lensMm": data["camera"]["lens_mm"], "fovDeg": round(data["camera"]["three"]["fov_deg"], 3)}})
     save_manifest(m)
     print("cameras exported", flush=True)
 
@@ -277,10 +329,88 @@ def cmd_env(a):
         size = os.path.getsize(out_dir / "drawer.hdr")
         width = 768
     put(m, {"id": "env/drawer", "kind": "env", "files": ["env/drawer.hdr"], "status": a.status,
-            "tool": "tools/blender/drawer_wall.py", "command": "drawer_wall.py env; wall_export.py env", "sourceCommit": commit, "width": width, "height": width // 2,
+            "tool": "tools/blender/drawer_wall.py", "command": f"{queue_cmd('env', 'drawer_wall.py env')}; wall_export.py env", "sourceCommit": commit, "width": width, "height": width // 2,
             "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024)}})
     save_manifest(m)
     print(f"env exported: {size // KB} KB", flush=True)
+
+
+def read_still(src, width=None):
+    """A lifted still (RGBA PNG, straight alpha, the view transform applied) as linear RGB and alpha, float32, at
+    `width` px wide."""
+    import cv2
+    import numpy as np
+    im = cv2.imread(str(src), cv2.IMREAD_UNCHANGED)
+    im = im.astype(np.float32) / (65535.0 if im.dtype == np.uint16 else 255.0)
+    if width and im.shape[1] != width:
+        im = cv2.resize(im, (width, int(round(im.shape[0] * width / im.shape[1]))), interpolation=cv2.INTER_AREA if im.shape[1] > width else cv2.INTER_CUBIC)
+    rgb = grade_scene.to_linear(cv2.cvtColor(np.ascontiguousarray(im[..., :3]), cv2.COLOR_BGR2RGB))
+    alpha = im[..., 3] if im.shape[-1] == 4 else np.ones(im.shape[:2], np.float32)
+    return rgb, alpha
+
+
+def still_over(src, base, width):
+    """The still composited over a base frame (both linear), for R1 and the contact sheet."""
+    import cv2
+    import numpy as np
+    rgb, alpha = read_still(src, width)
+    b = grade_scene.load(base)
+    b = cv2.resize(b, (rgb.shape[1], rgb.shape[0]), interpolation=cv2.INTER_AREA)
+    return rgb * alpha[..., None] + b * (1 - alpha[..., None])
+
+
+def save_rgba(s, alpha, out, quality):
+    """An sRGB float image with its alpha as an RGBA AVIF or WebP."""
+    import numpy as np
+    from PIL import Image
+    import pillow_avif  # noqa: F401
+    rgba = np.dstack([(s * 255 + 0.5).astype(np.uint8), (alpha * 255 + 0.5).astype(np.uint8)])
+    im = Image.fromarray(rgba, "RGBA")
+    if out.suffix == ".avif":
+        im.save(out, "AVIF", quality=quality, speed=4)
+    else:
+        im.save(out, "WEBP", quality=quality, method=6)
+
+
+def cmd_stills(a):
+    """The lifted stills (DRAWER-WALL.md, The frames in 3D): work/wall/stills/<frame>-lifted.png, the frame alone
+    on transparency at the inspect pose, graded as the wall is (its colour over black, then unpremultiplied, the alpha
+    kept) to wall/assets/stills/<frame>-lifted.{avif,webp} at 1200 px within 200 KB; kind `still`."""
+    import numpy as np
+    m = load_manifest()
+    commit = git_commit()
+    out_dir = ASSETS / "stills"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    frames = a.frame or sorted(p.name[:3] for p in (WORK / "stills").glob("F0?-lifted.png"))
+    for fid in frames:
+        src = WORK / "stills" / f"{fid}-lifted.png"
+        if not src.exists():
+            print(f"stills: {src.relative_to(ROOT)} is not rendered yet; skipped", flush=True)
+            continue
+        rgb, alpha = read_still(src, a.width)
+        g = grade_scene.grade(rgb * alpha[..., None], LOOK["still"], seed=grade_scene.seed_for(f"stills-{fid}-lifted"), **grade_for("still"))
+        # the grade saw the frame over black (premultiplied); the browser composites straight colour, so divide the
+        # alpha back out where there is enough of it to divide by
+        g = np.where(alpha[..., None] > 0.02, np.clip(g / np.maximum(alpha[..., None], 0.02), 0, 1), 0).astype(np.float32)
+        files, rep = [], {}
+        for ext in ("avif", "webp"):
+            out = out_dir / f"{fid}-lifted.{ext}"
+            q = 84
+            while True:
+                save_rgba(g, alpha, out, q)
+                size = os.path.getsize(out)
+                if size <= BUDGET["still"](a.width) or q <= 30:
+                    break
+                q -= 6
+            rep[ext] = {"quality": q, "bytes": size}
+            files.append(f"stills/{fid}-lifted.{ext}")
+        put(m, {"id": f"stills/{fid}-lifted", "kind": "still", "files": files, "status": a.status, "frame": fid,
+                "tool": "tools/blender/drawer_wall.py", "command": f"{queue_cmd(f'lifted-{fid}', f'drawer_wall.py lifted --frame {fid}')}; wall_export.py stills --frame {fid} --width {a.width} ({grade_note('still')})",
+                "sourceCommit": commit, "width": g.shape[1], "height": g.shape[0],
+                "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "alpha": True,
+                           "alphaCoverage": round(float((alpha > 0.5).mean()), 4), "grade": LOOK["still"]}})
+        print(f"still {fid}: avif {rep['avif']['bytes'] // KB} KB q{rep['avif']['quality']}, webp {rep['webp']['bytes'] // KB} KB, {g.shape[1]}x{g.shape[0]}", flush=True)
+    save_manifest(m)
 
 
 def cmd_knobs(a):
@@ -289,7 +419,7 @@ def cmd_knobs(a):
     for knob in ("black-relief", "gold", "plain"):
         src = WORK / f"knob-{knob}.png"
         if src.exists():
-            grade_scene.process(src, out_dir / f"knob-{knob}.jpg", LOOK["knob"], None, 1024, None, 86, **GRADE)
+            grade_scene.process(src, out_dir / f"knob-{knob}.jpg", LOOK["knob"], None, 1024, None, 86, **grade_for("knob"))
             print("knob", knob, flush=True)
 
 
@@ -306,25 +436,26 @@ def cmd_r1(a):
             src = WORK / f"{layout}-black-relief-{variant}.png"
             if src.exists():
                 out = out_dir / f"wall-{layout}-{variant}.jpg"
-                grade_scene.process(src, out, LOOK["wall"], None, 1170 if layout == "portrait" else 1600, None, 84, seed=grade_scene.seed_for(f"plate-{layout}-black-relief"), **GRADE)
+                grade_scene.process(src, out, LOOK["wall"], None, 1170 if layout == "portrait" else 1600, None, 84, seed=grade_scene.seed_for(f"plate-{layout}-black-relief"), **grade_for("wall"))
                 pieces.append((f"The {layout} wall, every drawer {variant}", out))
     for i in (0, 8, 16, 23):
         src = WORK / "seq" / "base" / f"{i:03d}.png"
         if src.exists():
             out = out_dir / f"view-{i:02d}.jpg"
-            grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for(f"seq-base-{i:03d}"), **GRADE)
+            grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for(f"seq-base-{i:03d}"), **grade_for("sequence"))
             pieces.append((f"The drawer view, frame {i} of 24", out))
     for knob in ("black-relief", "gold", "plain"):
         src = WORK / f"knob-{knob}.png"
         if src.exists():
             out = out_dir / f"knob-{knob}.jpg"
-            grade_scene.process(src, out, LOOK["knob"], None, 900, None, 86, **GRADE)
+            grade_scene.process(src, out, LOOK["knob"], None, 900, None, 86, **grade_for("knob"))
             pieces.append((f"The knob, {knob} (O15)", out))
     src = WORK / "stills" / "F09-lifted.png"
-    if src.exists():
+    base = WORK / "seq" / "base" / "023.png"
+    if src.exists() and base.exists():
         out = out_dir / "lifted-F09.jpg"
-        grade_scene.process(src, out, LOOK["still"], None, 900, None, 84, seed=grade_scene.seed_for("stills-F09-lifted"), **GRADE)
-        pieces.append(("F09 lifted into the light (the still; the live frame takes this pose)", out))
+        grade_scene.save(grade_scene.grade(still_over(src, base, 900), LOOK["still"], seed=grade_scene.seed_for("stills-F09-lifted"), **grade_for("sequence")), out, 84)
+        pieces.append(("F09 lifted into the light, over the open drawer (the still; the live frame takes this pose)", out))
     # the contact sheet: every piece scaled into a 3-wide grid on black, labelled
     cell_w, pad = 600, 24
     thumbs = []
@@ -375,13 +506,17 @@ def main():
     for name in ("cameras", "env"):
         p = sub.add_parser(name)
         p.add_argument("--status", default="mockup", choices=["prototype", "mockup", "final"])
+    p = sub.add_parser("stills")
+    p.add_argument("--frame", action="append", default=None)
+    p.add_argument("--width", type=int, default=1200)
+    p.add_argument("--status", default="mockup", choices=["prototype", "mockup", "final"])
     sub.add_parser("knobs")
     sub.add_parser("r1")
     sub.add_parser("prune")
     a = ap.parse_args()
     if a.cmd == "sequence" and not a.width:
         a.width = [720, 1200]
-    {"wall": cmd_wall, "sequence": cmd_sequence, "cameras": cmd_cameras, "env": cmd_env, "knobs": cmd_knobs, "r1": cmd_r1, "prune": cmd_prune}[a.cmd](a)
+    {"wall": cmd_wall, "sequence": cmd_sequence, "cameras": cmd_cameras, "env": cmd_env, "stills": cmd_stills, "knobs": cmd_knobs, "r1": cmd_r1, "prune": cmd_prune}[a.cmd](a)
 
 
 if __name__ == "__main__":

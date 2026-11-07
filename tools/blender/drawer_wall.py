@@ -103,6 +103,16 @@ def calfskin(name, col=(0.0065, 0.0063, 0.006)):
     b.inputs["Coat Weight"].default_value = 0.15
     b.inputs["Coat Roughness"].default_value = 0.3
     geo = nt.nodes.new("ShaderNodeNewGeometry")
+    # the grain is fixed to the leather, not to the room: the world position less the object's `slide` (a property
+    # build_drawer sets on the parts that move with a drawer; absent, so zero, on everything else). No two drawers
+    # match, as in world space, and a sliding front keeps its grain from frame to frame instead of crawling
+    slide = nt.nodes.new("ShaderNodeAttribute")
+    slide.attribute_type = "OBJECT"
+    slide.attribute_name = "slide"
+    anchored = nt.nodes.new("ShaderNodeVectorMath")
+    anchored.operation = "SUBTRACT"
+    nt.links.new(geo.outputs["Position"], anchored.inputs[0])
+    nt.links.new(slide.outputs["Vector"], anchored.inputs[1])
     vor = nt.nodes.new("ShaderNodeTexVoronoi")
     vor.inputs["Scale"].default_value = 650.0
     vor.inputs["Randomness"].default_value = 1.0
@@ -115,7 +125,7 @@ def calfskin(name, col=(0.0065, 0.0063, 0.006)):
     big.inputs["Scale"].default_value = 18.0
     big.inputs["Detail"].default_value = 3.0
     for t in (vor, noi, big):
-        nt.links.new(geo.outputs["Position"], t.inputs["Vector"])
+        nt.links.new(anchored.outputs["Vector"], t.inputs["Vector"])
     mix = nt.nodes.new("ShaderNodeMix")
     mix.data_type = "FLOAT"
     mix.inputs[0].default_value = 0.4
@@ -257,9 +267,12 @@ def build_drawer(name, mats, centre, ext_mm=0.0, lit=True, with_gcd=True, frame_
     w, h = DRAWER_W * MM / 2, DRAWER_H * MM / 2
     t = FRONT_T * MM
     # the front: calfskin, bevelled, its face at y = 0 (local), its back at y = t
-    box(f"{name} front", -w, w, 0.0, t, -h, h, mats.front, root, FRONT_BEVEL * MM)
+    slide = [0.0, -ext_mm * MM, 0.0]                # how far the drawer's parts have moved from rest (the grain stays with them)
+    front = box(f"{name} front", -w, w, 0.0, t, -h, h, mats.front, root, FRONT_BEVEL * MM)
+    front["slide"] = slide
     for zz in (h - CORD_INSET * MM, -h + CORD_INSET * MM):
-        cylinder(f"{name} cord", CORD_R * MM, DRAWER_W * MM - 2 * FRONT_BEVEL * MM, (0, -0.0002, zz), (0, math.radians(90), 0), mats.cord, 24, root)
+        cord = cylinder(f"{name} cord", CORD_R * MM, DRAWER_W * MM - 2 * FRONT_BEVEL * MM, (0, -0.0002, zz), (0, math.radians(90), 0), mats.cord, 24, root)
+        cord["slide"] = slide
     # the box behind the front: suede floor and walls inside, dark wood outside
     bw = w - BOX_WALL * MM
     zb = -h + 10 * MM                               # the floor's top, a little above the front's bottom
@@ -454,14 +467,17 @@ def ortho_camera(sc, W_m, H_m, tilt_deg=15.0):
     cam.data.type = "ORTHO"
     tilt = math.radians(tilt_deg)
     plate_w = W_m * (1 + 2 * ROOM)
-    # the cabinet's height on the plate is foreshortened by the tilt; the room above and below the same as beside
-    plate_h = H_m * math.cos(tilt) + 2 * ROOM * W_m + CABINET_DEPTH * MM * math.sin(tilt) * 0.0
-    cam.data.ortho_scale = max(plate_w, plate_h) if plate_w >= plate_h else plate_h
+    # the cabinet's face is foreshortened by the tilt and its top shows above the face by the depth's sine; the two
+    # together sit centred on the plate, with the same black room above and below as beside, so the plate's edges
+    # hold nothing but the room (drawer_wall.py check measures the renders for that)
+    top = CABINET_DEPTH * MM * math.sin(tilt)
+    plate_h = H_m * math.cos(tilt) + top + 2 * ROOM * W_m
     cam.data.sensor_fit = "HORIZONTAL" if plate_w >= plate_h else "VERTICAL"
     cam.data.ortho_scale = plate_w if plate_w >= plate_h else plate_h
     cam.data.clip_start, cam.data.clip_end = 0.01, 20.0
     dist = 3.0
-    cam.location = (0, -dist * math.cos(tilt), dist * math.sin(tilt))
+    up = Vector((0, math.sin(tilt), math.cos(tilt)))                   # the camera's up, on the plate
+    cam.location = Vector((0, -dist * math.cos(tilt), dist * math.sin(tilt))) + up * (top / 2)
     cam.rotation_euler = (math.radians(90) - tilt, 0, 0)
     return cam, (plate_w, plate_h)
 
@@ -670,9 +686,56 @@ def matrix_y_up(m):
     return [[float(out[r][c]) for c in range(4)] for r in range(4)]
 
 
-def write_cameras(sc, cam, root, centre, outdir):
-    """camera/open.json: the last frame's camera and the frame's transform in the drawer; camera/inspect.json: the
-    lifted pose, the same camera, the frame risen toward it and turned to a three-quarter view."""
+LIFT_UP_M, LIFT_TOWARD_M, LIFT_YAW_DEG = 0.13, 0.12, 35.0   # the lifted pose: up, toward the camera, turned to a three-quarter view
+LIFT_KEY_W, LIFT_RIM_W = 12.0, 3.0                           # the lifted frame's own light: a warm key from the side, a cool rim from above
+LIFT_LEAN_SHORT_DEG = 8.0
+CAMERA_TINT = (0.0443, 0.0444, 0.0567)         # the bounds do not depend on the tint; F09's, for the build
+
+
+def frame_place(centre, lo, hi):
+    """Where build_drawer puts a frame rig in a drawer open to FULL_EXT (world, metres), by the same arithmetic: the
+    frame's bounding box centred across the drawer and in the box's depth, its bottom on the suede."""
+    cx, cz = centre
+    t = FRONT_T * MM
+    zb = -DRAWER_H * MM / 2 + 10 * MM
+    fy = t + (BOX_DEPTH * MM - (hi[1] - lo[1])) / 2 - lo[1]
+    return Vector((cx - (lo[0] + hi[0]) / 2, -FULL_EXT * MM + fy, cz + zb - lo[2] + 0.0002))
+
+
+def frame_poses(cam, centre, lo, hi):
+    """The open pose (resting in the drawer) and the lifted pose as Blender world matrices. Lifted: the frame turns
+    about its own centre, 35 degrees about the vertical so the wearer's right (the GCD's side, the frame's -x) comes
+    to the camera, and tilts about the camera's right by the camera's own downward angle so its front faces the lens;
+    then it rises 130 mm and comes 120 mm toward the camera."""
+    open_loc = frame_place(centre, lo, hi)
+    upright = Euler((math.radians(90), 0, 0)).to_matrix().to_4x4()
+    open_m = Matrix.Translation(open_loc) @ upright
+    pivot = open_loc + Vector(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2))   # the frame's centre, open
+    toward = cam.location - pivot
+    toward.z = 0
+    toward.normalize()
+    cam_right = Vector((0, 0, 1)).cross(toward)
+    fwd = cam.matrix_world.to_3x3() @ Vector((0, 0, -1))               # how far the camera looks down, from its forward axis
+    tilt = math.asin(max(-1.0, min(1.0, -fwd.z)))
+    lift = Vector((0, 0, LIFT_UP_M)) + toward * LIFT_TOWARD_M
+    # Rz(+35) takes the frame's -x, (-1, 0, 0), to (-0.82, -0.57, 0): toward -y, where the camera is. A negative turn
+    # about the camera's right (+x for a camera at -y) leans the top away from the camera, which turns the front's
+    # normal (-y) upward: by the camera's own angle it points straight back up the line of sight
+    lean = -(tilt - math.radians(LIFT_LEAN_SHORT_DEG))              # negative about the camera's right: the top leans away, the front looks up at the lens
+    lift_m = (Matrix.Translation(lift + pivot) @ Matrix.Rotation(lean, 4, cam_right) @ Matrix.Rotation(math.radians(LIFT_YAW_DEG), 4, "Z")
+              @ Matrix.Translation(-pivot) @ open_m)
+    return open_m, lift_m
+
+
+def pose_json(m):
+    return {"matrix_blender": [[float(m[r][c]) for c in range(4)] for r in range(4)], "matrix_three": matrix_y_up(m),
+            "position_blender": [float(v) for v in m.to_translation()], "position_three": y_up(m.to_translation())}
+
+
+def write_cameras(sc, cam, root, centre, outdir, frame_ids=None, mesh_step=4, default="F09"):
+    """camera/open.json: the last frame's camera and, for every frame, its transform resting in the drawer (where
+    build_drawer put it in the render); camera/inspect.json: the same camera and every frame's lifted pose. Each frame
+    is built (at `mesh_step`) for its bounds, then removed."""
     outdir = pathlib.Path(outdir)
     outdir.mkdir(parents=True, exist_ok=True)
     fov = 2 * math.degrees(math.atan((36.0 / 2) * (VIEW_ASPECT[1] / VIEW_ASPECT[0]) / cam.data.lens))
@@ -681,31 +744,37 @@ def write_cameras(sc, cam, root, centre, outdir):
             "position": list(map(float, cam.location)), "rotation_euler_xyz_rad": list(map(float, cam.rotation_euler)),
             "three": {"position": y_up(cam.location), "fov_deg": fov, "near": 0.02, "far": 10.0,
                       "quaternion_xyzw": quaternion_y_up(cam.matrix_world.to_quaternion())}}
-    # the frame's place in the open drawer: where build_drawer puts a frame rig (its origin on the suede, centred)
     cx, cz = centre
-    t = FRONT_T * MM
     zb = cz - DRAWER_H * MM / 2 + 10 * MM
-    frame_loc = Vector((cx, -FULL_EXT * MM + t + BOX_DEPTH * MM / 2, zb))
-    open_m = Matrix.Translation(frame_loc) @ Euler((math.radians(90), 0, 0)).to_matrix().to_4x4()
-    # the lifted pose: up and toward the camera, turned 35 degrees about the vertical so the wearer's right (the GCD,
-    # the frame's -x) comes toward the camera: Rz(+35) takes (-1, 0, 0) to (-0.82, -0.57, 0), toward -y
-    toward = (cam.location - frame_loc)
-    toward.z = 0
-    toward.normalize()
-    lift_loc = frame_loc + Vector((0, 0, 0.13)) + toward * 0.12
-    lift_m = Matrix.Translation(lift_loc) @ Euler((math.radians(90), 0, math.radians(35))).to_matrix().to_4x4()
+    placement = {"note": "the rule build_drawer places a frame by: its bounding box centred on x, centred in the box's depth, its bottom on the suede; Blender Z up, metres",
+                 "x_m": float(cx), "y_box_front_m": float(-FULL_EXT * MM + FRONT_T * MM), "y_box_back_m": float(-FULL_EXT * MM + FRONT_T * MM + BOX_DEPTH * MM),
+                 "z_floor_m": float(zb), "three": {"x": float(cx), "y_floor": float(zb), "z_box_front": float(FULL_EXT * MM - FRONT_T * MM), "z_box_back": float(FULL_EXT * MM - FRONT_T * MM - BOX_DEPTH * MM)}}
+    opens, lifts = {}, {}
+    for fid in frame_ids or sorted(frame3d.FRAMES):
+        was = frame3d.FRAMES[fid].get("mesh_step")
+        frame3d.FRAMES[fid]["mesh_step"] = mesh_step
+        rig, lo, hi, parts = build_frame(fid, CAMERA_TINT)
+        if was is None:
+            frame3d.FRAMES[fid].pop("mesh_step", None)
+        else:
+            frame3d.FRAMES[fid]["mesh_step"] = was
+        open_m, lift_m = frame_poses(cam, centre, lo, hi)
+        opens[fid] = pose_json(open_m)
+        opens[fid]["bounds_mm"] = {"lo": [float(v) / MM for v in lo], "hi": [float(v) / MM for v in hi]}
+        lifts[fid] = pose_json(lift_m)
+        for ob in list(parts) + [rig]:
+            bpy.data.objects.remove(ob, do_unlink=True)
     (outdir / "open.json").write_text(json.dumps({
-        "camera": camj,
-        "frame": {"note": "the frame rig's origin: midway between the lens centres on the front's face, resting on the suede; Blender Z up",
-                  "matrix_blender": [[float(open_m[r][c]) for c in range(4)] for r in range(4)],
-                  "matrix_three": matrix_y_up(open_m)}}, indent=1))
+        "camera": camj, "placement": placement,
+        "frame": {"note": f"{default}'s resting pose (the `frames` entry); the rig's origin is the frame's bounding-box centre on x, its y as frame3d builds it, its bottom on z",
+                  **opens[default]},
+        "frames": opens}, indent=1))
     (outdir / "inspect.json").write_text(json.dumps({
         "camera": camj,
-        "frame": {"note": "the lifted pose: 130 mm up and 120 mm toward the camera, turned 35 degrees to a three-quarter view",
-                  "matrix_blender": [[float(lift_m[r][c]) for c in range(4)] for r in range(4)],
-                  "matrix_three": matrix_y_up(lift_m),
-                  "position_blender": list(map(float, lift_loc)), "position_three": y_up(lift_loc)}}, indent=1))
-    print("wrote", outdir / "open.json", outdir / "inspect.json", flush=True)
+        "frame": {"note": f"{default}'s lifted pose (the `frames` entry): turned {LIFT_YAW_DEG:.0f} degrees about its centre to a three-quarter view and tilted to face the camera, {LIFT_UP_M * 1000:.0f} mm up and {LIFT_TOWARD_M * 1000:.0f} mm toward the camera",
+                  **lifts[default]},
+        "frames": lifts}, indent=1))
+    print("wrote", outdir / "open.json", outdir / "inspect.json", f"({len(opens)} frames)", flush=True)
 
 
 def quaternion_y_up(q):
@@ -810,12 +879,15 @@ def cmd_lifted(a):
     if a.mesh_step:
         frame3d.FRAMES[a.frame]["mesh_step"] = a.mesh_step
     rig, lo, hi, parts = build_frame(a.frame, tuple(a.tint))
-    m = Matrix([row[:] for row in inspect["frame"]["matrix_blender"]])
+    pose = inspect.get("frames", {}).get(a.frame) or inspect["frame"]
+    m = Matrix([row[:] for row in pose["matrix_blender"]])
     rig.matrix_world = m
     bpy.context.view_layer.update()
     # the still is the frame alone on transparency, over the view's dimmed drawer: the cabinet and the drawers stay
     # for the light they reflect and bounce but are invisible to the camera
     sc.render.film_transparent = True
+    sc.cycles.film_transparent_glass = True        # what the lenses transmit counts toward alpha: the drawer shows through them, as in the live view
+    sc.cycles.film_transparent_roughness = 0.2
     sc.render.image_settings.color_mode = "RGBA"
     frame_names = {p.name for p in parts}
     for ob in bpy.data.objects:
@@ -826,8 +898,8 @@ def cmd_lifted(a):
     cam.data.dof.focus_distance = (centre - cam.location).length
     # the lifted frame's own light: the warm key from the drawer's side and a soft cool rim from above, as the live
     # frame gets them (the environment map plus one warm key)
-    area("lift key", (slots[a.slot][0] + 0.20, -0.50, slots[a.slot][1] + 0.44), tuple(centre), 0.30, 7.0 * a.light, (1.0, 0.86, 0.68), size_y=0.16)
-    area("lift rim", (slots[a.slot][0] - 0.25, -0.05, slots[a.slot][1] + 0.40), tuple(centre), 0.05, 3.0 * a.light, (0.86, 0.93, 1.0), size_y=0.5)
+    area("lift key", (slots[a.slot][0] + 0.20, -0.50, slots[a.slot][1] + 0.44), tuple(centre), 0.30, LIFT_KEY_W * a.light, (1.0, 0.86, 0.68), size_y=0.16)
+    area("lift rim", (slots[a.slot][0] - 0.25, -0.05, slots[a.slot][1] + 0.40), tuple(centre), 0.05, LIFT_RIM_W * a.light, (0.86, 0.93, 1.0), size_y=0.5)
     out = pathlib.Path(a.out) if a.out else WORK / "stills" / f"{a.frame}-lifted.png"
     render(sc, out)
 
@@ -847,7 +919,7 @@ def cmd_cameras(a):
     sc.camera = cam
     view_camera(sc, 1.0, slots[a.slot])
     bpy.context.view_layer.update()
-    write_cameras(sc, cam, roots[a.slot], slots[a.slot], pathlib.Path(a.out) if a.out else WORK / "camera")
+    write_cameras(sc, cam, roots[a.slot], slots[a.slot], pathlib.Path(a.out) if a.out else WORK / "camera", a.frames, a.mesh_step or 4)
 
 
 def cmd_check(a):
@@ -892,16 +964,44 @@ def cmd_check(a):
             length = float(np.ptp(co[:, 0])) / MM
             if abs(length - GCD_MM) > GCD_MM * 0.01:
                 fails.append(f"{g.name}: {length:.2f} mm, not {GCD_MM}")
-    # 2, 3. the plate: scene black at the edges; the dark crops against the plate's surroundings and the dark render
+    # 2. scene black: the outermost 2% of the width, on every side, of every web output (plates, sequence frames) is
+    # within 1/255 of black; and the renders themselves, before the grade, are black there too, so the cabinet is
+    # clear of the band (the grade's edge mask only tidies the film curve's floor and the encoders' ringing)
+    band = 0.02
+
+    def edge_max(img):
+        mm = max(1, int(round(band * img.shape[1])))
+        return int(max(img[:mm].max(), img[-mm:].max(), img[:, :mm].max(), img[:, -mm:].max()))
+
+    def read(path):
+        return np.asarray(Image.open(path).convert("RGB")).astype(np.int16)
+
+    outputs = sorted(assets.glob("plate-*.avif")) + sorted(assets.glob("plate-*.webp"))
+    seq_dir = ROOT / "wall" / "assets" / "seq"
+    if seq_dir.exists():
+        outputs += sorted(q for q in seq_dir.rglob("*") if q.suffix in (".avif", ".webp"))
+    for q in outputs:
+        v = edge_max(read(q))
+        if v > 1:
+            fails.append(f"{q.relative_to(ROOT)}: the outermost 2% reaches {v}/255, not within 1/255 of scene black")
+    print(f"check: scene black sampled on {len(outputs)} web outputs (the plates, the sequence frames)")
+    skipped = []
+    for variant in ("lit", "dark"):
+        raw = WORK / f"{a.layout}-{a.knob}-{variant}.png"
+        if raw.exists():
+            v = edge_max(read(raw))
+            if v > 2:
+                fails.append(f"{raw.name}: the render's own outermost 2% reaches {v}/255: the cabinet reaches into the edge band")
+        else:
+            skipped.append(f"the {variant} render's edges ({raw.name} is not on this machine)")
+    # 3. the dark crops against the plate's surroundings and the dark render; lit and dark differ only inside the crops
     plate_path = assets / "plate-lit.avif"
     if plate_path.exists():
-        plate = np.asarray(Image.open(plate_path).convert("RGB")).astype(np.int16)
+        plate = read(plate_path)
         h, w = plate.shape[:2]
-        mx, my = int(round(0.02 * w)), int(round(0.02 * h))
-        edge = np.concatenate([plate[:my].ravel(), plate[-my:].ravel(), plate[:, :mx].ravel(), plate[:, -mx:].ravel()])
-        if edge.max() > 1:
-            fails.append(f"plate-lit: the outermost 2% reaches {edge.max()}/255, not within 1/255 of scene black")
         dark_full = WORK / f"{a.layout}-{a.knob}-dark.graded.png"
+        if not dark_full.exists():
+            skipped.append(f"the dark crops against the dark render ({dark_full.name} is not on this machine)")
         for r in rects["drawers"]:
             crop_path = assets / f"bay-{r['index']:02d}-dark.avif"
             if not crop_path.exists():
@@ -910,7 +1010,7 @@ def cmd_check(a):
             c = r["crop"]
             x0, y0 = int(round(c["x"] / 100 * w)), int(round(c["y"] / 100 * h))
             x1, y1 = int(round((c["x"] + c["w"]) / 100 * w)), int(round((c["y"] + c["h"]) / 100 * h))
-            crop = np.asarray(Image.open(crop_path).convert("RGB")).astype(np.int16)
+            crop = read(crop_path)
             if crop.shape[0] != y1 - y0 or crop.shape[1] != x1 - x0:
                 fails.append(f"{crop_path.name}: {crop.shape[1]}x{crop.shape[0]}, the rect is {x1 - x0}x{y1 - y0}")
                 continue
@@ -922,12 +1022,31 @@ def cmd_check(a):
             if ring_diff.mean() > 2.0:
                 fails.append(f"{crop_path.name}: its edge differs from the plate by {ring_diff.mean():.2f}/255 on average")
             if dark_full.exists():
-                full = np.asarray(Image.open(dark_full).convert("RGB")).astype(np.int16)
+                full = read(dark_full)
                 d = np.abs(full[y0:y1, x0:x1] - crop).mean()
                 if d > 2.5:
                     fails.append(f"{crop_path.name}: differs from the dark render by {d:.2f}/255 on average")
+        lit_g = WORK / f"{a.layout}-{a.knob}-lit.graded.png"
+        if lit_g.exists() and dark_full.exists():
+            li, da = read(lit_g), read(dark_full)
+            if li.shape != da.shape:
+                fails.append(f"the graded lit and dark renders differ in size: {li.shape} and {da.shape}")
+            else:
+                outside = np.ones(li.shape[:2], bool)
+                hh, ww = outside.shape
+                for r in rects["drawers"]:
+                    c = r["crop"]
+                    outside[int(round(c["y"] / 100 * hh)):int(round((c["y"] + c["h"]) / 100 * hh)), int(round(c["x"] / 100 * ww)):int(round((c["x"] + c["w"]) / 100 * ww))] = False
+                d = np.abs(li - da).max(-1)[outside]
+                print(f"check: lit against dark outside the crops: mean {d.mean():.2f}/255, max {int(d.max())}/255")
+                if d.mean() > 1.5:
+                    fails.append(f"the lit and dark plates differ outside the crops by {d.mean():.2f}/255 on average: the crops miss some of the light")
+        else:
+            skipped.append("lit against dark outside the crops (the graded renders are not on this machine)")
     else:
         fails.append(f"{plate_path} missing")
+    for sk in skipped:
+        print("check: skipped:", sk)
     for f in fails:
         print("check:", f)
     print(f"check {a.layout} {a.knob}: {len(fails)} failures")
@@ -989,6 +1108,8 @@ def main():
     p.add_argument("--knob", choices=["black-relief", "gold", "plain"], default="black-relief")
     p.add_argument("--slot", type=int, default=2)
     p.add_argument("--out", default=None)
+    p.add_argument("--frames", nargs="*", default=None, help="the frames to place (every frame by default)")
+    p.add_argument("--mesh-step", type=int, default=4, help="the frames are built at this step for their bounds (the GLBs' 4)")
     p = sub.add_parser("check")
     p.add_argument("--layout", choices=list(LAYOUTS), required=True)
     p.add_argument("--knob", choices=["black-relief", "gold", "plain"], default="black-relief")

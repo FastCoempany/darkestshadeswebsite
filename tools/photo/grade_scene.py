@@ -21,8 +21,12 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 
-EDGE_BLACK = 0.035         # the outermost 3.5% of the frame is exactly scene black (the check samples 2%: the lossy
-EDGE_FADE = 0.075          # encoders' ringing at the fade's edge stays outside the sampled band); the fade starts here
+# The edge band, in fractions of the image's WIDTH on every side: the outermost 2% is exactly scene black (what the
+# check samples), and the picture is at full level from 3.2% in. The plate's room round the cabinet is 3.27% of its
+# width (drawer_wall.ROOM), so the fade ends in the room, never on the cabinet; a drawer-view frame's front starts
+# 8% in. The mask only tidies the film curve's lifted floor and the encoders' ringing where the render is black.
+EDGE_BLACK = 0.02
+EDGE_FADE = 0.032
 
 
 def to_linear(s):
@@ -59,15 +63,17 @@ def filmic(x, shoulder=0.85, toe=0.012):
     return y * (1 - toe) + toe
 
 
-def edge_mask(h, w):
-    """1 inside, falling to exactly 0 over the outermost EDGE_FADE .. EDGE_BLACK of the frame on every side."""
+def edge_mask(h, w, black=EDGE_BLACK, fade=EDGE_FADE):
+    """1 inside, falling to exactly 0 over the outermost `fade` .. `black` of the width on every side."""
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    d = np.minimum(np.minimum(xx / w, 1 - (xx + 1) / w), np.minimum(yy / h, 1 - (yy + 1) / h))   # distance to the nearest edge, 0..0.5
-    t = np.clip((d - EDGE_BLACK) / (EDGE_FADE - EDGE_BLACK), 0, 1)
+    d = np.minimum(np.minimum(xx, w - 1 - xx), np.minimum(yy, h - 1 - yy)) / w   # distance to the nearest edge, in widths
+    t = np.clip((d - black) / (fade - black), 0, 1)
     return t * t * (3 - 2 * t)
 
 
-def grade(img, look="warm", light=(0.25, 0.15), vignette=0.55, grain=0.028, halation=0.10, exposure=1.0, seed=7, soften=0.55, toe=0.012):
+def grade(img, look="cool", light=(0.25, 0.15), vignette=0.55, grain=0.028, halation=0.10, exposure=0.3, seed=7, soften=0.55, toe=0.004, edge=None):
+    """`edge`: (black, fade) in fractions of the width; the module's defaults, the plates', unless given."""
+    edge = edge or (EDGE_BLACK, EDGE_FADE)
     h, w = img.shape[:2]
     x = img * exposure
     black = (x.max(-1) <= 1e-6)                           # what the render left black stays black
@@ -103,7 +109,7 @@ def grade(img, look="warm", light=(0.25, 0.15), vignette=0.55, grain=0.028, hala
     x = x + glow * halation * np.array([1.0, 0.85, 0.7], np.float32)
     x = filmic(x, toe=toe)
     x = x + shadow_tint * (1 - np.clip(lum[..., None] * 6, 0, 1))
-    edge = edge_mask(h, w)
+    edge = edge_mask(h, w, *edge)
     keep = edge * (~black)                                # exact black where the render was black, and at the edges
     x = x * keep[..., None]
     s = to_srgb(x)
@@ -144,8 +150,8 @@ def save(s, out, quality=82):
         raise SystemExit(f"grade_scene: unknown output type {ext}")
 
 
-def process(src, out, look="warm", crop=None, width=None, height=None, quality=82, light=(0.25, 0.15), vignette=0.55,
-            grain=0.028, halation=0.10, exposure=1.0, soften=0.55, seed=None, toe=0.012):
+def process(src, out, look="cool", crop=None, width=None, height=None, quality=82, light=(0.25, 0.15), vignette=0.55,
+            grain=0.028, halation=0.10, exposure=0.3, soften=0.55, seed=None, toe=0.004, edge=None):
     img = load(src)
     if crop:
         x0, y0, x1, y1 = crop
@@ -158,7 +164,7 @@ def process(src, out, look="warm", crop=None, width=None, height=None, quality=8
             width = int(round(w * height / h))
         interp = cv2.INTER_AREA if img.shape[1] > width else cv2.INTER_CUBIC
         img = cv2.resize(img, (width, height), interpolation=interp)
-    s = grade(img, look, light, vignette, grain, halation, exposure, seed_for(out) if seed is None else seed, soften, toe)
+    s = grade(img, look, light, vignette, grain, halation, exposure, seed_for(out) if seed is None else seed, soften, toe, edge)
     save(s, out, quality)
     return s.shape
 
@@ -167,7 +173,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("src")
     ap.add_argument("out")
-    ap.add_argument("--look", default="warm", choices=["warm", "cool", "neutral"])
+    ap.add_argument("--look", default="cool", choices=["warm", "cool", "neutral"], help="the wall's one grade is cool (the prototype was warm)")
     ap.add_argument("--crop", type=int, nargs=4, metavar=("X0", "Y0", "X1", "Y1"))
     ap.add_argument("--width", type=int)
     ap.add_argument("--height", type=int)
@@ -176,13 +182,14 @@ def main(argv=None):
     ap.add_argument("--vignette", type=float, default=0.55)
     ap.add_argument("--grain", type=float, default=0.028)
     ap.add_argument("--halation", type=float, default=0.10)
-    ap.add_argument("--exposure", type=float, default=1.0)
+    ap.add_argument("--exposure", type=float, default=0.3, help="the wall's 0.3 puts the leather where the founder-reviewed prototype still has it (the prototype's own value was 1.0)")
     ap.add_argument("--soften", type=float, default=0.55)
     ap.add_argument("--seed", type=int, default=None, help="the grain's seed; by default from the output file's name")
-    ap.add_argument("--toe", type=float, default=0.012, help="the lifted blacks of the film curve (the prototype's 0.012; the wall uses 0.004)")
+    ap.add_argument("--toe", type=float, default=0.004, help="the lifted blacks of the film curve (the wall's 0.004; the prototype's was 0.012)")
+    ap.add_argument("--edge", type=float, nargs=2, metavar=("BLACK", "FADE"), default=None, help=f"the edge band, fractions of the width: exactly black to BLACK, full from FADE (the plates' {EDGE_BLACK} {EDGE_FADE} by default; the drawer view's frames use 0.02 0.06)")
     a = ap.parse_args(argv)
     shape = process(a.src, a.out, a.look, a.crop, a.width, a.height, a.quality, tuple(a.light), a.vignette, a.grain,
-                    a.halation, a.exposure, a.soften, a.seed, a.toe)
+                    a.halation, a.exposure, a.soften, a.seed, a.toe, tuple(a.edge) if a.edge else None)
     print(a.out, shape[1], "x", shape[0], file=sys.stderr)
 
 

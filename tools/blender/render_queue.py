@@ -10,12 +10,15 @@ under a time limit; one line per finished job and one per failure.
     python3 tools/blender/render_queue.py status d3
     python3 tools/blender/render_queue.py clear d3
 
-A jobs file is work/queue/<name>.json: a list of {id, cmd, outputs, done, error}. `run` takes jobs in order, skips a
-job whose outputs all exist (and marks it done), runs the rest one at a time through `nice -n 19`, writes a log per
-job in work/queue/log/<name>-<id>.log, and exits 0 when every job is done, 2 when the chunk's time ran out with jobs
-left, 1 when a job failed (it goes on to the next job; a failed job is retried on the next run).
+A jobs file is work/queue/<name>.json: a list of {id, cmd, outputs, done, error, tools}. `run` takes jobs in order,
+skips a job whose outputs all exist and verify (a readable image, parsable JSON; and marks it done), re-runs a job
+marked done whose output has gone, runs the rest one at a time through `nice -n 19`, writes a log per job in
+work/queue/log/<name>-<id>.log, and exits 0 when every job is done, 2 when the chunk's time ran out with jobs left,
+1 when a job failed (it goes on to the next job; a failed job is retried on the next run). Each job carries a stamp
+of the tool code it was rendered with; `status` names the jobs rendered with other code than today's.
 """
 import argparse
+import hashlib
 import json
 import os
 import pathlib
@@ -37,26 +40,68 @@ def save(name, jobs):
     (QUEUE / f"{name}.json").write_text(json.dumps(jobs, indent=1))
 
 
-def outputs_exist(job):
-    return all((ROOT / o).exists() and (ROOT / o).stat().st_size > 0 for o in job["outputs"])
+TOOLS = ["tools/blender/drawer_wall.py", "tools/blender/frame3d.py", "tools/blender/frame_texture.py", "tools/photo/grade_scene.py"]
+
+
+def tools_hash():
+    """A stamp of the tool code a job is rendered with: a job whose stamp differs from today's was rendered by other
+    code (the queue says so, and leaves the decision to re-render to `clear` and `add`)."""
+    h = hashlib.sha1()
+    for t in TOOLS:
+        q = ROOT / t
+        if q.exists():
+            h.update(q.read_bytes())
+    return h.hexdigest()[:12]
+
+
+def output_ok(rel):
+    """An output exists and verifies: a readable image, parsable JSON, a non-trivial HDR or EXR."""
+    p = ROOT / rel
+    if not p.exists() or p.stat().st_size == 0:
+        return False
+    ext = p.suffix.lower()
+    try:
+        if ext in (".png", ".jpg", ".jpeg", ".webp", ".avif"):
+            from PIL import Image
+            if ext == ".avif":
+                import pillow_avif  # noqa: F401
+            with Image.open(p) as im:
+                im.verify()
+        elif ext == ".json":
+            json.loads(p.read_text())
+        elif ext in (".hdr", ".exr"):
+            return p.stat().st_size > 1024
+    except Exception:
+        return False
+    return True
+
+
+def outputs_ok(job):
+    return all(output_ok(o) for o in job["outputs"])
 
 
 def cmd_add(a):
     jobs = load(a.queue)
     jobs = [j for j in jobs if j["id"] != a.id]
-    jobs.append({"id": a.id, "cmd": a.command, "outputs": a.outputs, "done": False, "error": None})
+    jobs.append({"id": a.id, "cmd": a.command, "outputs": a.outputs, "done": False, "error": None, "tools": tools_hash()})
     save(a.queue, jobs)
     print(f"{a.queue}: {len(jobs)} jobs ({a.id} added)")
 
 
 def cmd_status(a):
     jobs = load(a.queue)
-    done = sum(1 for j in jobs if j["done"] or outputs_exist(j))
-    failed = [j["id"] for j in jobs if j.get("error")]
+    done = sum(1 for j in jobs if outputs_ok(j))
+    failed = [j["id"] for j in jobs if j.get("error") and not outputs_ok(j)]
+    stale = [j["id"] for j in jobs if outputs_ok(j) and j.get("tools") and j["tools"] != tools_hash()]
     print(f"{a.queue}: {done}/{len(jobs)} done, {len(failed)} failed{': ' + ', '.join(failed) if failed else ''}")
-    for j in jobs:
-        state = "done" if j["done"] or outputs_exist(j) else ("failed" if j.get("error") else "left")
-        print(f"  {state:6s} {j['id']}  {j.get('seconds', '')}")
+    if stale:
+        print(f"{a.queue}: {len(stale)} done with other tool code than today's (clear and add to re-render): {', '.join(stale[:6])}{'…' if len(stale) > 6 else ''}")
+    try:
+        for j in jobs:
+            state = "done" if outputs_ok(j) else ("failed" if j.get("error") else "left")
+            print(f"  {state:6s} {j['id']}  {j.get('seconds', '')}")
+    except BrokenPipeError:
+        pass
 
 
 def cmd_clear(a):
@@ -76,12 +121,16 @@ def cmd_run(a):
     limit = a.minutes * 60
     failed = 0
     left = 0
+    stamp = tools_hash()
     for j in jobs:
-        if j["done"] or outputs_exist(j):
+        if outputs_ok(j):
             if not j["done"]:
                 j["done"] = True
                 save(a.queue, jobs)
             continue
+        if j["done"]:
+            print(f"redo   {j['id']}  (marked done, but an output is missing or does not read)", flush=True)
+            j["done"] = False
         if time.time() - start > limit:
             left += 1
             continue
@@ -90,10 +139,10 @@ def cmd_run(a):
         with open(log, "w") as f:
             r = subprocess.run(["nice", "-n", "19", *j["cmd"]], cwd=ROOT, stdout=f, stderr=subprocess.STDOUT)
         secs = int(time.time() - t)
-        ok = r.returncode == 0 and outputs_exist(j)
+        ok = r.returncode == 0 and outputs_ok(j)
         j["seconds"] = secs
         if ok:
-            j["done"], j["error"] = True, None
+            j["done"], j["error"], j["tools"] = True, None, stamp
             print(f"done   {j['id']}  {secs}s", flush=True)
         else:
             j["error"] = f"exit {r.returncode}" if r.returncode else "outputs missing"
