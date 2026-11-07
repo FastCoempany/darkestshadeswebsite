@@ -467,19 +467,21 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 # Part 3 · Starting the run (for me)
 
-1. **Environment.** In Claude Code on the web, on `FastCoempany/darkestshadeswebsite`: network access **Full**, and the setup script from `09-build-plan.md` ("Workspace setup", step 2).
-2. **A new session with Fable**, then `/effort ultracode`.
+From the **Code** tab of the Claude app, on the phone or the desktop, or at claude.ai/code. The session runs in the cloud, so my computer can be off.
+
+1. **Environment, once.** On the new-session screen, the environment control under the message box, then **New environment**: name `Drawer wall`, **Network access** Full, **Setup script** from `09-build-plan.md` ("Workspace setup", step 2), then **Add environment**.
+2. **The session.** Repository `FastCoempany/darkestshadeswebsite`, branch `main`, environment `Drawer wall`, permission mode **Auto**: cloud sessions don't offer Bypass, and Auto is what lets goal turns run without stopping to ask. Then send `/model fable`, `/effort xhigh` and `/effort ultracode`, one message each (ultracode doesn't raise the effort level by itself). On Max, Fable is included up to half the weekly limit; if Claude Code asks to bill usage credits, choose the default model instead.
 3. **Run 1:** send this as one message.
 
 ```
 /goal Run docs/build/DRAWER-WALL.md phases D0 to D7: the drawer wall alone, never a website. Done when docs/build/WALL-PROGRESS.md marks D0 to D7 done, each phase's exit evidence has been run and shown in this session (the command, its exit status and the output that matters), every D-phase pull request is merged into main, and the phone link and the R1 review set are at the top of WALL-PROGRESS.md. Hold CLAUDE.md, docs/brief/00-decisions.md and DRAWER-WALL.md throughout, and never weaken a check to get past it. Or stop after 300 turns.
 ```
 
-4. **While it runs.** `/goal` on its own shows progress; `/goal clear` stops it. Answer R1 as a comment on the D3 pull request. When R2 arrives: open the link on my phone, run the usability test with five people (`docs/build/drawer-wall/usability.md`), and answer O15–O18 in a comment on the D7 pull request.
-5. **Run 2:** a new session, `/effort ultracode`, then:
+4. **While it runs.** `/goal` on its own shows progress; `/goal clear` stops it. If it stops on a usage limit, send `continue` once the limit resets: the goal stays set. Answer R1 as a comment on the D3 pull request. When R2 arrives: open the link on my phone, run the usability test with five people (`docs/build/drawer-wall/usability.md`), and answer O15–O18 in a comment on the D7 pull request.
+5. **Run 2:** a new session set up as in step 2, then:
 
 ```
 /goal Run docs/build/DRAWER-WALL.md phases D8 and D9 with my comments on the D-phase pull requests and the usability results in WALL-PROGRESS.md: the drawer wall alone, never a website. Done when WALL-PROGRESS.md marks D8 and D9 done with their exit evidence run and shown in this session, the run 2 finishing checks have been run and shown passing, all work is merged into main and pushed, and the final report is written. Hold the same rules. Or stop after 200 turns.
 ```
 
-If a session stops for my plan's usage limit, start it again later with the same `/goal`; WALL-PROGRESS.md carries the state. A rough expectation: run 1 takes a few days of wall-clock time, most of it render time in the background and waiting on usage limits; run 2 a day or two, depending on how much the feedback asks for.
+If `/goal` ever shows no goal (a session reopened after a long pause, or a new one), send the same `/goal` again; WALL-PROGRESS.md carries the state. A rough expectation: run 1 takes a few days of wall-clock time, most of it render time in the background and waiting on usage limits; run 2 a day or two, depending on how much the feedback asks for.
