@@ -18,11 +18,11 @@ The build doesn't have the real fonts yet (`00-decisions.md` #41). There's no Ad
 | Display | Owners Wide Medium | Mona Sans | `font-variation-settings: var(--font-variation-display)`, which is `"wdth" 125, "wght" 640`: its widest, at Owners Wide Medium's stroke weight |
 | Text | Stolzl Light, Book, Regular, Medium | Urbanist | The same weights (300, 350, 400, 500). At Light, the one weight the deck shows, Urbanist's stroke is within 10% of Stolzl's |
 
-- **Install** them from npm: `npm i @fontsource-variable/mona-sans @fontsource-variable/urbanist`. Import `@fontsource-variable/mona-sans/standard.css` (the width and weight axes) and `@fontsource-variable/urbanist/index.css`. They are served from the app itself, so no Content-Security-Policy change and no network route is needed.
+- **Install** them from npm: `npm i @fontsource-variable/mona-sans @fontsource-variable/urbanist`. Import `@fontsource-variable/mona-sans/standard.css` (the width and weight axes) and `@fontsource-variable/urbanist/index.css`. They are served from the wall itself, so no Content-Security-Policy change and no network route is needed.
 - **The token stacks** list them after the real names (`'Owners Wide', 'owners-wide', 'Mona Sans Variable', …` and `'Stolzl', 'stolzl', 'Urbanist Variable', …`). When the real fonts load (route A or B below), they take over with nothing else to change.
 - **Display text** always sets `font-variation-settings: var(--font-variation-display)`. A static Owners Wide ignores it, so it stays when the real font arrives.
 - The type sizes in the tokens were set for the real fonts. Don't retune them for the stand-ins.
-- Screenshots and visual baselines made with the stand-ins are marked "stand-in type" in `docs/build/PROGRESS.md` and in the PRs, and are remade when the real fonts arrive.
+- Screenshots and visual baselines made with the stand-ins are marked "stand-in type" in the build run's progress file (`docs/build/WALL-PROGRESS.md`) and in the PRs, and are remade when the real fonts arrive.
 
 ## Where the real fonts are
 
@@ -34,14 +34,14 @@ Web licensing for darkestshades.com is settled later (`00-decisions.md` O8).
 
 ## Loading the real fonts, once licensed
 
-Pick one; the app supports both. Either one replaces the stand-ins on its own.
+Pick one; the wall (`wall/`) supports both. Either one replaces the stand-ins on its own.
 
 **A. Adobe Fonts web project**
 1. In Adobe Fonts, add Owners Wide Medium and Stolzl Light, Book, Regular, Medium to a web project.
 2. Copy the project ID (the `xxxxxxx` in `https://use.typekit.net/xxxxxxx.css`).
 3. Set `PUBLIC_ADOBE_FONTS_KIT=xxxxxxx` in the cloud environment's variables (it's not a secret; it ships in page HTML).
-4. Network access must allow `use.typekit.net` and `p.typekit.net` (Full, or Custom with those hosts), and so must the app's Content-Security-Policy; Hydrogen's default policy blocks them.
-5. Check the kit's CSS for the family names and weights it assigns, and map them in `app/styles/fonts.css` to the token families `'Owners Wide'` and `'Stolzl'` (Book is 350 in our tokens).
+4. Network access must allow `use.typekit.net` and `p.typekit.net` (Full, or Custom with those hosts), and so must the page's Content-Security-Policy, if it sets one.
+5. Check the kit's CSS for the family names and weights it assigns, and map them in `wall/src/styles/fonts.css` to the token families `'Owners Wide'` and `'Stolzl'` (Book is 350 in our tokens).
 
 **B. Local files** (trial or licensed)
 Put these in `brand/fonts/private/` (git-ignored), WOFF2 preferred:
@@ -49,7 +49,7 @@ Put these in `brand/fonts/private/` (git-ignored), WOFF2 preferred:
 OwnersWide-Medium.woff2
 Stolzl-Light.woff2   Stolzl-Book.woff2   Stolzl-Regular.woff2   Stolzl-Medium.woff2
 ```
-`app/styles/fonts.local.css` declares them as `'Owners Wide'` 500 and `'Stolzl'` 300 / 350 / 400 / 500 and is only included when the files exist. In a cloud session, add them through the environment's setup script from private storage, never from the repo.
+`wall/src/styles/fonts.local.css` declares them as `'Owners Wide'` 500 and `'Stolzl'` 300 / 350 / 400 / 500 and is only included when the files exist. In a cloud session, add them through the environment's setup script from private storage, never from the repo.
 
 ## Checks
 

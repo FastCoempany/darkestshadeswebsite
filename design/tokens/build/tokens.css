@@ -81,7 +81,7 @@
   --layout-gutter-1440: 3.5rem;
   --layout-header-sm: 3.5rem;
   --layout-header-lg: 4rem;
-  --layout-measure: 30em;
+  --layout-measure: 68ch;
   --motion-instant: 0ms;
   --motion-quick: 120ms;
   --motion-hold: 1200ms;
@@ -113,7 +113,6 @@
   --color-surface-overlay: var(--ds-onyx-800);
   --color-surface-inverse: var(--ds-bone-100);
   --color-surface-stage: var(--ds-stage);
-  --color-surface-entry: var(--ds-black);
   --color-text-primary: var(--ds-bone-100);
   --color-text-secondary: var(--ds-ash-300);
   --color-text-tertiary: var(--ds-ash-400);
@@ -121,7 +120,6 @@
   --color-text-inverse: var(--ds-onyx-950);
   --color-text-accent: var(--ds-gold-500);
   --color-text-editorial: var(--ds-camel-500);
-  --color-text-on-stage: var(--ds-onyx-950);
   --color-border-hairline: var(--ds-onyx-700);
   --color-border-rule: var(--ds-graphite-500);
   --color-border-control: var(--ds-graphite-400);
@@ -137,7 +135,6 @@
   --color-status-error: var(--ds-error-300);
   --color-status-info: var(--ds-info-300);
   --color-status-live: var(--ds-gold-500);
-  --color-status-error-stage: var(--ds-error-700);
   color-scheme: dark;
 }
 [data-theme="paper"] {
@@ -147,7 +144,6 @@
   --color-surface-overlay: var(--ds-stage);
   --color-surface-inverse: var(--ds-onyx-950);
   --color-surface-stage: var(--ds-stage);
-  --color-surface-entry: var(--ds-black);
   --color-text-primary: var(--ds-onyx-950);
   --color-text-secondary: var(--ds-onyx-700);
   --color-text-tertiary: var(--ds-graphite-500);
@@ -155,7 +151,6 @@
   --color-text-inverse: var(--ds-bone-100);
   --color-text-accent: var(--ds-gold-700);
   --color-text-editorial: var(--ds-camel-700);
-  --color-text-on-stage: var(--ds-onyx-950);
   --color-border-hairline: var(--ds-ash-200);
   --color-border-rule: var(--ds-ash-400);
   --color-border-control: var(--ds-graphite-500);
@@ -171,7 +166,6 @@
   --color-status-error: var(--ds-error-700);
   --color-status-info: var(--ds-info-700);
   --color-status-live: var(--ds-gold-700);
-  --color-status-error-stage: var(--ds-error-700);
   color-scheme: light;
 }
 @media (prefers-reduced-motion: reduce) {

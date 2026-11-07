@@ -42,22 +42,3 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
-
-# Hydrogen / React Router / tooling
-.react-router/
-/dist/
-/.mf
-.env
-
-# Claude Code agent worktrees and local settings (docs/build/RUN.md, Orchestration)
-.claude/worktrees/
-.claude/settings.local.json
-
-# Check output
-# Lighthouse: the summary and the HTML reports are committed as evidence; the raw JSON is not.
-/docs/qa/lighthouse/*.json
-!/docs/qa/lighthouse/summary.json
-/.lighthouseci/
-
-# TypeScript incremental state
-tsconfig.tsbuildinfo

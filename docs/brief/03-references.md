@@ -1,5 +1,7 @@
 # 03 · References: the three videos
 
+> **Parked, Nov 7 2026.** This describes a website, and no website is being built: the work is the drawer wall alone (`00-decisions.md` #46, `docs/build/DRAWER-WALL.md`). Don't build from it.
+
 The founder chose three screen recordings as the foundation for the entry and the home page (`00-decisions.md` #6). Copies are in `reference/videos/` for study. They are third-party footage: never shipped, never quoted on the site, never used as frames in our sequences. What carries over is structure, cadence and attitude.
 
 ## 1. The strobe of editorial stills (`01-strobe-editorial-stills.mp4`)

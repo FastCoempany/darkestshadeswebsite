@@ -1,11 +1,12 @@
 # darkestshadeswebsite
 
-The website for **Darkest Shades** (darkestshades.com · [@darkestshades](https://instagram.com/darkestshades)): a Shopify Hydrogen storefront for eight frames, $100 each, released in drops. **See Everything. Reveal Nothing.**
+The brief, assets and tools of **Darkest Shades** ([@darkestshades](https://instagram.com/darkestshades)): eight frames, $100 each, released in drops. **See Everything. Reveal Nothing.**
 
-This repo holds the brief, the assets and the app (`app/`, a Hydrogen storefront built through the phases in `docs/brief/09-build-plan.md`; `docs/build/PROGRESS.md` says where it stands).
+The work now is **the drawer wall**: the eight frames shown in a wall of drawers, built as one standalone piece in `wall/` by the run in `docs/build/DRAWER-WALL.md` (`00-decisions.md` #44, #46). No website is being built. The site build of Oct 30–31 was thrown out; it sits on the `archive/site-build-2026-10-31` branch and is not used.
 
 ## Start here
 - **`CLAUDE.md`**: the rules for anyone (human or agent) building this.
+- **`docs/build/DRAWER-WALL.md`**: the drawer wall's build run; `docs/build/drawer-wall/` holds its prototypes and research.
 - **`docs/brief/`**: the brief, `00-decisions.md` first.
 
 | Doc | About |
@@ -13,38 +14,13 @@ This repo holds the brief, the assets and the app (`app/`, a Hydrogen storefront
 | `00-decisions.md` | What's settled, what's open |
 | `01-brand-system.md` | Marks, color, type, the SS90 patina |
 | `02-raf-lens.md` | The design lens (internal) |
-| `03-references.md` | The three reference videos → the entry and the home page |
-| `04-ia-and-pages.md` | Sitemap, navigation, page templates |
-| `05-components.md` | Base and house components, states, behavior |
+| `03-references.md` | Parked (#46): the reference videos, for a site's entry and home page |
+| `04-ia-and-pages.md` | Parked (#46): a site's sitemap, navigation and pages |
+| `05-components.md` | Parked (#46): a site's components |
 | `06-products.md` | The eight frames, measurements, the GCD per frame, drops |
 | `07-photography.md` | Lightbox clean-up, the cast, compositing, the DAM |
 | `08-copy.md` | Voice, honesty rules, consent and safety copy |
-| `09-build-plan.md` | Stack, workspace setup, phases, checks |
-
-### Run the app
-
-Node 22, Python 3 with Pillow and NumPy (the flash check), and Playwright's Chromium (the end-to-end suite). On Windows, run these in PowerShell one line at a time (its built-in version does not accept `&&` between commands):
-
-```bash
-npm install                                    # also brings the font stand-ins (Mona Sans, Urbanist); nothing else until the real fonts are licensed
-python3 -m pip install pillow numpy
-npx playwright install chromium
-npm run dev            # http://localhost:3000 (MiniOxygen); ?mode=wire for the wireframes; /dev/tokens for the token sheet
-npm run storybook      # http://localhost:6006: every component and page state, UI and wire mode, 390 and 1440 in the toolbar
-```
-
-Before a pull request:
-
-```bash
-npm run checks         # banned strings, hex colors in app/, the product schema, the copy gate, the copy audit, the layer rule, the flash check
-npm run typecheck && npm run lint && npm test
-npm run test:e2e       # Playwright: fonts, screenshots at 390 and 1440, axe, the keyboard pass, the Storybook matrix
-npm run preview:review -- --port 3000   # then, in another shell: npm run lighthouse (fails under 90; CHROME_PATH points at a Chrome binary when it is not the Playwright one)
-```
-
-The screenshots compare against baselines made on the build machine; on another machine set `CI=1` so they are recorded instead of compared. `npm run capture:wire` and `npm run capture:ui` remake the review sets in `docs/wireframes/` and `docs/ui/`.
-
-`npm run build` refuses while any section of `content/copy/en.json` is `draft` or `placeholder` (every section today): that is the copy gate, not a broken build. `npm run build:review` is the same build with drafts allowed; Lighthouse and the review screenshots run on it. `docs/build/PROGRESS.md` is where the build stands, with the questions for the founder, the copy awaiting sign-off and the "Before launch" list.
+| `09-build-plan.md` | Parked (#46) except its workspace setup: a site's stack, phases and checks |
 
 ## What's here
 - `brand/marks/`: Anastasiia's logo, stacked logo and brand mark (masters, web SVGs, favicon set).

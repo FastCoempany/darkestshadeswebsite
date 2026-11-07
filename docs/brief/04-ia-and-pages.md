@@ -1,5 +1,7 @@
 # 04 · Information architecture and pages
 
+> **Parked, Nov 7 2026.** This describes a website, and no website is being built: the work is the drawer wall alone (`00-decisions.md` #46, `docs/build/DRAWER-WALL.md`). Don't build from it.
+
 Eight products, so everything is capsule-sized: four top-level destinations, no search, no filters, no mega-menu.
 
 ## Sitemap

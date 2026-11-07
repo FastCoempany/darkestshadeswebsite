@@ -1,6 +1,6 @@
 # The drawer wall: working material
 
-The run itself is `docs/build/DRAWER-WALL.md`; the decisions are `docs/brief/00-decisions.md` #43–#45 and O15–O18. This folder holds what the run starts from and what it produces for review.
+The run itself is `docs/build/DRAWER-WALL.md`: the drawer wall alone, built in `wall/`, not a website. The decisions are `docs/brief/00-decisions.md` #43–#46 and O15–O18. This folder holds what the run starts from and what it produces for review.
 
 | Path | What it is |
 |---|---|
@@ -13,7 +13,7 @@ The run itself is `docs/build/DRAWER-WALL.md`; the decisions are `docs/brief/00-
 | `research-2026-11-06.md` | The research behind the stack, the mechanics and the budgets, with where the run departs from it. |
 | `usability.md` | Written in D7: the five-person test. |
 | `review/R1` … `R4` | The review sets the run publishes for the founder. |
-| `launch.md` | Written in D9: what the store connection needs, how to change a drawer, add a frame, swap in a reshoot or a scanned leather. |
+| `launch.md` | Written in D9: how the wall goes into a store later (the metaobject definitions, the adapter, placing `<drawer-wall>`), how to change a drawer, add a frame, swap in a reshoot or a scanned leather. |
 
 Both scripts run from the repo root with `bpy==5.2.2` (they import `tools/blender/frame3d.py`):
 

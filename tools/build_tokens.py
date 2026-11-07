@@ -68,26 +68,21 @@ def main():
     # Wireframe mode: greyscale roles, no gold, no camel, media slots labelled by ShotSlot.
     wire = {
         "surface-canvas": "#FFFFFF", "surface-base": "#FFFFFF", "surface-raised": "#F2F2F2", "surface-overlay": "#E6E6E6",
-        "surface-inverse": "#1A1A1A", "surface-stage": "#DADADA", "surface-entry": "#FFFFFF",
+        "surface-inverse": "#1A1A1A", "surface-stage": "#DADADA",
         "text-primary": "#000000", "text-secondary": "#3D3D3D", "text-tertiary": "#5C5C5C", "text-disabled": "#8A8A8A",
-        "text-inverse": "#FFFFFF", "text-accent": "#000000", "text-editorial": "#000000", "text-on-stage": "#000000",
+        "text-inverse": "#FFFFFF", "text-accent": "#000000", "text-editorial": "#000000",
         "border-hairline": "#CCCCCC", "border-rule": "#999999", "border-control": "#6B6B6B", "focus-ring": "#000000",
         "action-primary-bg": "#1A1A1A", "action-primary-text": "#FFFFFF", "action-primary-bg-hover": "#000000",
         "action-secondary-border": "#1A1A1A", "action-secondary-text": "#1A1A1A",
         "action-quiet-text": "#3D3D3D", "action-quiet-text-hover": "#000000",
         "status-success": "#000000", "status-error": "#000000", "status-info": "#000000", "status-live": "#000000",
-        "status-error-stage": "#000000",
     }
     w = [HEAD, '[data-mode="wire"], [data-mode="wire"] [data-theme] {']
     w += [f"  --color-{k}: {v};" for k, v in wire.items()]
     w += ["  --font-family-display: ui-sans-serif, system-ui, sans-serif;", "}",
           '[data-mode="wire"] img, [data-mode="wire"] video, [data-mode="wire"] canvas { visibility: hidden; }',
-          '/* Marks are drawings, not photographs: they stay, in greyscale. */',
-          '[data-mode="wire"] .ds-seal img { visibility: visible; filter: grayscale(1); }',
-          '[data-mode="wire"] [data-shot] { container-type: inline-size; }',
-          '[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid; place-items: center;',
-          '  padding: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;',
-          '  font: 500 clamp(7px, 9cqi, 12px)/1.2 ui-monospace, monospace; color: #3D3D3D; background:',
+          '[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid;',
+          '  place-items: center; font: 500 12px/1.2 ui-monospace, monospace; color: #3D3D3D; background:',
           '  repeating-linear-gradient(135deg, #EEEEEE 0 10px, #E2E2E2 10px 20px); border: 1px dashed #999999; }']
     (OUT / "wire.css").write_text("\n".join(w) + "\n")
 
@@ -97,25 +92,11 @@ def main():
     t = [HEAD, "@theme inline {", "  --color-*: initial;"]
     for r in color["roles"]["night"]:
         t.append(f"  --color-ds-{r}: var(--color-{r});")
-    # Families. `font-display` also sets the stand-in's variation axes (brand/fonts/README.md); a static
-    # Owners Wide ignores them. Tailwind's preflight reads --default-font-family for the page.
-    t += ["  --default-font-family: var(--font-family-text);",
-          "  --font-display: var(--font-family-display);",
-          "  --font-display--font-variation-settings: var(--font-variation-display);",
-          "  --font-text: var(--font-family-text);"]
-    for name, _ in leaves(base["font"]["weight"], "font-weight"):
-        t.append(f"  --font-weight-{name.replace('font-weight-', '')}: var(--{name});")
+    t += ["  --font-display: var(--font-family-display);", "  --font-text: var(--font-family-text);"]
     for name, _ in leaves(base["font"]["size"], "font-size"):
         t.append(f"  --text-{name.replace('font-size-', '')}: var(--{name});")
-    for name, _ in leaves(base["font"]["leading"], "font-leading"):
-        t.append(f"  --leading-{name.replace('font-leading-', '')}: var(--{name});")
-    for name, _ in leaves(base["font"]["tracking"], "font-tracking"):
-        t.append(f"  --tracking-{name.replace('font-tracking-', '')}: var(--{name});")
     for name, _ in leaves(base["space"], "space"):
         t.append(f"  --spacing-{name.replace('space-', '')}: var(--{name});")
-    for name, _ in leaves(base["aspect"], "aspect"):
-        t.append(f"  --aspect-{name.replace('aspect-', '')}: var(--{name});")
-    t.append("  --ease-ds: var(--motion-ease);")
     # Media queries can't read CSS variables, so the breakpoints go in as literal values.
     for name, v in leaves(base["breakpoint"], "breakpoint"):
         t.append(f"  --breakpoint-{name.replace('breakpoint-', '')}: {css(v)};")

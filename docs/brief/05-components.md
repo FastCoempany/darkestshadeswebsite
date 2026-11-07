@@ -1,5 +1,7 @@
 # 05 · Components
 
+> **Parked, Nov 7 2026.** This describes a website, and no website is being built: the work is the drawer wall alone (`00-decisions.md` #46, `docs/build/DRAWER-WALL.md`). Don't build from it.
+
 Built fresh for Darkest Shades. The digs repo is a reference for process (stories per state, wire mode, token discipline), not a source of components: nothing is copied, and no Darkest Shades component should look or behave like a digs one (`00-decisions.md` #21).
 
 Two layers, enforced by folder:

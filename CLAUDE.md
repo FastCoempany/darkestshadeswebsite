@@ -1,41 +1,36 @@
-# CLAUDE.md: Darkest Shades storefront (darkestshades.com)
+# CLAUDE.md: Darkest Shades, the drawer wall
 
-You are building the **Darkest Shades** website: a custom Shopify storefront (Hydrogen) for a sunglasses brand that sells eight frames at $100 in drops. This phase is **wireframes, UI and components**. No payments, no live store connection.
+Darkest Shades is a sunglasses brand that sells eight frames at $100 in drops. The work in this repo is **the drawer wall** (`docs/brief/00-decisions.md` #44, #46): the eight frames shown in a wall of drawers, built as one standalone piece in `wall/` by the run in `docs/build/DRAWER-WALL.md`. **It is not a website**: no pages, navigation, bag or checkout. The site build of Oct 30–31 was thrown out (#46). Nothing from it is used; it sits on the `archive/site-build-2026-10-31` branch only so the history is complete.
 
 ## Read first, in order
 1. `docs/brief/00-decisions.md`: what's settled and what's open. It wins any conflict.
-2. `docs/brief/01-brand-system.md` → `09-build-plan.md`.
-3. `content/products/*.json`, `content/drops/*.json`, `content/copy/en.json`, `design/tokens/`.
-4. During a build run: its run file (`docs/build/DRAWER-WALL.md` for the drawer wall; `docs/build/RUN.md` for the full site, done Oct 31) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
+2. `docs/brief/01-brand-system.md`, `02-raf-lens.md`, `06-products.md`, `07-photography.md`, `08-copy.md`. Parked, because they describe a website (#46): `03`, `04`, `05` and `09` (except `09`'s "Workspace setup").
+3. `content/products/*.json`, `content/copy/en.json`, `design/tokens/`.
+4. During the build run: `docs/build/DRAWER-WALL.md` and `docs/build/WALL-PROGRESS.md` (where it stands). Re-read both after every compaction.
 
 ## Non-negotiables
 
 **Brand**
-- Tagline: **See Everything. Reveal Nothing.** Prada is the idol; the design lens is "philosophy as manifesto, before product" (`02-raf-lens.md`). **Raf Simons is never named, shown or quoted** anywhere in the site, metadata, alt text or shipped code.
-- Marks: Anastasiia's logo and angular brand mark are primary; the **GCD** (gold band, black onyx inset) is the secondary insignia. **Nav and favicon use the brand mark, never the GCD.** Marks come only from `brand/marks/` and `brand/emblems/gcd/`. The Eclipse Silhouette and the old engraved wordmark never appear.
+- Tagline: **See Everything. Reveal Nothing.** Prada is the idol; the design lens is "philosophy as manifesto, before product" (`02-raf-lens.md`). **Raf Simons is never named, shown or quoted** anywhere in the wall, its metadata, alt text or shipped code.
+- Marks: Anastasiia's logo and angular brand mark are primary; the **GCD** (gold band, black onyx inset) is the secondary insignia. **The favicon uses the brand mark, never the GCD.** Marks come only from `brand/marks/` and `brand/emblems/gcd/`. The Eclipse Silhouette and the old engraved wordmark never appear.
 - **The GCD on the product executes one way only**: full size, its own proportion and its one placement (`01-brand-system.md`; per frame in `content/products/`), on every frame in every photo, composite and render, whatever the view. Never scaled, moved or left off to suit a picture.
 - Fonts: **Owners Wide** (Medium) and **Stolzl** (Light, Book, Regular, Medium) only. **Never commit font files** (public repo); load them as `brand/fonts/README.md` says. Until they're licensed, the open-licensed stand-ins in that README (Mona Sans, Urbanist) render them; no other fonts.
-- Color: **role tokens only** in `app/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`, `--color-border-*`, `--color-focus-ring`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product photographs always sit on the stage color; the drawer wall's scenes are dark (`00-decisions.md` #43, #44).
+- Color: **role tokens only** in `wall/src/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`, `--color-border-*`, `--color-focus-ring`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product photographs always sit on the stage color; the wall's scenes are dark (#43, #44).
 
 **Honesty**
 - The price ($100) is always visible.
-- Countdowns only count to real times from drop data; pair counts only come from inventory; a missing value renders nothing. No discounts, no exit offers, no fake urgency, no invented reviews (`08-copy.md`).
-
-**Opening experience**
-- Sound off by design; built from still images, not video; photosensitivity notice first; skippable from frame 1; never on deep links or for returning visitors; no bursts under `prefers-reduced-motion`. `tools/flashcheck.py` must pass (`03-references.md`).
+- The wall shows only what its records hold: no countdowns, quantities or dates it doesn't have; a missing value renders nothing. No discounts, no fake urgency, no invented reviews (`08-copy.md`).
 
 **Products and copy**
-- Every product fact comes from `content/products/` (from the 1:1 drawings). **Never invent a spec**; `null` hides the row. Frames carry the founder's names (`06-products.md`); names are never explained or tied to a real person.
-- All copy from `content/copy/en.json`. No lorem ipsum anywhere. `@darkestshades`, `darkestshades.com`, `#DarkestShades`.
+- Every product fact comes from `content/products/` (from the 1:1 drawings). **Never invent a spec.** Frames carry the founder's names (`06-products.md`); names are never explained or tied to a real person.
+- All copy from `content/copy/en.json` (the wall's own section). No lorem ipsum anywhere. `@darkestshades`, `darkestshades.com`, `#DarkestShades`.
 
 **Imagery**
-- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. The drawer wall shows renders of the 3D frames rebuilt from the 1:1 drawings, matched to those photos (`00-decisions.md` #44). People only from the seven-person generated cast, wearing the real frames (composited, never generated). Until finals land, every image is a labelled `ShotSlot`. Reference videos, the reference film (#43) and Prada/runway material never ship.
+- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. The wall shows renders of the 3D frames rebuilt from the 1:1 drawings, matched to those photos (#44). No generated glasses, hands or people in the wall. Every image's status (prototype, mockup, final) is tracked in the wall's asset manifest. Reference videos, the reference film (#43) and Prada/runway material never ship.
 
 **Build**
-- Mobile first: 390, then 768, 1024, 1440. WCAG 2.2 AA.
-- `app/components/base/` must not import from `app/components/house/`. Components are Darkest Shades' own; don't copy digs components.
-- Every component has a Storybook story per state, at 390 and 1440, in UI and wire mode.
-- Data goes through `app/lib/mock/` in Storefront API shape. No live Shopify calls, no checkout wiring in this phase.
+- The wall only, standalone in `wall/`: each drawer its own element with its own record, shaped like a Shopify metaobject. No live Shopify calls, no checkout, nothing from the archived site build.
+- Mobile first: 390, then 768, 1024, 1440. WCAG 2.2 AA. Every gesture has a button that does the same.
 - Change tokens through `tools/palette.py` and `design/tokens/tokens.base.json`, then `python3 tools/build_tokens.py`; never hand-edit `design/tokens/build/`.
 - Free tools only. No purchases, no paid APIs.
 
@@ -54,23 +49,9 @@ python3 tools/photo/wear.py content/photography/people/W1-S07-F02-A1.json      #
 python3 tools/blender/frame3d.py F04 --check --out /tmp/F04.png                 # a frame rebuilt in 3D from its drawings, upright in a light tent
 python3 tools/blender/wear3d.py content/photography/people/M1-S06-F04-A1.json   # the cast member wearing the 3D frame in the scene's light → work/people/<id>-3d/ (depth model: work/models/, head3d.py)
 python3 tools/photo/cutout.py content/photography/people/M1-S06-F04-A1.json     # that picture cut out: the person wearing the frame on transparency → work/people/<id>-3d/cutout.png
-python3 tools/photo/entry_stills.py --check                                     # remakes the entry's black-and-white stills from the finals -> assets/entry/ + sequence.json, verifying the decoded files (burst 1 under luminance 0.09); then python3 tools/flashcheck.py
+python3 docs/build/drawer-wall/prototype/drawer_scene.py --ext 0,0.25 --outdir work/drawer-proto --samples 40 --size 760   # the founder-reviewed drawer prototype
 ```
-App (phase 0 on; `npm install` first; Node 22):
-```
-npm run dev                       # Hydrogen dev server (MiniOxygen) on http://localhost:3000; /dev/tokens is the token sheet; ?mode=wire for wireframes
-npm run build                     # production build: refuses while any copy section is draft or placeholder (the draft-copy gate)
-npm run build:review              # production settings, drafts allowed: what Lighthouse and the review screenshots run on
-npm run preview:review -- --port 3000   # build:review, then serve it on :3000
-npm run typecheck && npm run lint # React Router typegen + tsc; ESLint
-npm test                          # Vitest: logic, honesty rules, the mock adapter
-npm run storybook                 # Storybook on :6006 (mode and theme in the toolbar); npm run storybook:build -> storybook-static/
-npm run test:e2e                  # Playwright: fonts, screenshots at 390 and 1440, axe, the Storybook matrix (starts the review build and Storybook itself)
-npm run checks                    # the CI checks: banned strings, hex colors in app/, product schema, the copy gate, base-never-imports-house
-npm run flashcheck -- --self-test # tools/flashcheck.py on the synthetic strobes; without flags it checks assets/entry/sequence.json
-npm run lighthouse                # Lighthouse mobile on the review build (needs preview:review running; fails under 90) -> docs/qa/lighthouse/
-npm run ci                        # everything above in CI order
-```
+The wall's own commands (`cd wall && npm run dev`, `build`, `test`, `test:e2e`, `check`, `lighthouse`, `all`) and the new Blender tools are added by the run (`DRAWER-WALL.md`, D1–D4); list them here as they land.
 
 ## When unsure
 If `00-decisions.md` doesn't answer it and it touches brand, product facts, money or legal copy, ask the founder. Otherwise make the call and note it in the PR.

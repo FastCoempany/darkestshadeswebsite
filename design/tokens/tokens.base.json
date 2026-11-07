@@ -246,8 +246,7 @@
   },
   "measure": {
    "$type": "dimension",
-   "$value": "30em",
-   "$description": "About 68 characters of body text in the stand-in and in Stolzl; `68ch` measured 92 letters because ch is the width of a zero."
+   "$value": "68ch"
   }
  },
  "motion": {

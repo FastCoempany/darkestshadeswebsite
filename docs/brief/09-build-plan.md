@@ -1,5 +1,7 @@
 # 09 · Build plan
 
+> **Parked, Nov 7 2026.** This describes a website, and no website is being built: the work is the drawer wall alone (`00-decisions.md` #46, `docs/build/DRAWER-WALL.md`). Don't build from it. Only its "Workspace setup (cloud)" section still applies: the drawer wall's run uses it.
+
 ## Stack
 
 | Layer | Choice | Notes |

@@ -6,7 +6,6 @@
   --color-surface-overlay: #E6E6E6;
   --color-surface-inverse: #1A1A1A;
   --color-surface-stage: #DADADA;
-  --color-surface-entry: #FFFFFF;
   --color-text-primary: #000000;
   --color-text-secondary: #3D3D3D;
   --color-text-tertiary: #5C5C5C;
@@ -14,7 +13,6 @@
   --color-text-inverse: #FFFFFF;
   --color-text-accent: #000000;
   --color-text-editorial: #000000;
-  --color-text-on-stage: #000000;
   --color-border-hairline: #CCCCCC;
   --color-border-rule: #999999;
   --color-border-control: #6B6B6B;
@@ -30,14 +28,9 @@
   --color-status-error: #000000;
   --color-status-info: #000000;
   --color-status-live: #000000;
-  --color-status-error-stage: #000000;
   --font-family-display: ui-sans-serif, system-ui, sans-serif;
 }
 [data-mode="wire"] img, [data-mode="wire"] video, [data-mode="wire"] canvas { visibility: hidden; }
-/* Marks are drawings, not photographs: they stay, in greyscale. */
-[data-mode="wire"] .ds-seal img { visibility: visible; filter: grayscale(1); }
-[data-mode="wire"] [data-shot] { container-type: inline-size; }
-[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid; place-items: center;
-  padding: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-  font: 500 clamp(7px, 9cqi, 12px)/1.2 ui-monospace, monospace; color: #3D3D3D; background:
+[data-mode="wire"] [data-shot]::after { content: attr(data-shot); position: absolute; inset: 0; display: grid;
+  place-items: center; font: 500 12px/1.2 ui-monospace, monospace; color: #3D3D3D; background:
   repeating-linear-gradient(135deg, #EEEEEE 0 10px, #E2E2E2 10px 20px); border: 1px dashed #999999; }
