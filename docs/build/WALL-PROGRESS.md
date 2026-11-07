@@ -21,7 +21,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 |---|---|---|---|---|
 | D0 · Start | done | `wall/d0-start` → PR #11 | the four spikes, with numbers, in "D0 · Start" below; `frame_texture.py --from-dam` run for F01 and F02 | Nov 7 2026 |
 | D1 · The project | done | `wall/d1-project` → PR #12 | `npm run all` exit 0 on the empty project (check, Vitest 2/2, build, Playwright 22 passed and 8 skipped across the three projects, Lighthouse 100); the four screens shown in the session; in "D1 · The project" below | Nov 7 2026 |
-| D2 · Records and logic | done | `wall/d2-records` → PR (number below) | Vitest 286 tests in 9 files (every resolver case, missing and unknown value, every machine transition and every impossible one); `npm run check` validates `data/wall.json` and the manifest; `npm run all` exit 0; in "D2 · Records and logic" below | Nov 7 2026 |
+| D2 · Records and logic | done | `wall/d2-records` → PR #13 | Vitest 286 tests in 9 files (every resolver case, missing and unknown value, every machine transition and every impossible one); `npm run check` validates `data/wall.json` and the manifest; `npm run all` exit 0; in "D2 · Records and logic" below | Nov 7 2026 |
 | D3 · The wall and the drawer | not started | | | |
 | D4 · The frames | not started | | | |
 | D5 · The elements | not started | | | |
