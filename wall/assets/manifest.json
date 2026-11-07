@@ -51,12 +51,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77052,
-        "webpBytes": 71042,
+        "avifBytes": 73241,
+        "webpBytes": 65818,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -71,12 +71,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78161,
-        "webpBytes": 72316,
+        "avifBytes": 73854,
+        "webpBytes": 65430,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -91,12 +91,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77125,
-        "webpBytes": 69378,
+        "avifBytes": 72929,
+        "webpBytes": 64902,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -111,12 +111,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 75132,
-        "webpBytes": 69176,
+        "avifBytes": 73357,
+        "webpBytes": 64504,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -131,12 +131,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78834,
-        "webpBytes": 70308,
+        "avifBytes": 75500,
+        "webpBytes": 65482,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -151,12 +151,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78906,
-        "webpBytes": 67348,
+        "avifBytes": 73964,
+        "webpBytes": 61974,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -171,12 +171,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81746,
-        "webpBytes": 68950,
+        "avifBytes": 76297,
+        "webpBytes": 62640,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -191,12 +191,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79243,
-        "webpBytes": 70116,
+        "avifBytes": 76341,
+        "webpBytes": 63824,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -211,13 +211,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 61582,
-        "webpBytes": 68318,
-        "avifQuality": 58,
+        "avifBytes": 78845,
+        "webpBytes": 63348,
+        "avifQuality": 64,
         "grade": "cool"
       }
     },
@@ -231,12 +231,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81019,
-        "webpBytes": 69066,
+        "avifBytes": 78303,
+        "webpBytes": 63506,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -251,12 +251,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80388,
-        "webpBytes": 69726,
+        "avifBytes": 77302,
+        "webpBytes": 63518,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -271,12 +271,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79913,
-        "webpBytes": 69806,
+        "avifBytes": 76137,
+        "webpBytes": 64248,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -291,13 +291,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 60387,
-        "webpBytes": 67592,
-        "avifQuality": 58,
+        "avifBytes": 77403,
+        "webpBytes": 62984,
+        "avifQuality": 64,
         "grade": "cool"
       }
     },
@@ -311,12 +311,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80506,
-        "webpBytes": 67696,
+        "avifBytes": 75674,
+        "webpBytes": 63536,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -331,12 +331,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78138,
-        "webpBytes": 67296,
+        "avifBytes": 74451,
+        "webpBytes": 62132,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -351,12 +351,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81053,
-        "webpBytes": 65854,
+        "avifBytes": 78448,
+        "webpBytes": 61230,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -371,13 +371,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 58970,
-        "webpBytes": 65234,
-        "avifQuality": 58,
+        "avifBytes": 75727,
+        "webpBytes": 62292,
+        "avifQuality": 64,
         "grade": "cool"
       }
     },
@@ -391,12 +391,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80331,
-        "webpBytes": 61792,
+        "avifBytes": 75759,
+        "webpBytes": 59276,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -411,12 +411,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79259,
-        "webpBytes": 63122,
+        "avifBytes": 75451,
+        "webpBytes": 57650,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -431,12 +431,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77529,
-        "webpBytes": 61188,
+        "avifBytes": 73542,
+        "webpBytes": 57576,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -451,12 +451,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77185,
-        "webpBytes": 60666,
+        "avifBytes": 73485,
+        "webpBytes": 57252,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -471,12 +471,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 76667,
-        "webpBytes": 62266,
+        "avifBytes": 73423,
+        "webpBytes": 56796,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -491,12 +491,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78860,
-        "webpBytes": 62228,
+        "avifBytes": 75020,
+        "webpBytes": 57456,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -511,12 +511,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 1200",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79539,
-        "webpBytes": 61910,
+        "avifBytes": 76606,
+        "webpBytes": 56726,
         "avifQuality": 64,
         "grade": "cool"
       }
@@ -531,12 +531,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45050,
-        "webpBytes": 38942,
+        "avifBytes": 42849,
+        "webpBytes": 35020,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -551,12 +551,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44944,
-        "webpBytes": 37004,
+        "avifBytes": 42185,
+        "webpBytes": 35330,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -571,12 +571,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44404,
-        "webpBytes": 38492,
+        "avifBytes": 41550,
+        "webpBytes": 35872,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -591,13 +591,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 32547,
-        "webpBytes": 38116,
-        "avifQuality": 64,
+        "avifBytes": 43210,
+        "webpBytes": 34938,
+        "avifQuality": 70,
         "grade": "cool"
       }
     },
@@ -611,12 +611,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45104,
-        "webpBytes": 38260,
+        "avifBytes": 42418,
+        "webpBytes": 34886,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -631,12 +631,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45113,
-        "webpBytes": 36930,
+        "avifBytes": 42316,
+        "webpBytes": 34104,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -651,12 +651,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44925,
-        "webpBytes": 37612,
+        "avifBytes": 42283,
+        "webpBytes": 34526,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -671,12 +671,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44412,
-        "webpBytes": 38106,
+        "avifBytes": 41285,
+        "webpBytes": 35334,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -691,12 +691,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45984,
-        "webpBytes": 38130,
+        "avifBytes": 43285,
+        "webpBytes": 35522,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -711,12 +711,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44975,
-        "webpBytes": 38190,
+        "avifBytes": 42133,
+        "webpBytes": 34774,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -731,12 +731,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44457,
-        "webpBytes": 38678,
+        "avifBytes": 41690,
+        "webpBytes": 35186,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -751,12 +751,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44434,
-        "webpBytes": 38014,
+        "avifBytes": 42341,
+        "webpBytes": 36432,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -771,12 +771,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45372,
-        "webpBytes": 38262,
+        "avifBytes": 42780,
+        "webpBytes": 35148,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -791,12 +791,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44813,
-        "webpBytes": 38318,
+        "avifBytes": 42799,
+        "webpBytes": 35528,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -811,12 +811,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44986,
-        "webpBytes": 36692,
+        "avifBytes": 42389,
+        "webpBytes": 34712,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -831,12 +831,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44583,
-        "webpBytes": 36502,
+        "avifBytes": 42489,
+        "webpBytes": 35136,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -851,12 +851,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44686,
-        "webpBytes": 36162,
+        "avifBytes": 41941,
+        "webpBytes": 34112,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -871,12 +871,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44106,
-        "webpBytes": 35980,
+        "avifBytes": 42011,
+        "webpBytes": 34900,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -891,12 +891,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43922,
-        "webpBytes": 34720,
+        "avifBytes": 41808,
+        "webpBytes": 33712,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -911,12 +911,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43217,
-        "webpBytes": 34922,
+        "avifBytes": 40936,
+        "webpBytes": 32972,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -931,12 +931,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43614,
-        "webpBytes": 34958,
+        "avifBytes": 41658,
+        "webpBytes": 33568,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -951,12 +951,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42436,
-        "webpBytes": 34902,
+        "avifBytes": 39726,
+        "webpBytes": 33364,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -971,12 +971,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43134,
-        "webpBytes": 35720,
+        "avifBytes": 41322,
+        "webpBytes": 33544,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -991,12 +991,12 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24; wall_export.py sequence --width 720",
-      "sourceCommit": "9eafd34f4f8c",
+      "sourceCommit": "ae6d3d3eddcb",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42538,
-        "webpBytes": 34574,
+        "avifBytes": 40707,
+        "webpBytes": 33310,
         "avifQuality": 70,
         "grade": "cool"
       }
@@ -1011,14 +1011,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 403,
       "checks": {
-        "avifBytes": 37769,
-        "webpBytes": 22856
+        "avifBytes": 36314,
+        "webpBytes": 21692
       }
     },
     {
@@ -1031,7 +1031,7 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
@@ -1051,7 +1051,7 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
@@ -1071,14 +1071,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 403,
       "checks": {
-        "avifBytes": 37284,
-        "webpBytes": 21760
+        "avifBytes": 35828,
+        "webpBytes": 20784
       }
     },
     {
@@ -1091,14 +1091,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 404,
       "checks": {
-        "avifBytes": 37075,
-        "webpBytes": 21080
+        "avifBytes": 35520,
+        "webpBytes": 20356
       }
     },
     {
@@ -1111,7 +1111,7 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
@@ -1131,7 +1131,7 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
@@ -1151,14 +1151,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 404,
       "checks": {
-        "avifBytes": 36070,
-        "webpBytes": 20602
+        "avifBytes": 34601,
+        "webpBytes": 19648
       }
     },
     {
@@ -1171,14 +1171,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit; wall_export.py wall",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 2880,
       "height": 1258,
       "checks": {
-        "avifBytes": 326404,
-        "webpBytes": 224666,
+        "avifBytes": 354166,
+        "webpBytes": 214606,
         "grade": "cool e0.3 toe0.004"
       }
     },
@@ -1191,7 +1191,7 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit",
-      "sourceCommit": "446f5aef08cf",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 2880,
@@ -1207,14 +1207,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 20346,
-        "webpBytes": 11120
+        "avifBytes": 17660,
+        "webpBytes": 9046
       }
     },
     {
@@ -1227,14 +1227,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 20209,
-        "webpBytes": 11330
+        "avifBytes": 17647,
+        "webpBytes": 9420
       }
     },
     {
@@ -1247,14 +1247,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 317,
       "checks": {
-        "avifBytes": 22449,
-        "webpBytes": 13174
+        "avifBytes": 22355,
+        "webpBytes": 12512
       }
     },
     {
@@ -1267,14 +1267,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 317,
       "checks": {
-        "avifBytes": 22433,
-        "webpBytes": 13104
+        "avifBytes": 22288,
+        "webpBytes": 12640
       }
     },
     {
@@ -1287,14 +1287,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 23070,
-        "webpBytes": 13408
+        "avifBytes": 22846,
+        "webpBytes": 12986
       }
     },
     {
@@ -1307,14 +1307,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 23186,
-        "webpBytes": 12984
+        "avifBytes": 22878,
+        "webpBytes": 13314
       }
     },
     {
@@ -1327,14 +1327,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 21963,
-        "webpBytes": 12486
+        "avifBytes": 21452,
+        "webpBytes": 11734
       }
     },
     {
@@ -1347,14 +1347,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 21818,
-        "webpBytes": 12386
+        "avifBytes": 21276,
+        "webpBytes": 12214
       }
     },
     {
@@ -1367,14 +1367,14 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit; wall_export.py wall",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 1170,
-      "height": 1983,
+      "height": 2131,
       "checks": {
-        "avifBytes": 159455,
-        "webpBytes": 137218,
+        "avifBytes": 159112,
+        "webpBytes": 136640,
         "grade": "cool e0.3 toe0.004"
       }
     },
@@ -1387,11 +1387,11 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit",
-      "sourceCommit": "d63af37bbde5",
+      "sourceCommit": "ae6d3d3eddcb",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 1170,
-      "height": 1983
+      "height": 2131
     }
   ]
 }

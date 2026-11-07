@@ -826,7 +826,8 @@ def cmd_lifted(a):
     cam.data.dof.focus_distance = (centre - cam.location).length
     # the lifted frame's own light: the warm key from the drawer's side and a soft cool rim from above, as the live
     # frame gets them (the environment map plus one warm key)
-    area("lift key", (slots[a.slot][0] + 0.18, -0.52, slots[a.slot][1] + 0.42), tuple(centre), 0.22, 1.6 * a.light, (1.0, 0.86, 0.68), size_y=0.12)
+    area("lift key", (slots[a.slot][0] + 0.20, -0.50, slots[a.slot][1] + 0.44), tuple(centre), 0.30, 7.0 * a.light, (1.0, 0.86, 0.68), size_y=0.16)
+    area("lift rim", (slots[a.slot][0] - 0.25, -0.05, slots[a.slot][1] + 0.40), tuple(centre), 0.05, 3.0 * a.light, (0.86, 0.93, 1.0), size_y=0.5)
     out = pathlib.Path(a.out) if a.out else WORK / "stills" / f"{a.frame}-lifted.png"
     render(sc, out)
 

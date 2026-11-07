@@ -21,8 +21,8 @@ import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 
-EDGE_BLACK = 0.02          # the outermost 2% of the frame is exactly scene black
-EDGE_FADE = 0.06           # the fade into it starts here
+EDGE_BLACK = 0.035         # the outermost 3.5% of the frame is exactly scene black (the check samples 2%: the lossy
+EDGE_FADE = 0.075          # encoders' ringing at the fade's edge stays outside the sampled band); the fade starts here
 
 
 def to_linear(s):

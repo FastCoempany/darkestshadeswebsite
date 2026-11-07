@@ -60,22 +60,41 @@ def put(m, entry):
     m["assets"] = [e for e in m["assets"] if e["id"] != entry["id"]] + [entry]
 
 
-def encode_within(src, out, look, width, budget, seed, crop=None, crop_after=None, quality=82, extra=None):
-    """Grade and encode `src` to `out`, lowering the quality until the file fits its budget. Returns (quality, bytes)."""
+def edge_ok(path, band=0.02, limit=1):
+    """Scene black is exact (DRAWER-WALL.md, Assets): the outermost `band` of the encoded file within `limit`/255 of
+    black. The lossy encoders can leave a stray level at an edge; the export lowers the quality until none is left."""
+    import numpy as np
+    from PIL import Image
+    import pillow_avif  # noqa: F401
+    a = np.asarray(Image.open(path).convert("RGB")).astype(int)
+    h, w = a.shape[:2]
+    mx, my = max(1, int(round(band * w))), max(1, int(round(band * h)))
+    return max(a[:my].max(), a[-my:].max(), a[:, :mx].max(), a[:, -mx:].max()) <= limit
+
+
+def encode_within(src, out, look, width, budget, seed, crop=None, crop_after=None, quality=82, extra=None, check_edge=True):
+    """Grade and encode `src` to `out`, lowering the quality until the file fits its budget and its edges are scene
+    black. Returns (quality, bytes)."""
     extra = extra or {}
     q = quality
+    graded = None
     while True:
         if crop_after:
             # grade the whole image at the plate's size and seed, then cut the crop: the grain lines up with the plate
-            s = grade_scene.grade(grade_scene.load(src) if width is None else resized(src, width), look, seed=seed, **GRADE, **extra)
+            if graded is None:
+                graded = grade_scene.grade(grade_scene.load(src) if width is None else resized(src, width), look, seed=seed, **GRADE, **extra)
             x0, y0, x1, y1 = crop_after
-            grade_scene.save(s[y0:y1, x0:x1], out, q)
+            grade_scene.save(graded[y0:y1, x0:x1], out, q)
         else:
             grade_scene.process(src, out, look, crop, width, None, q, seed=seed, **GRADE, **extra)
         size = os.path.getsize(out)
-        if size <= budget or q <= 30:
+        fits = size <= budget
+        clean = (not check_edge) or edge_ok(out)
+        if (fits and clean) or q <= 30:
+            if not fits or not clean:
+                print(f"export: {out} at q{q}: {'over budget' if not fits else ''}{' edge not black' if not clean else ''}", flush=True)
             return q, size
-        q -= 6
+        q -= 6 if not fits else 2
 
 
 def resized(src, width):
