@@ -19,7 +19,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 
 | Phase | State | Branch / PR | Evidence | Date |
 |---|---|---|---|---|
-| D0 · Start | done | `wall/d0-start` → PR (number below) | the four spikes, with numbers, in "D0 · Start" below; `frame_texture.py --from-dam` run for F01 and F02 | Nov 7 2026 |
+| D0 · Start | done | `wall/d0-start` → PR #11 | the four spikes, with numbers, in "D0 · Start" below; `frame_texture.py --from-dam` run for F01 and F02 | Nov 7 2026 |
 | D1 · The project | not started | | | |
 | D2 · Records and logic | not started | | | |
 | D3 · The wall and the drawer | not started | | | |
