@@ -1,6 +1,6 @@
 # Build run: the drawer wall
 
-I'm Antaeus, the founder; where the docs say "the founder", that's me. This session builds the frames page as a wall of drawers: a working, photoreal mockup on the real stack (Hydrogen, mock data in Storefront API shape), good enough to put in people's hands on their phones, and built so that it becomes the real page at launch. It runs before the rest of the site and lays its foundation (phase 0 of `docs/build/RUN.md`).
+I'm Antaeus, the founder; where the docs say "the founder", that's me. This session builds the frames page as a wall of drawers: a working, photoreal mockup on the real stack (Hydrogen, mock data in Storefront API shape), good enough to put in people's hands on their phones, and built so that it becomes the real page at launch. The site itself was built on Oct 30–31 (RUN.md phases 0–6, PRs #1–#9) in the look before Nov 5. This run replaces what `/frames` shows today (the stage-card grid) with the drawer wall, inside that app, with its components, mock store, cart, tests and checks.
 
 Part 1 is what we're making. Part 2 is how to build it. Part 3 is for me: how I start the run. This file and `docs/build/PROGRESS.md` are your memory; re-read both at the start of every phase and after every break or compaction.
 
@@ -30,7 +30,8 @@ Private and intimate. The site is near-black; the scenes are the image.
 - **The cabinet.** Black calfskin over every face: a fine irregular pebble grain, a coarser crease, a satin sheen with soft mottling, piped edges (a fine cord along the top and bottom of each drawer front). The grain is in world space, so no two drawers carry the same grain. The room is black.
 - **A drawer.** Front about 220 × 122 mm. One knob, centered: blackened metal, about 46 mm across and 22 mm deep, its face tilted 28° up toward the person opening it. On the knob's face, the GCD as an ornament, 30 mm long: in black relief by default, metal and stone both black, so it reads by light, not color (O15). Inside: a warm brown-black suede lining; the frame sits on it upright, temples open, front toward you.
 - **The seam light.** Each drawer has two looks. `lit`: a thin warm light escapes along its seams, because the drawer holds a frame you can look at. `dark`: no light, because the frame is sold out, locked or hidden. The light is state, never decoration, and never a promise the data doesn't make.
-- **Layouts.** Two renders of the same cabinet. Portrait (under 1024 px): 2 drawers across, 4 rows. Landscape (1024 px and up): 4 across, 2 rows. The drawers are identical; only the cabinet's proportions change: the rail under each row is deep enough for that drawer's label at its breakpoint. More bays means a re-render of the wall, nothing else.
+- **Layouts.** Two renders of the same cabinet. Portrait (under 1024 px): 2 drawers across, 4 rows. Landscape (1024 px and up): 4 across, 2 rows. Never a row of three (`06-products.md`: F04, F05 and F09). The drawers are identical; only the cabinet's proportions change: the rail under each row is deep enough for that drawer's label at its breakpoint. More bays means a re-render of the wall, nothing else.
+- **Above the wall:** `frames.statement`, receding, in Stolzl Light; `frames.title` stays the page's hidden heading.
 - **The camera.** Orthographic, tilted 15° down: the wall as you'd see it standing in front of a low cabinet, every drawer the same size, the knobs looking up at you.
 - **Labels.** Under each drawer, on its rail, in HTML: the look number in camel micro, the name in micro `text-secondary` (wrapping, never truncated, at 320 px too), and `$100` at body size on the next line. A sold-out drawer adds `product.soldOut`. A locked one shows `drawer.notYet` in place of the name; its look number and `$100` stay. A hidden one has no label.
 
@@ -43,7 +44,7 @@ The default mechanic is **tap first** (O16). The **pull first** variant (`?mech=
 3. **The drawer view.** One full-screen layer, nothing behind it scrolls. The drawer, shut, barely lit; the hint `drawer.hintPull` with a thin falling line. Pull down to slide the drawer out: a scrubbed image sequence, the camera leaning in and down as the drawer comes out, the frame coming into the warm light. Let go and the drawer settles open or shut (velocity first, then position). A quiet button does the same (`drawer.open`, `drawer.shut`). Close (`nav.close`, Esc, or on wide screens a tap on the dim room around the view) returns you to the wall with focus on that drawer.
 4. **Lift.** With the drawer open, the hint `drawer.hintLift`. Tap the frame (or `drawer.lift`). The rendered frame hands over to a live 3D frame at exactly the same place, then rises toward you into the light, turning to a three-quarter view, while the drawer dims and softens behind it.
 5. **Turn and come closer.** One finger turns it: freely around, a little up and down. Pinch or double-tap brings it closer (to 3×); on desktop, drag and the wheel. Buttons: `drawer.turnLeft`, `drawer.turnRight`, `drawer.closer`, `drawer.further`, `drawer.reset`. The view keeps its full sharpness at every zoom because it is drawn live at the screen's resolution.
-6. **The photographs.** `drawer.photos` opens the real lightbox photographs (A1, A2, A3, A6 where they exist) on their stage color, each at full resolution, pinch and drag to one image pixel per screen pixel. `drawer.photosClose` goes back to the frame.
+6. **The photographs.** `drawer.photos` opens the real lightbox photographs (A1, A2, A3, A6 where they exist) on their stage color in the existing `Gallery`, whose zoomed state now loads each photograph at full resolution, pinch and drag to one image pixel per screen pixel. `drawer.photosClose` goes back to the frame. `drawer.framePage` links to the frame's own page (`/frames/{handle}`: the full gallery, specs, drawings, worn by).
 7. **Buy.** In the drawer view and the lifted view: the name, `$100`, and the buy row the data allows: `product.addToBag` while the drop is live and the frame is in stock; `product.soldOut` when it isn't; the drop line from `drop.states.*` before the drop, with real values only ("Drop 001. Date to be announced." today). Add to bag updates `Bag (n)` and announces it.
 8. **Put back.** `drawer.putBack`, a tap on the drawer, or Esc. The frame settles back into the drawer the way it rose. Esc again shuts the drawer; again, closes the view.
 
@@ -77,7 +78,7 @@ Every case, and every missing-data case (no date, no quantity, no product, no as
 ## Honesty and brand on this page
 
 - `$100` is visible under every drawer except a hidden one, and in every view of a frame.
-- The seam light, the buy row, the drop line and any number come from data. States the real data doesn't have (live, sold out, locked) appear only in tests, stories and the preview's labelled fixture panel, never in a route.
+- The seam light, the buy row, the drop line and any number come from data. States the real data doesn't have (live, sold out, locked) appear only in tests, stories and the phone build's labelled fixture panel, never in a route.
 - The frame's GCD executes one way only: the 3D models carry it at full size, proportion and placement (`frame3d.py`), and the export is checked against `content/products/` (D4). F08's renders show its GCD (the model carries it); its photographs don't (#34).
 - The knob GCD is the `gcd-black` variant by default (O15). The only gold in any view is the frame's own GCD; the focus ring is the usual exception.
 - Lenses in the renders and the 3D frames take each frame's measured tint (`assets/drawer-wall/lens-tints.json`, D4); F04 takes #38's values.
@@ -87,7 +88,7 @@ Every case, and every missing-data case (no date, no quantity, no product, no as
 
 ## Not in this run
 
-The home page and the opening, the drop page, the full product page (beyond what `/frames/{handle}` shows), manifesto, cast, the list and SMS, questions, care, policies, the menu sheet, checkout and any store connection: RUN.md phases 1–6, after their Part 1 is rewritten to #43. This run builds only the header and footer the wall needs (logo or brand mark, `Bag (n)`; the logo edge to edge, `@darkestshades`, the exchange and warranty line).
+Every other page stays as built on Oct 30–31, in the earlier look, until it is redesigned (#43): the home page and the opening, the drop pages, the frame page `/frames/{handle}` (the drawer view links to it), manifesto, cast, the list, questions, care, policies, the bag, the header, the menu and the footer. This run changes `/frames` and adds what the wall needs to the shared code; no other page changes, and their visual baselines must not move. No checkout and no store connection.
 
 ## Open questions (mine to decide)
 
@@ -96,7 +97,7 @@ The home page and the opening, the drop page, the full product page (beyond what
 | O15 | The GCD on the knobs: black relief, gold, or plain on the wall | Black relief; D3 renders a close-up of each variant for me | R1 |
 | O16 | Tap first or pull first | Tap first on the route; pull first behind `?mech=pull` | After the usability test |
 | O17 | A reshoot | No; the cleaned lightbox set | Before launch |
-| O18 | Where testers open the preview | A private Artifact link | R2 |
+| O18 | Where testers open the phone build | A private Artifact link | R2 |
 | — | The copy this run adds (`drawer.*` in `en.json`) | Drafts below, marked for sign-off | Launch |
 
 ---
@@ -107,13 +108,15 @@ The home page and the opening, the drop page, the full product page (beyond what
 
 1. `CLAUDE.md` and `docs/brief/00-decisions.md`.
 2. This file for this run. Where it departs from RUN.md or `09-build-plan.md`, this file wins.
-3. RUN.md Part 2 for how a run operates (running unattended, orchestration, git and pull requests, PROGRESS.md, verification, phase 0's notes, edge cases, never), except where this file says otherwise.
+3. RUN.md Part 2 for how a run operates (running unattended, orchestration, git and pull requests, PROGRESS.md, verification, edge cases, never), except where this file says otherwise.
 4. `docs/brief/01`–`09` for detail; Part 1 above for intent.
 
 ## Where things stand (Nov 6 2026)
 
-- **No app.** No `app/`, no `package.json`, no `PROGRESS.md`. D1 runs RUN.md phase 0.
-- **Products, drops, copy, tokens, marks:** as RUN.md's "Where things stand" says.
+- **The app is built** (RUN.md phases 0–6, Oct 30–31, PRs #1–#9; `docs/build/PROGRESS.md` holds the record, the decision log and the questions). Hydrogen 2026.4.7, React 18.3, React Router 7.16, Tailwind 4, Storybook, Vitest, Playwright with axe (every story at 390 and 1440 in UI and wire mode against committed baselines; pixel comparisons run on the VM only, not on GitHub Actions, as PROGRESS.md explains), Lighthouse asserting 90 (`checks/lighthouse.mjs`), and `npm run checks` (banned strings, hex colors, product schema, copy gate, copy audit, layers, flash check). `npm run ci` runs them all in CI order.
+- **What the wall reuses:** the mock store (`app/lib/mock/`: `createStore`, `effectiveState`, the drop and inventory `fixtures`), the cart (`app/lib/cart.tsx`) and `BagDrawer`, the copy accessor (`app/lib/copy.ts`), `PageShell`, `Header`, `Footer`, and the base components (`Button`, `Price`, `Sheet`, `ShotSlot` with its `sequence` variant, `Gallery` with its zoomed state, `VisuallyHidden`, `Notice`).
+- **What `/frames` is today:** `app/routes/frames._index.tsx` → `app/components/pages/FramesPage.tsx`, the statement and eight `StageCard`s (1, 2, 4 and 4 across). `StageCard` stays: the home page and the drop pages use it. `/frames/{handle}` is the frame page (`FramePage.tsx`) and stays as it is.
+- **Products, drops, copy, tokens, marks:** as RUN.md's "Where things stand" says; `en.json` has a `frames` section (`title`, `statement`).
 - **The eight frames in 3D:** `tools/blender/frame3d.py` builds every frame (F01–F06, F08, F09) from its 1:1 drawings, with the GCD at full size on the wearer's right (`frame3d.gcd_parts`), materials from `materials_for()` (procedural acetate; a light-path lens shader that does not export to glTF as it is). `tools/blender/frame_texture.py` gives a tortoise front (F01, F02) its real pattern, read from its cleaned front shot in `work/out/`, which a fresh VM doesn't have (D0 checks how to rebuild it). Other sessions use these tools: add flags and functions, never change what they already produce.
 - **The photographs:** 56 finals (`assets/photography/`, up to 2048 px) and their full-resolution stage masters (`dam/product/DS-{frame}-{angle}-v01-stage.png`, about 3700 × 4600 px).
 - **The prototypes** (founder-reviewed, Nov 5 2026), in `docs/build/drawer-wall/prototype/`: `drawer_scene.py` (the single leather drawer; about 80 s a frame at 760 × 950 and 40 samples on 2 CPUs), `lift_scene.py` (the frame on black: the dark and lit pair), `grade.py` (the grade), `interaction/drawer.src.html` and `pull.src.html` (the touch prototypes; their placeholders were filled with base64 frames), `stills/`.
@@ -127,7 +130,7 @@ Install the current stable versions in D1 and pin them in `package.json`. All MI
 | Package | Why |
 |---|---|
 | `three` | The live frame (WebGL 2, `AgXToneMapping` to match Blender's AgX) |
-| `@react-three/fiber`, `@react-three/drei` | The lifted frame in React. Match fiber's major to the app's React major (v8 for React 18, v9 for React 19) |
+| `@react-three/fiber`, `@react-three/drei` | The lifted frame in React. The app is on React 18.3, so fiber v8 and the drei that goes with it |
 | `@use-gesture/react` | Drag, pinch, wheel and the tap-or-drag decision |
 | `@react-spring/web` | The drawer's settle and the lift |
 | `@gltf-transform/cli` (dev) | GLB optimization: meshopt geometry, WebP textures (`EXT_texture_webp`). KTX2 only later, if phones show memory pressure |
@@ -136,39 +139,47 @@ No OpenSeadragon: the photo zoom is one full-resolution image per angle, which n
 
 ## Files this run adds
 
+New, unless marked *(changed)*:
+
 ```
 content/drawers/frames-wall.json         the seed of bay_wall + drawer_bay (product per bay, overrides)
-content/drawers/wall.schema.json
+content/drawers/wall.schema.json         (checked by npm run check:schema)
 app/lib/drawer/resolve.ts                bay state from bay + product + drop + now (pure; tested)
 app/lib/drawer/machine.ts                the per-drawer state machine (pure reducer; tested)
 app/lib/drawer/manifest.ts               typed access to assets/drawer-wall/manifest.json
 app/lib/drawer/gestures.ts               every threshold and spring in one place
 app/lib/drawer/tier.ts                   capability tier (0, 1, 2)
-app/lib/mock/metaobjects.ts              bay_wall and drawer_bay in Storefront API shape
+app/lib/mock/                            (changed) the store gains bay_wall and drawer_bay in Storefront API shape
 app/components/base/SequencePlayer.tsx   scrubbed image sequence on a canvas
-app/components/base/Stage.tsx            full-screen layer: scroll lock, focus trap, Esc, returns focus
-app/components/base/PanZoomImage.tsx     one full-resolution image, pinch / drag / double-tap / wheel / keys
-app/components/base/ShotSlot.tsx         + sequence and model variants (wire-mode labels)
-app/components/house/drawer/             DrawerWall, DrawerBay, BayLabel, DrawerStage, StageHint,
-                                         BuyRow, LiftedFrame (lazy), PhotoZoom
-app/routes/frames._index.tsx             /frames
-app/routes/frames.$handle.tsx            /frames/{handle}: the wall with that drawer open
+app/components/base/Sheet.tsx            (changed) a `scene` variant: full screen, scroll-locked, no hard cut;
+                                         the same focus trap, Esc and focus return
+app/components/base/ShotSlot.tsx         (changed) a `model` variant for the live frame (wire-mode label)
+app/components/base/Gallery.tsx          (changed) the zoomed state loads a full-resolution source when given one
+app/components/house/drawer/             DrawerWall, DrawerBay, BayLabel, DrawerView, StageHint, BuyRow,
+                                         LiftedFrame (lazy), with stories
+app/components/pages/FramesPage.tsx      (changed) the statement and the wall instead of the stage cards
+app/routes/frames._index.tsx             (changed) loads the wall; ?open={handle} opens that drawer
 assets/drawer-wall/                      committed web outputs + manifest.json + manifest.schema.json
   wall/{layout}/{knob}/plate-lit.*, bay-NN-dark.*, rects.json
   seq/{frame}/NNN.{avif,webp} @720, @1200   camera/{open,inspect}.json   env/drawer.hdr
   glb/{frame}.glb   stills/{frame}-lifted.*   lens-tints.json
 public/zoom/                             generated, git-ignored: full-resolution photo zoom images
+checks/assets.mjs                        check:assets, added to npm run checks
+checks/strings.mjs                       (changed) the film's title, its maker and FOOH join the list
 tools/blender/drawer_wall.py             the cabinet, the drawer, the renders (+ --check)
-tools/blender/frame_glb.py               a frame as an optimized-ready GLB (+ --check)
+tools/blender/frame_glb.py               a frame as a GLB ready to optimize (+ --check)
 tools/blender/render_queue.py            resumable render jobs, one frame per job
 tools/photo/grade_scene.py               the grade, from the prototype's grade.py
 tools/photo/lens_tints.py                measured lens transmission per frame
 tools/photo/zoom_export.py               stage masters → public/zoom/
 tools/web3d/optimize.mjs                 gltf-transform: meshopt + WebP, budgets
-preview/                                 the static phone preview's entry
-tests/drawer/                            Playwright flows (touch, mouse, keyboard)
+phone/                                   the static phone build's entry (npm run phone:build → dist-phone/)
+tests/unit/drawer-*.test.ts              resolver, machine, manifest, gestures, tier
+tests/e2e/drawer.spec.ts                 the flows (touch, mouse, keyboard), in new Playwright projects
 docs/build/drawer-wall/                  prototype/, research, usability.md, review/R1..R4, launch.md
 ```
+
+`DrawerView` is the drawer's full-screen view (Part 1, steps 3–8), built on `Sheet`'s `scene` variant: one focus trap in the codebase, not two.
 
 ## The drawer's state machine
 
@@ -259,17 +270,16 @@ Outputs per layout and knob style: `plate-lit` (the whole wall, every drawer lit
 
 ## On the page
 
-- **Tiers** (`app/lib/drawer/tier.ts`): tier 0 (no JS, or Save-Data): the wall as an image with each drawer a link to `/frames/{handle}`, which server-renders the drawer open (its last frame), the name, `$100`, the drop line and the A1 and A2 photographs. Tier 1 (no WebGL 2, under 4 GB of device memory where reported, or a lost context): everything but the live frame; lifting shows the lifted still, and turning gives way to the photographs. Tier 2: everything.
+- **Tiers** (`app/lib/drawer/tier.ts`): tier 0 (no JS, or Save-Data): the wall as an image, each drawer a link to its frame page `/frames/{handle}`, which works without JS. Tier 1 (no WebGL 2, under 4 GB of device memory where reported, or a lost context): everything but the live frame; lifting shows the lifted still, and turning gives way to the photographs. Tier 2: everything.
 - **SequencePlayer:** frames fetched as blobs (encoded, about 1 MB a drawer at 720 px); decoded `ImageBitmap`s kept only for the current frame ± 2 and closed otherwise; the next ones decoded ahead in the direction of travel; cross-fade between neighbours on a 2D canvas sized to the view at the device pixel ratio; AVIF where `createImageBitmap` takes it, WebP otherwise. The first and last frames load first.
 - **Prefetch:** opening a drawer prefetches its product sequence, its GLB and the three.js chunk at idle priority. The three.js chunk is never in the initial bundle.
 - **The handoff:** at lift, the canvas mounts over the drawer's last frame with the GLB at `open.json`'s transform and a soft contact shadow; the view cross-fades over 120 ms from the rendered frame (with the frame) to the empty drawer plus the live frame, then lifts. Until the GLB is ready, the lifted still holds the place.
 - **The live frame:** one `<Canvas>`, `frameloop="demand"`, AgX tone mapping, the drawer HDR as its environment plus one warm key matched to the scene, disposed when the frame goes back. On `webglcontextlost`: tier 1 for the rest of the visit.
-- **Deep links:** `/frames/{handle}` renders the wall with that drawer's view open on its last frame, not lifted. Unknown handles: the 404.
+- **Deep links:** `/frames?open={handle}` opens the wall with that drawer's view open on its last frame, not lifted; an unknown handle opens nothing. `/frames/{handle}` stays the frame page.
 
 ## Copy (`en.json`, a new `drawer` section, status `draft`)
 
 ```
-drawer.statement      Eight frames. One to a drawer.
 drawer.openLabel      Open the drawer.
 drawer.notYet         Not yet.
 drawer.hintPull       Pull it toward you
@@ -281,6 +291,7 @@ drawer.lift           Lift them out
 drawer.putBack        Put them back
 drawer.photos         See the photographs
 drawer.photosClose    Back to the frame
+drawer.framePage      Specs and drawings
 drawer.turnLeft       Turn left
 drawer.turnRight      Turn right
 drawer.closer         Closer
@@ -294,7 +305,7 @@ drawer.announce.back    {name}, back in the drawer.
 drawer.announce.added   {name} is in your bag.
 ```
 
-Reuse what exists (`nav.close`, `nav.bag`, `product.addToBag`, `product.soldOut`, `drop.states.*`, `alt.*`). Any other string you need goes in the same section as a draft and on PROGRESS.md's sign-off list. Never hard-code copy.
+Reuse what exists (`frames.title`, `frames.statement`, `nav.close`, `nav.bag`, `product.addToBag`, `product.soldOut`, `drop.states.*`, `alt.*`). Any other string you need goes in the same section as a draft and on PROGRESS.md's sign-off list. Never hard-code copy.
 
 ## Budgets
 
@@ -319,8 +330,8 @@ Reuse what exists (`nav.close`, `nav.bag`, `product.addToBag`, `product.soldOut`
 ## Testing
 
 - **Unit (Vitest):** `resolve.ts` (every state, override, missing value and the honesty guard), `machine.ts` (every transition and every impossible one), the manifest loader, the gesture math (release decisions, rubber band, clamps), the tier choice.
-- **Stories:** every component and state at 390 and 1440, UI and wire, with mock data and the real assets (prototype stills while the renders are pending, marked `prototype` in the manifest). WebGL stories are pixel-tested in wire mode only; in UI mode a smoke test checks the canvas drew.
-- **End to end (Playwright):** Chromium as a Pixel and as desktop; WebKit as an iPhone for everything but the live 3D (headless WebKit's WebGL is not reliable). Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: the wall shows every drawer with its name and `$100`; tap first: open, pull, settle both ways, lift, turn (yaw changes), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls the page; tap first: a vertical swipe on a drawer scrolls the page and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); a deep link; no JS (tier 0).
+- **Stories:** every component and state at 390 and 1440, UI and wire, with mock data and the real assets (prototype stills while the renders are pending, marked `prototype` in the manifest); the existing Storybook suite picks them up and makes their baselines. WebGL stories are pixel-tested in wire mode only; in UI mode a smoke test checks the canvas drew.
+- **End to end (Playwright, `tests/e2e/drawer.spec.ts`):** the `drawer-pixel` and `drawer-desktop` projects (Chromium) for everything; `drawer-iphone` (WebKit) for everything but the live 3D (headless WebKit's WebGL is not reliable). On GitHub Actions they run like the rest: everything asserted, screenshots recorded, not compared. Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: the wall shows every drawer with its name and `$100`; tap first: open, pull, settle both ways, lift, turn (yaw changes), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls the page; tap first: a vertical swipe on a drawer scrolls the page and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); a deep link; no JS (tier 0).
 - **Accessibility:** axe on the wall, the drawer view shut and open, the lifted frame and the photographs; names and live announcements; targets ≥ 44 px; 320 px and 200% zoom; label contrast measured against the plate's pixels under each label (≥ 4.5:1).
 - **Performance:** Lighthouse on the review build; the bundle check; the frame-rate trace; decoded frames counted through the debug log.
 - **Asset checks:** `drawer_wall.py --check`, `frame_glb.py --check` for every frame, `check:assets`, scene black, lens tints present with sources.
@@ -328,7 +339,7 @@ Reuse what exists (`nav.close`, `nav.bag`, `product.addToBag`, `product.soldOut`
 
 ## The phone preview
 
-`npm run preview:build` builds `preview/` (the same components, the mock data, the real assets) into `dist-preview/`, static, with relative paths, `noindex`, and a panel labelled "Fixture states (example data)" that switches the drop between today's data, live, sold out and locked, plus the `?mech=` choice. It is a testing harness, not a route of the site.
+`npm run phone:build` builds `phone/` (the same components, the mock data, the real assets) into `dist-phone/` (git-ignored), static, with relative paths, `noindex`, and a panel labelled "Fixture states (example data)" that switches the drop between today's data, live, sold out and locked, plus the `?mech=` choice. It is a testing harness, not a route of the site.
 
 - **Default: a private Artifact** (O18), published with its files (each publish takes up to 255 files; a version holds 511 files and 256 MB, so publish in two parts if needed). The artifact wraps the page in its own document skeleton: strip `<html>`, `<head>` and `<body>` from the built page and keep scripts as relative files. D0's spike says whether module scripts, GLB fetches and `createImageBitmap` work there.
 - **Fallback: GitHub Pages** from a workflow, only after I say yes (it's public).
@@ -351,14 +362,14 @@ Record per person: time to the first open, accidental opens, accidental scrolls,
 One branch and one pull request per phase (`build/drawer-d0-start`, `build/drawer-d1-foundation`, …). Every phase ends with a review by agents that didn't build it, against `CLAUDE.md`, `00-decisions.md`, Part 1 and the phase's exit list; fix what they find, then show the exit evidence. Render chunks run in the background while code phases proceed; nothing waits on a render that it doesn't need.
 
 **D0 · Start** (no pull request needed if nothing but PROGRESS.md changes)
-- Read this file, RUN.md Part 2, `CLAUDE.md`, `00-decisions.md`, `01`, `04`, `05`, `06`, `08`. Create `docs/build/PROGRESS.md` (RUN.md's layout plus a "Drawer wall" section: the phase table, the render queue, the review gates, the usability results).
+- Read this file, RUN.md Part 2, `CLAUDE.md`, `00-decisions.md`, `01`, `04`, `05`, `06`, `08`. Add a "Drawer wall" section to `docs/build/PROGRESS.md` (the phase table, the render queue, the review gates, the usability results; questions and decisions go in its existing logs). The full-site record above it stays as it is.
 - Check the environment: `bpy` 5.2.2, Node, npm, the Playwright browsers (`$PLAYWRIGHT_BROWSERS_PATH`), WebKit. Check what F01's and F02's tortoise needs: `frame_texture.py` reads their cleaned front shots from `work/out/`; find out whether `tools/photo/zipget.py` and `clean_lightbox.py` can rebuild them here, and if they can't, log it and take the pattern from the stage master in `dam/product/` registered the same way.
 - **Spikes, each logged with numbers:** S1 F09 as a GLB with the material conversion, shown in three.js headless next to a Cycles still from the same camera (a side-by-side image and the mean difference); S2 a three-file test Artifact (a page, a JS module, a GLB, a WebP) if the session has the Artifact tool; S3 one drawer-view frame at final settings, seconds per frame, and the queue estimate from it; S4 a CDP touch drag in Chromium.
 - **Exit:** the four spike results in PROGRESS.md.
 
-**D1 · Foundation**
-- RUN.md phase 0 in full, with its notes. Plus: the stack additions; the `surface-scene` role token (black) through `tools/palette.py`, with `text-primary` and `text-secondary` checked on it; the CI string check's additions; the minimal `Header` and `Footer`; `npm run assets` and `npm run check:assets` (stubs that pass on an empty manifest).
-- **Exit:** RUN.md phase 0's done criteria shown, and `check:assets` passing.
+**D1 · Additions to the foundation**
+- The stack additions; the `surface-scene` role token (black) through `tools/palette.py`, with `text-primary` and `text-secondary` checked on it; the string check's additions; `checks/assets.mjs` in `npm run checks` (passing on an empty manifest); `npm run assets`; the new Playwright projects (`drawer-pixel`, Chromium as a Pixel with touch; `drawer-iphone`, WebKit as an iPhone; `drawer-desktop`), WebKit installed if the VM allows it (log it if not).
+- **Exit:** `npm run ci` passing as it did on Oct 31, with nothing else changed.
 
 **D2 · Data and logic**
 - `content/drawers/frames-wall.json` and its schema (the eight frames in look-number order, every override `auto`); the metaobject mock; `resolve.ts`; `machine.ts`; `gestures.ts`; `tier.ts`; the manifest schema and loader; the `drawer` copy section.
@@ -374,15 +385,15 @@ One branch and one pull request per phase (`build/drawer-d0-start`, `build/drawe
 - **Exit:** eight sequences and eight GLBs within budget; `frame_glb.py --check` passing for all eight (shown); `lens-tints.json` complete with sources; `check:assets` passing.
 
 **D5 · Components**
-- Base first, in one context (`Stage`, `SequencePlayer`, `ShotSlot`, `PanZoomImage`), then the house components, fanned out: `DrawerWall`, `DrawerBay`, `BayLabel`, `DrawerStage`, `StageHint`, `BuyRow`, `LiftedFrame`, `PhotoZoom`. Both mechanics. Every state in Storybook at 390 and 1440, UI and wire.
+- Base first, in one context (`SequencePlayer`, `Sheet`'s `scene` variant, `ShotSlot`'s `model` variant, `Gallery`'s full-resolution zoom), then the house components, fanned out: `DrawerWall`, `DrawerBay`, `BayLabel`, `DrawerView`, `StageHint`, `BuyRow`, `LiftedFrame`. Both mechanics. Every state in Storybook at 390 and 1440, UI and wire.
 - **Exit:** the story list complete (one line per component and state in the PR); Vitest and the component tests green; axe clean on every story.
 
 **D6 · The page**
-- The two routes, the bag (local cart in the cart API's shape, `Bag (n)`, a side sheet with the lines and "Checkout opens at launch"), the tiers, the meta (`noindex` on review and preview builds), every end-to-end flow above.
-- **Exit:** Playwright green on all three projects; axe clean; Lighthouse and every budget shown on the review build; the three.js chunk shown absent from the initial bundle.
+- `FramesPage` renders the statement and the wall in place of the stage cards; the route loads the wall and honours `?open=`; Add to bag goes through the existing cart and `BagDrawer`; the tiers; the meta (`noindex` on review builds and the phone build); every end-to-end flow above.
+- **Exit:** `npm run ci` green (the drawer projects included); visual baselines changed only for `/frames` and the new or changed stories, listed in the PR, every other page's baselines untouched; axe clean; `npm run lighthouse` passing, with LCP, CLS and TBT on `/frames` recorded against the budgets; the three.js chunk shown absent from the initial bundle.
 
 **D7 · On a phone**
-- The preview build and its publication; `usability.md`; a real-device checklist for me (an iPhone and an Android: open, pull, lift, turn, pinch, photographs, rotate the phone, low-power mode, a weak connection).
+- The phone build (`npm run phone:build`) and its publication; `usability.md`; a real-device checklist for me (an iPhone and an Android: open, pull, lift, turn, pinch, photographs, rotate the phone, low-power mode, a weak connection).
 - **R2, my second look:** the preview link at the top of PROGRESS.md and in the PR, with what to try. **Run 1 ends here.** Write "Now and next" so run 2 can start cold.
 - **Exit:** the link works from a clean browser at 390 px (screenshots from it shown); PROGRESS.md complete for D0–D7; every D-phase PR merged.
 
@@ -406,7 +417,7 @@ RUN.md's rules hold: don't stop between phases, my questions go to PROGRESS.md a
 
 ## Orchestration
 
-- **One context, no fan-out:** D1's foundation, `resolve.ts` and `machine.ts`, the base components of D5, the Blender lookdev (one eye on the look), the lift handoff.
+- **One context, no fan-out:** D1's additions, `resolve.ts` and `machine.ts`, the base components of D5, the Blender lookdev (one eye on the look), the lift handoff.
 - **Fan out:** D2's schema and mock against D3's tool writing; D5's house components after the base; D6's end-to-end suites by flow; each phase's reviews.
 - **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#45 and O15–O18, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, tokens, `en.json`, the manifest or another agent's files.
 
@@ -438,7 +449,7 @@ RUN.md's "Never" holds (no Shopify calls, no image or video generation, no paid 
 
 ## Finishing
 
-**Run 1 (after D7):** typecheck, lint, Vitest, Playwright (three projects), axe, Lighthouse and `check:assets`, each shown; `git status` clean and pushed; a short report for me: what's built, the preview link, what to try on the phone, the questions for me.
+**Run 1 (after D7):** `npm run ci` and `npm run lighthouse`, each shown; `git status` clean and pushed; a short report for me: what's built, the preview link, what to try on the phone, the questions for me.
 
 **Run 2 (after D9):** the same checks plus the asset checks for every frame; RUN.md's "Where things stand" updated; a short report: what changed since R2, the decisions recorded, what's left before launch (O15–O18 if still open, copy sign-off, the store connection, fonts).
 

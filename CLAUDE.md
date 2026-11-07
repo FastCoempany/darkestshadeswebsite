@@ -6,7 +6,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 1. `docs/brief/00-decisions.md`: what's settled and what's open. It wins any conflict.
 2. `docs/brief/01-brand-system.md` → `09-build-plan.md`.
 3. `content/products/*.json`, `content/drops/*.json`, `content/copy/en.json`, `design/tokens/`.
-4. During a build run: its run file (`docs/build/DRAWER-WALL.md` for the drawer wall, which runs first; `docs/build/RUN.md` for the full site) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
+4. During a build run: its run file (`docs/build/DRAWER-WALL.md` for the drawer wall; `docs/build/RUN.md` for the full site, done Oct 31) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
 
 ## Non-negotiables
 

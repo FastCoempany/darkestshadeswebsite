@@ -1,6 +1,6 @@
 # Build run: darkestshades.com, phases 0 to 6
 
-> **Status, Nov 6 2026.** The drawer-wall run (`docs/build/DRAWER-WALL.md`) goes first, and it runs phase 0 below as its foundation. Phases 1 to 6 wait: Part 1 describes the look before Nov 5, and the look has changed (`00-decisions.md` #43, #44). Rewrite Part 1 before running them. Part 2's rules for running unattended, orchestration, git, PROGRESS.md, verification and phase 0 apply to the drawer-wall run as written.
+> **Status, Nov 6 2026.** This run is done: phases 0 to 6 were built and merged on Oct 30–31 (PRs #1–#9; `docs/build/PROGRESS.md`). Since then the look has changed (`00-decisions.md` #43), and the frames page becomes a drawer wall (#44) in its own run, `docs/build/DRAWER-WALL.md`. The other pages keep the look described in Part 1 below until each is redesigned. Part 2's rules for running unattended, orchestration, git, PROGRESS.md and verification apply to the drawer-wall run as written.
 
 I'm Antaeus, the founder; where the docs say "the founder", that's me. In this session you build the Darkest Shades site end to end: every phase of `docs/brief/09-build-plan.md`, 0 through 6, without stopping for me.
 
