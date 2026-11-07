@@ -4,6 +4,7 @@
     python3 tools/blender/frame_texture.py F02            # the angle set's A1 shot (work/out/<shot>/)
     python3 tools/blender/frame_texture.py F01 --temples  # and a band for acetate temples in the same material
     python3 tools/blender/frame_texture.py F06 --openings # only the lens openings as the front shot shows them
+    python3 tools/blender/frame_texture.py F02 --from-dam # the same, read from the DAM's masters (dam/product/) where work/out/ is absent
 
 A tortoise acetate is a pattern, not a colour: the 3D front takes it from the real frame. The cleaned
 front shot (tools/photo/clean_lightbox.py: the frame cut out, its lenses in their own layer, the GCD
@@ -200,6 +201,11 @@ def main():
                     help="the band's length along the temple and its height round the temple's section, mm")
     ap.add_argument("--openings", action="store_true",
                     help="only the lens openings as the front shot shows them (work/frames3d/<frame>/openings.png)")
+    ap.add_argument("--from-dam", action="store_true",
+                    help="read the cleaned front shot from the DAM (dam/product/DS-<frame>-A1-v01-master.png, the cut-out with "
+                         "the lens filter in its alpha, and -stage.png) instead of work/out/<shot>/; the lens openings then come "
+                         "from the drawing, registered the same way; --shot is not used, the DAM holds the A1 masters by "
+                         "frame (a VM without work/out/: DRAWER-WALL.md, D0)")
     a = ap.parse_args()
     import frame3d
     shot = a.shot
@@ -209,12 +215,21 @@ def main():
     if a.openings:
         photo_openings(a.frame, shot)
         return
-    po = ROOT / "work" / "out" / shot
-    cut = np.asarray(Image.open(po / "cutout.png")).astype(np.float32)
-    rgb, alpha = cut[..., :3], cut[..., 3] / 255
-    T = np.asarray(Image.open(po / "layers" / "lens.png")).astype(np.float32) / 255
-    lens = T.mean(-1) < 0.9
-    stage = np.asarray(Image.open(po / "stage-full.png")).astype(np.float32)
+    if a.from_dam:
+        # the DAM's masters are work/out/'s cutout.png and stage-full.png, losslessly recompressed (07-photography.md,
+        # step 11); the lens layer is not in the DAM, so the lens is the drawing's openings once registered (below)
+        dam = ROOT / "dam" / "product"
+        cut = np.asarray(Image.open(dam / f"DS-{a.frame}-A1-v01-master.png").convert("RGBA")).astype(np.float32)
+        rgb, alpha = cut[..., :3], cut[..., 3] / 255
+        lens = None
+        stage = np.asarray(Image.open(dam / f"DS-{a.frame}-A1-v01-stage.png").convert("RGB")).astype(np.float32)
+    else:
+        po = ROOT / "work" / "out" / shot
+        cut = np.asarray(Image.open(po / "cutout.png")).astype(np.float32)
+        rgb, alpha = cut[..., :3], cut[..., 3] / 255
+        T = np.asarray(Image.open(po / "layers" / "lens.png")).astype(np.float32) / 255
+        lens = T.mean(-1) < 0.9
+        stage = np.asarray(Image.open(po / "stage-full.png")).astype(np.float32)
     bg = float(s2l(np.median(stage[(alpha < 0.01)][:, :3], axis=0) / 255).mean())   # the tent's white, linear
     from scipy import ndimage as ndi
     sil_photo = ndi.binary_fill_holes(alpha > 0.5)
@@ -241,6 +256,10 @@ def main():
     warped = cv2.warpAffine(sil_draw.astype(np.uint8), A.astype(np.float32), (sil_photo.shape[1], sil_photo.shape[0]),
                             flags=cv2.INTER_NEAREST)
     iou = float((warped.astype(bool) & sil_photo).sum() / (warped.astype(bool) | sil_photo).sum())
+    if lens is None:
+        # --from-dam: the lens openings as the drawing draws them, in the photo's pixels
+        lens = cv2.warpAffine(openings.astype(np.uint8), A.astype(np.float32), (sil_photo.shape[1], sil_photo.shape[0]),
+                              flags=cv2.INTER_NEAREST).astype(bool)
 
     # the texture: the frame's box in the photo, at `ppm` px per mm
     scale = a.ppm / float(np.sqrt(abs(np.linalg.det(Mp[:, :2]))))
@@ -317,6 +336,8 @@ def main():
         Image.fromarray((np.clip(bp, 0, 1) * 255).astype(np.uint8)).save(out / "temple-preview.jpg", quality=92)
         info["temple"] = {"file": "temple.png", "mm": [L_mm, V_mm], "ppm": a.ppm, "blue_coverage": round(coverage, 3),
                           "blue": [round(float(v), 4) for v in blue], "black": [round(float(v), 4) for v in black]}
+    if a.from_dam:
+        info["source"] = "dam/product"      # the default output stays as it was: no key without the flag
     (out / "map.json").write_text(json.dumps(info, indent=1))
     print(json.dumps(info))
 

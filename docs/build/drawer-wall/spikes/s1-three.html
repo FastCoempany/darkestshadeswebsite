@@ -1,0 +1,44 @@
+<!doctype html><meta charset="utf-8"><title>S1 three.js</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+<canvas id="c" width="1024" height="1024"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+const q = new URLSearchParams(location.search);
+const dir = q.get('dir') || '/s1/out';
+const variant = q.get('variant') || 'match';
+const size = +(q.get('size') || 1024);
+const canvas = document.getElementById('c'); canvas.width = canvas.height = size;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, alpha: false });
+renderer.setPixelRatio(1); renderer.setSize(size, size, false);
+renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x000000);
+const cam = await (await fetch(dir + '/camera.json')).json();
+const camera = new THREE.PerspectiveCamera(cam.three.fov_deg, 1, 0.01, 20);
+camera.position.fromArray(cam.three.position); camera.up.set(0, 1, 0); camera.lookAt(new THREE.Vector3().fromArray(cam.three.target));
+const hdr = await new HDRLoader().loadAsync(dir + '/' + (q.get('hdr') || 'env.hdr'));
+hdr.mapping = THREE.EquirectangularReflectionMapping;
+const pmrem = new THREE.PMREMGenerator(renderer); pmrem.compileEquirectangularShader();
+scene.environment = pmrem.fromEquirectangular(hdr).texture;
+// Blender's equirect: +Y (Blender) at u=0.25? Align by rotation: Blender's panoramic camera (rotation 90deg about X)
+// looks down -Y... three's equirect expects the image centre at -Z. Blender's env map centre (u=0.5) is +Y... we keep
+// the scene's own rotation and test alignment with the key light's highlight position instead.
+scene.environmentRotation = new THREE.Euler(0, +(q.get('rot') || 0) * Math.PI / 180, 0);
+const t0 = performance.now();
+const gltf = await new GLTFLoader().loadAsync(dir + '/F09.glb');
+const tLoad = performance.now() - t0;
+let tris = 0, mats = new Set();
+gltf.scene.traverse(o => { if (o.isMesh) { tris += o.geometry.index ? o.geometry.index.count / 3 : o.geometry.attributes.position.count / 3; mats.add(o.material.name);
+  if (variant === 'coat' && o.material.name.startsWith('acetate')) { o.material.clearcoat = 1; o.material.clearcoatRoughness = 0.03; o.material.roughness = 0.08; }
+  if (o.material.name === 'lens') { o.material.transparent = true; o.material.depthWrite = false; }
+}});
+scene.add(gltf.scene);
+const box = new THREE.Box3().setFromObject(gltf.scene);
+renderer.render(scene, camera);
+const info = { bounds: { min: box.min.toArray().map(v => +v.toFixed(4)), max: box.max.toArray().map(v => +v.toFixed(4)) }, tLoadMs: Math.round(tLoad), tris, materials: [...mats], gl: renderer.getContext().getParameter(renderer.getContext().VERSION),
+  renderer: (renderer.getContext().getExtension('WEBGL_debug_renderer_info') ? renderer.getContext().getParameter(renderer.getContext().getExtension('WEBGL_debug_renderer_info').UNMASKED_RENDERER_WEBGL) : '?') };
+window.__done = { info, png: canvas.toDataURL('image/png') };
+</script>

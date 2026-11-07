@@ -1,0 +1,63 @@
+# S1 Blender log, as built (mesh_step as frame3d has it):
+[   53.0s] triangles as built: 5422948 (frame ratio 0.00938, gcd ratio 0.110)
+ERROR Draco is not available because library could not be found at /usr/local/lib/python3.13/site-packages/bpy/lib/libbf_intern_draco_bridge.so
+ERROR MeshOptimizer is not available because library could not be found at /usr/local/lib/python3.13/site-packages/bpy/lib/libbf_intern_meshopt_bridge.so
+18:18:53 | INFO: Starting glTF 2.0 export
+18:18:53 | INFO: Extracting primitive: F09 end 1
+18:18:53 | INFO: Primitives created: 1
+18:18:53 | INFO: Extracting primitive: F09 end -1
+18:18:53 | INFO: Primitives created: 1
+18:19:38 | INFO: Extracting primitive: F09 front
+18:19:38 | INFO: Primitives created: 1
+18:19:39 | INFO: Extracting primitive: F09 gcd gold
+18:19:39 | INFO: Primitives created: 1
+18:19:39 | INFO: Extracting primitive: F09 gcd onyx
+18:19:39 | INFO: Primitives created: 1
+18:19:40 | INFO: Extracting primitive: F09 lens 0
+18:19:40 | INFO: Primitives created: 1
+18:19:42 | INFO: Extracting primitive: F09 lens 1
+18:19:42 | INFO: Primitives created: 1
+18:19:42 | INFO: Extracting primitive: Sphere.001
+18:19:42 | INFO: Primitives created: 1
+18:19:42 | INFO: Extracting primitive: Sphere
+18:19:42 | INFO: Primitives created: 1
+18:19:42 | INFO: Extracting primitive: F09 temple 0
+18:19:42 | INFO: Primitives created: 1
+18:19:42 | INFO: Extracting primitive: F09 temple 1
+18:19:42 | INFO: Primitives created: 1
+18:19:42 | INFO: Finished glTF 2.0 export in 48.95720958709717 s
+[  145.6s] glb exported in 49.0s: 1.20 MB
+[  145.6s] done: 59990 triangles exported
+EXIT=0 WALL=147s
+
+# S1 Blender log, --mesh-step 4:
+[   26.5s] triangles as built: 968332 (frame ratio 0.05699, gcd ratio 0.110)
+ERROR Draco is not available because library could not be found at /usr/local/lib/python3.13/site-packages/bpy/lib/libbf_intern_draco_bridge.so
+ERROR MeshOptimizer is not available because library could not be found at /usr/local/lib/python3.13/site-packages/bpy/lib/libbf_intern_meshopt_bridge.so
+18:24:06 | INFO: Starting glTF 2.0 export
+18:24:06 | INFO: Extracting primitive: F09 end 1
+18:24:06 | INFO: Primitives created: 1
+18:24:06 | INFO: Extracting primitive: F09 end -1
+18:24:06 | INFO: Primitives created: 1
+18:24:08 | INFO: Extracting primitive: F09 front
+18:24:08 | INFO: Primitives created: 1
+18:24:08 | INFO: Extracting primitive: F09 gcd gold
+18:24:08 | INFO: Primitives created: 1
+18:24:08 | INFO: Extracting primitive: F09 gcd onyx
+18:24:08 | INFO: Primitives created: 1
+18:24:09 | INFO: Extracting primitive: F09 lens 0
+18:24:09 | INFO: Primitives created: 1
+18:24:11 | INFO: Extracting primitive: F09 lens 1
+18:24:11 | INFO: Primitives created: 1
+18:24:11 | INFO: Extracting primitive: Sphere.001
+18:24:11 | INFO: Primitives created: 1
+18:24:11 | INFO: Extracting primitive: Sphere
+18:24:11 | INFO: Primitives created: 1
+18:24:11 | INFO: Extracting primitive: F09 temple 0
+18:24:11 | INFO: Primitives created: 1
+18:24:11 | INFO: Extracting primitive: F09 temple 1
+18:24:11 | INFO: Primitives created: 1
+18:24:11 | INFO: Finished glTF 2.0 export in 4.9422447681427 s
+[   33.3s] glb exported in 5.0s: 1.26 MB
+[   33.3s] done: 59990 triangles exported
+EXIT=0 WALL=34s
