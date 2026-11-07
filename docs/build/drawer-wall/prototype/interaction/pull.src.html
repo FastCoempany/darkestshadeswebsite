@@ -1,0 +1,101 @@
+<title>Pull Toward You</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500&display=swap">
+<style>
+/* one dark room: the frame waits in the back, the viewer pulls it into the light */
+:root{
+  --room:#000000; --text:#E8E4DC; --quiet:#8E8C87; --line:rgba(232,228,220,.28); --focus:#E8E4DC;
+  --sans:'Urbanist','Stolzl',ui-sans-serif,system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--room);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.room{position:fixed;inset:0;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
+.room:active{cursor:grabbing}
+.room:focus-visible{box-shadow:inset 0 0 0 1px var(--focus)}
+.stage{position:absolute;left:50%;top:50%;width:min(92vw,92vh,760px);aspect-ratio:1;max-width:100%;
+  transform:translate(-50%,-50%);will-change:transform}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
+#lit{opacity:0}
+.light{position:absolute;inset:-20%;pointer-events:none;opacity:0;
+  background:radial-gradient(closest-side at 50% 52%,rgba(232,228,220,.10),rgba(232,228,220,0) 70%)}
+.top,.bottom{position:fixed;left:0;right:0;display:flex;justify-content:space-between;align-items:center;pointer-events:none;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.top{top:0;padding-top:calc(22px + env(safe-area-inset-top,0px))}
+.bottom{bottom:0;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px));flex-direction:column;gap:14px}
+.cap{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.name{font-size:22px;font-weight:300;margin:0;text-align:center;opacity:0;transform:translateY(8px)}
+.hint{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--quiet)}
+.hint i{display:block;width:1px;height:34px;background:linear-gradient(var(--line),transparent);animation:drip 2.4s ease-in-out infinite}
+@keyframes drip{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+@media (prefers-reduced-motion:reduce){.hint i{animation:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+
+<div class="room" id="room" tabindex="0" role="slider" aria-label="Bring What Stevie Saw toward you" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="stage" id="stage">
+    <div class="light" id="light"></div>
+    <img id="dark" alt="" src="__DARK__">
+    <img id="lit" alt="What Stevie Saw, three-quarter view, the GCD on the temple" src="__LIT__">
+  </div>
+</div>
+
+<div class="top"><span class="cap">What Stevie Saw</span><span class="cap">$100</span></div>
+<div class="bottom">
+  <p class="name" id="name">What Stevie Saw</p>
+  <div class="hint" id="hint"><span class="cap">Pull it toward you</span><i></i></div>
+</div>
+
+<script>
+(()=>{
+  const room=document.getElementById('room'),stage=document.getElementById('stage'),
+        lit=document.getElementById('lit'),dark=document.getElementById('dark'),
+        light=document.getElementById('light'),hint=document.getElementById('hint'),name=document.getElementById('name');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let p=0,target=0,drag=null,raf=0;
+  const ease=t=>t*t*(3-2*t);
+  function draw(){
+    const e=ease(p);
+    const s=.34+.74*e;                 // far and small, then close
+    const y=-14*(1-e);                 // starts up the room, toward the back wall
+    const tilt=8*(1-e);                // tipped away, then square to you
+    stage.style.transform=`translate(-50%,calc(-50% + ${y}vh)) perspective(900px) rotateX(${tilt}deg) scale(${s})`;
+    stage.style.filter=`blur(${(2.4*(1-e)).toFixed(2)}px)`;
+    dark.style.opacity=(.55+.45*Math.min(1,p*3)).toFixed(3);
+    lit.style.opacity=Math.pow(e,1.5).toFixed(3);
+    light.style.opacity=e.toFixed(3);
+    hint.style.opacity=Math.max(0,1-p*4).toFixed(3);
+    const n=Math.max(0,(p-.75)/.25);
+    name.style.opacity=n.toFixed(3);name.style.transform=`translateY(${8*(1-n)}px)`;
+    room.setAttribute('aria-valuenow',Math.round(p*100));
+  }
+  function loop(){
+    const k=drag?1:(reduce?1:.09);
+    p+= (target-p)*k;
+    if(Math.abs(target-p)<.0005)p=target;
+    draw();
+    raf=(p!==target)?requestAnimationFrame(loop):0;
+  }
+  const go=()=>{if(!raf)raf=requestAnimationFrame(loop)};
+  const reach=()=>Math.max(220,innerHeight*.5);
+  room.addEventListener('pointerdown',ev=>{drag={y:ev.clientY,from:target};room.setPointerCapture(ev.pointerId)});
+  room.addEventListener('pointermove',ev=>{
+    if(!drag)return;
+    target=Math.min(1,Math.max(0,drag.from+(ev.clientY-drag.y)/reach()));go();
+  });
+  const release=()=>{if(!drag)return;drag=null;target=target>.55?1:0;go()};
+  room.addEventListener('pointerup',release);room.addEventListener('pointercancel',release);
+  room.addEventListener('wheel',ev=>{ev.preventDefault();target=Math.min(1,Math.max(0,target-ev.deltaY/900));go();
+    clearTimeout(room._t);room._t=setTimeout(()=>{target=target>.55?1:(target<.2?0:target);go()},500)},{passive:false});
+  room.addEventListener('keydown',ev=>{
+    const k=ev.key;
+    if(k==='ArrowDown'||k==='ArrowRight')target=Math.min(1,target+.1);
+    else if(k==='ArrowUp'||k==='ArrowLeft')target=Math.max(0,target-.1);
+    else if(k==='Enter'||k===' ')target=target>.5?0:1;
+    else if(k==='Home')target=0;else if(k==='End')target=1;else return;
+    ev.preventDefault();go();
+  });
+  draw();
+})();
+</script>

@@ -6,7 +6,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 1. `docs/brief/00-decisions.md`: what's settled and what's open. It wins any conflict.
 2. `docs/brief/01-brand-system.md` → `09-build-plan.md`.
 3. `content/products/*.json`, `content/drops/*.json`, `content/copy/en.json`, `design/tokens/`.
-4. During the site build: `docs/build/RUN.md` (how the end-to-end run works) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
+4. During a build run: its run file (`docs/build/DRAWER-WALL.md` for the drawer wall, which runs first; `docs/build/RUN.md` for the full site) and `docs/build/PROGRESS.md` (where it stands). Re-read both after every compaction.
 
 ## Non-negotiables
 
@@ -15,7 +15,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 - Marks: Anastasiia's logo and angular brand mark are primary; the **GCD** (gold band, black onyx inset) is the secondary insignia. **Nav and favicon use the brand mark, never the GCD.** Marks come only from `brand/marks/` and `brand/emblems/gcd/`. The Eclipse Silhouette and the old engraved wordmark never appear.
 - **The GCD on the product executes one way only**: full size, its own proportion and its one placement (`01-brand-system.md`; per frame in `content/products/`), on every frame in every photo, composite and render, whatever the view. Never scaled, moved or left off to suit a picture.
 - Fonts: **Owners Wide** (Medium) and **Stolzl** (Light, Book, Regular, Medium) only. **Never commit font files** (public repo); load them as `brand/fonts/README.md` says. Until they're licensed, the open-licensed stand-ins in that README (Mona Sans, Urbanist) render them; no other fonts.
-- Color: **role tokens only** in `app/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`, `--color-border-*`, `--color-focus-ring`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product images always sit on the stage color.
+- Color: **role tokens only** in `app/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`, `--color-border-*`, `--color-focus-ring`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product photographs always sit on the stage color; the drawer wall's scenes are dark (`00-decisions.md` #43, #44).
 
 **Honesty**
 - The price ($100) is always visible.
@@ -29,7 +29,7 @@ You are building the **Darkest Shades** website: a custom Shopify storefront (Hy
 - All copy from `content/copy/en.json`. No lorem ipsum anywhere. `@darkestshades`, `darkestshades.com`, `#DarkestShades`.
 
 **Imagery**
-- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. People only from the seven-person generated cast, wearing the real frames (composited, never generated). Until finals land, every image is a labelled `ShotSlot`. Reference videos and Prada/runway material never ship.
+- Product photos only from the cleaned lightbox set, with the GCD and without the old marks. The drawer wall shows renders of the 3D frames rebuilt from the 1:1 drawings, matched to those photos (`00-decisions.md` #44). People only from the seven-person generated cast, wearing the real frames (composited, never generated). Until finals land, every image is a labelled `ShotSlot`. Reference videos, the reference film (#43) and Prada/runway material never ship.
 
 **Build**
 - Mobile first: 390, then 768, 1024, 1440. WCAG 2.2 AA.

@@ -1,0 +1,143 @@
+<title>The Drawer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500&display=swap">
+<style>
+/* a dark room, one drawer: pull it, lift what's inside into the light, turn it in your hand */
+:root{
+  --room:#000000; --text:#E8E4DC; --quiet:#8E8C87; --line:rgba(232,228,220,.32); --focus:#E8E4DC;
+  --sans:'Urbanist','Stolzl',ui-sans-serif,system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--room);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.scene{position:fixed;inset:0;touch-action:none;user-select:none;-webkit-user-select:none;outline:none;cursor:grab}
+.scene:active{cursor:grabbing}
+.scene:focus-visible{box-shadow:inset 0 0 0 1px var(--focus)}
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.drawer{width:min(100vw,80vh*.8);aspect-ratio:4/5;max-width:100%;position:relative;transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .9s,opacity .9s}
+.drawer img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;-webkit-user-drag:none}
+.drawer{-webkit-mask-image:radial-gradient(70% 62% at 50% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(70% 62% at 50% 50%,#000 55%,transparent 100%)}
+.lift{width:min(96vw,82vh,760px);aspect-ratio:1;max-width:100%;position:relative;opacity:0;
+  transform:translateY(14vh) scale(.42);transition:transform 1.1s cubic-bezier(.2,.7,.2,1),opacity .7s}
+.lift{-webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent);mask-image:radial-gradient(closest-side,#000 70%,transparent)}
+.lift .turn{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.lift img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;-webkit-user-drag:none}
+#lit{opacity:0;transition:opacity 1.2s .25s}
+.sheen{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;
+  background:radial-gradient(40% 30% at var(--sx,50%) 46%,rgba(232,228,220,.10),transparent 70%)}
+.s-lifted .drawer{transform:scale(.92) translateY(6vh);filter:blur(6px) brightness(.35)}
+.s-lifted .lift{opacity:1;transform:none}
+.s-lifted #lit{opacity:1}
+.s-lifted .sheen{opacity:1}
+.top,.bottom{position:fixed;left:0;right:0;display:flex;justify-content:space-between;align-items:center;pointer-events:none;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.top{top:0;padding-top:calc(22px + env(safe-area-inset-top,0px))}
+.bottom{bottom:0;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px));flex-direction:column;gap:14px;min-height:96px;justify-content:flex-end}
+.cap{font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.hint{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--quiet);transition:opacity .5s}
+.hint i{display:block;width:1px;height:34px;background:linear-gradient(var(--line),transparent);animation:drip 2.4s ease-in-out infinite}
+@keyframes drip{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+.name{font-size:22px;font-weight:300;margin:0;text-align:center;opacity:0;transform:translateY(8px);transition:opacity .8s .6s,transform .8s .6s}
+.s-lifted .name{opacity:1;transform:none}
+.back{pointer-events:auto;background:none;border:0;border-bottom:1px solid var(--line);color:var(--text);font-family:inherit;padding:0 0 3px;cursor:pointer;opacity:0;transition:opacity .6s .9s}
+.back:focus-visible{outline:1px solid var(--focus);outline-offset:6px}
+.s-lifted .back{opacity:1}
+.s-lifted .hint{opacity:0}
+.tap{position:absolute;left:50%;top:50%;width:46%;height:22%;transform:translate(-50%,-18%);border:0;background:transparent;cursor:pointer;
+  pointer-events:none;border-radius:4px}
+.tap:focus-visible{outline:1px solid var(--focus)}
+.s-open .tap{pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.hint i{animation:none}.drawer,.lift,#lit,.name,.back{transition-duration:.01s;transition-delay:0s}}
+</style>
+
+<div class="scene" id="scene" tabindex="0" role="slider" aria-label="Pull the drawer open" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="layer"><div class="drawer" id="drawer">__FRAMES__<button class="tap" id="tap" aria-label="Lift What Stevie Saw out of the drawer"></button></div></div>
+  <div class="layer"><div class="lift" id="lift"><div class="turn" id="turn">
+    <img id="dark" alt="" src="__DARK__">
+    <img id="lit" alt="What Stevie Saw, three-quarter view, the GCD on the temple" src="__LIT__">
+    <div class="sheen" id="sheen"></div>
+  </div></div></div>
+</div>
+
+<div class="top"><span class="cap">What Stevie Saw</span><span class="cap">$100</span></div>
+<div class="bottom">
+  <p class="name">What Stevie Saw</p>
+  <button class="back cap" id="back" type="button">Put them back</button>
+  <div class="hint" id="hint"><span class="cap" id="hintText">Pull the drawer</span><i></i></div>
+</div>
+
+<script>
+(()=>{
+  const scene=document.getElementById('scene'),drawer=document.getElementById('drawer'),
+        frames=[...drawer.querySelectorAll('img')],tap=document.getElementById('tap'),
+        turn=document.getElementById('turn'),sheen=document.getElementById('sheen'),
+        hintText=document.getElementById('hintText'),back=document.getElementById('back');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let p=0,target=0,drag=null,raf=0,state='shut',rot={x:0,y:0},rotT={x:0,y:0};
+  const N=frames.length-1;
+  function show(){
+    const f=p*N,i=Math.floor(f),t=f-i;
+    frames.forEach((im,k)=>{im.style.opacity=k===i?1:(k===i+1?t:0)});
+    if(i+1<=N)frames[i].style.opacity=1;
+    scene.setAttribute('aria-valuenow',Math.round(p*100));
+  }
+  function setState(s){
+    state=s;document.body.classList.toggle('s-open',s==='open');document.body.classList.toggle('s-lifted',s==='lifted');
+    hintText.textContent=s==='open'?'Tap them to lift them out':'Pull the drawer';
+    scene.setAttribute('aria-label',s==='lifted'?'Turn What Stevie Saw':'Pull the drawer open');
+  }
+  function loop(){
+    let moving=false;
+    if(state!=='lifted'){
+      p+=(target-p)*(drag||reduce?1:.12); if(Math.abs(target-p)<.0008)p=target; else moving=true; show();
+    }else{
+      rot.x+=(rotT.x-rot.x)*.12; rot.y+=(rotT.y-rot.y)*.12;
+      if(Math.abs(rotT.x-rot.x)+Math.abs(rotT.y-rot.y)>.02)moving=true;
+      turn.style.transform=`perspective(1100px) rotateX(${rot.x}deg) rotateY(${rot.y}deg)`;
+      sheen.style.setProperty('--sx',(50-rot.y*2.2)+'%');
+    }
+    raf=moving?requestAnimationFrame(loop):0;
+  }
+  const go=()=>{if(!raf)raf=requestAnimationFrame(loop)};
+  const reach=()=>Math.max(220,innerHeight*.45);
+  function settle(){target=target>.5?1:0;go();setTimeout(()=>{if(state!=='lifted')setState(target===1?'open':'shut')},reduce?0:350)}
+
+  scene.addEventListener('pointerdown',ev=>{
+    if(ev.target===tap||ev.target===back)return;
+    drag={x:ev.clientX,y:ev.clientY,from:target,rx:rotT.x,ry:rotT.y};scene.setPointerCapture(ev.pointerId);
+  });
+  scene.addEventListener('pointermove',ev=>{
+    if(!drag)return;
+    if(state==='lifted'){
+      rotT.y=Math.max(-22,Math.min(22,drag.ry+(ev.clientX-drag.x)/8));
+      rotT.x=Math.max(-12,Math.min(12,drag.rx-(ev.clientY-drag.y)/12));go();return;
+    }
+    target=Math.min(1,Math.max(0,drag.from+(ev.clientY-drag.y)/reach()));
+    if(state==='open'&&target<.98)setState('shut');go();
+  });
+  const release=()=>{if(!drag)return;drag=null;if(state==='lifted'){rotT={x:0,y:0};go()}else settle()};
+  scene.addEventListener('pointerup',release);scene.addEventListener('pointercancel',release);
+  scene.addEventListener('wheel',ev=>{
+    if(state==='lifted')return; ev.preventDefault();
+    target=Math.min(1,Math.max(0,target-ev.deltaY/800));if(state==='open'&&target<.98)setState('shut');go();
+    clearTimeout(scene._t);scene._t=setTimeout(settle,450);
+  },{passive:false});
+  scene.addEventListener('keydown',ev=>{
+    const k=ev.key;
+    if(state==='lifted'){
+      if(k==='ArrowLeft')rotT.y=Math.max(-22,rotT.y-6);else if(k==='ArrowRight')rotT.y=Math.min(22,rotT.y+6);
+      else if(k==='Escape'){putBack();return}else return; ev.preventDefault();go();return;
+    }
+    if(k==='ArrowDown'){target=Math.min(1,target+.1)}else if(k==='ArrowUp'){target=Math.max(0,target-.1)}
+    else if((k==='Enter'||k===' ')&&state==='open'){lift();ev.preventDefault();return}
+    else if(k==='Enter'||k===' '){target=1}else return;
+    ev.preventDefault();go();clearTimeout(scene._t);scene._t=setTimeout(settle,300);
+  });
+  function lift(){setState('lifted');rot={x:0,y:0};rotT={x:0,y:0};go();back.focus({preventScroll:true})}
+  function putBack(){setState('open');scene.focus({preventScroll:true})}
+  tap.addEventListener('click',lift);
+  back.addEventListener('click',putBack);
+  show();
+})();
+</script>
