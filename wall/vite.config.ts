@@ -62,7 +62,7 @@ function fontsKit(): Plugin {
 
 /** `virtual:wall-frames` and `virtual:wall-copy`: the eight frames' facts from content/products/ and the copy deck's
  * wall section from content/copy/en.json, extracted at build time so the wall ships only what it shows. */
-function wallData(): Plugin {
+export function wallData(): Plugin {
   const PRODUCTS = resolve(__dirname, '../content/products');
   const DECK = resolve(__dirname, '../content/copy/en.json');
   const ids: Record<string, string> = { 'virtual:wall-frames': '\0wall-frames', 'virtual:wall-copy': '\0wall-copy' };
@@ -118,9 +118,51 @@ function wallAssets(): Plugin {
   };
 }
 
+/** Tier 0 (no JavaScript): the <noscript> in index.html gets the wall plate and a plain list of the eight drawers
+ * (look number, name, $100), each linking to its A1 photograph in the zoom set; built from the records, the frames'
+ * facts, the copy deck and the manifest at build time, so nothing is hard-coded in the page. */
+function wallNoscript(): Plugin {
+  return {
+    name: 'wall-noscript',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html, ctx) {
+        if (!ctx.filename.endsWith('index.html')) return html;
+        const products = readdirSync(resolve(__dirname, '../content/products')).filter((f) => /^f0[1-9]\.json$/.test(f)).map((f) => JSON.parse(readFileSync(resolve(__dirname, '../content/products', f), 'utf8')));
+        const frames = framesFrom(products) as Record<string, { lookNumber: string | null; name: string | null; price: { amount: string; currencyCode: string } | null } | undefined>;
+        const copy = copyFrom(JSON.parse(readFileSync(resolve(__dirname, '../content/copy/en.json'), 'utf8')));
+        const records = JSON.parse(readFileSync(resolve(__dirname, 'data/wall.json'), 'utf8')) as { records: Array<{ id: string; type: string; fields: Array<{ key: string; value: string | null }> }> };
+        const wall = records.records.find((r) => r.type === 'bay_wall');
+        const order: string[] = JSON.parse(wall?.fields.find((f) => f.key === 'bays')?.value ?? '[]');
+        const bays = new Map(records.records.filter((r) => r.type === 'drawer_bay').map((r) => [r.id, r]));
+        const manifestPath = resolve(__dirname, 'assets/manifest.json');
+        const manifest = existsSync(manifestPath) ? (JSON.parse(readFileSync(manifestPath, 'utf8')) as { assets: Array<{ id: string; kind: string; files: string[]; width?: number; height?: number }> }) : { assets: [] };
+        const plate = manifest.assets.find((a) => a.id === 'wall/portrait/black-relief/plate-lit');
+        const esc = (x: string) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+        const price = (pr: { amount: string; currencyCode: string } | null) => (pr && pr.currencyCode === 'USD' ? `$${Number(pr.amount).toFixed(Number.isInteger(Number(pr.amount)) ? 0 : 2)}` : '');
+        const items = order.map((id) => {
+          const b = bays.get(id);
+          const fid = b?.fields.find((f) => f.key === 'frame')?.value ?? '';
+          const state = b?.fields.find((f) => f.key === 'state')?.value ?? '';
+          const f = frames[fid];
+          if (!f || !['available', 'sold_out', 'locked'].includes(state)) return '';
+          const title = state === 'locked' ? esc(String(copy.wall.notYet ?? '')) : esc(f.name ?? '');
+          const sold = state === 'sold_out' ? ` <span>${esc(String(copy.wall.soldOut ?? ''))}</span>` : '';
+          const body = `<span>${esc(f.lookNumber ?? '')}</span> <span>${title}</span> <span>${esc(price(f.price))}</span>${sold}`;
+          return state === 'locked' ? `<li>${body}</li>` : `<li><a href="./zoom/${fid.toLowerCase()}-a1.webp">${body}</a></li>`;
+        }).filter(Boolean).join('\n      ');
+        const avif = plate?.files.find((x) => x.endsWith('.avif')), webp = plate?.files.find((x) => x.endsWith('.webp'));
+        const pic = plate && webp ? `<picture>${avif ? `<source srcset="./assets/${avif}" type="image/avif">` : ''}<img src="./assets/${webp}" alt="" width="${plate.width ?? ''}" height="${plate.height ?? ''}"></picture>` : '';
+        const block = `<noscript>\n    <div class="tier0">${pic}<h1>${esc(String(copy.wall.title ?? ''))}</h1><ol>\n      ${items}\n    </ol></div>\n  </noscript>`;
+        return html.replace(/<noscript>[\s\S]*?<\/noscript>/, block);
+      },
+    },
+  };
+}
+
 export default defineConfig({
   base: './',
-  plugins: [fontsLocal(), fontsKit(), wallData(), wallAssets()],
+  plugins: [fontsLocal(), fontsKit(), wallData(), wallAssets(), wallNoscript()],
   publicDir: 'public',
   build: {
     outDir: 'dist',
