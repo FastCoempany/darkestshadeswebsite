@@ -19,7 +19,9 @@ import { springStep, springSettled, type SpringState } from '../lib/spring';
 import { log } from '../lib/log';
 
 export interface Pose { yaw: number; pitch: number; zoom: number }
-interface CameraJson { camera: { three: { position: number[]; fov_deg: number; near: number; far: number; quaternion_xyzw: number[] } }; frame: { matrix_three: number[][] } }
+interface FramePose { matrix_three: number[][] }
+// camera/open.json and inspect.json: the camera, every frame's pose under `frames` (the default frame's again as `frame`)
+interface CameraJson { camera: { three: { position: number[]; fov_deg: number; near: number; far: number; quaternion_xyzw: number[] } }; frame: FramePose; frames?: Record<string, FramePose> }
 
 const LIFT_SPRING = { stiffness: 120, damping: 20 };
 
@@ -119,8 +121,9 @@ export class LiftedFrame extends LitElement {
     camera.quaternion.set(c.quaternion_xyzw[0]!, c.quaternion_xyzw[1]!, c.quaternion_xyzw[2]!, c.quaternion_xyzw[3]!);
     this.camera = camera;
     this.scene = scene;
-    this.open = decompose(openJ.frame.matrix_three);
-    this.inspect = decompose(inspectJ.frame.matrix_three);
+    const poseOf = (j: CameraJson) => (j.frames?.[f.id] ?? j.frame).matrix_three;   // this frame's own pose: its bounds place it
+    this.open = decompose(poseOf(openJ));
+    this.inspect = decompose(poseOf(inspectJ));
     // the light: the drawer's own environment, and one warm key from the drawer's side as the scene has it
     if (env) {
       try {

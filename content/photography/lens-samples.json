@@ -1,0 +1,15 @@
+{
+  "$comment": "Lens sample boxes for tools/photo/lens_tints.py, chosen by eye on the A1 stage masters (dam/product/DS-<frame>-A1-v01-stage.png) on Nov 7 2026: pixel boxes [x0, y0, x1, y1] inside each lens, clear of the rim, of reflections and of what is seen through a light lens; `stage` a box of bare stage. A gradient lens (F06, F08) carries `gradient` boxes at three heights, top to bottom, so the live frame's lens takes the tint by height. F04 is measured here too, but its wall value is #38's (00-decisions.md).",
+  "frames": {
+    "F01": { "stage": [200, 200, 900, 900], "lenses": [[1150, 2300, 1450, 2600], [2350, 2300, 2650, 2600]] },
+    "F02": { "stage": [200, 200, 900, 900], "lenses": [[900, 2300, 1300, 2650], [2400, 2300, 2800, 2650]] },
+    "F03": { "stage": [150, 150, 600, 600], "lenses": [[550, 1350, 850, 1600], [1400, 1350, 1700, 1600]] },
+    "F04": { "stage": [200, 200, 900, 900], "lenses": [[1000, 2250, 1500, 2600], [2300, 2250, 2800, 2600]] },
+    "F05": { "stage": [200, 200, 900, 900], "lenses": [[1000, 2400, 1550, 2750], [2400, 2400, 2950, 2750]] },
+    "F06": { "stage": [200, 200, 900, 900], "lenses": [[1000, 2250, 1500, 2350], [2100, 2250, 2600, 2350]],
+             "gradient": { "top": [[1000, 1900, 1500, 2000], [2100, 1900, 2600, 2000]], "middle": [[1000, 2250, 1500, 2350], [2100, 2250, 2600, 2350]], "bottom": [[1000, 2600, 1500, 2700], [2100, 2600, 2600, 2700]] } },
+    "F08": { "stage": [200, 200, 900, 900], "lenses": [[900, 2400, 1400, 2500], [2400, 2400, 2900, 2500]],
+             "gradient": { "top": [[900, 2100, 1400, 2200], [2400, 2100, 2900, 2200]], "middle": [[900, 2400, 1400, 2500], [2400, 2400, 2900, 2500]], "bottom": [[900, 2650, 1400, 2750], [2400, 2650, 2900, 2750]] } },
+    "F09": { "stage": [200, 200, 900, 900], "lenses": [[900, 2300, 1400, 2650], [2400, 2300, 2900, 2650]] }
+  }
+}

@@ -1,6 +1,6 @@
 import { defineConfig, type Plugin } from 'vite';
 import { copyFileSync, createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, extname, relative, resolve } from 'node:path';
+import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { copyFrom, framesFrom } from './src/data/extract';
 
 // The wall, alone: two pages (the wall and the states sheet), relative paths so the built folder works from any host
@@ -98,7 +98,7 @@ function wallAssets(): Plugin {
         if (!m) return next();
         const rel = decodeURIComponent((m[1] ?? '') + (m[2] ?? ''));
         const file = resolve(SRC, rel);
-        if (!file.startsWith(SRC) || !existsSync(file) || !statSync(file).isFile()) return next();
+        if (!file.startsWith(SRC + sep) || !existsSync(file) || !statSync(file).isFile()) return next();
         res.setHeader('content-type', types[extname(file)] ?? 'application/octet-stream');
         res.setHeader('cache-control', 'no-cache');
         createReadStream(file).pipe(res);

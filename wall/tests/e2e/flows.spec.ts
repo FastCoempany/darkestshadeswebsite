@@ -55,10 +55,11 @@ test.describe('tap first', () => {
 
   test('a vertical swipe on a drawer scrolls the wall and opens nothing', async ({ page, browserName, isMobile }) => {
     test.skip(browserName !== 'chromium' || !isMobile, 'touch through CDP needs Chromium');
+    await page.setViewportSize({ width: 412, height: 520 });   // short enough that the wall must scroll
     await page.goto('index.html');
     await wallLoaded(page);
     const cdp = await page.context().newCDPSession(page);
-    const c = await bayCenter(page, 'drawer_bay/f03');
+    const c = await bayCenter(page, 'drawer_bay/f01');
     const before = await page.evaluate(() => scrollY);
     await touchDrag(cdp, page, c.x, c.y, c.y - 220, 10);
     await page.waitForTimeout(500);
