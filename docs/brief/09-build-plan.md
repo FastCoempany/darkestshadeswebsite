@@ -27,7 +27,7 @@
    pip install --break-system-packages -q bpy==5.2.2 pymupdf numpy scipy scikit-image pillow opencv-contrib-python-headless cairosvg jsonschema || true
    pip install --break-system-packages -q "rembg[cpu]" pymatting || true
    ```
-   `bpy` is Blender as a Python module (about 350 MB); with the environment cache it installs once. A setup script that exits non-zero stops the session from starting, so a failed install is let through (`|| true`) and the drawer wall's D0 checks what's there. `insightface` is left out: only the people tools use it (`wear.py`, `head3d.py`), and the wall shows no people.
+   `bpy` is Blender as a Python module (about 350 MB); with the environment cache it installs once. A setup script that exits non-zero stops the session from starting, so a failed install is let through (`|| true`) and the drawer wall's D0 installs whatever is missing. `insightface` is left out: only the people tools use it (`wear.py`, `head3d.py`), and the wall shows no people.
 3. **Fonts**: put the licensed or trial font files in `brand/fonts/private/` (git-ignored), or set `PUBLIC_ADOBE_FONTS_KIT` to an Adobe Fonts web project ID. `brand/fonts/README.md` has both routes.
 4. This workspace measured 2 vCPUs and 7 GB RAM: fine for the Python tools and Cycles renders at product sizes; too small to run image-generation models locally (generation stays in Figma).
 

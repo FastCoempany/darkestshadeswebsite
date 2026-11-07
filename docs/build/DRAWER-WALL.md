@@ -366,7 +366,7 @@ One branch and one pull request per phase (`wall/d0-start`, `wall/d1-project`, â
 
 **D0 Â· Start** (no pull request needed if nothing but WALL-PROGRESS.md changes)
 - Read this file, `CLAUDE.md`, `00-decisions.md`, `01`, `06`, `07`, `08`. Create `docs/build/WALL-PROGRESS.md` (the layout below).
-- Check the environment: `bpy` 5.2.2, Node 22, npm, the Playwright browsers (`$PLAYWRIGHT_BROWSERS_PATH`), WebKit. Check what F01's and F02's tortoise needs: `frame_texture.py` reads their cleaned front shots from `work/out/`; find out whether `tools/photo/zipget.py` and `clean_lightbox.py` can rebuild them here, and if they can't, log it and take the pattern from the stage master in `dam/product/`, registered the same way.
+- Check the environment: `bpy` 5.2.2, Node 22, npm, the Playwright browsers (`$PLAYWRIGHT_BROWSERS_PATH`), WebKit. Install what's missing: the packages in `09-build-plan.md`'s setup script now, WebKit in D1 at the pinned Playwright version. Check what F01's and F02's tortoise needs: `frame_texture.py` reads their cleaned front shots from `work/out/`; find out whether `tools/photo/zipget.py` and `clean_lightbox.py` can rebuild them here, and if they can't, log it and take the pattern from the stage master in `dam/product/`, registered the same way.
 - **Spikes, each logged with numbers:** S1 F09 as a GLB with the material conversion, shown in three.js headless next to a Cycles still from the same camera (a side-by-side image and the mean difference); S2 a three-file test Artifact (a page, a JS module, a GLB, a WebP) if the session has the Artifact tool; S3 one drawer-view frame at final settings, seconds per frame, and the queue estimate from it; S4 a CDP touch drag in Chromium.
 - **Exit:** the four spike results in WALL-PROGRESS.md.
 
@@ -469,8 +469,8 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 From the **Code** tab of the Claude app, on the phone or the desktop, or at claude.ai/code. The session runs in the cloud, so my computer can be off.
 
-1. **Environment, once.** On the new-session screen, the environment control under the message box, then **New environment**: name `Drawer wall`, **Network access** Full, **Setup script** from `09-build-plan.md` ("Workspace setup", step 2), then **Add environment**.
-2. **The session.** Repository `FastCoempany/darkestshadeswebsite`, branch `main`, environment `Drawer wall`, permission mode **Auto**: cloud sessions don't offer Bypass, and Auto is what lets goal turns run without stopping to ask. Then send `/model fable`, `/effort xhigh` and `/effort ultracode`, one message each (ultracode doesn't raise the effort level by itself). On Max, Fable is included up to half the weekly limit; if Claude Code asks to bill usage credits, choose the default model instead.
+1. **Network access Full** on the environment the session runs in (its name is under the session title): the menu on the title, then **Edit cloud environment**. A running session picks the change up within about a minute. The setup script in `09-build-plan.md` ("Workspace setup", step 2) is optional: it only saves install time, because D0 installs whatever is missing.
+2. **The session.** Repository `FastCoempany/darkestshadeswebsite`, branch `main`, permission mode **Auto**: cloud sessions don't offer Bypass, and Auto is what lets goal turns run without stopping to ask. Then send `/model fable`, `/effort xhigh` and `/effort ultracode`, one message each (ultracode doesn't raise the effort level by itself). On Max, Fable is included up to half the weekly limit; if Claude Code asks to bill usage credits, choose the default model instead.
 3. **Run 1:** send this as one message.
 
 ```
