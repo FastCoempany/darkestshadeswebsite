@@ -1,0 +1,43 @@
+{
+  "name": "darkest-shades-drawer-wall",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The drawer wall: eight frames in a wall of drawers, one standalone piece. Not a website.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
+    "test": "vitest run",
+    "test:e2e": "playwright test --trace off",
+    "check": "node checks/strings.mjs && node checks/colors.mjs && node checks/schema.mjs && node checks/assets.mjs",
+    "lighthouse": "node checks/lighthouse.mjs",
+    "assets": "python3 ../tools/photo/zoom_export.py",
+    "all": "npm run check && npm run test && npm run build && npm run test:e2e && npm run lighthouse"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@fontsource-variable/mona-sans": "5.3.0",
+    "@fontsource-variable/urbanist": "5.3.0",
+    "@gltf-transform/cli": "4.5.1",
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
+    "@gltf-transform/functions": "4.5.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.19.0",
+    "@types/three": "0.187.0",
+    "@use-gesture/vanilla": "10.3.1",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "chrome-launcher": "1.2.3",
+    "lighthouse": "13.6.0",
+    "lit": "3.3.3",
+    "meshoptimizer": "1.3.0",
+    "playwright": "1.63.0",
+    "playwright-core": "1.63.0",
+    "three": "0.187.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

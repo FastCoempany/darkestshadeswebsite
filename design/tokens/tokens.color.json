@@ -182,6 +182,10 @@
         "ref": "stage",
         "value": "#E4E2DD"
       },
+      "surface-scene": {
+        "ref": "black",
+        "value": "#000000"
+      },
       "text-primary": {
         "ref": "bone-100",
         "value": "#E8E4DC"
@@ -295,6 +299,10 @@
       "surface-stage": {
         "ref": "stage",
         "value": "#E4E2DD"
+      },
+      "surface-scene": {
+        "ref": "black",
+        "value": "#000000"
       },
       "text-primary": {
         "ref": "onyx-950",

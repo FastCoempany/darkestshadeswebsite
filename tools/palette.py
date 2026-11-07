@@ -52,11 +52,13 @@ GRADIENTS = {
 
 # --- Semantic roles ---------------------------------------------------------
 # "night" is the default theme (dark). "paper" is for editorial/policy pages and
-# the product stage. Components use roles only, never primitives or hex.
+# the product stage. Components use roles only, never primitives or hex. "surface-scene" is the drawer wall's room:
+# black in both themes (the scene is the image, 00-decisions.md #43); product photographs stay on surface-stage.
 ROLES = {
     "night": {
         "surface-canvas": "onyx-950", "surface-base": "onyx-900", "surface-raised": "onyx-850",
         "surface-overlay": "onyx-800", "surface-inverse": "bone-100", "surface-stage": "stage",
+        "surface-scene": "black",
         "text-primary": "bone-100", "text-secondary": "ash-300", "text-tertiary": "ash-400",
         "text-disabled": "graphite-400", "text-inverse": "onyx-950", "text-accent": "gold-500",
         "text-editorial": "camel-500",
@@ -72,6 +74,7 @@ ROLES = {
     "paper": {
         "surface-canvas": "bone-50", "surface-base": "bone-50", "surface-raised": "white",
         "surface-overlay": "stage", "surface-inverse": "onyx-950", "surface-stage": "stage",
+        "surface-scene": "black",
         "text-primary": "onyx-950", "text-secondary": "onyx-700", "text-tertiary": "graphite-500",
         "text-disabled": "ash-400", "text-inverse": "bone-100", "text-accent": "gold-700",
         "text-editorial": "camel-700",
@@ -86,7 +89,7 @@ ROLES = {
     },
 }
 
-# Pairs that must pass. (role, background role, minimum ratio)
+# Pairs that must pass. (role, background role, minimum ratio[, the themes it applies to])
 CHECKS = [
     ("text-primary", "surface-canvas", 4.5), ("text-primary", "surface-overlay", 4.5),
     ("text-secondary", "surface-canvas", 4.5), ("text-secondary", "surface-overlay", 4.5),
@@ -97,6 +100,10 @@ CHECKS = [
     ("border-control", "surface-canvas", 3.0), ("focus-ring", "surface-canvas", 3.0),
     ("action-primary-text", "action-primary-bg", 4.5),
     ("text-primary", "surface-stage", 0.0),  # informational: stage is light, text on it uses paper roles
+    # the drawer wall's scene is black and the wall renders in night only (00-decisions.md #43, #44; wall/): its
+    # labels use night's text roles, so these pairs are checked in night
+    ("text-primary", "surface-scene", 4.5, ("night",)), ("text-secondary", "surface-scene", 4.5, ("night",)),
+    ("text-tertiary", "surface-scene", 4.5, ("night",)), ("focus-ring", "surface-scene", 3.0, ("night",)),
 ]
 
 
@@ -146,7 +153,9 @@ def main():
     fails = 0
     for theme, roles in ROLES.items():
         lines += ["", f"## Theme: {theme}", "", "| Foreground | Background | Ratio | Needs | Result |", "|---|---|---|---|---|"]
-        for fg, bg, need in CHECKS:
+        for fg, bg, need, *only in CHECKS:
+            if only and theme not in only[0]:
+                continue
             a, b = hexof[roles[fg]], hexof[roles[bg]]
             r = ratio(a, b)
             ok = r >= need

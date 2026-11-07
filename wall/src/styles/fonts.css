@@ -1,0 +1,6 @@
+/* The type stand-ins until Owners Wide and Stolzl are licensed (brand/fonts/README.md, 00-decisions.md #41):
+   Mona Sans for Owners Wide (the width and weight axes), Urbanist for Stolzl (the weight axis). Served from the
+   wall itself. The real fonts, when they load (virtual:fonts-local or an Adobe Fonts kit), come first in the
+   token stacks and take over with nothing else to change. */
+@import '@fontsource-variable/mona-sans/standard.css';
+@import '@fontsource-variable/urbanist/index.css';
