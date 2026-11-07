@@ -51,7 +51,7 @@ TOOLS_HASH = render_queue.tools_hash()     # a stamp of the tool files every ent
 
 
 def grade_note(part="wall"):
-    return f"grade {LOOK[part]} exposure {GRADE['exposure']} toe {GRADE['toe']}, edge black to {EDGE[part][0]} and full from {EDGE[part][1]} of the width"
+    return f"grade {LOOK[part]} exposure {GRADE['exposure']} toe {GRADE['toe']}, edge black to {EDGE[part][0]} of the width or {grade_scene.EDGE_MIN_PX} px and full from {EDGE[part][1]}"
 
 
 def git_commit():

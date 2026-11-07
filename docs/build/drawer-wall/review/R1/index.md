@@ -15,4 +15,4 @@ Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER
 - The knob, black-relief (O15): `knob-black-relief.jpg`
 - The knob, gold (O15): `knob-gold.jpg`
 - The knob, plain (O15): `knob-plain.jpg`
-- F09 lifted into the light (the still; the live frame takes this pose): `lifted-F09.jpg`
+- F09 lifted into the light, over the open drawer (the still; the live frame takes this pose): `lifted-F09.jpg`

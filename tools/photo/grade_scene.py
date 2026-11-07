@@ -25,8 +25,11 @@ from scipy.ndimage import gaussian_filter
 # check samples), and the picture is at full level from 3.2% in. The plate's room round the cabinet is 3.27% of its
 # width (drawer_wall.ROOM), so the fade ends in the room, never on the cabinet; a drawer-view frame's front starts
 # 8% in. The mask only tidies the film curve's lifted floor and the encoders' ringing where the render is black.
+# The black band is never narrower than EDGE_MIN_PX: two WebP macroblocks, so the encoders' ringing and deblocking
+# round the first picture block stay out of the sampled 2% (at 720 px that band is 14 px, inside the first block).
 EDGE_BLACK = 0.02
 EDGE_FADE = 0.032
+EDGE_MIN_PX = 32
 
 
 def to_linear(s):
@@ -64,10 +67,13 @@ def filmic(x, shoulder=0.85, toe=0.012):
 
 
 def edge_mask(h, w, black=EDGE_BLACK, fade=EDGE_FADE):
-    """1 inside, falling to exactly 0 over the outermost `fade` .. `black` of the width on every side."""
+    """1 inside, falling to exactly 0 over the outermost `fade` .. `black` of the width on every side; the black band
+    at least EDGE_MIN_PX wide, the fade at least 4 px beyond it."""
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    d = np.minimum(np.minimum(xx, w - 1 - xx), np.minimum(yy, h - 1 - yy)) / w   # distance to the nearest edge, in widths
-    t = np.clip((d - black) / (fade - black), 0, 1)
+    d = np.minimum(np.minimum(xx, w - 1 - xx), np.minimum(yy, h - 1 - yy))       # distance to the nearest edge, px
+    black_px = max(black * w, EDGE_MIN_PX)
+    fade_px = max(fade * w, black_px + 4)
+    t = np.clip((d - black_px) / (fade_px - black_px), 0, 1)
     return t * t * (3 - 2 * t)
 
 

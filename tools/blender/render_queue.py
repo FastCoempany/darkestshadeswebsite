@@ -121,7 +121,6 @@ def cmd_run(a):
     limit = a.minutes * 60
     failed = 0
     left = 0
-    stamp = tools_hash()
     for j in jobs:
         if outputs_ok(j):
             if not j["done"]:
@@ -135,6 +134,7 @@ def cmd_run(a):
             left += 1
             continue
         log = QUEUE / "log" / f"{a.queue}-{j['id']}.log"
+        stamp = tools_hash()                      # the tool code this job runs with (the command reads the files now)
         t = time.time()
         with open(log, "w") as f:
             r = subprocess.run(["nice", "-n", "19", *j["cmd"]], cwd=ROOT, stdout=f, stderr=subprocess.STDOUT)

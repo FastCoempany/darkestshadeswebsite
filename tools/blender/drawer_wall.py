@@ -893,6 +893,7 @@ def cmd_lifted(a):
     for ob in bpy.data.objects:
         if ob.type == "MESH" and ob.name not in frame_names:
             ob.visible_camera = False
+            ob.visible_transmission = False     # nor through the lenses: the drawer shows through them from the view's own frame, as it does live
     # the lifted frame is what the camera focuses on
     centre = m @ Vector(((lo[0] + hi[0]) / 2, 0, (hi[2] - lo[2]) / 2))
     cam.data.dof.focus_distance = (centre - cam.location).length
