@@ -273,5 +273,52 @@
       "S06": "against a black backdrop",
       "S07": "against a white backdrop"
     }
+  },
+  "wall": {
+    "$comment": "The drawer wall's own copy (docs/build/DRAWER-WALL.md, Copy). Drafts awaiting the founder; the sign-off list is in docs/build/WALL-PROGRESS.md. {name} is the frame's name, {subject} its alt.subjects phrase, from content/products/ and the alt section.",
+    "status": "draft",
+    "title": "The frames",
+    "openLabel": "Open the drawer.",
+    "notYet": "Not yet.",
+    "soldOut": "Sold out",
+    "hintPull": "Pull it toward you",
+    "hintLift": "Tap them to lift them out",
+    "hintTurn": "Turn them. Pinch to come closer.",
+    "open": "Open the drawer",
+    "shut": "Shut the drawer",
+    "close": "Close",
+    "lift": "Lift them out",
+    "putBack": "Put them back",
+    "photos": "See the photographs",
+    "photosClose": "Back to the frame",
+    "turnLeft": "Turn left",
+    "turnRight": "Turn right",
+    "closer": "Closer",
+    "further": "Further",
+    "reset": "Reset",
+    "model3dLabel": "{subject}, a view you can turn",
+    "announce": {
+      "open": "{name}. The drawer is open.",
+      "shut": "The drawer is shut.",
+      "lifted": "{name}, lifted out.",
+      "back": "{name}, back in the drawer.",
+      "photo": "{name}, photograph {n} of {count}: {alt}"
+    },
+    "panel": {
+      "$comment": "The simulated backend behind ?panel=1 (Part 1): the founder changes any drawer's record and sees that drawer change.",
+      "title": "Records (example data)",
+      "frame": "Frame",
+      "state": "State",
+      "light": "Light",
+      "mechanic": "How a drawer opens",
+      "tapFirst": "Tap first",
+      "pullFirst": "Pull first",
+      "close": "Close the records"
+    },
+    "debug": {
+      "$comment": "The local event log behind ?debug=1, for the tests and the usability sessions.",
+      "copy": "Copy the event log",
+      "copied": "Copied."
+    }
   }
 }
