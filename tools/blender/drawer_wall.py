@@ -54,7 +54,7 @@ FULL_EXT = 250.0                       # the drawer fully out (the sequence's la
 
 # --- The cabinet (mm) -------------------------------------------------------------------------------------------
 LAYOUTS = {
-    "portrait": {"cols": 2, "rows": 4, "rail": 96.0, "width_px": 1170},
+    "portrait": {"cols": 2, "rows": 4, "rail": 114.0, "width_px": 1170},   # a two-line name, 11 px, at 390 px wide
     "landscape": {"cols": 4, "rows": 2, "rail": 56.0, "width_px": 2880},
 }
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM, GAP_X = 26.0, 26.0, 26.0, 20.0
@@ -499,7 +499,7 @@ def rects_for(sc, cam, slots, W, H, layout):
                 knob_pts.append((cx + lx, wy, cz + wz))
         knob = rect(knob_pts)
         rail = L["rail"] * MM
-        label = rect([(cx - w, 0, cz - h - 7 * MM), (cx + w, 0, cz - h - 7 * MM), (cx - w, 0, cz - h - rail + 7 * MM), (cx + w, 0, cz - h - rail + 7 * MM)])
+        label = rect([(cx - w, 0, cz - h - 5 * MM), (cx + w, 0, cz - h - 5 * MM), (cx - w, 0, cz - h - rail + 5 * MM), (cx + w, 0, cz - h - rail + 5 * MM)])
         g = GLOW_MM * MM
         crop = rect([(cx + sx * (w + g), 0, cz + sz * (h + g)) for sx in (-1, 1) for sz in (-1, 1)])
         out.append({"index": i, "col": i % L["cols"], "row": i // L["cols"], "face": face, "knob": knob, "label": label, "crop": crop})
