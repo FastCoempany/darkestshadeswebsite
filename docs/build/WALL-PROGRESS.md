@@ -22,7 +22,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 | D0 · Start | done | `wall/d0-start` → PR #11 | the four spikes, with numbers, in "D0 · Start" below; `frame_texture.py --from-dam` run for F01 and F02 | Nov 7 2026 |
 | D1 · The project | done | `wall/d1-project` → PR #12 | `npm run all` exit 0 on the empty project (check, Vitest 2/2, build, Playwright 22 passed and 8 skipped across the three projects, Lighthouse 100); the four screens shown in the session; in "D1 · The project" below | Nov 7 2026 |
 | D2 · Records and logic | done | `wall/d2-records` → PR #13 | Vitest 286 tests in 9 files (every resolver case, missing and unknown value, every machine transition and every impossible one); `npm run check` validates `data/wall.json` and the manifest; `npm run all` exit 0; in "D2 · Records and logic" below | Nov 7 2026 |
-| D3 · The wall and the drawer | not started | | | |
+| D3 · The wall and the drawer | in progress | `wall/d3-wall` | lookdev done against the prototype stills; the queue running (below) | Nov 7 2026 |
 | D4 · The frames | not started | | | |
 | D5 · The elements | not started | | | |
 | D6 · The wall, together | not started | | | |
@@ -75,9 +75,16 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 
 ## Render queue
 
-| Job | State | Time per frame | Notes |
+`work/queue/d3.json`, filled by `tools/blender/queue_d3.sh`, run by `tools/blender/render_queue.py run d3 --minutes 95` in the background at `nice 19`; `status d3` lists every job. Jobs whose outputs exist are skipped, so a reclaimed VM resumes where it stopped (the web outputs are committed after every chunk).
+
+| Job | State | Time | Notes |
 |---|---|---|---|
-| (not started) | | | |
+| wall portrait lit, dark (1170 px, 64 samples) | running | | `drawer_wall.py wall` |
+| wall landscape lit, dark (2880 px) | queued | | |
+| knob close-ups: black-relief, gold, plain (1024 px, 96 samples) | queued | | for O15 (R1) |
+| base sequence, 24 frames (1200 × 1500, 48 samples, denoised) | queued | about 2 min a frame from S3 | one job per frame |
+| cameras (open.json, inspect.json), env (1024 × 512), the F09 lifted still | queued | | |
+| the eight frame sequences, region renders | D4 | | |
 
 ## Review gates
 
