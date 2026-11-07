@@ -1,6 +1,6 @@
 import { defineConfig, type Plugin } from 'vite';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { copyFileSync, createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { dirname, extname, relative, resolve } from 'node:path';
 import { copyFrom, framesFrom } from './src/data/extract';
 
 // The wall, alone: two pages (the wall and the states sheet), relative paths so the built folder works from any host
@@ -85,9 +85,42 @@ function wallData(): Plugin {
   };
 }
 
+/** wall/assets/ (the committed renders, GLBs, cameras and the manifest) served at ./assets/ in dev and copied there
+ * in the build, as they are, no hashing: the manifest names them. The zoom images in public/zoom/ ride on publicDir. */
+function wallAssets(): Plugin {
+  const SRC = resolve(__dirname, 'assets');
+  const types: Record<string, string> = { '.json': 'application/json', '.avif': 'image/avif', '.webp': 'image/webp', '.glb': 'model/gltf-binary', '.hdr': 'application/octet-stream', '.png': 'image/png', '.jpg': 'image/jpeg' };
+  return {
+    name: 'wall-assets',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const m = req.url?.match(/^\/assets\/(wall|seq|glb|stills|env|camera|manifest\.json|lens-tints\.json)([^?]*)/);
+        if (!m) return next();
+        const rel = decodeURIComponent((m[1] ?? '') + (m[2] ?? ''));
+        const file = resolve(SRC, rel);
+        if (!file.startsWith(SRC) || !existsSync(file) || !statSync(file).isFile()) return next();
+        res.setHeader('content-type', types[extname(file)] ?? 'application/octet-stream');
+        res.setHeader('cache-control', 'no-cache');
+        createReadStream(file).pipe(res);
+      });
+    },
+    closeBundle() {
+      const out = resolve(__dirname, 'dist/assets');
+      const copy = (dir: string) => {
+        for (const name of readdirSync(dir)) {
+          const p = resolve(dir, name);
+          if (statSync(p).isDirectory()) copy(p);
+          else if (!name.endsWith('.schema.json')) { const dest = resolve(out, relative(SRC, p)); mkdirSync(dirname(dest), { recursive: true }); copyFileSync(p, dest); }
+        }
+      };
+      if (existsSync(SRC)) copy(SRC);
+    },
+  };
+}
+
 export default defineConfig({
   base: './',
-  plugins: [fontsLocal(), fontsKit(), wallData()],
+  plugins: [fontsLocal(), fontsKit(), wallData(), wallAssets()],
   publicDir: 'public',
   build: {
     outDir: 'dist',

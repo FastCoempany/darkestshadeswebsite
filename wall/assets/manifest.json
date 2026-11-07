@@ -3,6 +3,202 @@
   "renderSet": "wall-v1",
   "assets": [
     {
+      "id": "wall/landscape/black-relief/bay-00-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-00-dark.avif",
+        "wall/landscape/black-relief/bay-00-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 684,
+      "height": 403,
+      "checks": {
+        "avifBytes": 37769,
+        "webpBytes": 22856
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-01-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-01-dark.avif",
+        "wall/landscape/black-relief/bay-01-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 683,
+      "height": 403,
+      "checks": {
+        "avifBytes": 38457,
+        "webpBytes": 23048
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-02-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-02-dark.avif",
+        "wall/landscape/black-relief/bay-02-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 683,
+      "height": 403,
+      "checks": {
+        "avifBytes": 38209,
+        "webpBytes": 23634
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-03-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-03-dark.avif",
+        "wall/landscape/black-relief/bay-03-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 684,
+      "height": 403,
+      "checks": {
+        "avifBytes": 37284,
+        "webpBytes": 21760
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-04-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-04-dark.avif",
+        "wall/landscape/black-relief/bay-04-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 684,
+      "height": 404,
+      "checks": {
+        "avifBytes": 37075,
+        "webpBytes": 21080
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-05-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-05-dark.avif",
+        "wall/landscape/black-relief/bay-05-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 683,
+      "height": 404,
+      "checks": {
+        "avifBytes": 36811,
+        "webpBytes": 20676
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-06-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-06-dark.avif",
+        "wall/landscape/black-relief/bay-06-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 683,
+      "height": 404,
+      "checks": {
+        "avifBytes": 36737,
+        "webpBytes": 21184
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/bay-07-dark",
+      "kind": "wall-dark",
+      "files": [
+        "wall/landscape/black-relief/bay-07-dark.avif",
+        "wall/landscape/black-relief/bay-07-dark.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 684,
+      "height": 404,
+      "checks": {
+        "avifBytes": 36070,
+        "webpBytes": 20602
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/plate-lit",
+      "kind": "wall-plate",
+      "files": [
+        "wall/landscape/black-relief/plate-lit.avif",
+        "wall/landscape/black-relief/plate-lit.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit; wall_export.py wall",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 2880,
+      "height": 1258,
+      "checks": {
+        "avifBytes": 326404,
+        "webpBytes": 224666,
+        "grade": "cool e0.3 toe0.004"
+      }
+    },
+    {
+      "id": "wall/landscape/black-relief/rects",
+      "kind": "rects",
+      "files": [
+        "wall/landscape/black-relief/rects.json"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit",
+      "sourceCommit": "446f5aef08cf",
+      "layout": "landscape",
+      "knob": "black-relief",
+      "width": 2880,
+      "height": 1258
+    },
+    {
       "id": "wall/portrait/black-relief/bay-00-dark",
       "kind": "wall-dark",
       "files": [
