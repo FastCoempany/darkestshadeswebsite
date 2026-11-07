@@ -1010,16 +1010,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
-      "height": 403,
+      "height": 404,
       "checks": {
-        "avifBytes": 36314,
-        "webpBytes": 21692
-      }
+        "avifBytes": 37420,
+        "webpBytes": 22592,
+        "cropPx": "121,359,684,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-01-dark",
@@ -1030,16 +1033,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
-      "height": 403,
+      "height": 404,
       "checks": {
-        "avifBytes": 38457,
-        "webpBytes": 23048
-      }
+        "avifBytes": 38058,
+        "webpBytes": 22578,
+        "cropPx": "773,359,683,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-02-dark",
@@ -1050,16 +1056,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
-      "height": 403,
+      "height": 404,
       "checks": {
-        "avifBytes": 38209,
-        "webpBytes": 23634
-      }
+        "avifBytes": 38211,
+        "webpBytes": 23018,
+        "cropPx": "1424,359,683,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-03-dark",
@@ -1070,16 +1079,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
-      "height": 403,
+      "height": 404,
       "checks": {
-        "avifBytes": 35828,
-        "webpBytes": 20784
-      }
+        "avifBytes": 37133,
+        "webpBytes": 21680,
+        "cropPx": "2075,359,684,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-04-dark",
@@ -1090,16 +1102,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 404,
       "checks": {
-        "avifBytes": 35520,
-        "webpBytes": 20356
-      }
+        "avifBytes": 37840,
+        "webpBytes": 22322,
+        "cropPx": "121,825,684,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-05-dark",
@@ -1110,16 +1125,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
       "height": 404,
       "checks": {
-        "avifBytes": 36811,
-        "webpBytes": 20676
-      }
+        "avifBytes": 37082,
+        "webpBytes": 20744,
+        "cropPx": "773,825,683,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-06-dark",
@@ -1130,16 +1148,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 683,
       "height": 404,
       "checks": {
-        "avifBytes": 36737,
-        "webpBytes": 21184
-      }
+        "avifBytes": 37040,
+        "webpBytes": 21390,
+        "cropPx": "1424,825,683,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/bay-07-dark",
@@ -1150,16 +1171,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant dark --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 684,
       "height": 404,
       "checks": {
-        "avifBytes": 34601,
-        "webpBytes": 19648
-      }
+        "avifBytes": 36868,
+        "webpBytes": 21212,
+        "cropPx": "2075,825,684,404",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/plate-lit",
@@ -1170,17 +1194,21 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit --samples 64; wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 2880,
-      "height": 1258,
+      "height": 1496,
       "checks": {
-        "avifBytes": 354166,
-        "webpBytes": 214606,
+        "avifBytes": 382813,
+        "webpBytes": 264386,
+        "avifQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
         "grade": "cool e0.3 toe0.004"
-      }
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/landscape/black-relief/rects",
@@ -1190,12 +1218,17 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout landscape --knob black-relief --variant lit --samples 64 (writes the rects); wall_export.py wall --layout landscape --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "landscape",
       "knob": "black-relief",
       "width": 2880,
-      "height": 1258
+      "height": 1496,
+      "checks": {
+        "drawers": 8,
+        "verifiedBy": "drawer_wall.py check --layout landscape --knob black-relief"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-00-dark",
@@ -1206,16 +1239,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
-      "height": 318,
+      "height": 317,
       "checks": {
-        "avifBytes": 17660,
-        "webpBytes": 9046
-      }
+        "avifBytes": 21830,
+        "webpBytes": 12486,
+        "cropPx": "60,247,538,317",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-01-dark",
@@ -1226,16 +1262,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
-      "height": 318,
+      "height": 317,
       "checks": {
-        "avifBytes": 17647,
-        "webpBytes": 9420
-      }
+        "avifBytes": 21600,
+        "webpBytes": 12640,
+        "cropPx": "572,247,538,317",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-02-dark",
@@ -1246,16 +1285,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 317,
       "checks": {
-        "avifBytes": 22355,
-        "webpBytes": 12512
-      }
+        "avifBytes": 22845,
+        "webpBytes": 12862,
+        "cropPx": "60,734,538,317",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-03-dark",
@@ -1266,16 +1308,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 317,
       "checks": {
-        "avifBytes": 22288,
-        "webpBytes": 12640
-      }
+        "avifBytes": 22819,
+        "webpBytes": 12656,
+        "cropPx": "572,734,538,317",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-04-dark",
@@ -1286,16 +1331,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 22846,
-        "webpBytes": 12986
-      }
+        "avifBytes": 22834,
+        "webpBytes": 13108,
+        "cropPx": "60,1220,538,318",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-05-dark",
@@ -1306,16 +1354,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 22878,
-        "webpBytes": 13314
-      }
+        "avifBytes": 22764,
+        "webpBytes": 13380,
+        "cropPx": "572,1220,538,318",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-06-dark",
@@ -1326,16 +1377,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 21452,
-        "webpBytes": 11734
-      }
+        "avifBytes": 21449,
+        "webpBytes": 11818,
+        "cropPx": "60,1707,538,318",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/bay-07-dark",
@@ -1346,16 +1400,19 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant dark --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 538,
       "height": 318,
       "checks": {
-        "avifBytes": 21276,
-        "webpBytes": 12214
-      }
+        "avifBytes": 21283,
+        "webpBytes": 12258,
+        "cropPx": "572,1707,538,318",
+        "seed": "the plate's (graded whole, then cut)"
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/plate-lit",
@@ -1366,17 +1423,21 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit; wall_export.py wall",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit --samples 64; wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 1170,
-      "height": 2131,
+      "height": 2319,
       "checks": {
-        "avifBytes": 159112,
-        "webpBytes": 136640,
+        "avifBytes": 144245,
+        "webpBytes": 115618,
+        "avifQuality": 64,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
         "grade": "cool e0.3 toe0.004"
-      }
+      },
+      "toolsHash": "879c900d5308"
     },
     {
       "id": "wall/portrait/black-relief/rects",
@@ -1386,12 +1447,17 @@
       ],
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
-      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit",
-      "sourceCommit": "ae6d3d3eddcb",
+      "command": "drawer_wall.py wall --layout portrait --knob black-relief --variant lit --samples 64 (writes the rects); wall_export.py wall --layout portrait --knob black-relief (grade cool exposure 0.3 toe 0.004, edge black to 0.02 and full from 0.032 of the width)",
+      "sourceCommit": "2b253f037ad0",
       "layout": "portrait",
       "knob": "black-relief",
       "width": 1170,
-      "height": 2131
+      "height": 2319,
+      "checks": {
+        "drawers": 8,
+        "verifiedBy": "drawer_wall.py check --layout portrait --knob black-relief"
+      },
+      "toolsHash": "879c900d5308"
     }
   ]
 }
