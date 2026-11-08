@@ -73,7 +73,13 @@
           },
           "sourceCommit": {
             "type": "string",
-            "pattern": "^[0-9a-f]{7,40}$"
+            "description": "HEAD when the file was exported, with -dirty when the tools or the exporter had uncommitted changes then",
+            "pattern": "^[0-9a-f]{7,40}(-dirty)?$"
+          },
+          "toolsHash": {
+            "type": "string",
+            "description": "a stamp of the tool files the entry was made with (render_queue.tools_hash)",
+            "pattern": "^[0-9a-f]{12}$"
           },
           "frame": {
             "type": "string",
