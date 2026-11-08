@@ -62,9 +62,10 @@ export class DrawerView extends LitElement {
     button.quiet:hover { color: var(--color-text-primary); }
     button.quiet:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     button.quiet[hidden] { display: none; }
+    /* the frame's own tap target: the keyboard's and assistive technology's button; a pointer tap in its region is the
+       stage's (onPointerUp), because the stage captures the pointer on pointerdown and a click would land on it, not here */
     .tap-frame { position: absolute; left: 50%; top: 42%; width: 56%; height: 24%; transform: translate(-50%, -50%); background: transparent; border: 0; cursor: pointer; pointer-events: none; }
     .tap-frame:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); }
-    :host([data-state="open"]) .tap-frame { pointer-events: auto; }
     .close { pointer-events: auto; }
     @media (prefers-reduced-motion: reduce) { .hint i { animation: none; } .dimmed, .fade { transition-duration: 160ms; } }
   `;
@@ -81,7 +82,7 @@ export class DrawerView extends LitElement {
   private player: SequencePlayer | null = null;
   private canvas: HTMLCanvasElement | null = null;
   private trap: FocusTrap | null = null;
-  private drag: { id: number; y0: number; p0: number; lastY: number; lastT: number; v: number } | null = null;
+  private drag: { id: number; x0: number; y0: number; t0: number; p0: number; lastY: number; lastT: number; v: number } | null = null;
   private spring: SpringState | null = null;
   private raf = 0;
   private hintTimer = 0;
@@ -176,7 +177,7 @@ export class DrawerView extends LitElement {
     const stage = this.renderRoot.querySelector('.stage') as HTMLElement | null;
     if (!stage) return;
     try { stage.setPointerCapture(p.pointerId); } catch { /* the pointer may be gone */ }
-    this.drag = { id: p.pointerId, y0: p.y, p0: 0, lastY: p.y, lastT: performance.now(), v: 0 };
+    this.drag = { id: p.pointerId, x0: p.x, y0: p.y, t0: performance.now(), p0: 0, lastY: p.y, lastT: performance.now(), v: 0 };
   }
 
   private dispatch(ev: ViewEvent): void {
@@ -210,7 +211,7 @@ export class DrawerView extends LitElement {
     if (st === 'lifted' || st === 'photos' || st === 'lifting' || st === 'returning' || st === 'entering' || st === 'leaving') return;
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
     this.spring = null;
-    this.drag = { id: ev.pointerId, y0: ev.clientY, p0: this.ctx.p, lastY: ev.clientY, lastT: performance.now(), v: 0 };
+    this.drag = { id: ev.pointerId, x0: ev.clientX, y0: ev.clientY, t0: performance.now(), p0: this.ctx.p, lastY: ev.clientY, lastT: performance.now(), v: 0 };
   }
 
   private onPointerMove(ev: PointerEvent): void {
@@ -232,6 +233,14 @@ export class DrawerView extends LitElement {
     if (!d || d.id !== ev.pointerId) return;
     this.drag = null;
     const moved = Math.abs(ev.clientY - d.y0);
+    if (this.ctx.state === 'open') {
+      // a tap on the open drawer's frame lifts it (the tap-frame button's region; the button itself serves the keyboard)
+      if (this.ctx.canLift && isTap(ev.clientX - d.x0, ev.clientY - d.y0, performance.now() - d.t0)) {
+        const r = (this.renderRoot.querySelector('.tap-frame') as HTMLElement | null)?.getBoundingClientRect();
+        if (r && ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) this.dispatch({ type: 'LIFT' });
+      }
+      return;
+    }
     if (this.ctx.state === 'pulling') {
       // a tap on the open drawer's frame is the tap-frame button's; a tap elsewhere while shut does nothing
       if (moved < 2 && isTap(0, moved, performance.now() - d.lastT + 1)) {

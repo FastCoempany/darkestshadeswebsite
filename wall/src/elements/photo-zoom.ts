@@ -31,7 +31,6 @@ export class PhotoZoom extends LitElement {
     button { appearance: none; background: none; border: 0; border-bottom: var(--border-hairline) solid var(--color-text-inverse); color: var(--color-text-inverse); font: inherit; font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; padding: var(--space-3) var(--space-1); min-height: 44px; min-width: 44px; cursor: pointer; pointer-events: auto; }
     button[aria-pressed="true"] { border-bottom-width: 2px; }
     button:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
-    .empty { position: absolute; inset: 0; display: grid; place-items: center; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; }
     .count { text-align: center; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; pointer-events: none; }
   `;
 
@@ -191,7 +190,7 @@ export class PhotoZoom extends LitElement {
       <div class="view" tabindex="0" role="group" aria-label=${t('photos')}
         @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp} @wheel=${this.onWheel} @keydown=${this.onKeyDown}>
         ${e ? html`<img src=${'./zoom/' + e.file} alt=${e.alt || stageAlt(this.frame, e.angle)} width=${e.width} height=${e.height} decoding="async" draggable="false"
-            style=${styleMap({ transform: `translate(${left}px, ${top}px) scale(${s})`, width: `${e.width}px`, height: `${e.height}px` })} @load=${() => { this.loaded = true; }}>` : html`<p class="empty">${t('photos')}</p>`}
+            style=${styleMap({ transform: `translate(${left}px, ${top}px) scale(${s})`, width: `${e.width}px`, height: `${e.height}px` })} @load=${() => { this.loaded = true; }}>` : nothing}
       </div>
       <div class="bar">
         ${e ? html`<div class="count" aria-hidden="true">${this.index + 1} / ${this.entries.length} · ${e.angle}</div>` : nothing}

@@ -71,8 +71,9 @@ export async function stageCenter(page: Page): Promise<{ x: number; y: number; w
   return { x: box.x + box.width / 2, y: box.y + box.height / 2, w: box.width, h: box.height };
 }
 
+/** A click on the view's button with that accessible name (a quiet button of the view, or one of the photographs' bar). */
 export async function clickQuiet(page: Page, text: string): Promise<void> {
-  await page.locator('drawer-view').locator('button.quiet', { hasText: new RegExp(`^${text}$`, 'i') }).first().click();
+  await page.locator('drawer-view').locator('button.quiet, photo-zoom button', { hasText: new RegExp(`^${text}$`, 'i') }).first().click();
 }
 
 export async function wallLoaded(page: Page): Promise<void> {

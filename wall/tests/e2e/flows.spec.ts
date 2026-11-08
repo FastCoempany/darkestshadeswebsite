@@ -102,7 +102,10 @@ test.describe('the lift', () => {
     await waitForState(page, ['open'], 15000);
     const canLift = await page.evaluate(() => (window as unknown as { __wall: { store: { bay(id: string): { canLift: boolean } } } }).__wall.store.bay('drawer_bay/f09').canLift);
     test.skip(!canLift, 'no GLB or lifted still in the manifest yet (D4)');
-    await clickQuiet(page, 'Lift them out');
+    // the lift by the gesture: a tap on the frame in the open drawer (the tap-frame's region; the button is the keyboard's)
+    const s0 = await stageCenter(page);
+    if (isMobile) await touchTap(await page.context().newCDPSession(page), page, s0.x, s0.y - s0.h * 0.08);
+    else await page.mouse.click(s0.x, s0.y - s0.h * 0.08);
     await waitForState(page, ['lifted'], 20000);
     const yaw0 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number } }).ctx?.yaw ?? 0);
     await clickQuiet(page, 'Turn right');
