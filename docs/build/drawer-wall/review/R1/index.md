@@ -1,6 +1,6 @@
 # R1 · the founder's first look
 
-Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the D3 pull request.
+Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the current phase's pull request.
 
 ![contact sheet](contact-sheet.jpg)
 
@@ -12,6 +12,7 @@ Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER
 - The drawer view, frame 8 of 24: `view-08.jpg`
 - The drawer view, frame 16 of 24: `view-16.jpg`
 - The drawer view, frame 23 of 24: `view-23.jpg`
+- F09 in the open drawer, frame 23 of 24 (the end of the pull: the frame standing on the bed): `view-23-F09.jpg`
 - The knob, black-relief (O15): `knob-black-relief.jpg`
 - The knob, gold (O15): `knob-gold.jpg`
 - The knob, plain (O15): `knob-plain.jpg`

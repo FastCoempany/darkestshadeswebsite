@@ -51,8 +51,9 @@ MM = 0.001
 # "wire" (round, `radius`) or "strip" (a flat bar `height` tall and `thick` across, side and top
 # views), running `straight` mm back from the hinge, then curving `drop` mm down behind the ear; from
 # `tip_from` mm along it the acetate tip, `tip` = (height, width) mm; or "acetate" (F03: a solid
-# temple whose `heights` and `thicks` taper along it, on a "block" end piece; `gcd`: the emblem set into
-# one temple's outer face). Meshing: mesh_step (the front's grid, in drawing pixels of 0.05 mm),
+# temple whose `heights` and `thicks` taper along it, on a "block" end piece; `gcd`: the emblem, `on` a
+# temple's outer face, an end piece's (F04, F05: at the side view's mm from the hinge) or the front's
+# wing (F02: wing_gcd), `side` -1 for the wearer's right). Meshing: mesh_step (the front's grid, in drawing pixels of 0.05 mm),
 # edge_floor (mm: right at an edge the height runs level along it), exact_distance (edges measured to
 # the outline smoothed into curves, not to its pixel steps); all three keep a three-quarter view's gloss
 # free of streaks.
@@ -170,7 +171,12 @@ FRAMES = {
             "endpiece": {"top": 1.0, "bottom": 13.0, "inset": 4.0},
             "hinge": {"down": 9.7, "back": 17.0},
             "temple": {"kind": "wire", "radius": 1.0, "straight": 95.0, "drop": 30.0},
-            "texture": "work/frames3d/F02"},
+            "texture": "work/frames3d/F02",
+            # on the right wing of the front, on its flat face at the height of the end piece's band behind it,
+            # where the two pin heads sit (00-decisions.md #28, #31; 06-products.md): wing_gcd(). Its centre as the
+            # approved A1 photograph has it, 6.9 mm in from the wing's outer edge (dam/product/DS-F02-A1-v01-stage.png,
+            # Nov 8 2026: the gold spans 475 to 657 px, the acetate's edge is at 421 px on that row, 20.99 px/mm)
+            "gcd": {"side": -1, "on": "wing", "from_edge_mm": 6.9}},
     "F03": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.3,
             "bezel": {"kind": "well", "width": 3.2, "p": 1.0, "round": 0.3, "seam": 0.15, "blend": 0.6,
                       "step": 0.0, "drop": 1.2},
@@ -1169,6 +1175,9 @@ def build(frame, materials, tilt=None):
         parts.append(loft(f"{frame} end {side}", rings, mat))
         outward_normals(parts[-1])
         hinges.append((hx, hy, hz))
+    g = cfg.get("gcd")
+    if g and g.get("on") == "wing":
+        parts += wing_gcd(frame, cfg, sh, out, parts[0], materials, g["side"])
     sh["ends"] = ends
     _textured(parts, frame, materials)
     return parts, sh, hinges
@@ -1423,6 +1432,78 @@ def gcd_parts(frame, materials, length, centre, along, up, normal, proud=0.02):
             pl.use_smooth = True
         obs.append(ob)
     return obs
+
+
+def wing_gcd(frame, cfg, sh, out, front, materials, side):
+    """The GCD on a wing of the front (F02: 00-decisions.md #28, #31, #35; 06-products.md): centred on the
+    wing's flat front face, between the edge's rounding and the lens bay's bevel, at the height of the end
+    piece's band behind it, where the two pin heads sit (the founder's placement, marked on a photograph);
+    flat on the face as built (its wrap, dome and lean included), reading left to right seen from the
+    front. Its centre sits where the approved A1 photograph (dam/product/DS-F02-A1-v01-stage.png) has it,
+    `from_edge_mm` in the frame table (6.9 mm in from the wing's outer edge and 7.2 mm below its top, measured
+    on Nov 8 2026), kept on the flat face: the face as drawn begins 2.6 mm in (the edge's rounding), so the
+    8.8 mm emblem's centre can come no nearer the edge than 7.0 mm, 0.1 mm from the photograph's. Without
+    `from_edge_mm` the face's own centre is used (F02's, 8.35 mm in, was used until the D4 review measured
+    the photograph; the record's first explanation of the 1.5 mm, the hinge barrel and a 5 degree yaw, was
+    wrong). Its height is the end piece's band's, 7.0 mm below the wing's top."""
+    from scipy import ndimage as ndi
+    ppm = sh["ppm"]
+    ox, oy = sh["origin_px"]
+    solid = sh["solid"]
+    openings = np.zeros_like(solid)
+    for m in sh["opening_masks"]:
+        openings |= m
+    d_out = ndi.distance_transform_edt(ndi.binary_fill_holes(solid | openings)) / ppm
+    d_in = ndi.distance_transform_edt(~openings) / ppm
+    xe = out[:, 0].min() if side < 0 else out[:, 0].max()
+    top = float(out[np.abs(out[:, 0] - xe) < 3.0][:, 1].max())
+    ep = cfg["endpiece"]
+    yc = top - (ep["top"] + ep["bottom"]) / 2
+    row = int(round(oy - yc * ppm))
+    X = (np.arange(solid.shape[1]) - ox) / ppm
+    face = solid[row] & (d_in[row] > cfg["bezel"]["width"]) & (d_out[row] > cfg["edge_r"])
+    idx = np.nonzero(face)[0]
+    if len(idx) == 0:
+        raise ValueError(f"{frame}: no flat face on the wing at y = {yc:.1f} mm")
+    # the run of face pixels that starts at the wing's edge: the row crosses the lens opening and reaches the bridge
+    run = [int(i) for i in (idx if side < 0 else idx[::-1])[:1]]
+    for i in (idx if side < 0 else idx[::-1])[1:]:
+        if abs(int(i) - run[-1]) != 1:
+            break
+        run.append(int(i))
+    xs = X[np.array(run)]
+    length = float(product_gcd(frame)["lengthMm"])
+    if np.ptp(xs) < length:
+        print(f"{frame}: the wing's flat face is {np.ptp(xs):.1f} mm wide for a {length} mm GCD", flush=True)
+    xc = float((xs.min() + xs.max()) / 2)                 # the face's centre, where no photograph says otherwise
+    g = cfg.get("gcd", {})
+    if "from_edge_mm" in g:
+        # the founder's placement as the approved photograph has it: the centre this far in from the wing's outer
+        # edge, kept on the flat face (the emblem's ends clear of the edge's rounding and of the bevel)
+        want = xe - side * float(g["from_edge_mm"])
+        lo, hi = xs.min() + length / 2, xs.max() - length / 2
+        xc = float(min(max(want, lo), hi)) if lo <= hi else float(want)
+        if abs(xc - want) > 1e-6:
+            print(f"{frame}: the photograph's centre, {abs(want - xe):.2f} mm from the edge, moved {abs(xc - want):.2f} mm in "
+                  f"to keep the emblem on the flat face", flush=True)
+    # the face as built: a plane through the front's face vertices within 2.5 mm of the centre
+    co = np.zeros(len(front.data.vertices) * 3)
+    front.data.vertices.foreach_get("co", co)
+    co = co.reshape(-1, 3) / MM
+    near = co[np.hypot(co[:, 0] - xc, co[:, 1] - yc) < 2.5]
+    near = near[near[:, 2] >= np.median(near[:, 2])]          # the face, not the back
+    c0 = near.mean(0)
+    n = np.linalg.svd(near - c0)[2][2]
+    if n[2] < 0:
+        n = -n
+    zc = c0[2] - (n[0] * (xc - c0[0]) + n[1] * (yc - c0[1])) / n[2]
+    along = np.array([1.0, 0.0, 0.0])
+    along -= n * np.dot(along, n)
+    along /= np.linalg.norm(along)
+    up = np.cross(n, along)
+    print(f"{frame} wing GCD: centre ({xc:.2f}, {yc:.2f}, {zc:.2f}) mm, {xc - xe:.2f} from the edge, {top - yc:.2f} below "
+          f"the wing's top, on a face {np.ptp(xs):.1f} mm wide; normal ({n[0]:.3f}, {n[1]:.3f}, {n[2]:.3f})", flush=True)
+    return gcd_parts(frame, materials, length, (xc, yc, zc), along, up, n)
 
 
 def temples(frame, hinges, materials, ears=None, split=False, split_after_mm=0.0):

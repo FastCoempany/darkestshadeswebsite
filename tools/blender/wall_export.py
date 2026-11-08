@@ -68,7 +68,10 @@ def git_commit():
 def queue_cmd(job_id, fallback):
     """The exact command the render queue ran for a job (work/queue/*.json, the flags included), or `fallback`."""
     qdir = ROOT / "work" / "queue"
-    for q in sorted(qdir.glob("*.json")) if qdir.exists() else []:
+    # the live queues, the most recently written first; a snapshot kept beside them (a dot in its name, like
+    # d3.before-review2.json) is never read (the D4 review: name order took a stale copy's command for F09's still)
+    files = sorted((p for p in qdir.glob("*.json") if "." not in p.stem), key=lambda p: p.stat().st_mtime, reverse=True) if qdir.exists() else []
+    for q in files:
         try:
             jobs = json.loads(q.read_text())
         except Exception:
@@ -207,6 +210,9 @@ def cmd_wall(a):
     print(f"wall {a.layout} {a.knob}: {len(rects['drawers'])} dark crops, rects.json, manifest updated", flush=True)
 
 
+FIRST_REGION_FRAME = 3      # the first frame whose region the D4 queue renders (tools/blender/queue_d4.sh): the interior shows from here
+
+
 def composite_regions(frame):
     """A frame's sequence from its region renders (DRAWER-WALL.md, The drawer view): each region, rendered with the
     frame in the drawer, laid over the base frame with an 8 px feather at its edges; frames before the interior
@@ -225,17 +231,26 @@ def composite_regions(frame):
             continue
         b = cv2.imread(str(base), cv2.IMREAD_UNCHANGED)
         if not region.exists() or not meta.exists():
+            if i >= FIRST_REGION_FRAME:
+                # from here on the interior shows and the queue renders a region: shipping the base frame would show the
+                # drawer empty (the D4 review); the render or its border is missing, so the export stops
+                raise SystemExit(f"{frame} frame {i:03d}: no region render or border in {src_dir}; the sequence would show the drawer empty")
             cv2.imwrite(str(out), b)
             made += 1
             continue
         r = cv2.imread(str(region), cv2.IMREAD_UNCHANGED)
         x0, y0, x1, y1 = json.loads(meta.read_text())["border"]
         H, W = b.shape[:2]
-        px0, py0 = int(round(x0 * W)), int(round(y0 * H))
-        px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
-        if px1 > W or py1 > H:
-            r = r[: H - py0, : W - px0]
-            px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
+        # where Blender put the region: it keeps the render border as float32 fractions measured from the bottom and
+        # cuts it to whole pixels by truncation (the D4 review: rounding here set 128 of the 168 regions one pixel off
+        # the render, a step at the seam and a jitter through the pull); a size that does not match stops the export
+        bf = np.float32([x0, 1 - y1, x1, 1 - y0])
+        bx0, by0 = int(bf[0] * np.float32(W)), int(bf[1] * np.float32(H))
+        bx1, by1 = int(bf[2] * np.float32(W)), int(bf[3] * np.float32(H))
+        px0, py0, px1, py1 = bx0, H - by1, bx1, H - by0
+        if (px1 - px0, py1 - py0) != (r.shape[1], r.shape[0]):
+            raise SystemExit(f"{region}: the render is {r.shape[1]}x{r.shape[0]} but its border maps to {px1 - px0}x{py1 - py0} "
+                             f"at ({px0}, {py0}); the composite would sit off the render")
         # the feather: 8 px of ramp inside the region's edges, except along the frame's own edges
         fh, fw = r.shape[:2]
         f = 8
@@ -337,7 +352,7 @@ def cmd_env(a):
             "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024),
                        "capturePointBlenderM": ", ".join(f"{v:.4f}" for v in capture) if capture else "unknown",
                        "capture": "Blender's equirectangular camera at F09's lifted pose (camera/inspect.json, frame.position_blender), rotation 90 0 0 degrees: looking along +y, into the drawer and toward the wall, Z up",
-                       "threeRotation": "not yet set: D5 turns the environment until the live frame's reflections match the lifted still, and records the angle here"}})
+                       "threeRotation": "Euler (0, +90 deg, 0), scene.environmentRotation about the vertical (lifted-frame.ts ENV_ROTATION_Y): three.js's equirectangular mapping shows the capture's forward a quarter turn from where Blender put it; measured while preparing D5 with a probe capture (emissive markers right, up and ahead) read back as the background and in a mirror sphere's reflections"}})
     save_manifest(m)
     print(f"env exported: {size // KB} KB", flush=True)
 
@@ -432,8 +447,8 @@ def cmd_knobs(a):
 
 def cmd_r1(a):
     """R1, the founder's first look (DRAWER-WALL.md, D3): docs/build/drawer-wall/review/R1/ with a contact sheet of
-    both walls lit and dark, the view's frames 0, 8, 16 and 23, the three knob close-ups and one lifted still, each
-    graded as the wall is, plus the pieces as single JPEGs and an index.md."""
+    both walls lit and dark, the view's frames 0, 8, 16 and 23, F09 in the drawer at frame 23 (D4), the three knob
+    close-ups and one lifted still, each graded as the wall is, plus the pieces as single JPEGs and an index.md."""
     from PIL import Image, ImageDraw
     out_dir = ROOT / "docs" / "build" / "drawer-wall" / "review" / "R1"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -451,6 +466,12 @@ def cmd_r1(a):
             out = out_dir / f"view-{i:02d}.jpg"
             grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for(f"seq-base-{i:03d}"), **grade_for("sequence"))
             pieces.append((f"The drawer view, frame {i} of 24", out))
+    src = WORK / "seq" / "F09" / "023.png"
+    if src.exists():
+        # F09's own sequence at the end of the pull (D4): the frame standing on the bed, the bed question's picture
+        out = out_dir / "view-23-F09.jpg"
+        grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for("seq-F09-023"), **grade_for("sequence"))
+        pieces.append(("F09 in the open drawer, frame 23 of 24 (the end of the pull: the frame standing on the bed)", out))
     for knob in ("black-relief", "gold", "plain"):
         src = WORK / f"knob-{knob}.png"
         if src.exists():
@@ -484,7 +505,7 @@ def cmd_r1(a):
             x += cell_w + pad
         y += rh + pad
     sheet.save(out_dir / "contact-sheet.jpg", quality=82)
-    lines = ["# R1 · the founder's first look", "", "Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the D3 pull request.", "", "![contact sheet](contact-sheet.jpg)", ""]
+    lines = ["# R1 · the founder's first look", "", "Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the current phase's pull request.", "", "![contact sheet](contact-sheet.jpg)", ""]
     for label, path in pieces:
         lines.append(f"- {label}: `{path.name}`")
     (out_dir / "index.md").write_text("\n".join(lines) + "\n")

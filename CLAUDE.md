@@ -73,7 +73,14 @@ python3 tools/photo/grade_scene.py in.png out.avif --width 1170 [--edge 0.02 0.0
 python3 tools/blender/wall_export.py wall --layout portrait | sequence [--frame F09] | cameras | env | stills [--frame F09] | knobs | r1   # the web outputs + manifest entries
 bash tools/blender/queue_d3.sh; python3 tools/blender/render_queue.py run d3 --minutes 95        # the D3 render queue, in chunks (status d3)
 ```
-The D4 tools (`frame_glb.py`, `optimize.mjs`, `lens_tints.py`, `zoom_export.py`, `queue_d4.sh`) are listed here as they land.
+```
+python3 tools/photo/lens_tints.py                                                                  # each lens's measured transmission → wall/assets/lens-tints.json and its manifest entry; F04 takes #38's values
+python3 tools/blender/frame_glb.py F09 --out work/glb/F09.glb --check --report work/glb/F09.report.json   # a frame as a GLB (needs bpy==5.2.2); --check: triangles, bytes, the GCD's side, length and centre, the front's width
+node tools/web3d/optimize.mjs --all --manifest                                                     # every work/glb/F0X.glb → wall/assets/glb/ (meshopt, WebP textures) with its manifest entry carrying the report
+bash tools/blender/queue_d4.sh; python3 tools/blender/render_queue.py run d4 --minutes 115         # the D4 render queue: each frame's region renders and lifted still, with its measured tint (TINTS=path reads another tints file)
+python3 tools/blender/wall_export.py sequence --frame F09; python3 tools/blender/wall_export.py stills   # a frame's sequence composited over the base; the lifted stills (--frame F09 for one)
+python3 tools/photo/zoom_export.py                                                                 # = npm run assets: each frame's A1, A2, A3 and A6 stage masters → wall/public/zoom/ (never committed)
+```
 
 ## When unsure
 If `00-decisions.md` doesn't answer it and it touches brand, product facts, money or legal copy, ask the founder. Otherwise make the call and note it in the PR.

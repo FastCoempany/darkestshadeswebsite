@@ -19,7 +19,7 @@ never ran is marked `adopted` as well, since the queue cannot say what made its 
 whose output has gone, runs the rest one at a time through `nice -n 19`, requires each output to be newer than the
 job's start, writes a log per job in work/queue/log/<name>-<id>.log, and exits 0 when every job is done, 2 when the
 chunk's time ran out with jobs left, 1 when a job failed (it goes on to the next job; a failed job is retried on the
-next run). Only `run` writes `tools`, the stamp of the tool code (TOOLS below) as it stood when that job started;
+next run, its outputs not trusted even where its command left a readable file). Only `run` writes `tools`, the stamp of the tool code (TOOLS below) as it stood when that job started;
 `status` names the jobs whose stamp differs from today's, the adopted ones, those without a stamp and those waiting
 to be rendered again.
 """
@@ -106,8 +106,8 @@ def few(ids):
 def cmd_status(a):
     jobs = load(a.queue)
     today = tools_hash()
-    done = [j for j in jobs if outputs_ok(j) and not j.get("rerun")]
-    failed = [j["id"] for j in jobs if j.get("error") and not outputs_ok(j)]
+    done = [j for j in jobs if outputs_ok(j) and not j.get("rerun") and not j.get("error")]
+    failed = [j["id"] for j in jobs if j.get("error")]          # a failed job's outputs, readable or not, are not trusted
     rerun = [j["id"] for j in jobs if j.get("rerun")]
     adopted = [j["id"] for j in done if j.get("adopted")]
     stale = [j["id"] for j in done if j.get("tools") and j["tools"] != today]
@@ -125,10 +125,10 @@ def cmd_status(a):
         for j in jobs:
             if j.get("rerun"):
                 state = "rerun"
-            elif outputs_ok(j):
-                state = "adopt" if j.get("adopted") else "done"
             elif j.get("error"):
                 state = "failed"
+            elif outputs_ok(j):
+                state = "adopt" if j.get("adopted") else "done"
             else:
                 state = "left"
             print(f"  {state:6s} {j['id']}  {j.get('seconds') or ''}  {j.get('tools') or ''}")
@@ -154,7 +154,7 @@ def cmd_run(a):
     failed = 0
     left = 0
     for j in jobs:
-        if outputs_ok(j) and not j.get("rerun"):
+        if outputs_ok(j) and not j.get("rerun") and not j.get("error"):
             if not j["done"]:
                 j["done"] = True
                 if j.get("seconds") is None and not j.get("tools"):
