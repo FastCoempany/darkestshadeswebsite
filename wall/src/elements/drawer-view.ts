@@ -20,6 +20,10 @@ import { t, subjectOf } from '../lib/copy';
 import { log } from '../lib/log';
 import type { Tier } from '../lib/tier';
 
+/** The frame's region of the stage at the end of the pull, as fractions of the stage's box: a tap inside it lifts the
+ * frame (the frame sits across the middle of the open drawer in every sequence's last frame). */
+const FRAME_REGION = { x0: 0.22, x1: 0.78, y0: 0.3, y1: 0.54 };
+
 export interface OpenRequest { bay: ResolvedBay; pointer: { x: number; y: number; pointerId: number; target: Element } | null; from: DOMRect | null }
 
 const HINT_GESTURES = ['pull', 'lift', 'turn'] as const;
@@ -62,10 +66,6 @@ export class DrawerView extends LitElement {
     button.quiet:hover { color: var(--color-text-primary); }
     button.quiet:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     button.quiet[hidden] { display: none; }
-    /* the frame's own tap target: the keyboard's and assistive technology's button; a pointer tap in its region is the
-       stage's (onPointerUp), because the stage captures the pointer on pointerdown and a click would land on it, not here */
-    .tap-frame { position: absolute; left: 50%; top: 42%; width: 56%; height: 24%; transform: translate(-50%, -50%); background: transparent; border: 0; cursor: pointer; pointer-events: none; }
-    .tap-frame:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); }
     .close { pointer-events: auto; }
     @media (prefers-reduced-motion: reduce) { .hint i { animation: none; } .dimmed, .fade { transition-duration: 160ms; } }
   `;
@@ -241,15 +241,17 @@ export class DrawerView extends LitElement {
     this.drag = null;
     const moved = Math.abs(ev.clientY - d.y0);
     if (this.ctx.state === 'open') {
-      // a tap on the open drawer's frame lifts it (the tap-frame button's region; the button itself serves the keyboard)
+      // a tap on the frame in the open drawer lifts it: the frame's region of the stage (FRAME_REGION); the quiet
+      // "Lift them out" button is the same action for the keyboard and assistive technology
       if (this.ctx.canLift && isTap(ev.clientX - d.x0, ev.clientY - d.y0, performance.now() - d.t0)) {
-        const r = (this.renderRoot.querySelector('.tap-frame') as HTMLElement | null)?.getBoundingClientRect();
-        if (r && ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) this.dispatch({ type: 'LIFT' });
+        const sr = (ev.currentTarget as HTMLElement).getBoundingClientRect(), fr = FRAME_REGION;
+        const x = (ev.clientX - sr.left) / sr.width, y = (ev.clientY - sr.top) / sr.height;
+        if (x >= fr.x0 && x <= fr.x1 && y >= fr.y0 && y <= fr.y1) this.dispatch({ type: 'LIFT' });
       }
       return;
     }
     if (this.ctx.state === 'pulling') {
-      // a tap on the open drawer's frame is the tap-frame button's; a tap elsewhere while shut does nothing
+      // a tap while pulling lets go where it is; a tap on the shut drawer does nothing
       if (moved < 2 && isTap(0, moved, performance.now() - d.lastT + 1)) {
         this.dispatch({ type: 'RELEASE', v: 0, p: this.ctx.p });
         return;
@@ -415,7 +417,6 @@ export class DrawerView extends LitElement {
         @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp}>
         ${this.posterUrl && !this.drawn ? html`<img class="poster" src=${this.posterUrl} alt="" draggable="false">` : nothing}
         <canvas class=${classMap({ dimmed: liftedish })} aria-hidden="true"></canvas>
-        <button class="tap-frame" type="button" aria-label=${t('lift')} ?hidden=${!drawerOpen || !c.canLift} @click=${() => this.dispatch({ type: 'LIFT' })}></button>
         ${liftedish ? html`<lifted-frame class="lift-layer" .store=${s} .frame=${frame} .tier=${this.tier} .active=${st === 'lifted'} .label=${t('model3dLabel', { subject })}
             @lifted-turn=${this.onLiftedTurn} @lifted-zoom=${this.onLiftedZoom} @lifted-tap=${() => this.dispatch({ type: 'PUT_BACK' })}></lifted-frame>` : nothing}
       </div>
