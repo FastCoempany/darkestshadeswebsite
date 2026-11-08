@@ -73,6 +73,11 @@ function manifestEntry(frame, report) {
   if (built.frontWidthMm != null) checks.frontWidthMm = Math.round(built.frontWidthMm * 100) / 100;
   if (built.builtTriangles != null) checks.builtTriangles = built.builtTriangles;
   if (built.check != null) checks.frameGlbCheck = built.check;
+  // the D4 review's measurements: the band's proportion against the master's, the centre against the brand rule, the lens's source
+  if (built.gcdProportion != null) checks.gcdProportion = Math.round(built.gcdProportion * 10000) / 10000;
+  if (built.gcdMasterProportion != null) checks.gcdMasterProportion = built.gcdMasterProportion;
+  if (built.gcdRule) checks.gcdRule = { faceMm: built.gcdRule.faceMm, behindHingeMm: Math.round(built.gcdRule.behindHingeMm * 100) / 100, belowTopMm: Math.round(built.gcdRule.belowTopMm * 100) / 100 };
+  if (built.lensSource) checks.lensSource = built.lensSource;
   const tint = built.tint ? ` --tint ${built.tint.join(' ')}` : '';
   return {
     id: `glb/${frame}`, kind: 'glb', files: [`glb/${frame}.glb`], status: 'mockup', frame,
