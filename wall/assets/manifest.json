@@ -14,7 +14,7 @@
       "sourceCommit": "97239f3073e3",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68.0,
+        "lensMm": 68,
         "fovDeg": 36.617
       },
       "toolsHash": "0252e7dac85f"
@@ -31,7 +31,7 @@
       "sourceCommit": "97239f3073e3",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68.0,
+        "lensMm": 68,
         "fovDeg": 36.617
       },
       "toolsHash": "0252e7dac85f"
@@ -56,6 +56,206 @@
         "threeRotation": "not yet set: D5 turns the environment until the live frame's reflections match the lifted still, and records the angle here"
       },
       "toolsHash": "0252e7dac85f"
+    },
+    {
+      "id": "glb/F01",
+      "kind": "glb",
+      "files": [
+        "glb/F01.glb"
+      ],
+      "status": "mockup",
+      "frame": "F01",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F01 --out work/glb/F01.glb --tint 0.3073 0.4816 0.7333 --check --report work/glb/F01.report.json; optimize.mjs work/glb/F01.glb wall/assets/glb/F01.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 339004,
+        "withinAim": true,
+        "triangles": 59993,
+        "textures": "temple image/webp 2040x384; albedo image/webp 1866x685",
+        "materials": "acetate_temple, acetate.003, gcd_gold, gcd_onyx, lens.001, clear_acetate",
+        "gcdLengthMm": 11.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 150.2,
+        "builtTriangles": 1130324,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F02",
+      "kind": "glb",
+      "files": [
+        "glb/F02.glb"
+      ],
+      "status": "mockup",
+      "frame": "F02",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F02 --out work/glb/F02.glb --tint 0.0325 0.0325 0.0434 --check --report work/glb/F02.report.json; optimize.mjs work/glb/F02.glb wall/assets/glb/F02.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 322860,
+        "withinAim": true,
+        "triangles": 59994,
+        "textures": "albedo image/webp 1765x615",
+        "materials": "acetate.003, gcd_gold, gcd_onyx, lens.001, metal.001",
+        "gcdLengthMm": 8.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 142.57,
+        "builtTriangles": 883812,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F03",
+      "kind": "glb",
+      "files": [
+        "glb/F03.glb"
+      ],
+      "status": "mockup",
+      "frame": "F03",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F03 --out work/glb/F03.glb --tint 0.9463 0.6731 0.0647 --check --report work/glb/F03.report.json; optimize.mjs work/glb/F03.glb wall/assets/glb/F03.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 276116,
+        "withinAim": true,
+        "triangles": 59991,
+        "textures": "none",
+        "materials": "acetate.001, gcd_gold, gcd_onyx, lens.001",
+        "gcdLengthMm": 8.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 145,
+        "builtTriangles": 901956,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F04",
+      "kind": "glb",
+      "files": [
+        "glb/F04.glb"
+      ],
+      "status": "mockup",
+      "frame": "F04",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F04 --out work/glb/F04.glb --tint 0.038 0.038 0.049 --check --report work/glb/F04.report.json; optimize.mjs work/glb/F04.glb wall/assets/glb/F04.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 282136,
+        "withinAim": true,
+        "triangles": 59987,
+        "textures": "none",
+        "materials": "endmetal.001, acetate.001, gcd_gold, gcd_onyx, lens.001",
+        "gcdLengthMm": 8.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 146.6,
+        "builtTriangles": 973096,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F05",
+      "kind": "glb",
+      "files": [
+        "glb/F05.glb"
+      ],
+      "status": "mockup",
+      "frame": "F05",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F05 --out work/glb/F05.glb --tint 0.0484 0.0477 0.0595 --check --report work/glb/F05.report.json; optimize.mjs work/glb/F05.glb wall/assets/glb/F05.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 280776,
+        "withinAim": true,
+        "triangles": 59985,
+        "textures": "none",
+        "materials": "endmetal.001, acetate.001, gcd_gold, gcd_onyx, lens.001",
+        "gcdLengthMm": 8.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 146.8,
+        "builtTriangles": 969988,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F06",
+      "kind": "glb",
+      "files": [
+        "glb/F06.glb"
+      ],
+      "status": "mockup",
+      "frame": "F06",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F06 --out work/glb/F06.glb --tint 0.0919 0.084 0.1095 --check --report work/glb/F06.report.json; optimize.mjs work/glb/F06.glb wall/assets/glb/F06.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 316644,
+        "withinAim": true,
+        "triangles": 59987,
+        "textures": "F06 lens gradient image/webp 1x64",
+        "materials": "acetate.001, gcd_gold, gcd_onyx, lens.002, clear_acetate",
+        "gcdLengthMm": 9.3,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 144.8,
+        "builtTriangles": 1134920,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F08",
+      "kind": "glb",
+      "files": [
+        "glb/F08.glb"
+      ],
+      "status": "mockup",
+      "frame": "F08",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F08 --out work/glb/F08.glb --tint 0.166 0.1658 0.1915 --check --report work/glb/F08.report.json; optimize.mjs work/glb/F08.glb wall/assets/glb/F08.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 334956,
+        "withinAim": true,
+        "triangles": 59992,
+        "textures": "F08 lens gradient image/webp 1x64",
+        "materials": "acetate.001, gcd_gold, gcd_onyx, lens.002, clear_acetate, core.001",
+        "gcdLengthMm": 9.8,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 153.4,
+        "builtTriangles": 1211096,
+        "frameGlbCheck": "0 failures"
+      }
+    },
+    {
+      "id": "glb/F09",
+      "kind": "glb",
+      "files": [
+        "glb/F09.glb"
+      ],
+      "status": "mockup",
+      "frame": "F09",
+      "tool": "tools/blender/frame_glb.py",
+      "command": "frame_glb.py F09 --out work/glb/F09.glb --tint 0.0443 0.0444 0.0567 --check --report work/glb/F09.report.json; optimize.mjs work/glb/F09.glb wall/assets/glb/F09.glb (meshopt, WebP textures)",
+      "sourceCommit": "ac361d089f52",
+      "toolsHash": "a3cc75b84c6e",
+      "checks": {
+        "bytes": 274464,
+        "withinAim": true,
+        "triangles": 59990,
+        "textures": "none",
+        "materials": "acetate.001, gcd_gold, gcd_onyx, lens.001",
+        "gcdLengthMm": 14.7,
+        "gcdOnWearersRight": true,
+        "frontWidthMm": 146,
+        "builtTriangles": 968332,
+        "frameGlbCheck": "0 failures"
+      }
     },
     {
       "id": "lens-tints",
