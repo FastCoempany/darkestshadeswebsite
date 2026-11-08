@@ -266,9 +266,12 @@ def measure(frame, parts, sh):
             "gcdRule": rule}
 
 
-def check(frame, out, m, built_tris, expected_centre=None, master=None):
-    """The checks of DRAWER-WALL.md (D4 step 5). Returns the failures."""
+def check(frame, out, m, built_tris, expected_centre=None, master=None, rule=None):
+    """The checks of DRAWER-WALL.md (D4 step 5). Returns the failures. `rule`: where 01-brand-system.md's rule puts the
+    GCD's centre, read from the temple as built (before decimation thins its straight run); the exported centre is
+    held to it."""
     fails = []
+    rule = rule or m.get("gcdRule")
     pf = product(frame)
     size = os.path.getsize(out)
     if m["triangles"] > TRIS_MAX:
@@ -292,8 +295,9 @@ def check(frame, out, m, built_tris, expected_centre=None, master=None):
             # 01-brand-system.md: the centre 0.82 x the temple face's height behind the hinge and 39% down the face
             dx, dy, dz = (np.array(m["gcdCentreMm"]) - np.array(rule["expected"])).tolist()
             face = rule["faceMm"]
+            behind, below = rule["hingeZ"] - m["gcdCentreMm"][2], rule["topY"] - m["gcdCentreMm"][1]
             if abs(dz) > 0.5 or abs(dy) > 0.5:
-                fails.append(f"the GCD's centre sits {rule['behindHingeMm']:.2f} mm behind the hinge and {rule['belowTopMm']:.2f} mm below the "
+                fails.append(f"the GCD's centre sits {behind:.2f} mm behind the hinge and {below:.2f} mm below the "
                              f"temple's top; the rule puts it at {frame3d.GCD_FROM_HINGE * face:.2f} and {frame3d.GCD_DOWN * face:.2f} (within 0.5 mm)")
             if abs(dx) > 1.0:
                 fails.append(f"the GCD's centre is {abs(dx):.2f} mm from the temple's outer face")
@@ -346,7 +350,12 @@ def main():
         ys = [g_[0] for g_ in grad]
         m["lensSource"] = (f"the lens's alpha by height from frame3d's gradient table ({len(grad)} rows, {min(ys):g} to {max(ys):g} mm, "
                            f"measured on the same A1 shot); --tint is the lens's mean and is not read by this lens")
-    fails = check(frame, out, m, built, pre["gcdCentreMm"], master) if a.check else None
+    # the rule's reference points (the hinge end, the top edge at the station) come from the temple as built; the
+    # exported emblem is held to them
+    rule = pre.get("gcdRule")
+    if rule and m.get("gcdCentreMm"):
+        m["gcdRule"] = {**rule, "behindHingeMm": rule["hingeZ"] - m["gcdCentreMm"][2], "belowTopMm": rule["topY"] - m["gcdCentreMm"][1]}
+    fails = check(frame, out, m, built, pre["gcdCentreMm"], master, rule) if a.check else None
     if a.check:
         m["check"] = "0 failures" if not fails else "; ".join(fails)     # the report carries the check's result (optimize.mjs --manifest records it)
         if m.get("gcdRule"):
