@@ -67,8 +67,8 @@
       "frame": "F01",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F01 --out work/glb/F01.glb --tint 0.3073 0.4816 0.7333 --check --report work/glb/F01.report.json; optimize.mjs work/glb/F01.glb wall/assets/glb/F01.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 339004,
         "withinAim": true,
@@ -82,11 +82,9 @@
         "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 9.84 mm behind the hinge, 4.68 mm below the temple's top",
         "gcdProportion": 0.3318,
         "gcdMasterProportion": 0.3274,
-        "gcdRule": {
-          "faceMm": 12,
-          "behindHingeMm": 9.84,
-          "belowTopMm": 4.68
-        }
+        "gcdRuleFaceMm": 12,
+        "gcdBehindHingeMm": 9.84,
+        "gcdBelowTopMm": 4.68
       }
     },
     {
@@ -99,8 +97,8 @@
       "frame": "F02",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F02 --out work/glb/F02.glb --tint 0.0325 0.0325 0.0434 --check --report work/glb/F02.report.json; optimize.mjs work/glb/F02.glb wall/assets/glb/F02.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 323268,
         "withinAim": true,
@@ -126,8 +124,8 @@
       "frame": "F03",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F03 --out work/glb/F03.glb --tint 0.9463 0.6731 0.0647 --check --report work/glb/F03.report.json; optimize.mjs work/glb/F03.glb wall/assets/glb/F03.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 276124,
         "withinAim": true,
@@ -141,11 +139,9 @@
         "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 7.38 mm behind the hinge, 3.51 mm below the temple's top",
         "gcdProportion": 0.3314,
         "gcdMasterProportion": 0.3274,
-        "gcdRule": {
-          "faceMm": 9,
-          "behindHingeMm": 7.38,
-          "belowTopMm": 3.51
-        }
+        "gcdRuleFaceMm": 9,
+        "gcdBehindHingeMm": 7.38,
+        "gcdBelowTopMm": 3.51
       }
     },
     {
@@ -158,8 +154,8 @@
       "frame": "F04",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F04 --out work/glb/F04.glb --tint 0.038 0.038 0.049 --check --report work/glb/F04.report.json; optimize.mjs work/glb/F04.glb wall/assets/glb/F04.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 282136,
         "withinAim": true,
@@ -185,8 +181,8 @@
       "frame": "F05",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F05 --out work/glb/F05.glb --tint 0.0484 0.0477 0.0595 --check --report work/glb/F05.report.json; optimize.mjs work/glb/F05.glb wall/assets/glb/F05.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 280776,
         "withinAim": true,
@@ -212,8 +208,8 @@
       "frame": "F06",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F06 --out work/glb/F06.glb --tint 0.0919 0.084 0.1095 --check --report work/glb/F06.report.json; optimize.mjs work/glb/F06.glb wall/assets/glb/F06.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 316644,
         "withinAim": true,
@@ -227,11 +223,9 @@
         "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 7.79 mm behind the hinge, 3.70 mm below the temple's top",
         "gcdProportion": 0.3316,
         "gcdMasterProportion": 0.3274,
-        "gcdRule": {
-          "faceMm": 9.5,
-          "behindHingeMm": 7.79,
-          "belowTopMm": 3.7
-        },
+        "gcdRuleFaceMm": 9.5,
+        "gcdBehindHingeMm": 7.79,
+        "gcdBelowTopMm": 3.7,
         "lensSource": "the lens's alpha by height from frame3d's gradient table (12 rows, -22 to 22 mm, measured on the same A1 shot); --tint is the lens's mean and is not read by this lens"
       }
     },
@@ -245,8 +239,8 @@
       "frame": "F08",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F08 --out work/glb/F08.glb --tint 0.166 0.1658 0.1915 --check --report work/glb/F08.report.json; optimize.mjs work/glb/F08.glb wall/assets/glb/F08.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 334956,
         "withinAim": true,
@@ -260,11 +254,9 @@
         "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 8.20 mm behind the hinge, 3.91 mm below the temple's top",
         "gcdProportion": 0.3312,
         "gcdMasterProportion": 0.3274,
-        "gcdRule": {
-          "faceMm": 10,
-          "behindHingeMm": 8.2,
-          "belowTopMm": 3.91
-        },
+        "gcdRuleFaceMm": 10,
+        "gcdBehindHingeMm": 8.2,
+        "gcdBelowTopMm": 3.91,
         "lensSource": "the lens's alpha by height from frame3d's gradient table (15 rows, -20 to 20.5 mm, measured on the same A1 shot); --tint is the lens's mean and is not read by this lens"
       }
     },
@@ -278,8 +270,8 @@
       "frame": "F09",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F09 --out work/glb/F09.glb --tint 0.0443 0.0444 0.0567 --check --report work/glb/F09.report.json; optimize.mjs work/glb/F09.glb wall/assets/glb/F09.glb (meshopt, WebP textures)",
-      "sourceCommit": "0a70d93746af",
-      "toolsHash": "d3a75a231606",
+      "sourceCommit": "5e7ff67b952f",
+      "toolsHash": "0eb70e3ec04b",
       "checks": {
         "bytes": 274464,
         "withinAim": true,
@@ -293,11 +285,9 @@
         "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 12.30 mm behind the hinge, 5.85 mm below the temple's top",
         "gcdProportion": 0.3309,
         "gcdMasterProportion": 0.3274,
-        "gcdRule": {
-          "faceMm": 15,
-          "behindHingeMm": 12.3,
-          "belowTopMm": 5.85
-        }
+        "gcdRuleFaceMm": 15,
+        "gcdBehindHingeMm": 12.3,
+        "gcdBelowTopMm": 5.85
       }
     },
     {
