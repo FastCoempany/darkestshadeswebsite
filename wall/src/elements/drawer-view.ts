@@ -85,6 +85,7 @@ export class DrawerView extends LitElement {
   private drag: { id: number; x0: number; y0: number; t0: number; p0: number; lastY: number; lastT: number; v: number } | null = null;
   private spring: SpringState | null = null;
   private raf = 0;
+  private ro: ResizeObserver | null = null;
   private hintTimer = 0;
   private reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   private pendingPointer: OpenRequest['pointer'] = null;
@@ -158,6 +159,12 @@ export class DrawerView extends LitElement {
     this.dispatch({ type: 'ENTERED' });
     this.announce(t('announce.open', { name: req.bay.label?.name ?? '' }).replace(/^\.\s*/, ''));
     void this.draw();
+    if ('ResizeObserver' in window && !this.ro) {
+      // the stage follows the viewport (a phone turned while the drawer is open): the canvas's bitmap is drawn again
+      // at the new size (draw() sizes it from the canvas's box); between draws it would only stretch
+      const c = this.renderRoot.querySelector('canvas');
+      if (c) { this.ro = new ResizeObserver(() => { if (this.open && this.player) void this.draw(); }); this.ro.observe(c); }
+    }
     this.armHint('pull');
     if (req.pointer) this.carryPointer(req.pointer);
   }
@@ -324,6 +331,8 @@ export class DrawerView extends LitElement {
       this.player?.dispose();
       this.player = null;
       this.drawn = false;
+      this.ro?.disconnect();
+      this.ro = null;
       this.trap?.release();
       this.trap = null;
       log('view.left', { id: this.bay?.id });

@@ -73,6 +73,7 @@ export class LiftedFrame extends LitElement {
   private reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   private disposables: Array<{ dispose(): void }> = [];
   private ready: Promise<boolean> | null = null;
+  private ro: ResizeObserver | null = null;
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -185,6 +186,11 @@ export class LiftedFrame extends LitElement {
     this.progress = 0;
     this.applyPose();
     this.resize();
+    if ('ResizeObserver' in window && !this.ro) {
+      // the host follows the viewport (a phone turned while the frame is lifted): the renderer's size follows the host
+      this.ro = new ResizeObserver(() => { this.resize(); if (this.live) this.render3d(); });
+      this.ro.observe(this);
+    }
     this.live = true;
     this.render3d();
     return true;
@@ -367,6 +373,8 @@ export class LiftedFrame extends LitElement {
 
   private dispose(): void {
     cancelAnimationFrame(this.raf);
+    this.ro?.disconnect();
+    this.ro = null;
     for (const d of this.disposables) d.dispose();
     this.disposables = [];
     if (this.renderer) {
