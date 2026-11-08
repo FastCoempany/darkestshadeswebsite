@@ -211,10 +211,16 @@ def measure(frame, parts, sh):
         if p.name == f"{frame} front":
             front = co
     g = np.concatenate(gcd) if gcd else None
+    # the band's length along its own longest axis: on a temple it lies nearly along z, on F02's wrapped wing
+    # 18 degrees from x (an axis-aligned extent read 8.8 mm as 8.5 there)
+    length = None
+    if g is not None:
+        axis = np.linalg.svd(g - g.mean(0), full_matrices=False)[2][0]
+        length = float(np.ptp((g - g.mean(0)) @ axis))
     return {"triangles": total,
             "frontWidthMm": float(np.ptp(front[:, 0])) if front is not None else None,
             "gcdMeshes": len(gcd),
-            "gcdLengthMm": float(np.ptp(g[:, 0])) if g is not None and np.ptp(g[:, 0]) > np.ptp(g[:, 2]) else (float(np.ptp(g[:, 2])) if g is not None else None),
+            "gcdLengthMm": length,
             "gcdCentreMm": [float(v) for v in ((g.min(0) + g.max(0)) / 2)] if g is not None else None,
             "gcdOnWearersRight": bool(g is not None and ((g.min(0) + g.max(0)) / 2)[0] < 0)}
 
