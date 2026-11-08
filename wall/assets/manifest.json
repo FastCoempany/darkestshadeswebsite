@@ -5075,6 +5075,3606 @@
       "toolsHash": "7ae4fd6319b6"
     },
     {
+      "id": "seq/F05/1200/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/000.avif",
+        "seq/F05/1200/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 76751,
+        "webpBytes": 68540,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/001.avif",
+        "seq/F05/1200/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77973,
+        "webpBytes": 68510,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/002.avif",
+        "seq/F05/1200/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 76247,
+        "webpBytes": 71000,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/003.avif",
+        "seq/F05/1200/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77552,
+        "webpBytes": 69088,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/004.avif",
+        "seq/F05/1200/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80140,
+        "webpBytes": 69374,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/005.avif",
+        "seq/F05/1200/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79350,
+        "webpBytes": 68990,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/006.avif",
+        "seq/F05/1200/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77781,
+        "webpBytes": 70834,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/007.avif",
+        "seq/F05/1200/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80807,
+        "webpBytes": 72694,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/008.avif",
+        "seq/F05/1200/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63477,
+        "webpBytes": 70928,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/009.avif",
+        "seq/F05/1200/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 61621,
+        "webpBytes": 71884,
+        "avifQuality": 56,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/010.avif",
+        "seq/F05/1200/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80894,
+        "webpBytes": 72302,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/011.avif",
+        "seq/F05/1200/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64653,
+        "webpBytes": 71486,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/012.avif",
+        "seq/F05/1200/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65113,
+        "webpBytes": 70230,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/013.avif",
+        "seq/F05/1200/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64094,
+        "webpBytes": 73588,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/014.avif",
+        "seq/F05/1200/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64948,
+        "webpBytes": 71946,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/015.avif",
+        "seq/F05/1200/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63424,
+        "webpBytes": 70284,
+        "avifQuality": 56,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/016.avif",
+        "seq/F05/1200/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65776,
+        "webpBytes": 72526,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/017.avif",
+        "seq/F05/1200/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66973,
+        "webpBytes": 70792,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/018.avif",
+        "seq/F05/1200/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 67497,
+        "webpBytes": 71056,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/019.avif",
+        "seq/F05/1200/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65861,
+        "webpBytes": 69152,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/020.avif",
+        "seq/F05/1200/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66949,
+        "webpBytes": 68554,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/021.avif",
+        "seq/F05/1200/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66777,
+        "webpBytes": 69288,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/022.avif",
+        "seq/F05/1200/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66451,
+        "webpBytes": 69892,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/1200/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/1200/023.avif",
+        "seq/F05/1200/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66466,
+        "webpBytes": 68188,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/000.avif",
+        "seq/F05/720/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43340,
+        "webpBytes": 37360,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/001.avif",
+        "seq/F05/720/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44246,
+        "webpBytes": 36766,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/002.avif",
+        "seq/F05/720/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45814,
+        "webpBytes": 36502,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/003.avif",
+        "seq/F05/720/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43455,
+        "webpBytes": 36748,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/004.avif",
+        "seq/F05/720/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44801,
+        "webpBytes": 36720,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/005.avif",
+        "seq/F05/720/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43440,
+        "webpBytes": 36508,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/006.avif",
+        "seq/F05/720/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44414,
+        "webpBytes": 36842,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/007.avif",
+        "seq/F05/720/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43915,
+        "webpBytes": 37894,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/008.avif",
+        "seq/F05/720/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44956,
+        "webpBytes": 37142,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/009.avif",
+        "seq/F05/720/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44410,
+        "webpBytes": 37120,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/010.avif",
+        "seq/F05/720/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44263,
+        "webpBytes": 36536,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/011.avif",
+        "seq/F05/720/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45312,
+        "webpBytes": 37174,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/012.avif",
+        "seq/F05/720/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45903,
+        "webpBytes": 38212,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/013.avif",
+        "seq/F05/720/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 46013,
+        "webpBytes": 37752,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/014.avif",
+        "seq/F05/720/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 35392,
+        "webpBytes": 37836,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/015.avif",
+        "seq/F05/720/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 37038,
+        "webpBytes": 38204,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/016.avif",
+        "seq/F05/720/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 35721,
+        "webpBytes": 37682,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/017.avif",
+        "seq/F05/720/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 36299,
+        "webpBytes": 36936,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/018.avif",
+        "seq/F05/720/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45720,
+        "webpBytes": 36964,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/019.avif",
+        "seq/F05/720/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 35492,
+        "webpBytes": 37484,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/020.avif",
+        "seq/F05/720/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45983,
+        "webpBytes": 36678,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/021.avif",
+        "seq/F05/720/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45989,
+        "webpBytes": 37190,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/022.avif",
+        "seq/F05/720/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45696,
+        "webpBytes": 35754,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F05/720/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F05/720/023.avif",
+        "seq/F05/720/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F05 --region --tint 0.0484 0.0477 0.0595 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F05 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45702,
+        "webpBytes": 36378,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F05",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/000.avif",
+        "seq/F06/1200/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79256,
+        "webpBytes": 70900,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/001.avif",
+        "seq/F06/1200/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 76670,
+        "webpBytes": 69416,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/002.avif",
+        "seq/F06/1200/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 75971,
+        "webpBytes": 70282,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/003.avif",
+        "seq/F06/1200/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78408,
+        "webpBytes": 69480,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/004.avif",
+        "seq/F06/1200/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80646,
+        "webpBytes": 69108,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/005.avif",
+        "seq/F06/1200/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80290,
+        "webpBytes": 70138,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/006.avif",
+        "seq/F06/1200/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77655,
+        "webpBytes": 70356,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/007.avif",
+        "seq/F06/1200/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80015,
+        "webpBytes": 71128,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/008.avif",
+        "seq/F06/1200/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 62959,
+        "webpBytes": 70240,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/009.avif",
+        "seq/F06/1200/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 60800,
+        "webpBytes": 69914,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/010.avif",
+        "seq/F06/1200/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 72537,
+        "webpBytes": 69230,
+        "avifQuality": 62,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/011.avif",
+        "seq/F06/1200/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 62719,
+        "webpBytes": 71016,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/012.avif",
+        "seq/F06/1200/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65280,
+        "webpBytes": 70248,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/013.avif",
+        "seq/F06/1200/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64558,
+        "webpBytes": 70134,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/014.avif",
+        "seq/F06/1200/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65021,
+        "webpBytes": 70430,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/015.avif",
+        "seq/F06/1200/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65740,
+        "webpBytes": 71178,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/016.avif",
+        "seq/F06/1200/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64559,
+        "webpBytes": 70096,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/017.avif",
+        "seq/F06/1200/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64382,
+        "webpBytes": 69132,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/018.avif",
+        "seq/F06/1200/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 68153,
+        "webpBytes": 69136,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/019.avif",
+        "seq/F06/1200/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65763,
+        "webpBytes": 68360,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/020.avif",
+        "seq/F06/1200/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64780,
+        "webpBytes": 66128,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/021.avif",
+        "seq/F06/1200/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65384,
+        "webpBytes": 68360,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/022.avif",
+        "seq/F06/1200/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66101,
+        "webpBytes": 67876,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/1200/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/1200/023.avif",
+        "seq/F06/1200/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 62870,
+        "webpBytes": 67840,
+        "avifQuality": 56,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/000.avif",
+        "seq/F06/720/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43302,
+        "webpBytes": 36376,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/001.avif",
+        "seq/F06/720/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44861,
+        "webpBytes": 36278,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/002.avif",
+        "seq/F06/720/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43491,
+        "webpBytes": 36732,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/003.avif",
+        "seq/F06/720/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44574,
+        "webpBytes": 36748,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/004.avif",
+        "seq/F06/720/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44348,
+        "webpBytes": 37356,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/005.avif",
+        "seq/F06/720/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44483,
+        "webpBytes": 35988,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/006.avif",
+        "seq/F06/720/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43146,
+        "webpBytes": 36110,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/007.avif",
+        "seq/F06/720/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43896,
+        "webpBytes": 37572,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/008.avif",
+        "seq/F06/720/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44393,
+        "webpBytes": 36440,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/009.avif",
+        "seq/F06/720/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43958,
+        "webpBytes": 36676,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/010.avif",
+        "seq/F06/720/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43871,
+        "webpBytes": 36458,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/011.avif",
+        "seq/F06/720/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43920,
+        "webpBytes": 38586,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/012.avif",
+        "seq/F06/720/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45995,
+        "webpBytes": 37978,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/013.avif",
+        "seq/F06/720/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 36500,
+        "webpBytes": 37974,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/014.avif",
+        "seq/F06/720/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45913,
+        "webpBytes": 37892,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/015.avif",
+        "seq/F06/720/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45285,
+        "webpBytes": 36994,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/016.avif",
+        "seq/F06/720/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 36875,
+        "webpBytes": 36890,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/017.avif",
+        "seq/F06/720/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45867,
+        "webpBytes": 36848,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/018.avif",
+        "seq/F06/720/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44927,
+        "webpBytes": 36316,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/019.avif",
+        "seq/F06/720/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44969,
+        "webpBytes": 36270,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/020.avif",
+        "seq/F06/720/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44242,
+        "webpBytes": 35614,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/021.avif",
+        "seq/F06/720/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45733,
+        "webpBytes": 35828,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/022.avif",
+        "seq/F06/720/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44669,
+        "webpBytes": 35796,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F06/720/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F06/720/023.avif",
+        "seq/F06/720/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F06 --region --tint 0.0919 0.084 0.1095 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F06 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45285,
+        "webpBytes": 35066,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F06",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/000.avif",
+        "seq/F08/1200/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78819,
+        "webpBytes": 70028,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/001.avif",
+        "seq/F08/1200/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 78602,
+        "webpBytes": 68798,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/002.avif",
+        "seq/F08/1200/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 77024,
+        "webpBytes": 69228,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/003.avif",
+        "seq/F08/1200/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 76564,
+        "webpBytes": 69348,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/004.avif",
+        "seq/F08/1200/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79670,
+        "webpBytes": 69426,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/005.avif",
+        "seq/F08/1200/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 80144,
+        "webpBytes": 68140,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/006.avif",
+        "seq/F08/1200/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79467,
+        "webpBytes": 69540,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/007.avif",
+        "seq/F08/1200/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 79038,
+        "webpBytes": 70988,
+        "avifQuality": 64,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/008.avif",
+        "seq/F08/1200/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63243,
+        "webpBytes": 70580,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/009.avif",
+        "seq/F08/1200/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 62381,
+        "webpBytes": 69680,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/010.avif",
+        "seq/F08/1200/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 59521,
+        "webpBytes": 72132,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/011.avif",
+        "seq/F08/1200/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63855,
+        "webpBytes": 70396,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/012.avif",
+        "seq/F08/1200/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64315,
+        "webpBytes": 72984,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/013.avif",
+        "seq/F08/1200/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64163,
+        "webpBytes": 70234,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/014.avif",
+        "seq/F08/1200/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64275,
+        "webpBytes": 71146,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/015.avif",
+        "seq/F08/1200/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 65539,
+        "webpBytes": 71038,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/016.avif",
+        "seq/F08/1200/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64141,
+        "webpBytes": 69586,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/017.avif",
+        "seq/F08/1200/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63230,
+        "webpBytes": 68684,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/018.avif",
+        "seq/F08/1200/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 67052,
+        "webpBytes": 68572,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/019.avif",
+        "seq/F08/1200/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 64924,
+        "webpBytes": 67916,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/020.avif",
+        "seq/F08/1200/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 63001,
+        "webpBytes": 69120,
+        "avifQuality": 56,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/021.avif",
+        "seq/F08/1200/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66351,
+        "webpBytes": 68736,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/022.avif",
+        "seq/F08/1200/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 67025,
+        "webpBytes": 68508,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/1200/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/1200/023.avif",
+        "seq/F08/1200/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 66771,
+        "webpBytes": 69068,
+        "avifQuality": 58,
+        "webpQuality": 76,
+        "edgeBlackMaxAvif": 1,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/000",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/000.avif",
+        "seq/F08/720/000.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44562,
+        "webpBytes": 36270,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/001",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/001.avif",
+        "seq/F08/720/001.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43253,
+        "webpBytes": 36492,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/002",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/002.avif",
+        "seq/F08/720/002.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48 (the base frame: the interior does not show yet); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44589,
+        "webpBytes": 36656,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/003",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/003.avif",
+        "seq/F08/720/003.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 3 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 3 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43674,
+        "webpBytes": 36698,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/004",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/004.avif",
+        "seq/F08/720/004.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 4 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 4 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44645,
+        "webpBytes": 36790,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/005",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/005.avif",
+        "seq/F08/720/005.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 5 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 5 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 42353,
+        "webpBytes": 36410,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/006",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/006.avif",
+        "seq/F08/720/006.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 6 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 6 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43832,
+        "webpBytes": 36776,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/007",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/007.avif",
+        "seq/F08/720/007.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 7 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 7 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 43286,
+        "webpBytes": 38390,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/008",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/008.avif",
+        "seq/F08/720/008.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 8 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 8 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44290,
+        "webpBytes": 36762,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/009",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/009.avif",
+        "seq/F08/720/009.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 9 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 9 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 46022,
+        "webpBytes": 38058,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/010",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/010.avif",
+        "seq/F08/720/010.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 10 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 10 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44487,
+        "webpBytes": 38444,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/011",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/011.avif",
+        "seq/F08/720/011.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 11 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 11 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44262,
+        "webpBytes": 38034,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/012",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/012.avif",
+        "seq/F08/720/012.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 12 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 12 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 35086,
+        "webpBytes": 37980,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/013",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/013.avif",
+        "seq/F08/720/013.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 13 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 13 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 46012,
+        "webpBytes": 37490,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/014",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/014.avif",
+        "seq/F08/720/014.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 14 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 14 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45874,
+        "webpBytes": 37854,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/015",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/015.avif",
+        "seq/F08/720/015.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 15 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 15 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 44666,
+        "webpBytes": 37744,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/016",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/016.avif",
+        "seq/F08/720/016.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 16 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 16 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 36185,
+        "webpBytes": 36930,
+        "avifQuality": 64,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/017",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/017.avif",
+        "seq/F08/720/017.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 17 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 17 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45653,
+        "webpBytes": 37010,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/018",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/018.avif",
+        "seq/F08/720/018.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 18 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 18 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 46007,
+        "webpBytes": 36308,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/019",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/019.avif",
+        "seq/F08/720/019.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 19 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 19 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45332,
+        "webpBytes": 36110,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/020",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/020.avif",
+        "seq/F08/720/020.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 20 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 20 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45478,
+        "webpBytes": 36824,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/021",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/021.avif",
+        "seq/F08/720/021.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 21 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 21 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45761,
+        "webpBytes": 35318,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/022",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/022.avif",
+        "seq/F08/720/022.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 22 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 22 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45583,
+        "webpBytes": 35550,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "seq/F08/720/023",
+      "kind": "sequence-frame",
+      "files": [
+        "seq/F08/720/023.avif",
+        "seq/F08/720/023.webp"
+      ],
+      "status": "mockup",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py sequence --frames 24 --only 23 --frame F08 --region --tint 0.166 0.1658 0.1915 --samples 48 over drawer_wall.py sequence --frames 24 --only 23 --samples 48 (an 8 px feather); wall_export.py sequence --frame F08 --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 720,
+      "height": 900,
+      "checks": {
+        "avifBytes": 45169,
+        "webpBytes": 35570,
+        "avifQuality": 70,
+        "webpQuality": 82,
+        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxWebp": 0,
+        "grade": "cool"
+      },
+      "frame": "F08",
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
       "id": "seq/F09/1200/000",
       "kind": "sequence-frame",
       "files": [
@@ -7522,6 +11122,81 @@
         "webpQuality": 84,
         "alpha": true,
         "alphaCoverage": 0.1066,
+        "grade": "cool"
+      },
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "stills/F05-lifted",
+      "kind": "still",
+      "files": [
+        "stills/F05-lifted.avif",
+        "stills/F05-lifted.webp"
+      ],
+      "status": "mockup",
+      "frame": "F05",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py lifted --frame F05 --tint 0.0484 0.0477 0.0595 --samples 64; wall_export.py stills --frame F05 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.032)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 41098,
+        "webpBytes": 54044,
+        "avifQuality": 84,
+        "webpQuality": 84,
+        "alpha": true,
+        "alphaCoverage": 0.1051,
+        "grade": "cool"
+      },
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "stills/F06-lifted",
+      "kind": "still",
+      "files": [
+        "stills/F06-lifted.avif",
+        "stills/F06-lifted.webp"
+      ],
+      "status": "mockup",
+      "frame": "F06",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py lifted --frame F06 --tint 0.0919 0.084 0.1095 --samples 64; wall_export.py stills --frame F06 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.032)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 42047,
+        "webpBytes": 72968,
+        "avifQuality": 84,
+        "webpQuality": 84,
+        "alpha": true,
+        "alphaCoverage": 0.1249,
+        "grade": "cool"
+      },
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "stills/F08-lifted",
+      "kind": "still",
+      "files": [
+        "stills/F08-lifted.avif",
+        "stills/F08-lifted.webp"
+      ],
+      "status": "mockup",
+      "frame": "F08",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py lifted --frame F08 --tint 0.166 0.1658 0.1915 --samples 64; wall_export.py stills --frame F08 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.032)",
+      "sourceCommit": "5c0010673ebb",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 54067,
+        "webpBytes": 91484,
+        "avifQuality": 84,
+        "webpQuality": 84,
+        "alpha": true,
+        "alphaCoverage": 0.1311,
         "grade": "cool"
       },
       "toolsHash": "7ae4fd6319b6"
