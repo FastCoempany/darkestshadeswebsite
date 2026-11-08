@@ -54,6 +54,7 @@ FLOOR_T = 6.0
 KNOB_D, KNOB_DEPTH, KNOB_TILT = 46.0, 22.0, 28.0
 GCD_MM = 30.0                          # the knob's GCD
 FULL_EXT = 250.0                       # the drawer fully out (the sequence's last frame)
+FRAME_DEPTH_MM = 160.0                 # a frame's depth, temples open (the eight span 157 to 169 mm): where its front stands in the box
 
 # --- The cabinet (mm) -------------------------------------------------------------------------------------------
 LAYOUTS = {
@@ -615,7 +616,16 @@ def view_camera(sc, t, slot_centre_m, lens0=200.0, lens1=68.0):
     cam.rotation_euler = (aim - cam.location).to_track_quat("-Z", "Y").to_euler()
     cam.data.dof.use_dof = True
     cam.data.dof.aperture_fstop = 11.0 + (4.0 - 11.0) * s
-    cam.data.dof.focus_distance = dist
+    # the focus follows the drawer and then the frame (DRAWER-WALL.md, The drawer view; the prototype focused on the
+    # frame): from the front's centre at t=0 to the frame standing on the bed at t=1, the middle of its front where
+    # frame_place stands a FRAME_DEPTH_MM frame, at its mid-height, measured along the camera's axis. Until the D4
+    # review the focus sat on the aim, 40% into the box, about 75 mm behind the frame's front: the frame rendered
+    # soft at the end of the pull (8 to 9 px at 1200 px) while the bed behind it was sharp.
+    ext = FULL_EXT * MM * s
+    front_c = Vector((cx, -ext, cz))
+    frame_c = Vector((cx, -ext + (FRONT_T + (BOX_DEPTH - FRAME_DEPTH_MM) / 2 + 5.0) * MM, cz + bed_z() + 25 * MM))
+    fwd = (aim - cam.location).normalized()
+    cam.data.dof.focus_distance = (front_c.lerp(frame_c, s) - cam.location).dot(fwd)
     cam.data.clip_start = 0.02
     return cam
 

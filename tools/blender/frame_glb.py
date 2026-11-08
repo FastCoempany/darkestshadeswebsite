@@ -11,7 +11,9 @@ better without); a tortoise front (F01, F02) takes its own colour from work/fram
 front's planar UVs and the temple band on the temples' UVs; metal as metallic; the lenses as a tinted, alpha-blended
 glossy surface whose opacity is 1 minus the measured transmission (the gradient lenses as a texture); the GCD as two
 named materials, gcd_gold and gcd_onyx. --check: triangle count, file size, the GCD meshes present on the wearer's
-right with their length within 2% of the product's gcd.lengthMm and centred as the build places them (within 0.5 mm),
+right, with their onyx inset, their length within 2% of the product's gcd.lengthMm, the band's proportion within 2% of the
+master's, and on a temple their centre where 01-brand-system.md's rule puts it, read from the temple itself (within 0.5 mm; on F02's
+wing and the end pieces, where the build placed it from the drawing and the photograph),
 the front width within 1 mm of measurementsMm.frontWidth.
 """
 import argparse
@@ -192,12 +194,26 @@ def export(parts, out):
     return out
 
 
+def master_proportion():
+    """The band's height over its length in the vector master (brand/emblems/gcd/svg/gcd-geometry.svg, the `outer`
+    outline): the proportion every GCD keeps."""
+    import re
+    import gcd_render
+    svg = gcd_render.GEOM.read_text()
+    outer = gcd_render.parse_path(re.search(r'id="outer"\s+d="([^"]+)"', svg).group(1))
+    pts = np.vstack([np.asarray(sp, np.float64).reshape(-1, 2) for sp in outer]) if isinstance(outer, (list, tuple)) else np.asarray(outer, np.float64).reshape(-1, 2)
+    ext = np.ptp(pts, axis=0)
+    return float(ext.min() / ext.max())
+
+
 def measure(frame, parts, sh):
     """What --check measures on the evaluated (decimated) meshes: the exported triangle count, the front's width, the
-    GCD's length, its centre and which side it sits on."""
+    GCD's length along its own axis, its proportion, its centre, which side it sits on and whether its onyx inset is
+    there; and on a temple frame, where 01-brand-system.md's rule puts the centre, read from the temple itself (its
+    hinge end and its top edge at the emblem's station), so the check does not take the build's word for it."""
     dg = bpy.context.evaluated_depsgraph_get()
     total = 0
-    gcd = []
+    gcd, onyx, temple = [], [], []
     front = None
     for p in parts:
         me = p.evaluated_get(dg).data
@@ -208,25 +224,50 @@ def measure(frame, parts, sh):
         co = co.reshape(-1, 3) / MM
         if "gcd gold" in p.name:
             gcd.append(co)
+        elif "gcd onyx" in p.name:
+            onyx.append(co)
+        elif " temple" in p.name:
+            temple.append(co)
         if p.name == f"{frame} front":
             front = co
     g = np.concatenate(gcd) if gcd else None
-    # the band's length along its own longest axis: on a temple it lies nearly along z, on F02's wrapped wing
-    # 18 degrees from x (an axis-aligned extent read 8.8 mm as 8.5 there)
-    length = None
+    length = proportion = centre = rule = None
     if g is not None:
-        axis = np.linalg.svd(g - g.mean(0), full_matrices=False)[2][0]
-        length = float(np.ptp((g - g.mean(0)) @ axis))
+        c = g - g.mean(0)
+        axes = np.linalg.svd(c, full_matrices=False)[2]
+        # the band's length along its own longest axis (on a temple nearly z, on F02's wrapped wing 18 degrees from x,
+        # where an axis-aligned extent read 8.8 mm as 8.5) and its height along the next
+        length = float(np.ptp(c @ axes[0]))
+        proportion = float(np.ptp(c @ axes[1])) / length
+        centre = (g.min(0) + g.max(0)) / 2
+        side = -1 if centre[0] < 0 else 1
+        face = product(frame)["gcd"].get("templeFaceHeightMm")
+        mine = [t for t in temple if np.sign(t[:, 0].mean()) == side]
+        if face and mine and frame3d.FRAMES.get(frame, {}).get("gcd", {}).get("on") == "temple":
+            T = np.vstack(mine)
+            z_hinge = float(T[:, 2].max())                      # the temple's front end: the hinge seam
+            station = T[np.abs(T[:, 2] - centre[2]) < 1.0]
+            if len(station) == 0:
+                station = T[np.abs(T[:, 2] - centre[2]) < 2.0]
+            if len(station):
+                top = float(station[:, 1].max())
+                x_face = float(station[:, 0].min() if side < 0 else station[:, 0].max())
+                rule = {"faceMm": face, "hingeZ": z_hinge, "topY": top, "faceX": x_face,
+                        "expected": [x_face, top - frame3d.GCD_DOWN * face, z_hinge - frame3d.GCD_FROM_HINGE * face],
+                        "behindHingeMm": z_hinge - float(centre[2]), "belowTopMm": top - float(centre[1])}
     return {"triangles": total,
             "frontWidthMm": float(np.ptp(front[:, 0])) if front is not None else None,
             "gcdMeshes": len(gcd),
+            "gcdOnyxMeshes": len(onyx),
             "gcdLengthMm": length,
-            "gcdCentreMm": [float(v) for v in ((g.min(0) + g.max(0)) / 2)] if g is not None else None,
-            "gcdOnWearersRight": bool(g is not None and ((g.min(0) + g.max(0)) / 2)[0] < 0)}
+            "gcdProportion": proportion,
+            "gcdCentreMm": [float(v) for v in centre] if centre is not None else None,
+            "gcdOnWearersRight": bool(centre is not None and centre[0] < 0),
+            "gcdRule": rule}
 
 
-def check(frame, out, m, built_tris, expected_centre=None):
-    """The checks of DRAWER-WALL.md. Returns the failures."""
+def check(frame, out, m, built_tris, expected_centre=None, master=None):
+    """The checks of DRAWER-WALL.md (D4 step 5). Returns the failures."""
     fails = []
     pf = product(frame)
     size = os.path.getsize(out)
@@ -237,11 +278,27 @@ def check(frame, out, m, built_tris, expected_centre=None):
     if m["gcdMeshes"] < 1:
         fails.append("no GCD mesh")
     else:
+        if m.get("gcdOnyxMeshes", 0) < 1:
+            fails.append("no onyx inset mesh in the GCD")
         want = float(pf["gcd"]["lengthMm"])
         if abs(m["gcdLengthMm"] - want) > 0.02 * want:
             fails.append(f"GCD {m['gcdLengthMm']:.2f} mm, not within 2% of {want}")
+        if master and abs(m["gcdProportion"] - master) > 0.02 * master:
+            fails.append(f"the band's height is {m['gcdProportion']:.4f} of its length, not within 2% of the master's {master:.4f}")
         if not m["gcdOnWearersRight"]:
             fails.append("the GCD is not on the wearer's right")
+        rule = m.get("gcdRule")
+        if rule:
+            # 01-brand-system.md: the centre 0.82 x the temple face's height behind the hinge and 39% down the face
+            dx, dy, dz = (np.array(m["gcdCentreMm"]) - np.array(rule["expected"])).tolist()
+            face = rule["faceMm"]
+            if abs(dz) > 0.5 or abs(dy) > 0.5:
+                fails.append(f"the GCD's centre sits {rule['behindHingeMm']:.2f} mm behind the hinge and {rule['belowTopMm']:.2f} mm below the "
+                             f"temple's top; the rule puts it at {frame3d.GCD_FROM_HINGE * face:.2f} and {frame3d.GCD_DOWN * face:.2f} (within 0.5 mm)")
+            if abs(dx) > 1.0:
+                fails.append(f"the GCD's centre is {abs(dx):.2f} mm from the temple's outer face")
+        elif frame3d.FRAMES.get(frame, {}).get("gcd", {}).get("on") == "temple":
+            fails.append("the GCD's place against the rule could not be measured (no temple at its station)")
         if expected_centre is not None:
             d = float(np.linalg.norm(np.array(m["gcdCentreMm"]) - np.array(expected_centre)))
             if d > 0.5:
@@ -282,9 +339,20 @@ def main():
     m = measure(frame, parts, sh)
     m.update({"frame": frame, "bytes": os.path.getsize(out), "builtTriangles": built, "decimateRatio": round(ratio, 5), "gcdRatio": round(gcd_ratio, 4),
               "materials": used, "tint": list(tint), "meshStep": a.mesh_step, "seconds": round(time.time() - t0, 1)})
-    fails = check(frame, out, m, built, pre["gcdCentreMm"]) if a.check else None
+    master = master_proportion()
+    m["gcdMasterProportion"] = round(master, 4)
+    grad = frame3d.FRAMES.get(frame, {}).get("lens", {}).get("gradient")
+    if grad:
+        ys = [g_[0] for g_ in grad]
+        m["lensSource"] = (f"the lens's alpha by height from frame3d's gradient table ({len(grad)} rows, {min(ys):g} to {max(ys):g} mm, "
+                           f"measured on the same A1 shot); --tint is the lens's mean and is not read by this lens")
+    fails = check(frame, out, m, built, pre["gcdCentreMm"], master) if a.check else None
     if a.check:
         m["check"] = "0 failures" if not fails else "; ".join(fails)     # the report carries the check's result (optimize.mjs --manifest records it)
+        if m.get("gcdRule"):
+            m["check"] += f"; the GCD's centre against 01-brand-system.md's rule: {m['gcdRule']['behindHingeMm']:.2f} mm behind the hinge, {m['gcdRule']['belowTopMm']:.2f} mm below the temple's top"
+        elif frame3d.FRAMES.get(frame, {}).get("gcd", {}).get("on") in ("wing", "endpiece"):
+            m["check"] += "; the GCD's centre against the build's (the wing or end piece, placed from the drawing and the photograph)"
     print(json.dumps(m), flush=True)
     if a.report:
         pathlib.Path(a.report).parent.mkdir(parents=True, exist_ok=True)

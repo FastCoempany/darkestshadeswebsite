@@ -172,9 +172,11 @@ FRAMES = {
             "hinge": {"down": 9.7, "back": 17.0},
             "temple": {"kind": "wire", "radius": 1.0, "straight": 95.0, "drop": 30.0},
             "texture": "work/frames3d/F02",
-            # on the right wing of the front, centred on its flat face at the height of the end piece's band
-            # behind it, where the two pin heads sit (00-decisions.md #28, #31; 06-products.md): wing_gcd()
-            "gcd": {"side": -1, "on": "wing"}},
+            # on the right wing of the front, on its flat face at the height of the end piece's band behind it,
+            # where the two pin heads sit (00-decisions.md #28, #31; 06-products.md): wing_gcd(). Its centre as the
+            # approved A1 photograph has it, 6.9 mm in from the wing's outer edge (dam/product/DS-F02-A1-v01-stage.png,
+            # Nov 8 2026: the gold spans 475 to 657 px, the acetate's edge is at 421 px on that row, 20.99 px/mm)
+            "gcd": {"side": -1, "on": "wing", "from_edge_mm": 6.9}},
     "F03": {"depth": 6.5, "edge_r": 2.6, "back_r": 1.2, "dome": 0.3,
             "bezel": {"kind": "well", "width": 3.2, "p": 1.0, "round": 0.3, "seam": 0.15, "blend": 0.6,
                       "step": 0.0, "drop": 1.2},
@@ -1437,9 +1439,13 @@ def wing_gcd(frame, cfg, sh, out, front, materials, side):
     wing's flat front face, between the edge's rounding and the lens bay's bevel, at the height of the end
     piece's band behind it, where the two pin heads sit (the founder's placement, marked on a photograph);
     flat on the face as built (its wrap, dome and lean included), reading left to right seen from the
-    front. On the approved A1 photograph (dam/product/DS-F02-A1-v01-stage.png) the emblem's centre
-    measures 6.8 mm in from the wing's edge and 7.2 mm below its top; this puts it 8.5 and 7.0, the face's
-    centre and the band's (the photograph's edge includes the hinge, seen at a 5 degree yaw)."""
+    front. Its centre sits where the approved A1 photograph (dam/product/DS-F02-A1-v01-stage.png) has it,
+    `from_edge_mm` in the frame table (6.9 mm in from the wing's outer edge and 7.2 mm below its top, measured
+    on Nov 8 2026), kept on the flat face: the face as drawn begins 2.6 mm in (the edge's rounding), so the
+    8.8 mm emblem's centre can come no nearer the edge than 7.0 mm, 0.1 mm from the photograph's. Without
+    `from_edge_mm` the face's own centre is used (F02's, 8.35 mm in, was used until the D4 review measured
+    the photograph; the record's first explanation of the 1.5 mm, the hinge barrel and a 5 degree yaw, was
+    wrong). Its height is the end piece's band's, 7.0 mm below the wing's top."""
     from scipy import ndimage as ndi
     ppm = sh["ppm"]
     ox, oy = sh["origin_px"]
@@ -1466,10 +1472,20 @@ def wing_gcd(frame, cfg, sh, out, front, materials, side):
             break
         run.append(int(i))
     xs = X[np.array(run)]
-    xc = float((xs.min() + xs.max()) / 2)
     length = float(product_gcd(frame)["lengthMm"])
     if np.ptp(xs) < length:
         print(f"{frame}: the wing's flat face is {np.ptp(xs):.1f} mm wide for a {length} mm GCD", flush=True)
+    xc = float((xs.min() + xs.max()) / 2)                 # the face's centre, where no photograph says otherwise
+    g = cfg.get("gcd", {})
+    if "from_edge_mm" in g:
+        # the founder's placement as the approved photograph has it: the centre this far in from the wing's outer
+        # edge, kept on the flat face (the emblem's ends clear of the edge's rounding and of the bevel)
+        want = xe - side * float(g["from_edge_mm"])
+        lo, hi = xs.min() + length / 2, xs.max() - length / 2
+        xc = float(min(max(want, lo), hi)) if lo <= hi else float(want)
+        if abs(xc - want) > 1e-6:
+            print(f"{frame}: the photograph's centre, {abs(want - xe):.2f} mm from the edge, moved {abs(xc - want):.2f} mm in "
+                  f"to keep the emblem on the flat face", flush=True)
     # the face as built: a plane through the front's face vertices within 2.5 mm of the centre
     co = np.zeros(len(front.data.vertices) * 3)
     front.data.vertices.foreach_get("co", co)

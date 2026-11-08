@@ -68,7 +68,10 @@ def git_commit():
 def queue_cmd(job_id, fallback):
     """The exact command the render queue ran for a job (work/queue/*.json, the flags included), or `fallback`."""
     qdir = ROOT / "work" / "queue"
-    for q in sorted(qdir.glob("*.json")) if qdir.exists() else []:
+    # the live queues, the most recently written first; a snapshot kept beside them (a dot in its name, like
+    # d3.before-review2.json) is never read (the D4 review: name order took a stale copy's command for F09's still)
+    files = sorted((p for p in qdir.glob("*.json") if "." not in p.stem), key=lambda p: p.stat().st_mtime, reverse=True) if qdir.exists() else []
+    for q in files:
         try:
             jobs = json.loads(q.read_text())
         except Exception:
@@ -231,11 +234,16 @@ def composite_regions(frame):
         r = cv2.imread(str(region), cv2.IMREAD_UNCHANGED)
         x0, y0, x1, y1 = json.loads(meta.read_text())["border"]
         H, W = b.shape[:2]
-        px0, py0 = int(round(x0 * W)), int(round(y0 * H))
-        px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
-        if px1 > W or py1 > H:
-            r = r[: H - py0, : W - px0]
-            px1, py1 = px0 + r.shape[1], py0 + r.shape[0]
+        # where Blender put the region: it keeps the render border as float32 fractions measured from the bottom and
+        # cuts it to whole pixels by truncation (the D4 review: rounding here set 128 of the 168 regions one pixel off
+        # the render, a step at the seam and a jitter through the pull); a size that does not match stops the export
+        bf = np.float32([x0, 1 - y1, x1, 1 - y0])
+        bx0, by0 = int(bf[0] * np.float32(W)), int(bf[1] * np.float32(H))
+        bx1, by1 = int(bf[2] * np.float32(W)), int(bf[3] * np.float32(H))
+        px0, py0, px1, py1 = bx0, H - by1, bx1, H - by0
+        if (px1 - px0, py1 - py0) != (r.shape[1], r.shape[0]):
+            raise SystemExit(f"{region}: the render is {r.shape[1]}x{r.shape[0]} but its border maps to {px1 - px0}x{py1 - py0} "
+                             f"at ({px0}, {py0}); the composite would sit off the render")
         # the feather: 8 px of ramp inside the region's edges, except along the frame's own edges
         fh, fw = r.shape[:2]
         f = 8
