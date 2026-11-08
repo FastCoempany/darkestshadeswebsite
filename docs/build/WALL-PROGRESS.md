@@ -23,7 +23,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 | D1 · The project | done | `wall/d1-project` → PR #12 | `npm run all` exit 0 on the empty project (check, Vitest 2/2, build, Playwright 22 passed and 8 skipped across the three projects, Lighthouse 100); the four screens shown in the session; in "D1 · The project" below | Nov 7 2026 |
 | D2 · Records and logic | done | `wall/d2-records` → PR #13 | Vitest 286 tests in 9 files (every resolver case, missing and unknown value, every machine transition and every impossible one); `npm run check` validates `data/wall.json` and the manifest; `npm run all` exit 0; in "D2 · Records and logic" below | Nov 7 2026 |
 | D3 · The wall and the drawer | done | `wall/d3-wall` → PR #14 | `drawer_wall.py check` 0 failures for both layouts; every asset within budget (`npm run check`); the R1 set published; in "D3 · The wall and the drawer" below | Nov 8 2026 |
-| D4 · The frames | done | `wall/d4-frames` → PR (number below) | `frame_glb.py --check` 0 failures on all eight; eight sequences, eight stills and eight GLBs within budget (`npm run check`); `lens-tints.json` complete with sources; in "D4 · The frames" below | Nov 8 2026 |
+| D4 · The frames | done | `wall/d4-frames` → PR #15 | `frame_glb.py --check` 0 failures on all eight; eight sequences, eight stills and eight GLBs within budget (`npm run check`); `lens-tints.json` complete with sources; in "D4 · The frames" below | Nov 8 2026 |
 | D5 · The elements | not started | | | |
 | D6 · The wall, together | not started | | | |
 | D7 · On a phone | not started | | | |
