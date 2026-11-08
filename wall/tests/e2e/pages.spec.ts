@@ -17,7 +17,7 @@ for (const [path, name] of PAGES) {
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
     expect(bg).toBe('rgb(0, 0, 0)');
     await page.waitForTimeout(300);
-    await page.screenshot({ path: info.outputPath(`${path.replace('.html', '')}-${info.project.name}.png`), fullPage: true });
+    await page.screenshot({ path: info.outputPath(`${path.replace('.html', '')}-${info.project.name}.png`), fullPage: path === 'index.html' });   // the sheet is long: its full view is the states spec's
     expect(errors, 'no page or console errors').toEqual([]);
   });
 
