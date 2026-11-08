@@ -58,6 +58,23 @@
       "toolsHash": "0252e7dac85f"
     },
     {
+      "id": "lens-tints",
+      "kind": "tints",
+      "files": [
+        "lens-tints.json"
+      ],
+      "status": "mockup",
+      "tool": "tools/photo/lens_tints.py",
+      "command": "lens_tints.py (content/photography/lens-samples.json against dam/product/DS-<frame>-A1-v01-stage.png)",
+      "sourceCommit": "c20db59ccc8e",
+      "toolsHash": "0252e7dac85f",
+      "checks": {
+        "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
+        "gradients": "F06,F08",
+        "takenFromAnotherFrame": "F04 from 00-decisions.md #38: F04's intended lens colour, the front view's measured tint"
+      }
+    },
+    {
       "id": "seq/base/1200/000",
       "kind": "sequence-frame",
       "files": [
