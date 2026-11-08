@@ -246,9 +246,10 @@ def measure(frame, parts, sh):
         if face and mine and frame3d.FRAMES.get(frame, {}).get("gcd", {}).get("on") == "temple":
             T = np.vstack(mine)
             z_hinge = float(T[:, 2].max())                      # the temple's front end: the hinge seam
-            station = T[np.abs(T[:, 2] - centre[2]) < 1.0]
-            if len(station) == 0:
-                station = T[np.abs(T[:, 2] - centre[2]) < 2.0]
+            # the temple's ring of vertices nearest the emblem's station (the sweep's rings can sit a few mm apart)
+            dz = np.abs(T[:, 2] - centre[2])
+            band = max(1.0, float(np.partition(dz, min(24, len(dz) - 1))[min(24, len(dz) - 1)]) + 0.05)
+            station = T[dz <= band]
             if len(station):
                 top = float(station[:, 1].max())
                 x_face = float(station[:, 0].min() if side < 0 else station[:, 0].max())
