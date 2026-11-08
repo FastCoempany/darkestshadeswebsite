@@ -167,7 +167,7 @@ def cmd_wall(a):
     put(m, {"id": f"wall/{a.layout}/{a.knob}/plate-lit", "kind": "wall-plate", "files": files, "status": a.status,
             "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['lit']}; {export_cmd}",
             "sourceCommit": commit, "layout": a.layout, "knob": a.knob, "width": width, "height": height,
-            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "avifQuality": report["avif"]["quality"],
+            "checks": {"avifBytes": report["avif"]["bytes"], "webpBytes": report["webp"]["bytes"], "avifQuality": report["avif"]["quality"], "webpQuality": report["webp"]["quality"],
                        "edgeBlackMaxAvif": edge_max(out_dir / "plate-lit.avif"), "edgeBlackMaxWebp": edge_max(out_dir / "plate-lit.webp"),
                        "grade": f"{LOOK['wall']} e{GRADE['exposure']} toe{GRADE['toe']}"}})
     # both renders graded whole with the plate's seed, kept in work/ for the check (drawer_wall.py check compares the
@@ -192,12 +192,12 @@ def cmd_wall(a):
                 if size <= BUDGET["wall-dark"](width) or q <= 30:
                     break
                 q -= 6
-            rep[ext] = size
+            rep[ext] = {"bytes": size, "quality": q}
             files.append(f"wall/{a.layout}/{a.knob}/bay-{d['index']:02d}-dark.{ext}")
         put(m, {"id": f"wall/{a.layout}/{a.knob}/bay-{d['index']:02d}-dark", "kind": "wall-dark", "files": files, "status": a.status,
                 "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['dark']}; {export_cmd}",
                 "sourceCommit": commit, "layout": a.layout, "knob": a.knob, "width": x1 - x0, "height": y1 - y0,
-                "checks": {"avifBytes": rep["avif"], "webpBytes": rep["webp"], "cropPx": f"{x0},{y0},{x1 - x0},{y1 - y0}", "seed": "the plate's (graded whole, then cut)"}})
+                "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "webpQuality": rep["webp"]["quality"], "cropPx": f"{x0},{y0},{x1 - x0},{y1 - y0}", "seed": "the plate's (graded whole, then cut)"}})
     (out_dir / "rects.json").write_text(json.dumps(rects, indent=1) + "\n")
     put(m, {"id": f"wall/{a.layout}/{a.knob}/rects", "kind": "rects", "files": [f"wall/{a.layout}/{a.knob}/rects.json"], "status": a.status,
             "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd['lit']} (writes the rects); {export_cmd}", "sourceCommit": commit,
@@ -283,7 +283,7 @@ def cmd_sequence(a):
             entry = {"id": f"seq/{name}/{width}/{i:03d}", "kind": "sequence-frame", "files": files, "status": a.status,
                      "tool": "tools/blender/drawer_wall.py", "command": f"{render_cmd}; wall_export.py sequence{' --frame ' + a.frame if a.frame else ''} --width {width} ({grade_note('sequence')})",
                      "sourceCommit": commit, "width": width, "height": int(round(width * 1500 / 1200)),
-                     "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"],
+                     "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "webpQuality": rep["webp"]["quality"],
                                 "edgeBlackMaxAvif": edge_max(out_dir / f"{i:03d}.avif"), "edgeBlackMaxWebp": edge_max(out_dir / f"{i:03d}.webp"), "grade": LOOK["sequence"]}}
             if a.frame:
                 entry["frame"] = a.frame
@@ -328,9 +328,16 @@ def cmd_env(a):
         cv2.imwrite(str(out_dir / "drawer.hdr"), small)
         size = os.path.getsize(out_dir / "drawer.hdr")
         width = 768
+    # where and how the map was captured, so D5 can orient it: the panoramic camera sits at F09's lifted pose
+    # (drawer_wall.py env reads camera/inspect.json) and looks along +y, into the drawer and toward the wall
+    inspect_path = WORK / "camera" / "inspect.json"
+    capture = json.loads(inspect_path.read_text())["frame"]["position_blender"] if inspect_path.exists() else None
     put(m, {"id": "env/drawer", "kind": "env", "files": ["env/drawer.hdr"], "status": a.status,
             "tool": "tools/blender/drawer_wall.py", "command": f"{queue_cmd('env', 'drawer_wall.py env')}; wall_export.py env", "sourceCommit": commit, "width": width, "height": width // 2,
-            "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024)}})
+            "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024),
+                       "capturePointBlenderM": ", ".join(f"{v:.4f}" for v in capture) if capture else "unknown",
+                       "capture": "Blender's equirectangular camera at F09's lifted pose (camera/inspect.json, frame.position_blender), rotation 90 0 0 degrees: looking along +y, into the drawer and toward the wall, Z up",
+                       "threeRotation": "not yet set: D5 turns the environment until the live frame's reflections match the lifted still, and records the angle here"}})
     save_manifest(m)
     print(f"env exported: {size // KB} KB", flush=True)
 
@@ -407,7 +414,7 @@ def cmd_stills(a):
         put(m, {"id": f"stills/{fid}-lifted", "kind": "still", "files": files, "status": a.status, "frame": fid,
                 "tool": "tools/blender/drawer_wall.py", "command": f"{queue_cmd(f'lifted-{fid}', f'drawer_wall.py lifted --frame {fid}')}; wall_export.py stills --frame {fid} --width {a.width} ({grade_note('still')})",
                 "sourceCommit": commit, "width": g.shape[1], "height": g.shape[0],
-                "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "alpha": True,
+                "checks": {"avifBytes": rep["avif"]["bytes"], "webpBytes": rep["webp"]["bytes"], "avifQuality": rep["avif"]["quality"], "webpQuality": rep["webp"]["quality"], "alpha": True,
                            "alphaCoverage": round(float((alpha > 0.5).mean()), 4), "grade": LOOK["still"]}})
         print(f"still {fid}: avif {rep['avif']['bytes'] // KB} KB q{rep['avif']['quality']}, webp {rep['webp']['bytes'] // KB} KB, {g.shape[1]}x{g.shape[0]}", flush=True)
     save_manifest(m)

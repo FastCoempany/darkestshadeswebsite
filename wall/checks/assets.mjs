@@ -1,5 +1,6 @@
 // The asset check (DRAWER-WALL.md, Budgets): every manifest entry has its file, every file under wall/assets has its
-// manifest entry, and no asset is over its budget. Fails on any of the three.
+// manifest entry, every AVIF and WebP has the size its entry says (read from the file's own header), and no asset is
+// over its budget. Fails on any of the four.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -33,6 +34,25 @@ function* walk(dir) {
   }
 }
 
+// An AVIF's or WebP's pixel size from its header (no decoder here): AVIF from its ispe boxes (the largest is the
+// primary image's; an alpha plane carries the same size), WebP from the VP8, VP8L or VP8X header.
+function imageSize(p) {
+  const b = readFileSync(p);
+  if (b.length > 30 && b.toString('latin1', 0, 4) === 'RIFF' && b.toString('latin1', 8, 12) === 'WEBP') {
+    const chunk = b.toString('latin1', 12, 16);
+    if (chunk === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+    if (chunk === 'VP8L') { const x = b.readUInt32LE(21); return { w: (x & 0x3fff) + 1, h: ((x >>> 14) & 0x3fff) + 1 }; }
+    if (chunk === 'VP8X') return { w: b.readUIntLE(24, 3) + 1, h: b.readUIntLE(27, 3) + 1 };
+    return null;
+  }
+  let best = null;
+  for (let i = b.indexOf('ispe'); i !== -1 && i + 16 <= b.length; i = b.indexOf('ispe', i + 4)) {
+    const w = b.readUInt32BE(i + 8), h = b.readUInt32BE(i + 12);
+    if (!best || w * h > best.w * best.h) best = { w, h };
+  }
+  return best;
+}
+
 if (!existsSync(MANIFEST)) { console.error('assets: no manifest at wall/assets/manifest.json'); process.exit(1); }
 const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
 const entries = manifest.assets ?? [];
@@ -45,6 +65,12 @@ for (const e of entries) {
     if (!existsSync(p)) { console.error(`assets: ${file} is in the manifest but not on disk`); failures++; continue; }
     const budgetOf = BUDGET[e.kind];
     if (!budgetOf) { console.error(`assets: ${file} has an unknown kind "${e.kind}"`); failures++; continue; }
+    // the file's own dimensions against the entry's, so the budget is sized by the width the file really has
+    if (/\.(avif|webp)$/.test(file)) {
+      const dim = imageSize(p);
+      if (!dim) { console.error(`assets: ${file}: its dimensions could not be read from its header`); failures++; continue; }
+      if (dim.w !== e.width || dim.h !== e.height) { console.error(`assets: ${file} is ${dim.w}x${dim.h}, the manifest says ${e.width}x${e.height}`); failures++; continue; }
+    }
     const budget = budgetOf(e);
     const size = statSync(p).size;
     if (size > budget) { console.error(`assets: ${file} is ${(size / KB).toFixed(0)} KB, over its ${(budget / KB).toFixed(0)} KB budget`); failures++; }

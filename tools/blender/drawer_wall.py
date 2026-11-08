@@ -55,7 +55,7 @@ FULL_EXT = 250.0                       # the drawer fully out (the sequence's la
 # --- The cabinet (mm) -------------------------------------------------------------------------------------------
 LAYOUTS = {
     "portrait": {"cols": 2, "rows": 4, "rail": 114.0, "width_px": 1170},   # a two-line name, 11 px, at 390 px wide
-    "landscape": {"cols": 4, "rows": 2, "rail": 56.0, "width_px": 2880},
+    "landscape": {"cols": 4, "rows": 2, "rail": 76.0, "width_px": 2880},  # the same label at 1024 px wide (56 mm gave it 43 px; it needs about 58)
 }
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM, GAP_X = 26.0, 26.0, 26.0, 20.0
 CABINET_DEPTH = 340.0
@@ -145,8 +145,8 @@ def calfskin(name, col=(0.0065, 0.0063, 0.006)):
 
 
 def suede(name="suede", col=(0.0034, 0.0023, 0.0015)):
-    """The drawer's lining: a warm brown-black suede, matte with a soft nap (a little sheen, a fine world-space
-    noise in the roughness)."""
+    """The drawer's lining: a warm brown-black suede, matte with a soft nap (a little sheen, a fine noise in the
+    bump), the nap fixed to the lining as the calfskin's grain is to the leather (the position less `slide`)."""
     m = bpy.data.materials.new(name)
     m.use_nodes = True
     nt = m.node_tree
@@ -158,10 +158,17 @@ def suede(name="suede", col=(0.0034, 0.0023, 0.0015)):
     b.inputs["Sheen Roughness"].default_value = 0.7
     b.inputs["Sheen Tint"].default_value = (0.9, 0.75, 0.55, 1)
     geo = nt.nodes.new("ShaderNodeNewGeometry")
+    slide = nt.nodes.new("ShaderNodeAttribute")
+    slide.attribute_type = "OBJECT"
+    slide.attribute_name = "slide"
+    anchored = nt.nodes.new("ShaderNodeVectorMath")
+    anchored.operation = "SUBTRACT"
+    nt.links.new(geo.outputs["Position"], anchored.inputs[0])
+    nt.links.new(slide.outputs["Vector"], anchored.inputs[1])
     noi = nt.nodes.new("ShaderNodeTexNoise")
     noi.inputs["Scale"].default_value = 900.0
     noi.inputs["Detail"].default_value = 4.0
-    nt.links.new(geo.outputs["Position"], noi.inputs["Vector"])
+    nt.links.new(anchored.outputs["Vector"], noi.inputs["Vector"])
     bump = nt.nodes.new("ShaderNodeBump")
     bump.inputs["Strength"].default_value = 0.25
     bump.inputs["Distance"].default_value = 0.0002
@@ -276,11 +283,13 @@ def build_drawer(name, mats, centre, ext_mm=0.0, lit=True, with_gcd=True, frame_
     # the box behind the front: suede floor and walls inside, dark wood outside
     bw = w - BOX_WALL * MM
     zb = -h + 10 * MM                               # the floor's top, a little above the front's bottom
-    box(f"{name} floor", -bw, bw, t, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb, mats.suede, root)
+    lining = [box(f"{name} floor", -bw, bw, t, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb, mats.suede, root)]
     for s in (-1, 1):
-        box(f"{name} side", s * bw - (BOX_WALL * MM if s < 0 else 0), s * bw + (BOX_WALL * MM if s > 0 else 0),
-            t, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb + BOX_H * MM, mats.suede, root)
-    box(f"{name} back", -w + 2 * MM, w - 2 * MM, t + BOX_DEPTH * MM - BOX_WALL * MM, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb + BOX_H * MM, mats.suede, root)
+        lining.append(box(f"{name} side", s * bw - (BOX_WALL * MM if s < 0 else 0), s * bw + (BOX_WALL * MM if s > 0 else 0),
+                          t, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb + BOX_H * MM, mats.suede, root))
+    lining.append(box(f"{name} back", -w + 2 * MM, w - 2 * MM, t + BOX_DEPTH * MM - BOX_WALL * MM, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb + BOX_H * MM, mats.suede, root))
+    for part in lining:
+        part["slide"] = slide                       # the suede's nap moves with the box, as the front's grain does
     # the knob: a blackened cylinder on a pivot at the front's face, tilted up toward the viewer
     pivot = bpy.data.objects.new(f"{name} pivot", None)
     bpy.context.scene.collection.objects.link(pivot)
@@ -510,8 +519,9 @@ def rects_for(sc, cam, slots, W, H, layout):
             for dy in (0, -kd):
                 # the knob's circle in the pivot's tilted frame: local (x, y, z) → world
                 lx, ly, lz = r * math.cos(ang), dy, r * math.sin(ang)
-                wy = ly * math.cos(tilt) - lz * math.sin(tilt)
-                wz = ly * math.sin(tilt) + lz * math.cos(tilt)
+                # the pivot turns by -KNOB_TILT about x (build_drawer): the knob's face tips up toward the viewer
+                wy = ly * math.cos(tilt) + lz * math.sin(tilt)
+                wz = -ly * math.sin(tilt) + lz * math.cos(tilt)
                 knob_pts.append((cx + lx, wy, cz + wz))
         knob = rect(knob_pts)
         rail = L["rail"] * MM
@@ -689,6 +699,7 @@ def matrix_y_up(m):
 LIFT_UP_M, LIFT_TOWARD_M, LIFT_YAW_DEG = 0.13, 0.12, 35.0   # the lifted pose: up, toward the camera, turned to a three-quarter view
 LIFT_KEY_W, LIFT_RIM_W = 12.0, 3.0                           # the lifted frame's own light: a warm key from the side, a cool rim from above
 LIFT_LEAN_SHORT_DEG = 8.0
+LIFT_FSTOP = 8.0                               # the lifted still's aperture: the turned front spans 90 mm of depth; f/8 holds the GCD and the bridge within about 3 px
 CAMERA_TINT = (0.0443, 0.0444, 0.0567)         # the bounds do not depend on the tint; F09's, for the build
 
 
@@ -744,6 +755,12 @@ def write_cameras(sc, cam, root, centre, outdir, frame_ids=None, mesh_step=4, de
             "position": list(map(float, cam.location)), "rotation_euler_xyz_rad": list(map(float, cam.rotation_euler)),
             "three": {"position": y_up(cam.location), "fov_deg": fov, "near": 0.02, "far": 10.0,
                       "quaternion_xyzw": quaternion_y_up(cam.matrix_world.to_quaternion())}}
+    # the three.js camera must look where the Blender one does (the conversion is the easy thing to get wrong)
+    from mathutils import Quaternion
+    qx, qy, qz, qw = camj["three"]["quaternion_xyzw"]
+    fwd_three = Quaternion((qw, qx, qy, qz)) @ Vector((0, 0, -1))
+    fwd_blender = Vector(y_up(cam.matrix_world.to_3x3() @ Vector((0, 0, -1))))
+    assert (fwd_three - fwd_blender).length < 1e-6, f"the three.js camera looks along {tuple(fwd_three)}, the render's along {tuple(fwd_blender)}"
     cx, cz = centre
     zb = cz - DRAWER_H * MM / 2 + 10 * MM
     placement = {"note": "the rule build_drawer places a frame by: its bounding box centred on x, centred in the box's depth, its bottom on the suede; Blender Z up, metres",
@@ -778,9 +795,12 @@ def write_cameras(sc, cam, root, centre, outdir, frame_ids=None, mesh_step=4, de
 
 
 def quaternion_y_up(q):
-    """A Blender rotation (Z up) as a three.js quaternion (Y up), x y z w."""
+    """A Blender camera's rotation (Z up) as the three.js camera's quaternion (Y up), x y z w. Only the world's basis
+    changes: a camera looks down its own -Z with +Y up in both, so the rotation is R q, not R q R^-1 (which turns the
+    camera's own axes too and points it 90 degrees off; the second review's finding). The frames' matrices do take
+    R M R^-1 (matrix_y_up), because a GLB's vertices are converted with the same R."""
     R = Matrix(((1, 0, 0), (0, 0, 1), (0, -1, 0)))
-    m = R @ q.to_matrix() @ R.inverted()
+    m = R @ q.to_matrix()
     qq = m.to_quaternion()
     return [float(qq.x), float(qq.y), float(qq.z), float(qq.w)]
 
@@ -894,9 +914,21 @@ def cmd_lifted(a):
         if ob.type == "MESH" and ob.name not in frame_names:
             ob.visible_camera = False
             ob.visible_transmission = False     # nor through the lenses: the drawer shows through them from the view's own frame, as it does live
-    # the lifted frame is what the camera focuses on
-    centre = m @ Vector(((lo[0] + hi[0]) / 2, 0, (hi[2] - lo[2]) / 2))
-    cam.data.dof.focus_distance = (centre - cam.location).length
+    # the camera focuses on the lifted frame, by the frame's own axes (x across, y up, z toward the viewer; the bounds
+    # are the upright rig's, so up is lo[2]..hi[2] and the front is at -lo[1]): the front's centre at mid-height, and
+    # the GCD on the near temple, which the turn brings 20 to 30 mm nearer. The focus sits between the two, as the
+    # depth along the camera's axis (what Cycles focuses at), and the lens stops down to f/8 so both read sharp (the
+    # second review: the old point hung 22 mm in the air before the front, at f/4)
+    fwd = cam.matrix_world.to_3x3() @ Vector((0, 0, -1))
+    centre = m @ Vector(((lo[0] + hi[0]) / 2, (lo[2] + hi[2]) / 2, -lo[1]))
+    depths = [(centre - cam.location).dot(fwd)]
+    gcd_pts = [p.matrix_world @ Vector(v.co) for p in parts if "gcd" in p.name.lower() for v in p.data.vertices]
+    if gcd_pts:
+        depths.append(float(np.median([(q - cam.location).dot(fwd) for q in gcd_pts])))
+    cam.data.dof.focus_distance = sum(depths) / len(depths)
+    cam.data.dof.aperture_fstop = LIFT_FSTOP
+    print(f"lifted {a.frame}: focus {cam.data.dof.focus_distance:.4f} m along the axis (the front's centre at {depths[0]:.4f}"
+          + (f", the GCD at {depths[1]:.4f}" if len(depths) > 1 else "") + f"), f/{LIFT_FSTOP:.0f}", flush=True)
     # the lifted frame's own light: the warm key from the drawer's side and a soft cool rim from above, as the live
     # frame gets them (the environment map plus one warm key)
     area("lift key", (slots[a.slot][0] + 0.20, -0.50, slots[a.slot][1] + 0.44), tuple(centre), 0.30, LIFT_KEY_W * a.light, (1.0, 0.86, 0.68), size_y=0.16)
@@ -952,6 +984,24 @@ def cmd_check(a):
             for k in ("x", "y", "w", "h"):
                 if abs(r0[key][k] - r1[key][k]) > 0.05:
                     fails.append(f"drawer {r0['index']} {key}.{k}: {r0[key][k]} in rects.json, {r1[key][k]} from the geometry")
+    # the knob rect against the knob itself: every vertex of the knob and its GCD, projected, within 0.15% of the plate
+    # of the rect (rects_for's own arithmetic cannot judge this one: the second review found its tilt turned the wrong
+    # way while the comparison above agreed with it)
+    from bpy_extras.object_utils import world_to_camera_view
+    bpy.context.view_layer.update()
+    for r0, root in zip(rects["drawers"], roots):
+        us, vs = [], []
+        for o in bpy.data.objects:
+            if o.type == "MESH" and o.name.startswith(f"{root.name} knob"):
+                mw = o.matrix_world
+                for v in o.data.vertices:
+                    q = world_to_camera_view(sc, cam, mw @ v.co)
+                    us.append(q.x)
+                    vs.append(1 - q.y)
+        mesh = {"x": min(us) * 100, "y": min(vs) * 100, "w": (max(us) - min(us)) * 100, "h": (max(vs) - min(vs)) * 100}
+        for k in ("x", "y", "w", "h"):
+            if abs(r0["knob"][k] - mesh[k]) > 0.15:
+                fails.append(f"drawer {r0['index']} knob.{k}: {r0['knob'][k]} in rects.json, {mesh[k]:.4f} from the knob's own vertices")
     # 4. the knob GCD: 30 mm long, on every knob, or absent for plain
     gcd = [o for o in bpy.data.objects if "knob gcd gold" in o.name]
     if a.knob == "plain":
@@ -1046,12 +1096,40 @@ def cmd_check(a):
             skipped.append("lit against dark outside the crops (the graded renders are not on this machine)")
     else:
         fails.append(f"{plate_path} missing")
+    # 5. the camera files: the three.js camera looks where the render's does, its position is the render's in Y up,
+    # and each frame's three.js matrix is the Blender one in the Y-up basis (the second review found the camera's
+    # quaternion turned 90 degrees while the matrices were right)
+    from mathutils import Quaternion
+    R = Matrix(((1, 0, 0, 0), (0, 0, 1, 0), (0, -1, 0, 0), (0, 0, 0, 1)))
+    poses = 0
+    for name in ("open.json", "inspect.json"):
+        cam_path = ROOT / "wall" / "assets" / "camera" / name
+        if not cam_path.exists():
+            skipped.append(f"the camera file {name} (not in wall/assets/camera)")
+            continue
+        cj = json.loads(cam_path.read_text())
+        fwd_b = Vector(y_up(Euler(cj["camera"]["rotation_euler_xyz_rad"]).to_matrix() @ Vector((0, 0, -1))))
+        qx, qy, qz, qw = cj["camera"]["three"]["quaternion_xyzw"]
+        fwd_t = Quaternion((qw, qx, qy, qz)) @ Vector((0, 0, -1))
+        if (fwd_t - fwd_b).length > 1e-4:
+            fails.append(f"camera/{name}: the three.js camera looks along {tuple(round(v, 4) for v in fwd_t)}, the render's camera along {tuple(round(v, 4) for v in fwd_b)}")
+        if (Vector(cj["camera"]["three"]["position"]) - Vector(y_up(cj["camera"]["position"]))).length > 1e-6:
+            fails.append(f"camera/{name}: the three.js position is not the render's in Y up")
+        for fid, pose in cj.get("frames", {}).items():
+            mb = Matrix([row[:] for row in pose["matrix_blender"]])
+            mt = R @ mb @ R.inverted()
+            diff = max(abs(mt[r][c] - pose["matrix_three"][r][c]) for r in range(4) for c in range(4))
+            poses += 1
+            if diff > 1e-6:
+                fails.append(f"camera/{name} {fid}: matrix_three is not matrix_blender in Y up (differs by {diff:.2e})")
+    print(f"check: the camera files' three.js camera and {poses} frame poses against the Blender ones")
     for sk in skipped:
         print("check: skipped:", sk)
     for f in fails:
         print("check:", f)
-    print(f"check {a.layout} {a.knob}: {len(fails)} failures")
-    return 1 if fails else 0
+    note = f", {len(skipped)} measurements skipped: incomplete" if skipped else ""
+    print(f"check {a.layout} {a.knob}: {len(fails)} failures{note}")
+    return 1 if fails else (2 if skipped else 0)
 
 
 def main():

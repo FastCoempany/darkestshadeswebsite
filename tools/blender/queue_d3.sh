@@ -1,6 +1,7 @@
 #!/bin/bash
 # The D3 render queue (DRAWER-WALL.md, D3): the two walls lit and dark, the three knob close-ups for O15, the base
-# sequence (24 frames, one job each), the cameras and the environment map. Run it once to fill the queue, then
+# sequence (24 frames, one job each), the cameras and the environment map. Run it to fill the queue (again is safe:
+# a job already there with the same command is left alone, one whose command changed is rendered again), then
 #   nohup python3 tools/blender/render_queue.py run d3 --minutes 95 > work/queue/d3-run.log 2>&1 &
 # and again after each chunk until it exits 0. Jobs whose outputs exist are skipped, so it resumes.
 set -e
