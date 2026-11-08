@@ -46,7 +46,10 @@ CORD_R, CORD_INSET = 1.6, 3.6          # the piping along the front's top and bo
 GAP = 1.6                              # the seam round the front in the cabinet's opening
 BOX_DEPTH = 290.0                      # the drawer box behind the front
 BOX_WALL = 9.0
-BOX_H = 96.0                           # the box's inner height
+BOX_H = 44.0                           # the box's inner height above the suede bed (its walls' top 16 mm under the front's top edge, as before)
+BED_DROP = 60.0                        # the suede bed's top, below the front's top edge: a 52 mm frame standing on it rises to 8 mm under the
+                                       # edge (the founder-reviewed prototype's proportion) and shows whole over the front from the view's end
+                                       # camera; on the 96 mm deep box, its bed 10 mm above the front's bottom, the front hid it entirely
 FLOOR_T = 6.0
 KNOB_D, KNOB_DEPTH, KNOB_TILT = 46.0, 22.0, 28.0
 GCD_MM = 30.0                          # the knob's GCD
@@ -66,6 +69,12 @@ GLOW_MM = 16.0                         # how far the seam light reads beyond the
 VIEW_ASPECT = (1200, 1500)
 VIEW_FRONT_FRACTION = 0.84             # frame 0: the drawer front spans this much of the view's width
 VIEW_CENTER_Y = 0.46                   # frame 0: the front's centre sits here, from the top
+
+
+def bed_z():
+    """The suede bed's top, local to the drawer (metres): BED_DROP under the front's top edge, the same figure in the
+    build, the frame's place, the interior's region and the camera files."""
+    return (DRAWER_H / 2 - BED_DROP) * MM
 
 
 def smoothstep(t):
@@ -282,7 +291,7 @@ def build_drawer(name, mats, centre, ext_mm=0.0, lit=True, with_gcd=True, frame_
         cord["slide"] = slide
     # the box behind the front: suede floor and walls inside, dark wood outside
     bw = w - BOX_WALL * MM
-    zb = -h + 10 * MM                               # the floor's top, a little above the front's bottom
+    zb = bed_z()                                    # the suede bed's top (BED_DROP under the front's top edge)
     lining = [box(f"{name} floor", -bw, bw, t, t + BOX_DEPTH * MM, zb - FLOOR_T * MM, zb, mats.suede, root)]
     for s in (-1, 1):
         lining.append(box(f"{name} side", s * bw - (BOX_WALL * MM if s < 0 else 0), s * bw + (BOX_WALL * MM if s > 0 else 0),
@@ -670,7 +679,7 @@ def interior_region(sc, cam, root, centre, ext_mm):
         return None
     cx, cz = centre
     w = DRAWER_W * MM / 2
-    zb = -DRAWER_H * MM / 2 + 10 * MM
+    zb = bed_z()
     y0 = -ext_mm * MM + FRONT_T * MM
     pts = [(cx + sx * w, y, cz + z) for sx in (-1, 1) for y in (y0, y0 + BOX_DEPTH * MM) for z in (zb, zb + BOX_H * MM)]
     pts += [(cx + sx * w, -ext_mm * MM, cz + z) for sx in (-1, 1) for z in (-DRAWER_H * MM / 2, DRAWER_H * MM / 2)]
@@ -708,7 +717,7 @@ def frame_place(centre, lo, hi):
     frame's bounding box centred across the drawer and in the box's depth, its bottom on the suede."""
     cx, cz = centre
     t = FRONT_T * MM
-    zb = -DRAWER_H * MM / 2 + 10 * MM
+    zb = bed_z()
     fy = t + (BOX_DEPTH * MM - (hi[1] - lo[1])) / 2 - lo[1]
     return Vector((cx - (lo[0] + hi[0]) / 2, -FULL_EXT * MM + fy, cz + zb - lo[2] + 0.0002))
 
@@ -762,7 +771,7 @@ def write_cameras(sc, cam, root, centre, outdir, frame_ids=None, mesh_step=4, de
     fwd_blender = Vector(y_up(cam.matrix_world.to_3x3() @ Vector((0, 0, -1))))
     assert (fwd_three - fwd_blender).length < 1e-6, f"the three.js camera looks along {tuple(fwd_three)}, the render's along {tuple(fwd_blender)}"
     cx, cz = centre
-    zb = cz - DRAWER_H * MM / 2 + 10 * MM
+    zb = cz + bed_z()
     placement = {"note": "the rule build_drawer places a frame by: its bounding box centred on x, centred in the box's depth, its bottom on the suede; Blender Z up, metres",
                  "x_m": float(cx), "y_box_front_m": float(-FULL_EXT * MM + FRONT_T * MM), "y_box_back_m": float(-FULL_EXT * MM + FRONT_T * MM + BOX_DEPTH * MM),
                  "z_floor_m": float(zb), "three": {"x": float(cx), "y_floor": float(zb), "z_box_front": float(FULL_EXT * MM - FRONT_T * MM), "z_box_back": float(FULL_EXT * MM - FRONT_T * MM - BOX_DEPTH * MM)}}
