@@ -432,8 +432,8 @@ def cmd_knobs(a):
 
 def cmd_r1(a):
     """R1, the founder's first look (DRAWER-WALL.md, D3): docs/build/drawer-wall/review/R1/ with a contact sheet of
-    both walls lit and dark, the view's frames 0, 8, 16 and 23, the three knob close-ups and one lifted still, each
-    graded as the wall is, plus the pieces as single JPEGs and an index.md."""
+    both walls lit and dark, the view's frames 0, 8, 16 and 23, F09 in the drawer at frame 23 (D4), the three knob
+    close-ups and one lifted still, each graded as the wall is, plus the pieces as single JPEGs and an index.md."""
     from PIL import Image, ImageDraw
     out_dir = ROOT / "docs" / "build" / "drawer-wall" / "review" / "R1"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -451,6 +451,12 @@ def cmd_r1(a):
             out = out_dir / f"view-{i:02d}.jpg"
             grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for(f"seq-base-{i:03d}"), **grade_for("sequence"))
             pieces.append((f"The drawer view, frame {i} of 24", out))
+    src = WORK / "seq" / "F09" / "023.png"
+    if src.exists():
+        # F09's own sequence at the end of the pull (D4): the frame standing on the bed, the bed question's picture
+        out = out_dir / "view-23-F09.jpg"
+        grade_scene.process(src, out, LOOK["sequence"], None, 900, None, 84, seed=grade_scene.seed_for("seq-F09-023"), **grade_for("sequence"))
+        pieces.append(("F09 in the open drawer, frame 23 of 24 (the end of the pull: the frame standing on the bed)", out))
     for knob in ("black-relief", "gold", "plain"):
         src = WORK / f"knob-{knob}.png"
         if src.exists():
@@ -484,7 +490,7 @@ def cmd_r1(a):
             x += cell_w + pad
         y += rh + pad
     sheet.save(out_dir / "contact-sheet.jpg", quality=82)
-    lines = ["# R1 · the founder's first look", "", "Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the D3 pull request.", "", "![contact sheet](contact-sheet.jpg)", ""]
+    lines = ["# R1 · the founder's first look", "", "Made by `tools/blender/wall_export.py r1` on the renders in `work/wall/` (DRAWER-WALL.md, D3). Every image is graded as the wall is. Black relief is the knob's default (O15); the gold and plain close-ups are the alternatives. Answer on the current phase's pull request.", "", "![contact sheet](contact-sheet.jpg)", ""]
     for label, path in pieces:
         lines.append(f"- {label}: `{path.name}`")
     (out_dir / "index.md").write_text("\n".join(lines) + "\n")
