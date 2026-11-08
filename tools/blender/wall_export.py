@@ -210,6 +210,9 @@ def cmd_wall(a):
     print(f"wall {a.layout} {a.knob}: {len(rects['drawers'])} dark crops, rects.json, manifest updated", flush=True)
 
 
+FIRST_REGION_FRAME = 3      # the first frame whose region the D4 queue renders (tools/blender/queue_d4.sh): the interior shows from here
+
+
 def composite_regions(frame):
     """A frame's sequence from its region renders (DRAWER-WALL.md, The drawer view): each region, rendered with the
     frame in the drawer, laid over the base frame with an 8 px feather at its edges; frames before the interior
@@ -228,6 +231,10 @@ def composite_regions(frame):
             continue
         b = cv2.imread(str(base), cv2.IMREAD_UNCHANGED)
         if not region.exists() or not meta.exists():
+            if i >= FIRST_REGION_FRAME:
+                # from here on the interior shows and the queue renders a region: shipping the base frame would show the
+                # drawer empty (the D4 review); the render or its border is missing, so the export stops
+                raise SystemExit(f"{frame} frame {i:03d}: no region render or border in {src_dir}; the sequence would show the drawer empty")
             cv2.imwrite(str(out), b)
             made += 1
             continue
