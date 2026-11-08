@@ -85,7 +85,8 @@ test.describe('pull first (?mech=pull)', () => {
     await waitForState(page, ['open']);
     await clickQuiet(page, 'Close');
     await page.waitForFunction(() => !(document.querySelector('drawer-view') as HTMLElement & { open?: boolean })?.open);
-    // the face still scrolls
+    // the face still scrolls (a viewport short enough that the wall must scroll)
+    await page.setViewportSize({ width: 412, height: 520 });
     const c = await bayCenter(page, 'drawer_bay/f03');
     const before = await page.evaluate(() => scrollY);
     await touchDrag(cdp, page, c.x - 60, c.y, c.y - 220, 10);

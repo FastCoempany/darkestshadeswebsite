@@ -98,7 +98,10 @@ export class DrawerWall extends LitElement {
     }
   }
 
-  protected override firstUpdated(): void {
+  protected override updated(): void {
+    // the plate's size on screen, for the knob's 44 px target: observed from the first update that renders the plate
+    // (the store may arrive after the element's first render, which then shows nothing)
+    if (this.ro) return;
     const plate = this.renderRoot.querySelector('.plate');
     if (plate && 'ResizeObserver' in window) {
       this.ro = new ResizeObserver(([e]) => { if (e) this.plateSize = { width: e.contentRect.width, height: e.contentRect.height }; });

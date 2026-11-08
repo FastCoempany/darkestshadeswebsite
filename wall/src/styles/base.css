@@ -51,7 +51,7 @@ html, body {
 .tier0 a:hover > span:nth-child(2) { text-decoration: underline; }
 .tier0 li > span:last-child, .tier0 a > span:last-child { font-variant-numeric: tabular-nums; }
 drawer-wall:not(:defined) { display: block; min-height: 60vh; }
-.debug-copy { position: fixed; left: max(var(--space-3), env(safe-area-inset-left, 0px)); bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px)); z-index: 30; appearance: none; background: var(--color-surface-raised); color: var(--color-text-secondary); border: var(--border-hairline) solid var(--color-border-control); font: inherit; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; padding: var(--space-3); min-height: 44px; }
+.debug-copy { position: fixed; left: max(var(--space-3), env(safe-area-inset-left, 0px)); bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px)); z-index: 5; /* under the drawer view (10) and the records panel (20): it never covers their controls; close the view to copy */ appearance: none; background: var(--color-surface-raised); color: var(--color-text-secondary); border: var(--border-hairline) solid var(--color-border-control); font: inherit; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; padding: var(--space-3); min-height: 44px; }
 .debug-copy:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
 
 /* D1's labelled placeholders, where the wall will be: gone when the elements land (D5, D6) */

@@ -64,7 +64,8 @@ export class DrawerBay extends LitElement {
   /** The knob's rect grown to at least 44 × 44 px on screen (SC 2.5.8 and the doc's 44 px). */
   private knobStyle() {
     const r = this.rects!.knob;
-    const pw = this.plateSize.width || 1, ph = this.plateSize.height || 1;
+    const pw = this.plateSize.width, ph = this.plateSize.height;
+    if (!pw || !ph) return this.pct(r);   // the plate's size on screen is not known yet: the rect as drawn; grown once it is
     const wPct = Math.max(r.w, (KNOB_MIN_PX / pw) * 100), hPct = Math.max(r.h, (KNOB_MIN_PX / ph) * 100);
     return { left: `${r.x + r.w / 2 - wPct / 2}%`, top: `${r.y + r.h / 2 - hPct / 2}%`, width: `${wPct}%`, height: `${hPct}%` };
   }
