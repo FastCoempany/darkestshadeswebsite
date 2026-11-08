@@ -2,7 +2,7 @@
  "$comment": "Each frame's lens transmission (linear, r g b, 0 = opaque, 1 = clear), measured by tools/photo/lens_tints.py on the A1 stage master against the stage colour, in the boxes of content/photography/lens-samples.json. The wall's renders and the live frames take these tints; F04 takes #38's values.",
  "tool": "tools/photo/lens_tints.py",
  "samples": "content/photography/lens-samples.json",
- "sourceCommit": "c20db59ccc8e",
+ "sourceCommit": "81a2f15b03d4",
  "frames": {
   "F01": {
    "source": "dam/product/DS-F01-A1-v01-stage.png",
@@ -355,22 +355,22 @@
      },
      "bottom": {
       "transmission": [
-       0.2598,
-       0.2559,
-       0.2645
+       0.2644,
+       0.2605,
+       0.2692
       ],
       "boxes": [
        [
-        1000,
-        2600,
-        1500,
-        2700
+        1050,
+        2580,
+        1330,
+        2680
        ],
        [
-        2100,
-        2600,
-        2600,
-        2700
+        2300,
+        2580,
+        2550,
+        2680
        ]
       ]
      }
@@ -393,9 +393,9 @@
      0.1095
     ],
     "bottom": [
-     0.2598,
-     0.2559,
-     0.2645
+     0.2644,
+     0.2605,
+     0.2692
     ]
    }
   },

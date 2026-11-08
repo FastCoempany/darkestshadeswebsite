@@ -14,7 +14,7 @@
       "sourceCommit": "9c970b80d135",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68.0,
+        "lensMm": 68,
         "fovDeg": 36.617
       },
       "toolsHash": "7ae4fd6319b6"
@@ -31,7 +31,7 @@
       "sourceCommit": "9c970b80d135",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68.0,
+        "lensMm": 68,
         "fovDeg": 36.617
       },
       "toolsHash": "7ae4fd6319b6"
@@ -67,8 +67,8 @@
       "frame": "F01",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F01 --out work/glb/F01.glb --tint 0.3073 0.4816 0.7333 --check --report work/glb/F01.report.json; optimize.mjs work/glb/F01.glb wall/assets/glb/F01.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 339004,
         "withinAim": true,
@@ -79,7 +79,14 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 150.2,
         "builtTriangles": 1130324,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 9.84 mm behind the hinge, 4.68 mm below the temple's top",
+        "gcdProportion": 0.3318,
+        "gcdMasterProportion": 0.3274,
+        "gcdRule": {
+          "faceMm": 12,
+          "behindHingeMm": 9.84,
+          "belowTopMm": 4.68
+        }
       }
     },
     {
@@ -92,10 +99,10 @@
       "frame": "F02",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F02 --out work/glb/F02.glb --tint 0.0325 0.0325 0.0434 --check --report work/glb/F02.report.json; optimize.mjs work/glb/F02.glb wall/assets/glb/F02.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
-        "bytes": 322860,
+        "bytes": 323268,
         "withinAim": true,
         "triangles": 59994,
         "textures": "albedo image/webp 1765x615",
@@ -104,7 +111,9 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 142.57,
         "builtTriangles": 883812,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against the build's (the wing or end piece, placed from the drawing and the photograph)",
+        "gcdProportion": 0.3317,
+        "gcdMasterProportion": 0.3274
       }
     },
     {
@@ -117,10 +126,10 @@
       "frame": "F03",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F03 --out work/glb/F03.glb --tint 0.9463 0.6731 0.0647 --check --report work/glb/F03.report.json; optimize.mjs work/glb/F03.glb wall/assets/glb/F03.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
-        "bytes": 276116,
+        "bytes": 276124,
         "withinAim": true,
         "triangles": 59991,
         "textures": "none",
@@ -129,7 +138,14 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 145,
         "builtTriangles": 901956,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 7.38 mm behind the hinge, 3.51 mm below the temple's top",
+        "gcdProportion": 0.3314,
+        "gcdMasterProportion": 0.3274,
+        "gcdRule": {
+          "faceMm": 9,
+          "behindHingeMm": 7.38,
+          "belowTopMm": 3.51
+        }
       }
     },
     {
@@ -142,8 +158,8 @@
       "frame": "F04",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F04 --out work/glb/F04.glb --tint 0.038 0.038 0.049 --check --report work/glb/F04.report.json; optimize.mjs work/glb/F04.glb wall/assets/glb/F04.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 282136,
         "withinAim": true,
@@ -154,7 +170,9 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 146.6,
         "builtTriangles": 973096,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against the build's (the wing or end piece, placed from the drawing and the photograph)",
+        "gcdProportion": 0.3311,
+        "gcdMasterProportion": 0.3274
       }
     },
     {
@@ -167,8 +185,8 @@
       "frame": "F05",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F05 --out work/glb/F05.glb --tint 0.0484 0.0477 0.0595 --check --report work/glb/F05.report.json; optimize.mjs work/glb/F05.glb wall/assets/glb/F05.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 280776,
         "withinAim": true,
@@ -179,7 +197,9 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 146.8,
         "builtTriangles": 969988,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against the build's (the wing or end piece, placed from the drawing and the photograph)",
+        "gcdProportion": 0.3314,
+        "gcdMasterProportion": 0.3274
       }
     },
     {
@@ -192,8 +212,8 @@
       "frame": "F06",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F06 --out work/glb/F06.glb --tint 0.0919 0.084 0.1095 --check --report work/glb/F06.report.json; optimize.mjs work/glb/F06.glb wall/assets/glb/F06.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 316644,
         "withinAim": true,
@@ -204,7 +224,15 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 144.8,
         "builtTriangles": 1134920,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 7.79 mm behind the hinge, 3.70 mm below the temple's top",
+        "gcdProportion": 0.3316,
+        "gcdMasterProportion": 0.3274,
+        "gcdRule": {
+          "faceMm": 9.5,
+          "behindHingeMm": 7.79,
+          "belowTopMm": 3.7
+        },
+        "lensSource": "the lens's alpha by height from frame3d's gradient table (12 rows, -22 to 22 mm, measured on the same A1 shot); --tint is the lens's mean and is not read by this lens"
       }
     },
     {
@@ -217,8 +245,8 @@
       "frame": "F08",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F08 --out work/glb/F08.glb --tint 0.166 0.1658 0.1915 --check --report work/glb/F08.report.json; optimize.mjs work/glb/F08.glb wall/assets/glb/F08.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 334956,
         "withinAim": true,
@@ -229,7 +257,15 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 153.4,
         "builtTriangles": 1211096,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 8.20 mm behind the hinge, 3.91 mm below the temple's top",
+        "gcdProportion": 0.3312,
+        "gcdMasterProportion": 0.3274,
+        "gcdRule": {
+          "faceMm": 10,
+          "behindHingeMm": 8.2,
+          "belowTopMm": 3.91
+        },
+        "lensSource": "the lens's alpha by height from frame3d's gradient table (15 rows, -20 to 20.5 mm, measured on the same A1 shot); --tint is the lens's mean and is not read by this lens"
       }
     },
     {
@@ -242,8 +278,8 @@
       "frame": "F09",
       "tool": "tools/blender/frame_glb.py",
       "command": "frame_glb.py F09 --out work/glb/F09.glb --tint 0.0443 0.0444 0.0567 --check --report work/glb/F09.report.json; optimize.mjs work/glb/F09.glb wall/assets/glb/F09.glb (meshopt, WebP textures)",
-      "sourceCommit": "ac361d089f52",
-      "toolsHash": "a3cc75b84c6e",
+      "sourceCommit": "0a70d93746af",
+      "toolsHash": "d3a75a231606",
       "checks": {
         "bytes": 274464,
         "withinAim": true,
@@ -254,7 +290,14 @@
         "gcdOnWearersRight": true,
         "frontWidthMm": 146,
         "builtTriangles": 968332,
-        "frameGlbCheck": "0 failures"
+        "frameGlbCheck": "0 failures; the GCD's centre against 01-brand-system.md's rule: 12.30 mm behind the hinge, 5.85 mm below the temple's top",
+        "gcdProportion": 0.3309,
+        "gcdMasterProportion": 0.3274,
+        "gcdRule": {
+          "faceMm": 15,
+          "behindHingeMm": 12.3,
+          "belowTopMm": 5.85
+        }
       }
     },
     {
@@ -266,8 +309,8 @@
       "status": "mockup",
       "tool": "tools/photo/lens_tints.py",
       "command": "lens_tints.py (content/photography/lens-samples.json against dam/product/DS-<frame>-A1-v01-stage.png)",
-      "sourceCommit": "c20db59ccc8e",
-      "toolsHash": "0252e7dac85f",
+      "sourceCommit": "81a2f15b03d4",
+      "toolsHash": "22b3bba18212",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
         "gradients": "F06,F08",
