@@ -11,13 +11,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py cameras; wall_export.py cameras",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68,
+        "lensMm": 68.0,
         "fovDeg": 36.617
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "camera/open",
@@ -28,13 +28,13 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py cameras; wall_export.py cameras",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "checks": {
         "frames": "F01,F02,F03,F04,F05,F06,F08,F09",
-        "lensMm": 68,
+        "lensMm": 68.0,
         "fovDeg": 36.617
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "env/drawer",
@@ -45,17 +45,17 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py env --samples 48 --cameras work/wall/camera; wall_export.py env",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1024,
       "height": 512,
       "checks": {
-        "bytes": 400232,
+        "bytes": 369219,
         "withinBudget": true,
-        "capturePointBlenderM": "-0.0748, -0.2579, 0.3127",
+        "capturePointBlenderM": "-0.0748, -0.2579, 0.3647",
         "capture": "Blender's equirectangular camera at F09's lifted pose (camera/inspect.json, frame.position_blender), rotation 90 0 0 degrees: looking along +y, into the drawer and toward the wall, Z up",
         "threeRotation": "not yet set: D5 turns the environment until the live frame's reflections match the lifted still, and records the angle here"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "glb/F01",
@@ -284,19 +284,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 76844,
-        "webpBytes": 71166,
+        "avifBytes": 77443,
+        "webpBytes": 70896,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/001",
@@ -308,19 +308,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79699,
-        "webpBytes": 68676,
+        "avifBytes": 78569,
+        "webpBytes": 68694,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/002",
@@ -332,19 +332,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78097,
-        "webpBytes": 70970,
+        "avifBytes": 76741,
+        "webpBytes": 70718,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/003",
@@ -356,19 +356,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 3 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 76165,
-        "webpBytes": 70568,
+        "avifBytes": 77228,
+        "webpBytes": 69062,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/004",
@@ -380,19 +380,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 4 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79161,
-        "webpBytes": 70906,
+        "avifBytes": 78377,
+        "webpBytes": 69478,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/005",
@@ -404,19 +404,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 5 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79045,
-        "webpBytes": 68304,
+        "avifBytes": 78667,
+        "webpBytes": 69806,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/006",
@@ -428,19 +428,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 6 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81469,
-        "webpBytes": 68992,
+        "avifBytes": 80948,
+        "webpBytes": 68740,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/007",
@@ -452,19 +452,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 7 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81495,
-        "webpBytes": 69436,
+        "avifBytes": 80884,
+        "webpBytes": 70322,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/008",
@@ -476,19 +476,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 8 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 62553,
-        "webpBytes": 68472,
+        "avifBytes": 62563,
+        "webpBytes": 69736,
         "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/009",
@@ -500,19 +500,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 9 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 73377,
-        "webpBytes": 68364,
+        "avifBytes": 71598,
+        "webpBytes": 70072,
         "avifQuality": 62,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/010",
@@ -524,19 +524,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 10 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80533,
-        "webpBytes": 69736,
+        "avifBytes": 81379,
+        "webpBytes": 69628,
         "avifQuality": 64,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/011",
@@ -548,19 +548,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 11 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80717,
-        "webpBytes": 70116,
-        "avifQuality": 64,
+        "avifBytes": 62456,
+        "webpBytes": 69404,
+        "avifQuality": 58,
         "webpQuality": 76,
-        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/012",
@@ -572,19 +572,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 12 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81365,
-        "webpBytes": 67780,
-        "avifQuality": 64,
+        "avifBytes": 61917,
+        "webpBytes": 70700,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/013",
@@ -596,19 +596,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 13 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 70624,
-        "webpBytes": 70194,
-        "avifQuality": 62,
+        "avifBytes": 61854,
+        "webpBytes": 70830,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/014",
@@ -620,19 +620,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 14 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 78890,
-        "webpBytes": 67480,
-        "avifQuality": 64,
+        "avifBytes": 63121,
+        "webpBytes": 70484,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/015",
@@ -644,19 +644,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 15 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 74010,
-        "webpBytes": 66302,
-        "avifQuality": 62,
+        "avifBytes": 64172,
+        "webpBytes": 69154,
+        "avifQuality": 58,
         "webpQuality": 76,
-        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/016",
@@ -668,19 +668,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 16 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 81380,
-        "webpBytes": 65484,
-        "avifQuality": 64,
+        "avifBytes": 62448,
+        "webpBytes": 69808,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/017",
@@ -692,19 +692,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 17 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79326,
-        "webpBytes": 65276,
-        "avifQuality": 64,
+        "avifBytes": 62988,
+        "webpBytes": 71128,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/018",
@@ -716,19 +716,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 18 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79915,
-        "webpBytes": 63760,
-        "avifQuality": 64,
+        "avifBytes": 64388,
+        "webpBytes": 69688,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/019",
@@ -740,19 +740,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 19 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77857,
-        "webpBytes": 61754,
-        "avifQuality": 64,
+        "avifBytes": 64559,
+        "webpBytes": 68840,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/020",
@@ -764,19 +764,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 20 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 76790,
-        "webpBytes": 61400,
-        "avifQuality": 64,
+        "avifBytes": 64336,
+        "webpBytes": 67236,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/021",
@@ -788,19 +788,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 21 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 77264,
-        "webpBytes": 63048,
-        "avifQuality": 64,
+        "avifBytes": 62976,
+        "webpBytes": 68456,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/022",
@@ -812,19 +812,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 22 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 80268,
-        "webpBytes": 62796,
-        "avifQuality": 64,
+        "avifBytes": 64096,
+        "webpBytes": 67804,
+        "avifQuality": 58,
         "webpQuality": 76,
         "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/1200/023",
@@ -836,19 +836,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 23 --samples 48; wall_export.py sequence --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 1200,
       "height": 1500,
       "checks": {
-        "avifBytes": 79182,
-        "webpBytes": 61132,
-        "avifQuality": 64,
+        "avifBytes": 64655,
+        "webpBytes": 66496,
+        "avifQuality": 58,
         "webpQuality": 76,
-        "edgeBlackMaxAvif": 0,
+        "edgeBlackMaxAvif": 1,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/000",
@@ -860,19 +860,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 0 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44218,
-        "webpBytes": 37032,
+        "avifBytes": 44332,
+        "webpBytes": 37226,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/001",
@@ -884,19 +884,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 1 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43344,
-        "webpBytes": 36832,
+        "avifBytes": 43305,
+        "webpBytes": 36796,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/002",
@@ -908,19 +908,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 2 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43958,
-        "webpBytes": 36394,
+        "avifBytes": 43763,
+        "webpBytes": 36320,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/003",
@@ -932,19 +932,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 3 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 45131,
-        "webpBytes": 36670,
+        "avifBytes": 45266,
+        "webpBytes": 36808,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/004",
@@ -956,19 +956,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 4 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44589,
-        "webpBytes": 36578,
+        "avifBytes": 43707,
+        "webpBytes": 37328,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/005",
@@ -980,19 +980,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 5 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44531,
-        "webpBytes": 35946,
+        "avifBytes": 44228,
+        "webpBytes": 36524,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/006",
@@ -1004,19 +1004,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 6 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44027,
-        "webpBytes": 36698,
+        "avifBytes": 43872,
+        "webpBytes": 36786,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/007",
@@ -1028,19 +1028,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 7 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43168,
-        "webpBytes": 36832,
+        "avifBytes": 42846,
+        "webpBytes": 36886,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/008",
@@ -1052,19 +1052,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 8 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44494,
-        "webpBytes": 36672,
+        "avifBytes": 44345,
+        "webpBytes": 36376,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/009",
@@ -1076,19 +1076,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 9 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43734,
-        "webpBytes": 36970,
+        "avifBytes": 43701,
+        "webpBytes": 37874,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/010",
@@ -1100,19 +1100,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 10 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44289,
-        "webpBytes": 36914,
+        "avifBytes": 44514,
+        "webpBytes": 36686,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/011",
@@ -1124,19 +1124,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 11 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43958,
-        "webpBytes": 37318,
+        "avifBytes": 43446,
+        "webpBytes": 37008,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/012",
@@ -1148,19 +1148,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 12 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44946,
-        "webpBytes": 37270,
+        "avifBytes": 44668,
+        "webpBytes": 37112,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/013",
@@ -1172,19 +1172,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 13 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44378,
-        "webpBytes": 36354,
+        "avifBytes": 44042,
+        "webpBytes": 37110,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/014",
@@ -1196,19 +1196,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 14 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43483,
-        "webpBytes": 36280,
+        "avifBytes": 45400,
+        "webpBytes": 37156,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/015",
@@ -1220,19 +1220,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 15 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44119,
-        "webpBytes": 36174,
+        "avifBytes": 45369,
+        "webpBytes": 36618,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/016",
@@ -1244,19 +1244,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 16 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 44411,
-        "webpBytes": 36028,
+        "avifBytes": 45860,
+        "webpBytes": 36642,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/017",
@@ -1268,19 +1268,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 17 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42875,
-        "webpBytes": 35802,
+        "avifBytes": 44617,
+        "webpBytes": 36544,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/018",
@@ -1292,19 +1292,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 18 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 43353,
-        "webpBytes": 34756,
+        "avifBytes": 44569,
+        "webpBytes": 37114,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/019",
@@ -1316,19 +1316,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 19 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42104,
-        "webpBytes": 34420,
+        "avifBytes": 44915,
+        "webpBytes": 36246,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/020",
@@ -1340,19 +1340,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 20 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42261,
-        "webpBytes": 34970,
+        "avifBytes": 45399,
+        "webpBytes": 35542,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/021",
@@ -1364,19 +1364,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 21 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 41380,
-        "webpBytes": 34066,
+        "avifBytes": 44213,
+        "webpBytes": 35966,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/022",
@@ -1388,19 +1388,19 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 22 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 42547,
-        "webpBytes": 35024,
+        "avifBytes": 44518,
+        "webpBytes": 35632,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "seq/base/720/023",
@@ -1412,19 +1412,44 @@
       "status": "mockup",
       "tool": "tools/blender/drawer_wall.py",
       "command": "drawer_wall.py sequence --frames 24 --only 23 --samples 48; wall_export.py sequence --width 720 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.06)",
-      "sourceCommit": "97239f3073e3",
+      "sourceCommit": "9c970b80d135",
       "width": 720,
       "height": 900,
       "checks": {
-        "avifBytes": 41885,
-        "webpBytes": 33914,
+        "avifBytes": 44410,
+        "webpBytes": 35062,
         "avifQuality": 70,
         "webpQuality": 82,
         "edgeBlackMaxAvif": 0,
         "edgeBlackMaxWebp": 0,
         "grade": "cool"
       },
-      "toolsHash": "0252e7dac85f"
+      "toolsHash": "7ae4fd6319b6"
+    },
+    {
+      "id": "stills/F09-lifted",
+      "kind": "still",
+      "files": [
+        "stills/F09-lifted.avif",
+        "stills/F09-lifted.webp"
+      ],
+      "status": "mockup",
+      "frame": "F09",
+      "tool": "tools/blender/drawer_wall.py",
+      "command": "drawer_wall.py lifted --frame F09 --samples 64; wall_export.py stills --frame F09 --width 1200 (grade cool exposure 0.3 toe 0.004, edge black to 0.02 of the width or 32 px and full from 0.032)",
+      "sourceCommit": "9c970b80d135",
+      "width": 1200,
+      "height": 1500,
+      "checks": {
+        "avifBytes": 43623,
+        "webpBytes": 52640,
+        "avifQuality": 84,
+        "webpQuality": 84,
+        "alpha": true,
+        "alphaCoverage": 0.1164,
+        "grade": "cool"
+      },
+      "toolsHash": "7ae4fd6319b6"
     },
     {
       "id": "wall/landscape/black-relief/bay-00-dark",
