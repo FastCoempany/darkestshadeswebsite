@@ -352,7 +352,7 @@ def cmd_env(a):
             "checks": {"bytes": size, "withinBudget": size <= BUDGET["env"](1024),
                        "capturePointBlenderM": ", ".join(f"{v:.4f}" for v in capture) if capture else "unknown",
                        "capture": "Blender's equirectangular camera at F09's lifted pose (camera/inspect.json, frame.position_blender), rotation 90 0 0 degrees: looking along +y, into the drawer and toward the wall, Z up",
-                       "threeRotation": "not yet set: D5 turns the environment until the live frame's reflections match the lifted still, and records the angle here"}})
+                       "threeRotation": "Euler (0, +90 deg, 0), scene.environmentRotation about the vertical (lifted-frame.ts ENV_ROTATION_Y): three.js's equirectangular mapping shows the capture's forward a quarter turn from where Blender put it; measured while preparing D5 with a probe capture (emissive markers right, up and ahead) read back as the background and in a mirror sphere's reflections"}})
     save_manifest(m)
     print(f"env exported: {size // KB} KB", flush=True)
 
