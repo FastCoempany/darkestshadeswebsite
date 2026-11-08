@@ -4,6 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 // The states sheet (DRAWER-WALL.md, Testing): screenshots at 390 and 1440 against committed baselines, the live
 // canvas masked in the pixel comparison; a separate test checks that it drew; axe clean on the sheet.
 // WALL_NO_PIXELS=1 (CI) skips the comparisons only. Baselines carry stand-in type (Urbanist, Mona Sans).
+// The comparison is tight (threshold 0.1, at most 200 px): with pixelmatch's default 0.2 the frame on the suede and the
+// lifted still over the dark drawer did not count as a difference, and `--update-snapshots` kept a baseline without them.
 test.describe('the states sheet', () => {
   test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || !!isMobile, 'the baselines are desktop Chromium at two widths');
 
@@ -16,7 +18,7 @@ test.describe('the states sheet', () => {
       await page.evaluate(() => document.fonts.ready);
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(500);
-      await expect(page).toHaveScreenshot(`states-${w}.png`, { fullPage: true, mask: ['lifted', 'turned', 'zoomed'].map((f) => page.locator(`drawer-view[data-fixture="${f}"] lifted-frame canvas`)), maxDiffPixelRatio: 0.004, timeout: 90000 });   // two full captures must agree, and each takes about ten seconds with the live canvases on the page
+      await expect(page).toHaveScreenshot(`states-${w}.png`, { fullPage: true, mask: ['lifted', 'turned', 'zoomed'].map((f) => page.locator(`drawer-view[data-fixture="${f}"] lifted-frame canvas`)), threshold: 0.1, maxDiffPixels: 200, timeout: 90000 });   // two full captures must agree, and each takes about ten seconds with the live canvases on the page; a frame missing from a drawer (black on dark suede) must fail, so the colour threshold is tight and at most 200 px may differ
     });
   }
 

@@ -182,7 +182,8 @@ test('?open= opens that drawer on its last frame, not lifted; an unknown value o
   await page.goto('index.html?open=what-arnie-hid');
   await wallLoaded(page);
   expect(await waitForState(page, ['open'], 15000)).toBe('open');
-  await expect(page.locator('drawer-view')).toHaveAttribute('aria-label', /What Arnie Hid/);
+  // the view's dialog (its .view, role="dialog") is named for the frame; the host element carries no label
+  await expect(page.locator('drawer-view').getByRole('dialog', { name: /What Arnie Hid/ })).toBeVisible();
   await page.goto('index.html?open=F07');
   await wallLoaded(page);
   await page.waitForTimeout(800);
