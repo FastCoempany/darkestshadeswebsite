@@ -76,7 +76,11 @@ function manifestEntry(frame, report) {
   // the D4 review's measurements: the band's proportion against the master's, the centre against the brand rule, the lens's source
   if (built.gcdProportion != null) checks.gcdProportion = Math.round(built.gcdProportion * 10000) / 10000;
   if (built.gcdMasterProportion != null) checks.gcdMasterProportion = built.gcdMasterProportion;
-  if (built.gcdRule) checks.gcdRule = { faceMm: built.gcdRule.faceMm, behindHingeMm: Math.round(built.gcdRule.behindHingeMm * 100) / 100, belowTopMm: Math.round(built.gcdRule.belowTopMm * 100) / 100 };
+  if (built.gcdRule) {   // the manifest's checks are scalars
+    checks.gcdRuleFaceMm = built.gcdRule.faceMm;
+    checks.gcdBehindHingeMm = Math.round(built.gcdRule.behindHingeMm * 100) / 100;
+    checks.gcdBelowTopMm = Math.round(built.gcdRule.belowTopMm * 100) / 100;
+  }
   if (built.lensSource) checks.lensSource = built.lensSource;
   const tint = built.tint ? ` --tint ${built.tint.join(' ')}` : '';
   return {
