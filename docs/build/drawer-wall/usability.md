@@ -1,10 +1,12 @@
 # The usability test: five people, their own phones
 
+*A draft from D5 (Nov 8 2026); D7 finishes it against the built wall and the phone link.*
+
 Run by Antaeus after R2 (DRAWER-WALL.md, The usability test; O16). Five people on their own phones, at least two iPhones and two Androids, 15 minutes each, thinking aloud, in person or on a video call with screen sharing. Half start with tap first, half with pull first; everyone tries both. Nothing is explained before the tasks: the wall has to explain itself.
 
 ## Before each session
 
-- Open the phone link (the top of `WALL-PROGRESS.md`) on the tester's phone in their usual browser. Add `?mech=pull` for the pull-first start; without it the wall is tap first. Add `&debug=1` so the event log is kept.
+- Open the phone link (the top of `WALL-PROGRESS.md`) on the tester's phone in their usual browser. Add `?mech=pull` for the pull-first start; without it the wall is tap first. Add `debug=1` to the query (`?debug=1`, or `?mech=pull&debug=1`) so the event log is kept.
 - Say only: "This is a page from a sunglasses brand. I'll ask you to do a few things. Say what you're thinking as you go. Nothing you do is wrong."
 - Start a stopwatch at the first task.
 

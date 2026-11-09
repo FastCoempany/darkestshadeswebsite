@@ -22,11 +22,12 @@ let tier: Tier = 2;
 let view: DrawerView | null = null;
 let viewReady: Promise<DrawerView> | null = null;
 
-/** The drawer view and what it needs (three.js among them) load on the first open, never in the initial bundle. */
+/** The drawer view and what it needs load on the first open, never in the initial bundle; <lifted-frame> at every tier
+ * (tier 1 shows the lifted still through it), three.js only inside its tier-2 setup. */
 function loadView(store: WallStore, wall: DrawerWall): Promise<DrawerView> {
   if (!viewReady) {
     viewReady = (async () => {
-      await Promise.all([import('./elements/drawer-view'), import('./elements/photo-zoom'), tier === 2 ? import('./elements/lifted-frame') : Promise.resolve()]);
+      await Promise.all([import('./elements/drawer-view'), import('./elements/photo-zoom'), import('./elements/lifted-frame')]);
       const v = document.createElement('drawer-view');
       v.store = store;
       v.tier = tier;
@@ -54,7 +55,7 @@ async function start(): Promise<void> {
   if (params.get('mech') === 'pull') store.setMechanic('pull');
   const signals = readSignals(navigator, () => probeWebGL2(document));
   tier = tierFor(signals);
-  window.__wall = { phase: 'D6', store };
+  window.__wall = { phase: 'D5', store };
   const wall = document.querySelector('drawer-wall');
   if (!wall) return;
   wall.removeAttribute('data-placeholder');

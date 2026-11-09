@@ -1,7 +1,9 @@
 // <photo-zoom> (DRAWER-WALL.md, step 6): the real lightbox photographs (A1, A2, A3 and A6 where they exist) on
 // their stage colour, each at full resolution: pinch, drag or double-tap down to one image pixel per screen pixel;
-// on desktop drag and the wheel; keys + − 0 and the arrows. The photographs come from wall/public/zoom/ (made by
-// npm run assets, never committed) with their manifest alt text. Only here does the pale stage appear.
+// on desktop drag and the wheel; keys + − 0 and the arrows. Every gesture has a button in the bar: the angles, Closer,
+// Further, Reset, and while the photograph is larger than the view, Up, Down, Left and Right move it by half a view
+// (the drag's button). The photographs come from wall/public/zoom/ (made by npm run assets, never committed) with
+// their manifest alt text. Only here does the pale stage appear.
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
@@ -173,6 +175,12 @@ export class PhotoZoom extends LitElement {
     }
   }
 
+  /** The pan buttons: half a view in the direction named (Up shows more of the top, as the ArrowUp key does). */
+  private panBy(sx: number, sy: number): void {
+    this.pan = this.clampPan({ x: this.pan.x + sx * this.box.w / 2, y: this.pan.y + sy * this.box.h / 2 });
+    log('photos.pan', { x: Math.round(this.pan.x), y: Math.round(this.pan.y) });
+  }
+
   private go(delta: number): void {
     if (!this.entries.length) return;
     this.index = (this.index + delta + this.entries.length) % this.entries.length;
@@ -199,6 +207,11 @@ export class PhotoZoom extends LitElement {
         <button type="button" @click=${() => this.setZoom(this.zoom * 1.2)}>${t('closer')}</button>
         <button type="button" @click=${() => this.setZoom(this.zoom / 1.2)}>${t('further')}</button>
         <button type="button" @click=${() => this.setZoom(1)}>${t('reset')}</button>
+        ${this.zoom > 1 ? html`
+        <button type="button" @click=${() => this.panBy(0, 1)}>${t('panUp')}</button>
+        <button type="button" @click=${() => this.panBy(0, -1)}>${t('panDown')}</button>
+        <button type="button" @click=${() => this.panBy(1, 0)}>${t('panLeft')}</button>
+        <button type="button" @click=${() => this.panBy(-1, 0)}>${t('panRight')}</button>` : nothing}
         <button type="button" @click=${() => this.dispatchEvent(new CustomEvent('photos-close', { bubbles: true, composed: true }))}>${t('photosClose')}</button>
         </div>
       </div>

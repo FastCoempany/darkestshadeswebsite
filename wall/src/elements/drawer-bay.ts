@@ -32,7 +32,7 @@ export class DrawerBay extends LitElement {
       touch-action: pan-y; -webkit-tap-highlight-color: transparent; border-radius: 0; color: inherit; font: inherit;
     }
     .face:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
-    .face[disabled] { cursor: default; }
+    .face[aria-disabled="true"] { cursor: default; }
     .knob { touch-action: none; }
     .label {
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center;
@@ -41,7 +41,7 @@ export class DrawerBay extends LitElement {
     .look { color: var(--color-text-editorial); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; font-variant-numeric: tabular-nums; }
     .name { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; overflow-wrap: anywhere; }
     .price { color: var(--color-text-primary); font-size: var(--font-size-body); font-weight: var(--font-weight-regular); font-variant-numeric: tabular-nums; line-height: 1.25; margin-top: 0.1em; }
-    .status { color: var(--color-text-tertiary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; }
+    .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; }
     @media (min-width: 1024px) { .look, .name, .status { font-size: 12px; } }
   `;
 
@@ -131,7 +131,7 @@ export class DrawerBay extends LitElement {
       ${b.focusable ? html`<button class="face" type="button" part="face"
           style=${styleMap(this.pct(r.face))}
           aria-label=${this.accessibleName()}
-          ?disabled=${!b.canOpen}
+          aria-disabled=${b.canOpen ? 'false' : 'true'}
           data-state=${b.state} data-light=${b.light}
           @pointerdown=${this.mechanic === 'tap' ? this.onPointerDown : undefined}
           @pointerup=${this.mechanic === 'tap' ? this.onPointerUp : undefined}

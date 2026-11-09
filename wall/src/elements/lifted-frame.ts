@@ -3,14 +3,13 @@
 // the drawer's own HDR as the environment plus one warm key matched to the scene. The handoff: the canvas mounts
 // over the drawer's last frame with the GLB at open.json's transform and a soft contact shadow, cross-fades over
 // 120 ms, then springs to the inspect pose; turning, pinching and the wheel report deltas up to the view, whose
-// machine holds the pose. Tier 1 shows the lifted still instead. On a lost context: tier 1 for the rest of the visit.
+// machine holds the pose. Tier 1 shows the lifted still instead, and never loads three.js: the library and its
+// loaders are imported inside setup(), which runs at tier 2 only. On a lost context: tier 1 for the rest of the visit.
+// `lifted-handoff` tells the view when the frame fades in and out, so the empty drawer behind it fades with it.
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import type * as THREE from 'three';
 import type { WallStore } from '../data/store';
 import type { FrameFacts } from '../lib/types';
 import type { Tier } from '../lib/tier';
@@ -24,6 +23,12 @@ interface FramePose { matrix_three: number[][] }
 interface CameraJson { camera: { three: { position: number[]; fov_deg: number; near: number; far: number; quaternion_xyzw: number[] } }; frame: FramePose; frames?: Record<string, FramePose> }
 
 const LIFT_SPRING = { stiffness: 120, damping: 20 };
+
+/** three.js and the loaders (lifted-three.ts: the named pieces the live frame uses), loaded once at the first tier-2
+ * lift into their own chunk, never in the initial bundle; null until the first setup has run (the pose math needs it). */
+type ThreeModule = typeof import('./lifted-three');
+let T: ThreeModule | null = null;
+const loadThree = (): Promise<ThreeModule> => import('./lifted-three');
 /** The environment map's turn (DRAWER-WALL.md, The drawer view; the env entry's `threeRotation`): Blender's
  * equirectangular camera put its forward (+y Blender, -z here) at the image's centre column and the camera's right
  * (+x) three quarters across, which three.js's equirectangular mapping shows a quarter turn away; turned +90 degrees
@@ -62,6 +67,8 @@ export class LiftedFrame extends LitElement {
   private open: { position: THREE.Vector3; quaternion: THREE.Quaternion } | null = null;
   private inspect: { position: THREE.Vector3; quaternion: THREE.Quaternion } | null = null;
   private progress = 0;        // 0 at the open pose, 1 at the inspect pose
+  /** Where the frame is between the open pose (0) and the inspect pose (1); the tests read it. */
+  get liftProgress(): number { return this.progress; }
   private raf = 0;
   private dirty = false;
   private pointers = new Map<number, { x: number; y: number }>();
@@ -103,6 +110,11 @@ export class LiftedFrame extends LitElement {
     const camOpen = s.assets.camera('open');
     const camInspect = s.assets.camera('inspect');
     if (!glb || !camOpen || !camInspect) { log('lifted.no-assets', { frame: f.id, glb: !!glb, open: !!camOpen, inspect: !!camInspect }); return false; }
+    const t3 = performance.now();
+    const THREE = await loadThree();
+    const { GLTFLoader, HDRLoader, MeshoptDecoder } = THREE;
+    T = THREE;
+    log('lifted.three', { ms: Math.round(performance.now() - t3) });
     await this.updateComplete;
     const canvas = this.renderRoot.querySelector('canvas') as HTMLCanvasElement | null;
     if (!canvas) return false;
@@ -129,8 +141,8 @@ export class LiftedFrame extends LitElement {
     this.camera = camera;
     this.scene = scene;
     const poseOf = (j: CameraJson) => (j.frames?.[f.id] ?? j.frame).matrix_three;   // this frame's own pose: its bounds place it
-    this.open = decompose(poseOf(openJ));
-    this.inspect = decompose(poseOf(inspectJ));
+    this.open = decompose(THREE, poseOf(openJ));
+    this.inspect = decompose(THREE, poseOf(inspectJ));
     // the light: the drawer's own environment, and one warm key from the drawer's side as the scene has it
     if (env) {
       try {
@@ -153,13 +165,8 @@ export class LiftedFrame extends LitElement {
     const loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
     const t0 = performance.now();
-    let gltf: Awaited<ReturnType<GLTFLoader['loadAsync']>>;
-    try {
-      gltf = await loader.loadAsync(s.assets.url(s.assets.file(glb)!));
-    } catch (e) {
-      log('lifted.glb-failed', { frame: f.id, error: String(e) });
-      return false;
-    }
+    const gltf = await loader.loadAsync(s.assets.url(s.assets.file(glb)!)).catch((e: unknown) => { log('lifted.glb-failed', { frame: f.id, error: String(e) }); return null; });
+    if (!gltf) return false;
     log('lifted.glb', { frame: f.id, ms: Math.round(performance.now() - t0) });
     const root = new THREE.Group();
     root.add(gltf.scene);
@@ -171,7 +178,7 @@ export class LiftedFrame extends LitElement {
       }
     });
     // a soft contact shadow under the frame: a plane with a radial fall-off, fading as the frame rises
-    const shadowTex = radialShadowTexture();
+    const shadowTex = radialShadowTexture(THREE);
     const shadowMat = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0.7 });
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = box.getSize(new THREE.Vector3());
@@ -215,8 +222,8 @@ export class LiftedFrame extends LitElement {
   /** The frame's transform for the current progress and pose: between the open and the inspect poses, then yaw
    * about its own vertical, pitch about the camera's right, and zoom toward the camera. */
   private applyPose(): void {
-    const root = this.root, o = this.open, i = this.inspect, cam = this.camera;
-    if (!root || !o || !i || !cam) return;
+    const root = this.root, o = this.open, i = this.inspect, cam = this.camera, THREE = T;
+    if (!root || !o || !i || !cam || !THREE) return;
     const p = this.progress;
     const pos = o.position.clone().lerp(i.position, p);
     const q = o.quaternion.clone().slerp(i.quaternion, p);
@@ -243,7 +250,7 @@ export class LiftedFrame extends LitElement {
   /** The handoff and the rise; resolves when the frame rests at the inspect pose. */
   async lift(): Promise<void> {
     const ok = this.ready ? await this.ready : false;
-    this.shown = true;
+    this.setShown(true);
     if (!ok || this.tier !== 2) {
       await wait(this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS);
       return;
@@ -260,7 +267,7 @@ export class LiftedFrame extends LitElement {
 
   async putBack(): Promise<void> {
     if (!this.live || this.tier !== 2) {
-      this.shown = false;
+      this.setShown(false);
       await wait(this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS);
       return;
     }
@@ -272,8 +279,14 @@ export class LiftedFrame extends LitElement {
     } else {
       await this.animateProgress(0);
     }
-    this.shown = false;
+    this.setShown(false);
     await wait(HANDOFF_FADE_MS);
+  }
+
+  /** The frame's fade in or out (the still's at tier 1): the view fades the empty drawer behind it at the same moment. */
+  private setShown(shown: boolean): void {
+    this.shown = shown;
+    this.dispatchEvent(new CustomEvent('lifted-handoff', { detail: { shown }, bubbles: true, composed: true }));
   }
 
   private animateProgress(target: 0 | 1): Promise<void> {
@@ -398,14 +411,14 @@ export class LiftedFrame extends LitElement {
   }
 }
 
-function decompose(m: number[][]): { position: THREE.Vector3; quaternion: THREE.Quaternion } {
+function decompose(THREE: ThreeModule, m: number[][]): { position: THREE.Vector3; quaternion: THREE.Quaternion } {
   const mat = new THREE.Matrix4().set(m[0]![0]!, m[0]![1]!, m[0]![2]!, m[0]![3]!, m[1]![0]!, m[1]![1]!, m[1]![2]!, m[1]![3]!, m[2]![0]!, m[2]![1]!, m[2]![2]!, m[2]![3]!, m[3]![0]!, m[3]![1]!, m[3]![2]!, m[3]![3]!);
   const position = new THREE.Vector3(), quaternion = new THREE.Quaternion(), scale = new THREE.Vector3();
   mat.decompose(position, quaternion, scale);
   return { position, quaternion };
 }
 
-function radialShadowTexture(): THREE.CanvasTexture {
+function radialShadowTexture(THREE: ThreeModule): THREE.CanvasTexture {
   const c = document.createElement('canvas');
   c.width = c.height = 128;
   const ctx = c.getContext('2d')!;

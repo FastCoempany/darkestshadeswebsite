@@ -11,7 +11,7 @@ import { t } from '../lib/copy';
 @customElement('records-panel')
 export class RecordsPanel extends LitElement {
   static override styles = css`
-    :host { position: fixed; right: 0; top: 0; bottom: 0; width: min(100vw, 22rem); z-index: 20; box-sizing: border-box; background: var(--color-surface-raised); color: var(--color-text-primary); overflow: auto; border-left: var(--border-hairline) solid var(--color-border-hairline);
+    :host { display: block; position: fixed; right: 0; top: 0; bottom: 0; width: min(100vw, 22rem); z-index: 20; box-sizing: border-box; background: var(--color-surface-raised); color: var(--color-text-primary); overflow: auto; border-left: var(--border-hairline) solid var(--color-border-hairline);
       padding: var(--space-4); padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px)); padding-right: max(var(--space-4), env(safe-area-inset-right, 0px)); font-size: var(--font-size-small); }
     :host([inline]) { position: relative; inset: auto; width: 100%; height: 100%; z-index: auto; }
     h2 { font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; color: var(--color-text-secondary); margin: 0 0 var(--space-3); }

@@ -1,6 +1,8 @@
 // A focus trap for the drawer view (role="dialog", aria-modal): Tab cycles inside it, focus starts on the first
 // control, and release gives focus back to where it came from (the drawer on the wall). The root may live in a
-// shadow tree: the active element is read from that tree, and a focus event's real target from its composed path.
+// shadow tree, and the controls inside it may live in nested shadow trees (<photo-zoom>'s buttons, <lifted-frame>'s
+// canvas): the focusable list is collected through open shadow roots in tree order, the active element is read
+// down through the shadow roots that hold it, and a focus event's real target comes from its composed path.
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -18,15 +20,32 @@ export function within(root: Node, node: Node | null): boolean {
   return false;
 }
 
-/** The element with focus, seen from inside `root`'s tree (a shadow root's own activeElement, else the document's). */
+/** The element with focus, seen from inside `root`'s tree and down through nested shadow roots: a shadow root's
+ * own activeElement is the host of the next tree when focus sits deeper, so the walk continues into it. */
 export function activeIn(root: HTMLElement): Element | null {
   const tree = root.getRootNode();
-  return tree instanceof ShadowRoot ? tree.activeElement : document.activeElement;
+  let a: Element | null = tree instanceof ShadowRoot ? tree.activeElement : document.activeElement;
+  while (a?.shadowRoot?.activeElement) a = a.shadowRoot.activeElement;
+  return a;
+}
+
+/** Every focusable element under `root` in tree order, through open shadow roots (querySelectorAll stops at them). */
+export function focusablesIn(root: ParentNode): HTMLElement[] {
+  const out: HTMLElement[] = [];
+  const walk = (node: ParentNode) => {
+    for (const el of node.children) {
+      if (el.matches(FOCUSABLE)) out.push(el as HTMLElement);
+      if (el.shadowRoot) walk(el.shadowRoot);
+      walk(el);
+    }
+  };
+  walk(root);
+  return out;
 }
 
 export function trapFocus(root: HTMLElement, initial?: HTMLElement | null): FocusTrap {
   const from = (activeIn(root) ?? document.activeElement) as HTMLElement | null;
-  const focusables = () => [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((el) => !el.hidden && (el.offsetParent !== null || el === activeIn(root)));
+  const focusables = () => focusablesIn(root).filter((el) => !el.hidden && (el.offsetParent !== null || el === activeIn(root)));
   const onKey = (ev: KeyboardEvent) => {
     if (ev.key !== 'Tab') return;
     const list = focusables();

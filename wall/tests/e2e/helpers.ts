@@ -32,10 +32,44 @@ export async function touchPinch(cdp: CDPSession, page: Page, cx: number, cy: nu
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
 }
 
-export async function touchTap(cdp: CDPSession, page: Page, x: number, y: number): Promise<void> {
+/** A finger tap; `jitterPx` adds one small move before the lift, as a real finger does (within the 8 px tap slop). */
+export async function touchTap(cdp: CDPSession, page: Page, x: number, y: number, jitterPx = 0): Promise<void> {
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
   await page.waitForTimeout(40);
+  if (jitterPx) { await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x + jitterPx, y: y + jitterPx }] }); await page.waitForTimeout(16); }
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+}
+
+/** A held drag in pieces: start, move (as many times as needed), end; the state can be read between the moves. */
+export async function touchStart(cdp: CDPSession, x: number, y: number): Promise<void> {
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+}
+export async function touchMoveTo(cdp: CDPSession, page: Page, x: number, y0: number, y1: number, steps = 10, msPerStep = 16): Promise<void> {
+  for (let i = 1; i <= steps; i++) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y0 + ((y1 - y0) * i) / steps }] });
+    await page.waitForTimeout(msPerStep);
+  }
+}
+export async function touchEnd(cdp: CDPSession): Promise<void> {
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+}
+
+/** The element with focus, down through shadow roots: its tag, its text and its class. */
+export async function focused(page: Page): Promise<{ tag: string; text: string; cls: string } | null> {
+  return page.evaluate(() => {
+    let a: Element | null = document.activeElement;
+    while (a?.shadowRoot?.activeElement) a = a.shadowRoot.activeElement;
+    return a ? { tag: a.tagName, text: (a.textContent ?? '').trim(), cls: a.className?.toString() ?? '' } : null;
+  });
+}
+
+/** Tab (or Shift+Tab) until the focused element's text is `text`, at most `max` presses; returns the presses made. */
+export async function tabTo(page: Page, text: string, max = 16, back = false): Promise<number> {
+  for (let i = 1; i <= max; i++) {
+    await page.keyboard.press(back ? 'Shift+Tab' : 'Tab');
+    if ((await focused(page))?.text === text) return i;
+  }
+  throw new Error(`no focus on "${text}" after ${max} presses`);
 }
 
 /** The wall's state as the page exposes it. */

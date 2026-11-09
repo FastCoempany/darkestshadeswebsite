@@ -2,20 +2,23 @@
 // (role="dialog", aria-modal, labelled by the frame's name); nothing behind it scrolls. The drawer, shut, barely
 // lit; the hint wall.hintPull with a thin falling line; pull down to slide the drawer out through the scrubbed
 // sequence; let go and it settles open or shut (velocity first, then position); quiet buttons do the same. Tap the
-// frame (or wall.lift) to lift it into <lifted-frame>; wall.photos opens <photo-zoom>; put back, shut, close with
-// focus back on the drawer. The name and $100 stay on screen. Reduced motion: cross-fades of about 160 ms, the
-// drawer still follows the finger but snaps. Haptics: a 10 ms tick at the stops where navigator.vibrate exists.
+// frame (or wall.lift) to lift it into <lifted-frame>: the live frame fades in over the rendered one while the
+// drawer behind it cross-fades to the base sequence's last frame, the empty drawer (DRAWER-WALL.md, The handoff),
+// and the drawer dims and softens; wall.photos opens <photo-zoom>; put back, shut, close with focus back on the
+// drawer. Every gesture has a quiet button (pull: open/shut; lift; turn: left/right, tilt up/down; pinch: closer/
+// further/reset). The name and $100 stay on screen. Reduced motion: cross-fades of about 160 ms, the drawer still
+// follows the finger but snaps. Haptics: a 10 ms tick at the stops where navigator.vibrate exists.
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import type { WallStore } from '../data/store';
 import type { ResolvedBay } from '../lib/types';
 import { initialContext, reduce, type ViewContext, type ViewEvent, VIEW_OPEN_STATES } from '../lib/machine';
-import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, isTap, pullPosition, rubberBand } from '../lib/gestures';
+import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, TAP_MAX_PX, isTap, pullPosition, rubberBand } from '../lib/gestures';
 import { springSettled, springStep, type SpringState } from '../lib/spring';
 import { SequencePlayer, type FrameSource } from '../lib/sequence-player';
 import { lockScroll, unlockScroll } from '../lib/scroll-lock';
-import { trapFocus, type FocusTrap } from '../lib/focus-trap';
+import { trapFocus, within, activeIn, type FocusTrap } from '../lib/focus-trap';
 import { t, subjectOf } from '../lib/copy';
 import { log } from '../lib/log';
 import type { Tier } from '../lib/tier';
@@ -42,11 +45,15 @@ export class DrawerView extends LitElement {
     /* the stage: 4:5 like the renders, as large as the view allows (container units, so the states sheet's boxes work too) */
     .stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(100cqw, calc(100cqh * 1200 / 1500)); aspect-ratio: 1200 / 1500; max-width: 100%; overflow: hidden; outline: none; }
     .stage:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: calc(-1 * var(--border-focus)); }
-    canvas, .poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-    .poster { object-fit: cover; }
-    .fade { transition: opacity 160ms var(--motion-ease); }
+    /* the drawer: the poster, the sequence canvas and, over them at the lift, the empty drawer (the base sequence's last
+       frame); dimmed as one group, so nothing of the rendered frame shows through under the lifted frame */
+    .drawer { position: absolute; inset: 0; transition: opacity 600ms var(--motion-ease), filter 600ms var(--motion-ease); }
+    canvas, .poster, .empty, .empty img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .poster, .empty img { object-fit: cover; }
+    .fade { opacity: 0; transition: opacity 120ms var(--motion-ease); }
+    .fade.in { opacity: 1; }
     .lift-layer { position: absolute; inset: 0; }
-    .dimmed { opacity: 0.35; filter: blur(6px); transition: opacity 600ms var(--motion-ease), filter 600ms var(--motion-ease); }
+    .dimmed { opacity: 0.35; filter: blur(6px); }
     .top, .bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
       padding-left: max(var(--space-4), env(safe-area-inset-left, 0px)); padding-right: max(var(--space-4), env(safe-area-inset-right, 0px)); pointer-events: none; }
     .top { top: 0; padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px)); z-index: 2; }
@@ -77,6 +84,8 @@ export class DrawerView extends LitElement {
   @state() private bay: ResolvedBay | null = null;
   @state() private hint: Hint | null = null;
   @state() private posterUrl: string | null = null;
+  @state() private empty: FrameSource | null = null;      // the base sequence's last frame: the empty drawer behind the lifted frame
+  @state() private emptyShown = false;                    // follows the lifted frame's own fade (lifted-handoff)
   @state() private drawn = false;
 
   private player: SequencePlayer | null = null;
@@ -120,6 +129,8 @@ export class DrawerView extends LitElement {
     this.player?.dispose();
     this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
     this.posterUrl = frames[0]?.webp ?? frames[0]?.avif ?? null;
+    this.empty = this.emptyDrawer(width);
+    this.emptyShown = false;
     await this.updateComplete;
     await this.player?.prefetch();
     await this.draw();
@@ -128,6 +139,18 @@ export class DrawerView extends LitElement {
     if (this.ctx.state === 'lifted' && this.tier === 2) this.hint = 'turn';
     const lifted = this.renderRoot.querySelector('lifted-frame') as (HTMLElement & { lift?: () => Promise<void> }) | null;
     if (lifted?.lift) { await lifted.lift(); this.syncLifted(); }
+  }
+
+  /** A state change can remove the control that had focus (the "Lift them out" button once the lift begins, the
+   * photographs' bar on the way back, "Put them back" once the frame is back): focus then falls to the body, outside
+   * the dialog, where Escape and Tab no longer reach it. After each render that changed the state, focus lost that way
+   * comes back inside: to the live frame's canvas when the frame is lifted, otherwise to the stage. */
+  protected override updated(changed: Map<PropertyKey, unknown>): void {
+    if (!changed.has('ctx') || !this.open || this.hasAttribute('inline')) return;
+    const root = this.renderRoot.querySelector('.view') as HTMLElement | null;
+    if (!root || within(root, activeIn(root))) return;
+    const canvas = this.ctx.state === 'lifted' ? (this.renderRoot.querySelector('lifted-frame')?.shadowRoot?.querySelector('canvas') as HTMLElement | null) : null;
+    (canvas ?? (this.renderRoot.querySelector('.stage') as HTMLElement | null))?.focus({ preventScroll: true });
   }
 
   /** Open the view for a drawer (the wall's bay-open). */
@@ -153,11 +176,14 @@ export class DrawerView extends LitElement {
     this.player?.dispose();
     this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
     this.posterUrl = frames[0]?.webp ?? frames[0]?.avif ?? null;
+    this.empty = this.emptyDrawer(width);   // rendered from the start (transparent), so its bytes arrive before the lift
+    this.emptyShown = false;
     await this.updateComplete;
     this.trap = trapFocus(this.renderRoot.querySelector('.view') as HTMLElement, this.renderRoot.querySelector('.stage') as HTMLElement);
     void this.player?.prefetch();
     this.dispatch({ type: 'ENTERED' });
-    this.announce(t('announce.open', { name: req.bay.label?.name ?? '' }).replace(/^\.\s*/, ''));
+    // the view has opened on the shut drawer: say so (announce.open is for the drawer sliding open)
+    this.announce(t('announce.entered', { name: req.bay.label?.name ?? '' }).replace(/^\.\s*/, ''));
     void this.draw();
     if ('ResizeObserver' in window && !this.ro) {
       // the stage follows the viewport (a phone turned while the drawer is open): the canvas's bitmap is drawn again
@@ -177,6 +203,19 @@ export class DrawerView extends LitElement {
     cancelAnimationFrame(this.raf);
     this.ctx = { ...this.ctx, p: 1 };
     void this.draw().then(() => this.dispatch({ type: 'SETTLED' }));
+  }
+
+  /** The empty drawer behind the lifted frame: the base sequence's last frame at the width in use (the base's nearest). */
+  private emptyDrawer(width: number): FrameSource | null {
+    const s = this.store;
+    if (!s) return null;
+    const widths = s.assets.sequenceWidths('base');
+    const w = widths.includes(width) ? width : widths.find((x) => x >= width) ?? widths[widths.length - 1];
+    if (w === undefined) return null;
+    const last = s.assets.sequence('base', w).at(-1);
+    if (!last) return null;
+    const avif = s.assets.file(last, 'avif'), webp = s.assets.file(last, 'webp');
+    return { avif: avif ? s.assets.url(avif) : undefined, webp: webp ? s.assets.url(webp) : undefined };
   }
 
   private carryPointer(p: NonNullable<OpenRequest['pointer']>): void {
@@ -200,11 +239,11 @@ export class DrawerView extends LitElement {
   private onEnter(c: ViewContext, prev: ViewContext): void {
     switch (c.state) {
       case 'opening': case 'shutting': this.settle(c.state === 'opening' ? 1 : 0); break;
-      case 'open': this.haptic(); this.announce(t('announce.open', { name: this.bay?.label?.name ?? '' })); if (prev.state !== 'returning') this.armHint('lift'); break;
+      case 'open': if (prev.state !== 'returning') { this.haptic(); this.announce(t('announce.open', { name: this.bay?.label?.name ?? '' })); this.armHint('lift'); } break;
       case 'shut': if (prev.state === 'shutting') { this.haptic(); this.announce(t('announce.shut')); } this.armHint('pull'); break;
-      case 'lifting': this.lift(); break;
+      case 'lifting': void this.lift(); break;
       case 'lifted': this.announce(t('announce.lifted', { name: this.bay?.label?.name ?? '' })); if (prev.state !== 'photos') this.armHint('turn'); break;
-      case 'returning': this.putBack(); break;
+      case 'returning': void this.putBack(); break;
       case 'leaving': this.leave(); break;
       case 'photos': this.clearHint(); break;
       default: break;
@@ -229,7 +268,13 @@ export class DrawerView extends LitElement {
     d.v = 0.6 * d.v + 0.4 * ((ev.clientY - d.lastY) / dt);
     d.lastY = ev.clientY;
     d.lastT = now;
-    const h = (this.renderRoot.querySelector('.stage') as HTMLElement | null)?.clientHeight || window.innerHeight;
+    // the tap slop: a finger that has not yet moved 8 px on the resting drawer may still be a tap (the lift on the open
+    // drawer; nothing on the shut one), so it does not become a pull until it passes the slop; a pull then takes its
+    // position from the whole displacement, so nothing is lost
+    if ((this.ctx.state === 'open' || this.ctx.state === 'shut') && Math.hypot(ev.clientX - d.x0, ev.clientY - d.y0) < TAP_MAX_PX) return;
+    // a full pull is 45% of the view's height (the constant), not of the stage's: on a phone the stage is 4:5 of the
+    // width and fills only part of the view
+    const h = (this.renderRoot.querySelector('.view') as HTMLElement | null)?.clientHeight || window.innerHeight;
     const p = pullPosition(d.p0, ev.clientY - d.y0, h);
     this.dispatch({ type: 'DRAG', p });
     void this.draw();
@@ -307,16 +352,20 @@ export class DrawerView extends LitElement {
   }
 
   // --- the lift, the photographs, the way back ------------------------------------------------------------------
-  private lift(): void {
+  private async lift(): Promise<void> {
     done.add('lift');
     this.clearHint();
+    // <lifted-frame> is rendered by the update that 'lifting' requests: wait for it, or its lift() is never called and
+    // the live frame (and the still) never show
+    await this.updateComplete;
     const el = this.renderRoot.querySelector('lifted-frame') as (HTMLElement & { lift?: () => Promise<void> }) | null;
     const ms = this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS;
     const go = el?.lift ? el.lift() : new Promise<void>((r) => setTimeout(r, ms));
     void go.then(() => this.dispatch({ type: 'LIFTED' }));
   }
 
-  private putBack(): void {
+  private async putBack(): Promise<void> {
+    await this.updateComplete;
     const el = this.renderRoot.querySelector('lifted-frame') as (HTMLElement & { putBack?: () => Promise<void> }) | null;
     const ms = this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS;
     const go = el?.putBack ? el.putBack() : new Promise<void>((r) => setTimeout(r, ms));
@@ -333,6 +382,8 @@ export class DrawerView extends LitElement {
       this.player?.dispose();
       this.player = null;
       this.drawn = false;
+      this.empty = null;
+      this.emptyShown = false;
       this.ro?.disconnect();
       this.ro = null;
       this.trap?.release();
@@ -415,10 +466,17 @@ export class DrawerView extends LitElement {
       <div class="dim" @click=${(ev: Event) => { if (ev.target === ev.currentTarget && window.innerWidth >= 1024 && (st === 'shut' || st === 'open')) this.dispatch({ type: 'CLOSE' }); }}></div>
       <div class="stage" tabindex="-1"
         @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp}>
-        ${this.posterUrl && !this.drawn ? html`<img class="poster" src=${this.posterUrl} alt="" draggable="false">` : nothing}
-        <canvas class=${classMap({ dimmed: liftedish })} aria-hidden="true"></canvas>
+        <div class=${classMap({ drawer: true, dimmed: liftedish })}>
+          ${this.posterUrl && !this.drawn ? html`<img class="poster" src=${this.posterUrl} alt="" draggable="false">` : nothing}
+          <canvas aria-hidden="true"></canvas>
+          ${this.empty ? html`<picture class=${classMap({ empty: true, fade: true, in: this.emptyShown })} aria-hidden="true">
+            ${this.empty.avif ? html`<source srcset=${this.empty.avif} type="image/avif">` : nothing}
+            <img src=${this.empty.webp ?? this.empty.avif ?? ''} alt="" decoding="async" draggable="false">
+          </picture>` : nothing}
+        </div>
         ${liftedish ? html`<lifted-frame class="lift-layer" .store=${s} .frame=${frame} .tier=${this.tier} .active=${st === 'lifted'} .label=${t('model3dLabel', { subject })}
-            @lifted-turn=${this.onLiftedTurn} @lifted-zoom=${this.onLiftedZoom} @lifted-tap=${() => this.dispatch({ type: 'PUT_BACK' })}></lifted-frame>` : nothing}
+            @lifted-turn=${this.onLiftedTurn} @lifted-zoom=${this.onLiftedZoom} @lifted-tap=${() => this.dispatch({ type: 'PUT_BACK' })}
+            @lifted-handoff=${(ev: CustomEvent<{ shown: boolean }>) => { this.emptyShown = ev.detail.shown; }}></lifted-frame>` : nothing}
       </div>
       ${showPhotos ? html`<photo-zoom .frame=${frame} .name=${name} @photos-close=${() => this.dispatch({ type: 'BACK' })}></photo-zoom>` : nothing}
       <div class=${classMap({ top: true, 'on-stage': showPhotos })}><span class="micro">${name}</span><span class="price">${b.label?.price ?? ''}</span></div>
@@ -434,6 +492,8 @@ export class DrawerView extends LitElement {
           ${st === 'lifted' && this.tier === 2 ? html`
             <button class="quiet" type="button" @click=${() => this.turnBy(-24, 0)}>${t('turnLeft')}</button>
             <button class="quiet" type="button" @click=${() => this.turnBy(24, 0)}>${t('turnRight')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(0, -32)}>${t('tiltUp')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(0, 32)}>${t('tiltDown')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1.2)}>${t('closer')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1 / 1.2)}>${t('further')}</button>
             <button class="quiet" type="button" @click=${() => { this.dispatch({ type: 'RESET' }); this.syncLifted(); }}>${t('reset')}</button>` : nothing}

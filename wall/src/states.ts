@@ -67,6 +67,7 @@ export class StatesSheet extends LitElement {
     .view-box { position: relative; width: 100%; aspect-ratio: 390 / 844; overflow: hidden; background: var(--color-surface-base); }
     .view-box drawer-view { position: absolute; }
     .wall-box { max-width: 585px; }
+    .wall-box.landscape { max-width: 960px; }
     .panel-box { position: relative; height: 420px; overflow: hidden; max-width: 22rem; }
     pre { font-size: 11px; color: var(--color-text-tertiary); white-space: pre-wrap; }
   `;
@@ -132,7 +133,9 @@ export class StatesSheet extends LitElement {
       </div>
       <h2>drawer-wall</h2>
       <div class="wall-box"><drawer-wall .store=${s} layout="portrait"></drawer-wall></div>
-      <figcaption><span>the portrait wall from the records</span><span class="tag">${tag('wall-plate')}</span></figcaption>
+      <figcaption><span>the portrait wall from the records (under 1024 px)</span><span class="tag">${tag('wall-plate')}</span></figcaption>
+      <div class="wall-box landscape"><drawer-wall .store=${s} layout="landscape"></drawer-wall></div>
+      <figcaption><span>the landscape wall from the records (from 1024 px)</span><span class="tag">${tag('wall-plate')}</span></figcaption>
       <h2>drawer-view</h2>
       <div class="grid views">
         ${VIEW_STATES.map((name) => html`<figure><div class="view-box"><drawer-view inline .store=${s} data-fixture=${name}></drawer-view></div><figcaption><span>${name}</span><span class="tag">${name.includes('lifted') || name === 'turned' || name === 'zoomed' ? tag('glb') : tag('sequence-frame')}</span></figcaption></figure>`)}

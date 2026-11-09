@@ -1,5 +1,7 @@
 # The real-device checklist (for Antaeus, R2)
 
+*A draft from D5 (Nov 8 2026); D7 finishes it against the built wall and the phone link.*
+
 The phone build's link is at the top of `WALL-PROGRESS.md`. Run this on an iPhone and on an Android, in their usual browsers (Safari, Chrome), before the usability test. Tick what works; write a line for what doesn't, with the phone, the browser and what you saw. Nothing here needs an account or a purchase.
 
 ## On each phone
