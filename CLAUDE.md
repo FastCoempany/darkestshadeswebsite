@@ -58,9 +58,10 @@ npm run build                     # type-check, then the static wall in wall/dis
 npm run test                      # Vitest: the logic
 npm run test:e2e                  # Playwright: wall-pixel (Chromium as a Pixel), wall-iphone (WebKit as an iPhone), wall-desktop
 npm run check                     # banned strings, literal colors, the record and manifest schemas, the asset budgets
+npm run budget                    # after a build: the initial JavaScript <= 60 KB gzipped without three.js; the 3D chunk <= 200 KB, reached only at a lift
 npm run lighthouse                # Lighthouse mobile on the built wall: performance >= 90, LCP, CLS, TBT
 npm run assets                    # the zoom images from dam/ into wall/public/zoom/ (D4; never committed)
-npm run all                       # check, test, build, test:e2e, lighthouse, in that order
+npm run all                       # check, test, build, budget, test:e2e, lighthouse, in that order
 ```
 ```
 python3 tools/blender/drawer_wall.py wall --layout portrait --knob black-relief --variant lit   # the wall plate render → work/wall/ (and --variant dark, --layout landscape)

@@ -11,9 +11,10 @@
     "test": "vitest run",
     "test:e2e": "playwright test --trace off",
     "check": "node checks/strings.mjs && node checks/colors.mjs && node checks/schema.mjs && node checks/assets.mjs",
+    "budget": "node checks/bundle.mjs",
     "lighthouse": "node checks/lighthouse.mjs",
     "assets": "python3 ../tools/photo/zoom_export.py",
-    "all": "npm run check && npm run test && npm run build && npm run test:e2e && npm run lighthouse"
+    "all": "npm run check && npm run test && npm run build && npm run budget && npm run test:e2e && npm run lighthouse"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

@@ -40,7 +40,10 @@ export class DrawerBay extends LitElement {
     }
     .look { color: var(--color-text-editorial); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; font-variant-numeric: tabular-nums; }
     .name { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; overflow-wrap: anywhere; }
-    .price { color: var(--color-text-primary); font-size: var(--font-size-body); font-weight: var(--font-weight-regular); font-variant-numeric: tabular-nums; line-height: 1.25; margin-top: 0.1em; }
+    /* the price and, when the drawer is sold out, the word on one line: a two-line name then still leaves the label inside its
+       rect at 390 px (the word on its own line overran the rect onto the next drawer's piping by 9 px) */
+    .row { display: flex; align-items: baseline; justify-content: center; gap: 0.7em; margin-top: 0.1em; }
+    .price { color: var(--color-text-primary); font-size: var(--font-size-body); font-weight: var(--font-weight-regular); font-variant-numeric: tabular-nums; line-height: 1.25; }
     .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; }
     @media (min-width: 1024px) { .look, .name, .status { font-size: 12px; } }
   `;
@@ -141,8 +144,10 @@ export class DrawerBay extends LitElement {
       ${label ? html`<div class="label" part="label" style=${styleMap(this.pct(r.label))} aria-hidden="true">
         ${label.lookNumber ? html`<span class="look">${label.lookNumber}</span>` : nothing}
         ${label.notYet ? html`<span class="name">${t('notYet')}</span>` : label.name ? html`<span class="name">${label.name}</span>` : nothing}
-        ${label.price ? html`<span class="price">${label.price}</span>` : nothing}
-        ${label.soldOut ? html`<span class="status">${t('soldOut')}</span>` : nothing}
+        ${label.price || label.soldOut ? html`<span class="row">
+          ${label.price ? html`<span class="price">${label.price}</span>` : nothing}
+          ${label.soldOut ? html`<span class="status">${t('soldOut')}</span>` : nothing}
+        </span>` : nothing}
       </div>` : nothing}
     `;
   }
