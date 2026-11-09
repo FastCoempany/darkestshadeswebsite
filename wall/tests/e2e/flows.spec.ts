@@ -354,6 +354,25 @@ test('?open= opens that drawer on its last frame, not lifted; an unknown value o
   expect(await viewState(page)).toBeNull();
 });
 
+test('the switches from the hash, as the phone link passes them: #open-f09, #panel-debug, #pull', async ({ page }) => {
+  // an Artifact's link passes a plain #name to the page and no query string (D7); the query forms are the other tests'
+  await page.goto('index.html#open-f09');
+  await wallLoaded(page);
+  expect(await waitForState(page, ['open'], 15000)).toBe('open');
+  await expect(page.locator('drawer-view').getByRole('dialog', { name: /What Stevie Saw/ })).toBeVisible();
+  await page.goto('index.html#panel-debug');
+  await page.reload();
+  await wallLoaded(page);
+  await expect(page.locator('records-panel h2')).toHaveText('Records (example data)');
+  await expect(page.locator('button.debug-copy')).toHaveText('Copy the event log');
+  await expect(page.locator('drawer-view')).toHaveCount(0);
+  await page.goto('index.html#pull');
+  await page.reload();
+  await wallLoaded(page);
+  expect(await page.evaluate(() => window.__wall?.store.mechanic)).toBe('pull');
+  await expect(page.locator('drawer-wall').locator('drawer-bay .knob')).toHaveCount(8);
+});
+
 test('no JavaScript: the plate and a plain list of the eight drawers, each linking to its photograph', async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();

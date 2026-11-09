@@ -169,6 +169,10 @@ export default defineConfig({
     emptyOutDir: true,
     target: 'es2022',
     sourcemap: false,
+    // one stylesheet for the whole wall, linked from the page: no chunk then carries a CSS dependency that Vite's preload
+    // helper would fetch on a dynamic import (the phone set inlines the stylesheet, and a host that refused the fetch
+    // would otherwise lose the drawer view with it; D7)
+    cssCodeSplit: false,
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
