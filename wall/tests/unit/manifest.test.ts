@@ -70,7 +70,7 @@ describe('the committed manifest', () => {
   it('is a manifest the loader takes', () => {
     expect(isManifest(manifestJson)).toBe(true);
     expect(isManifest({})).toBe(false);
-    const idx = new AssetIndex(manifestJson as Manifest);
+    const idx = new AssetIndex(manifestJson as unknown as Manifest);
     expect(idx.problems).toEqual([]);
   });
 });

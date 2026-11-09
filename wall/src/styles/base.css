@@ -40,6 +40,20 @@ html, body {
   border: 0;
 }
 
+/* tier 0, no JavaScript: the plate and a plain list of the drawers (built into index.html) */
+.tier0 { max-width: 48rem; margin: 0 auto; padding: var(--space-4); padding-left: max(var(--space-4), env(safe-area-inset-left, 0px)); padding-right: max(var(--space-4), env(safe-area-inset-right, 0px)); }
+.tier0 img { display: block; width: 100%; height: auto; }
+.tier0 h1 { font-size: var(--font-size-h2); font-weight: var(--font-weight-light); margin: var(--space-6) 0 var(--space-3); }
+.tier0 ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.tier0 li { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: baseline; font-size: var(--font-size-body); }
+.tier0 li > *:first-child, .tier0 a > span:first-child { color: var(--color-text-editorial); font-size: var(--font-size-micro); font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); }
+.tier0 a { color: inherit; text-decoration: none; display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: baseline; min-height: 44px; }
+.tier0 a:hover > span:nth-child(2) { text-decoration: underline; }
+.tier0 li > span:last-child, .tier0 a > span:last-child { font-variant-numeric: tabular-nums; }
+drawer-wall:not(:defined) { display: block; min-height: 60vh; }
+.debug-copy { position: fixed; left: max(var(--space-3), env(safe-area-inset-left, 0px)); bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px)); z-index: 5; /* under the drawer view (10) and the records panel (20): it never covers their controls; close the view to copy */ appearance: none; background: var(--color-surface-raised); color: var(--color-text-secondary); border: var(--border-hairline) solid var(--color-border-control); font: inherit; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; padding: var(--space-3); min-height: 44px; }
+.debug-copy:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
+
 /* D1's labelled placeholders, where the wall will be: gone when the elements land (D5, D6) */
 [data-placeholder] {
   display: grid;
