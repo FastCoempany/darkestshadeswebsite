@@ -1,5 +1,5 @@
 // The banned-strings check (DRAWER-WALL.md, Testing): nothing that ships names Raf Simons, Prada, the film behind #43,
-// its maker or FOOH. Scans wall/src, wall/index.html, wall/states.html, wall/data and the copy deck's `wall` section.
+// its maker or FOOH, or shows a price (00-decisions.md #47). Scans wall/src, wall/index.html, wall/states.html, wall/data and the copy deck's `wall` section.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,10 @@ const BANNED = [
   [/prelude[\s_.-]*to[\s_.-]*forever/i, '00-decisions.md #43, the title'],
   [/adele[\s_.-]*dejak/i, '00-decisions.md #43, the maker'],
   [/\bfooh\b/i, '00-decisions.md #43, the genre word'],
+  // the wall shows no price (00-decisions.md #47, the founder's "remove pricing"): no dollar amount in anything that ships. The
+  // third-party three.js chunk is the one file left out: its minified code holds a "$1" replacement token, and none of the
+  // wall's own strings enter it.
+  [/\$\s?\d/, '00-decisions.md #47, no price on the wall', /[\\/]three-[^\\/]*\.js$/],
 ];
 
 function* walk(dir) {
@@ -36,7 +40,8 @@ if (existsSync(deck)) {
 
 let failures = 0;
 for (const [file, text] of texts) {
-  for (const [re, why] of BANNED) {
+  for (const [re, why, except] of BANNED) {
+    if (except && except.test(file)) continue;
     const m = text.match(re);
     if (m) {
       failures++;

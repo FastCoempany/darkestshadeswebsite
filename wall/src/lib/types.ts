@@ -6,14 +6,13 @@ export type FrameId = 'F01' | 'F02' | 'F03' | 'F04' | 'F05' | 'F06' | 'F08' | 'F
 export const FRAME_IDS: readonly FrameId[] = ['F01', 'F02', 'F03', 'F04', 'F05', 'F06', 'F08', 'F09'];
 
 /** A frame's facts, the subset of content/products/f0X.json the wall shows: its id, its handle (the deep link), its
- * look number, its name and its price. Nothing else ships; the asset checks read content/products/ themselves. A
- * value the record lacks is null, never filled in. */
+ * look number and its name. Nothing else ships: no price (00-decisions.md #47, the founder's "remove pricing"), and
+ * the asset checks read content/products/ themselves. A value the record lacks is null, never filled in. */
 export interface FrameFacts {
   id: FrameId;
   handle: string | null;
   lookNumber: string | null;
   name: string | null;
-  price: { amount: string; currencyCode: string } | null;
 }
 
 /** A metaobject field as Shopify's Storefront API returns it (value is always a string or null; a list field's
@@ -61,11 +60,11 @@ export interface BayWallRecord {
 
 export type SeamLight = 'lit' | 'dark';
 
-/** What a drawer renders, from its record and its frame's facts (resolve.ts). A null label renders nothing. */
+/** What a drawer renders, from its record and its frame's facts (resolve.ts). A null label renders nothing. No
+ * price: the wall shows none (00-decisions.md #47). */
 export interface BayLabel {
   lookNumber: string | null;
   name: string | null;
-  price: string | null;
   soldOut: boolean;
   notYet: boolean;
 }

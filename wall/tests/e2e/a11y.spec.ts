@@ -87,7 +87,7 @@ test.describe('accessibility', () => {
     expect(knobs).toHaveLength(8);
   });
 
-  test('320 px: the wall and the view reflow with no horizontal scroll, the name and $100 on screen', async ({ page, browserName, isMobile }) => {
+  test('320 px: the wall and the view reflow with no horizontal scroll, the name on screen and no price', async ({ page, browserName, isMobile }) => {
     test.skip(browserName !== 'chromium' || !!isMobile, 'a viewport test on desktop Chromium');
     await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('index.html');
@@ -109,13 +109,13 @@ test.describe('accessibility', () => {
         const kids = [...label.querySelectorAll('span')].filter((s) => s.getClientRects().length).map((s) => s.getBoundingClientRect());
         const bottom = Math.max(...kids.map((k) => k.bottom)), top = Math.min(...kids.map((k) => k.top));
         const left = Math.min(...kids.map((k) => k.left)), right = Math.max(...kids.map((k) => k.right));
-        return { id: bay.getAttribute('data-id'), lines: Math.round((bottom - top) / 11), over: bottom - r.bottom, left: left - r.left, right: r.right - right, nextFace: below ? below.top - bottom : null, price: (bay.shadowRoot!.querySelector('.price')?.textContent ?? '').trim() };
+        return { id: bay.getAttribute('data-id'), lines: Math.round((bottom - top) / 11), over: bottom - r.bottom, left: left - r.left, right: r.right - right, nextFace: below ? below.top - bottom : null, priced: !!bay.shadowRoot!.querySelector('.price') || /\$/.test(bay.shadowRoot!.textContent ?? '') };
       }).filter(Boolean);
     });
     const check = (rows: Awaited<ReturnType<typeof labels>>, where: string) => {
       expect(rows.length, where).toBe(8);
       for (const r of rows) {
-        expect(r!.price, `${where}: ${r!.id} shows the price`).toBe('$100');
+        expect(r!.priced, `${where}: ${r!.id} shows a price`).toBe(false);
         expect(r!.over, `${where}: ${r!.id}'s label reaches ${r!.over.toFixed(1)} px below its rect`).toBeLessThanOrEqual(0.5);
         expect(r!.left, `${where}: ${r!.id} left`).toBeGreaterThanOrEqual(-0.5);
         expect(r!.right, `${where}: ${r!.id} right`).toBeGreaterThanOrEqual(-0.5);
@@ -136,7 +136,8 @@ test.describe('accessibility', () => {
     expect(await overflow()).toBeLessThanOrEqual(0);
     const top = page.locator('drawer-view').locator('.top');
     await expect(top.locator('.micro')).toHaveText(/Holly Wore Them to Breakfast/i);
-    await expect(top.locator('.price')).toHaveText('$100');
+    await expect(top.locator('.price')).toHaveCount(0);
+    expect(await top.textContent()).not.toMatch(/\$/);
     const tb = (await top.boundingBox())!;
     expect(tb.x + tb.width).toBeLessThanOrEqual(320);
     for (const b of await page.locator('drawer-view').locator('button.quiet').all()) {

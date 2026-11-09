@@ -38,13 +38,13 @@ test.describe('the page inside the host\'s skeleton', () => {
     const type = await page.evaluate(() => {
       const bay = document.querySelector('drawer-wall')!.shadowRoot!.querySelector('drawer-bay')!.shadowRoot!;
       const of = (el: Element | null) => (el ? getComputedStyle(el) : null);
-      const look = of(bay.querySelector('.look')), price = of(bay.querySelector('.price'));
-      return { lookFamily: look?.fontFamily ?? '', priceFamily: price?.fontFamily ?? '', priceWeight: price?.fontWeight ?? '', bodyFamily: getComputedStyle(document.body).fontFamily, urbanist: document.fonts.check('300 16px "Urbanist Variable"') };
+      const look = of(bay.querySelector('.look')), name = of(bay.querySelector('.name'));
+      return { lookFamily: look?.fontFamily ?? '', nameFamily: name?.fontFamily ?? '', bodyFamily: getComputedStyle(document.body).fontFamily, urbanist: document.fonts.check('300 16px "Urbanist Variable"') };
     });
     // the text stack (Stolzl, its stand-in Urbanist) on the body and the labels, never the host's system stack
     expect(type.bodyFamily).toMatch(/^Stolzl/);
     expect(type.lookFamily).toMatch(/^Stolzl/);
-    expect(type.priceFamily).toMatch(/^Stolzl/);
+    expect(type.nameFamily).toMatch(/^Stolzl/);
     expect(type.urbanist).toBe(true);
     await bayButton(page, 'drawer_bay/f09').click();
     await waitForState(page, ['shut']);

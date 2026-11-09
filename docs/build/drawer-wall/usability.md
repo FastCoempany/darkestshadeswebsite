@@ -26,18 +26,17 @@ Without a switch the wall is tap first.
 1. **"Find a frame you like and look at it closely."** Watch for: do they find the drawer, the pull, the lift? How long to the first open?
 2. **"Show me the gold emblem up close."** Do they lift, turn, pinch, or go to the photographs?
 3. **"Put it back and look at another one."** Do they find put back, shut, close? Any accidental scroll or open on the way?
-4. **"What does it cost?"** Is $100 seen without hunting?
-5. **Free play, two minutes.** Then the three questions: What felt natural? What felt in the way? Which version would you keep, after trying the other one (switch the start now, `#pull-debug` or `#debug`, reload, and let them try the first task again)?
+4. **Free play, two minutes.** Then the three questions: What felt natural? What felt in the way? Which version would you keep, after trying the other one (switch the start now, `#pull-debug` or `#debug`, reload, and let them try the first task again)?
 
 ## What to record, per person
 
-| Person | Phone, browser | Started with | Time to first open (s) | Accidental opens | Accidental scrolls | Lifted | Turned | Zoomed | Opened the photographs | $100 seen without hunting | Their pick | Notes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | | tap / pull | | | | yes / no | yes / no | yes / no | yes / no | yes / no | tap / pull | |
-| 2 | | | | | | | | | | | | |
-| 3 | | | | | | | | | | | | |
-| 4 | | | | | | | | | | | | |
-| 5 | | | | | | | | | | | | |
+| Person | Phone, browser | Started with | Time to first open (s) | Accidental opens | Accidental scrolls | Lifted | Turned | Zoomed | Opened the photographs | Their pick | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | | tap / pull | | | | yes / no | yes / no | yes / no | yes / no | tap / pull | |
+| 2 | | | | | | | | | | | |
+| 3 | | | | | | | | | | | |
+| 4 | | | | | | | | | | | |
+| 5 | | | | | | | | | | | |
 
 - **Accidental open:** a drawer view opened when they meant to scroll. **Accidental scroll:** the wall moved when they meant to open or pull.
 - At the end of each session, tap "Copy the event log" (shown with `#debug`) and paste it into a note named for the person; it holds every open, pull, lift, turn, zoom and the states in between with their times. If the copy button does nothing on that phone, the log is also printed to the browser's console under `[wall]`.

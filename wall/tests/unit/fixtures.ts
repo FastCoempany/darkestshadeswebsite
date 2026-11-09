@@ -1,7 +1,7 @@
 // Fixtures for the logic tests: frame facts in the shape the wall reads them, and records in metaobject shape.
 import type { AssetAvailability, DrawerBayRecord, FrameFacts, FrameId, Metaobject } from '../../src/lib/types';
 
-// The eight frames as content/products/ names them (06-products.md): id, handle, look number, name, $100.
+// The eight frames as content/products/ names them (06-products.md): id, handle, look number, name. No price (#47).
 export const FRAMES: Record<FrameId, FrameFacts> = {
   F01: facts('F01', 'lou-went-underground', '01', 'Lou Went Underground'),
   F02: facts('F02', 'holly-wore-them-to-breakfast', '02', 'Holly Wore Them to Breakfast'),
@@ -14,7 +14,7 @@ export const FRAMES: Record<FrameId, FrameFacts> = {
 };
 
 function facts(id: FrameId, handle: string, lookNumber: string, name: string): FrameFacts {
-  return { id, handle, lookNumber, name, price: { amount: '100.00', currencyCode: 'USD' } };
+  return { id, handle, lookNumber, name };
 }
 
 export function bay(over: Partial<DrawerBayRecord> = {}): DrawerBayRecord {
