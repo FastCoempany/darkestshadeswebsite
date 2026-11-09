@@ -18,6 +18,7 @@
   --ds-gold-300: #D9BB82;
   --ds-gold-500: #C6A36A;
   --ds-gold-700: #7A5C2E;
+  --ds-camel-400: #CB997C;
   --ds-camel-500: #BF835F;
   --ds-camel-700: #7F5137;
   --ds-success-300: #8DB596;
@@ -120,7 +121,7 @@
   --color-text-disabled: var(--ds-graphite-400);
   --color-text-inverse: var(--ds-onyx-950);
   --color-text-accent: var(--ds-gold-500);
-  --color-text-editorial: var(--ds-camel-500);
+  --color-text-editorial: var(--ds-camel-400);
   --color-border-hairline: var(--ds-onyx-700);
   --color-border-rule: var(--ds-graphite-500);
   --color-border-control: var(--ds-graphite-400);

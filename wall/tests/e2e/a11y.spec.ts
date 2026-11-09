@@ -4,9 +4,10 @@ import { bayButton, clickQuiet, waitForState, wallLoaded } from './helpers';
 
 // Accessibility (DRAWER-WALL.md, Testing): axe on the wall, the drawer view shut and open, the lifted frame and the
 // photographs; the names and the live announcements; every target at least 44 px; 320 px (reflow, WCAG 1.4.10); the
-// labels' contrast measured against the plate's pixels under each label (at least 4.5:1), portrait and landscape: the
-// measure is the mean luminance of the pixels under the label rect (the rail colour the eye reads the text against);
-// the 95th and 99th percentiles (the grain's bright flecks) are recorded with it and shown in the record.
+// labels' contrast measured against the plate's pixels under each label (at least 4.5:1), portrait and landscape: each
+// label colour against the mean luminance of the pixels under the label rect and against the grain's 95th and 99th
+// percentiles, all three at least 4.5:1 (WCAG's G18 reads the pixels next to the letters, so the grain counts, and one
+// pixel in a hundred may be brighter than the numerals' floor).
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
 async function axeClean(page: Page, where: string): Promise<void> {
@@ -19,8 +20,8 @@ async function canLift(page: Page): Promise<boolean> {
 }
 
 test.describe('accessibility', () => {
-  test('the view in every state is clean under axe, named, and announced', async ({ page, browserName, isMobile }) => {
-    test.skip(browserName !== 'chromium' || !!isMobile, 'the live frame needs Chromium; one desktop pass');
+  test('the view in every state is clean under axe, named, and announced', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'the live frame needs Chromium: the Pixel and the desktop projects');
     await page.goto('index.html');
     await wallLoaded(page);
     await axeClean(page, 'the wall');
@@ -93,13 +94,42 @@ test.describe('accessibility', () => {
     await wallLoaded(page);
     const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(await overflow()).toBeLessThanOrEqual(0);
-    for (const id of ['drawer_bay/f01', 'drawer_bay/f02', 'drawer_bay/f09']) {
-      const bay = page.locator('drawer-wall').locator(`drawer-bay[data-id="${id}"]`);
-      await expect(bay.locator('.price')).toHaveText('$100');
-      const box = (await bay.locator('.label').boundingBox())!;
-      expect(box.x).toBeGreaterThanOrEqual(0);
-      expect(box.x + box.width).toBeLessThanOrEqual(320);
-    }
+    // every label's content inside its rail rect and above the next drawer's face, with the records as they are and then
+    // with the longest name (F02) sold out on every drawer (the two-line worst case)
+    const labels = () => page.locator('drawer-wall').evaluate((wall) => {
+      const bays = [...wall.shadowRoot!.querySelectorAll('drawer-bay')];
+      const faces = bays.map((b) => (b.shadowRoot!.querySelector('.face') as HTMLElement | null)?.getBoundingClientRect() ?? null);
+      return bays.map((bay) => {
+        const label = bay.shadowRoot!.querySelector('.label') as HTMLElement | null;
+        if (!label) return null;
+        const r = label.getBoundingClientRect();
+        // the drawer below: the nearest face whose top is under this label's top and which overlaps it sideways (the
+        // portrait wall has two columns, the landscape four, so the next bay in order may sit beside, not below)
+        const below = faces.filter((f): f is DOMRect => !!f && f.top > r.top && f.right > r.left && f.left < r.right).sort((a, b) => a.top - b.top)[0] ?? null;
+        const kids = [...label.querySelectorAll('span')].filter((s) => s.getClientRects().length).map((s) => s.getBoundingClientRect());
+        const bottom = Math.max(...kids.map((k) => k.bottom)), top = Math.min(...kids.map((k) => k.top));
+        const left = Math.min(...kids.map((k) => k.left)), right = Math.max(...kids.map((k) => k.right));
+        return { id: bay.getAttribute('data-id'), lines: Math.round((bottom - top) / 11), over: bottom - r.bottom, left: left - r.left, right: r.right - right, nextFace: below ? below.top - bottom : null, price: (bay.shadowRoot!.querySelector('.price')?.textContent ?? '').trim() };
+      }).filter(Boolean);
+    });
+    const check = (rows: Awaited<ReturnType<typeof labels>>, where: string) => {
+      expect(rows.length, where).toBe(8);
+      for (const r of rows) {
+        expect(r!.price, `${where}: ${r!.id} shows the price`).toBe('$100');
+        expect(r!.over, `${where}: ${r!.id}'s label reaches ${r!.over.toFixed(1)} px below its rect`).toBeLessThanOrEqual(0.5);
+        expect(r!.left, `${where}: ${r!.id} left`).toBeGreaterThanOrEqual(-0.5);
+        expect(r!.right, `${where}: ${r!.id} right`).toBeGreaterThanOrEqual(-0.5);
+        if (r!.nextFace !== null) expect(r!.nextFace, `${where}: ${r!.id}'s label against the next drawer's face`).toBeGreaterThan(0);
+      }
+    };
+    check(await labels(), '320 px, the records as they are');
+    await page.evaluate(() => { const s = window.__wall!.store; for (const b of s.resolved) { const rec = s.record(b.id)!; s.update({ ...rec, fields: rec.fields.map((f) => (f.key === 'frame' ? { ...f, value: 'F02' } : f.key === 'state' ? { ...f, value: 'sold_out' } : f)) }); } });
+    await page.waitForTimeout(300);
+    check(await labels(), '320 px, the longest name sold out on every drawer');
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.waitForTimeout(300);
+    check(await labels(), '390 px, the longest name sold out on every drawer');
+    await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('index.html?open=F02');
     await wallLoaded(page);
     await waitForState(page, ['open'], 15000);
@@ -158,8 +188,11 @@ test.describe('accessibility', () => {
       console.log(`label contrast (${layout}; mean/p95/p99): ${line}`);
       test.info().annotations.push({ type: 'contrast', description: line });
       expect(report).toHaveLength(8);
-      for (const r of report) for (const [k, [atMean]] of Object.entries(r.contrast)) {
+      // the mean, and the grain's 95th and 99th percentiles: one pixel in a hundred under the numerals may be brighter
+      for (const r of report) for (const [k, [atMean, atP95, atP99]] of Object.entries(r.contrast)) {
         expect(atMean, `${layout} drawer ${r.drawer}: ${k} against the rail's mean luminance`).toBeGreaterThanOrEqual(4.5);
+        expect(atP95, `${layout} drawer ${r.drawer}: ${k} against the rail's 95th percentile`).toBeGreaterThanOrEqual(4.5);
+        expect(atP99, `${layout} drawer ${r.drawer}: ${k} against the rail's 99th percentile`).toBeGreaterThanOrEqual(4.5);
       }
     });
   }

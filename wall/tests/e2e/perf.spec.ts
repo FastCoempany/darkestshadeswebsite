@@ -54,15 +54,21 @@ test.describe('performance', () => {
       await waitForState(page, ['open'], 6000);
     }
     await log.settle();
+    // held is read at two moments: after each draw (seek() has just closed what lies outside the window, so this reading
+    // cannot exceed 5 by construction) and when each decode lands (the peak: a frame one past the window may still be held)
     const draws = log.events.filter((e) => e.type === 'view.draw');
+    const decodes = log.events.filter((e) => e.type === 'sequence.decoded');
     const held = draws.map((e) => Number(e.data?.held ?? 0));
-    console.log(`decoded frames: ${draws.length} draws, held at most ${Math.max(...held)}`);
-    test.info().annotations.push({ type: 'decoded frames', description: `${draws.length} draws, held at most ${Math.max(...held)}` });
+    const peak = decodes.map((e) => Number(e.data?.held ?? 0));
+    console.log(`decoded frames: ${draws.length} draws, held at most ${Math.max(...held)} after a draw; ${decodes.length} decodes, held at most ${Math.max(...peak)} as a decode landed`);
+    test.info().annotations.push({ type: 'decoded frames', description: `${draws.length} draws, held at most ${Math.max(...held)}; ${decodes.length} decodes, peak ${Math.max(...peak)}` });
     expect(draws.length).toBeGreaterThan(40);
+    expect(decodes.length).toBeGreaterThan(20);
     expect(Math.max(...held)).toBeLessThanOrEqual(5);
+    expect(Math.max(...peak), 'the decode-time peak').toBeLessThanOrEqual(5);
   });
 
-  test('input to the next frame: open, pull and turn under 200 ms', async ({ page, browserName, isMobile }) => {
+  test('input to the frame after the next (past the paint): open, pull and turn under 200 ms', async ({ page, browserName, isMobile }) => {
     test.skip(browserName !== 'chromium' || !isMobile, 'touch through CDP, on the Pixel project');
     await page.goto('index.html');
     await wallLoaded(page);
@@ -71,7 +77,9 @@ test.describe('performance', () => {
       const lat: Record<string, number[]> = { open: [], pull: [], turn: [] };
       (window as unknown as { __lat: typeof lat }).__lat = lat;
       const kind = () => { const v = document.querySelector('drawer-view') as (HTMLElement & { state?: string; open?: boolean }) | null; if (!v?.open) return 'open'; if (v.state === 'pulling') return 'pull'; if (v.state === 'lifted') return 'turn'; return null; };
-      for (const type of ['pointerdown', 'pointermove', 'pointerup']) document.addEventListener(type, (e) => { const k = kind(); if (!k) return; const t = e.timeStamp; requestAnimationFrame((ts) => { lat[k]!.push(ts - t); }); }, true);
+      // to the start of the frame after the next: the next frame's start is before its paint, so the one after it is past the
+      // presentation of the response (the proxy for INP the lab can read; a real INP is to the paint itself)
+      for (const type of ['pointerdown', 'pointermove', 'pointerup']) document.addEventListener(type, (e) => { const k = kind(); if (!k) return; const t = e.timeStamp; requestAnimationFrame(() => requestAnimationFrame((ts2) => { lat[k]!.push(ts2 - t); })); }, true);
     });
     const cdp = await page.context().newCDPSession(page);
     const c = await bayCenter(page, 'drawer_bay/f09');
@@ -91,34 +99,45 @@ test.describe('performance', () => {
     const lat = await page.evaluate(() => (window as unknown as { __lat: Record<string, number[]> }).__lat);
     const stats = (xs: number[]) => { const a = [...xs].sort((p, q) => p - q); return a.length ? { n: a.length, median: a[Math.floor(a.length / 2)]!, max: a[a.length - 1]! } : { n: 0, median: 0, max: 0 }; };
     const report = { open: stats(lat.open!), pull: stats(lat.pull!), turn: stats(lat.turn!) };
-    console.log(`input to next frame (ms): ${Object.entries(report).map(([k, v]) => `${k} n ${v.n}, median ${v.median.toFixed(1)}, max ${v.max.toFixed(1)}`).join('; ')}`);
-    test.info().annotations.push({ type: 'input to next frame (ms)', description: JSON.stringify(report) });
+    console.log(`input to paint (ms): ${Object.entries(report).map(([k, v]) => `${k} n ${v.n}, median ${v.median.toFixed(1)}, max ${v.max.toFixed(1)}`).join('; ')}`);
+    test.info().annotations.push({ type: 'input to paint (ms)', description: JSON.stringify(report) });
     expect(report.open.n).toBeGreaterThan(0);
     expect(report.pull.n).toBeGreaterThan(10);
     if (canLift) expect(report.turn.n).toBeGreaterThan(10);
-    for (const [k, v] of Object.entries(report)) if (v.n) expect(v.max, `${k}: input to next frame`).toBeLessThanOrEqual(200);
+    for (const [k, v] of Object.entries(report)) if (v.n) expect(v.max, `${k}: input to the frame after the next`).toBeLessThanOrEqual(200);
   });
 
   test('frame rate while pulling and turning: never under 30 fps at the machine\'s speed; the 4x CPU figure recorded', async ({ page, browserName, isMobile }) => {
     test.skip(browserName !== 'chromium' || !isMobile, 'touch through CDP, on the Pixel project');
-    await page.goto('index.html?open=F09');
+    await page.goto('index.html?open=F09&debug=1');
     await wallLoaded(page);
     await waitForState(page, ['open'], 15000);
     const cdp = await page.context().newCDPSession(page);
+    // the animation-frame gaps say whether the main thread kept up; the canvas draws (view.draw in the log) say how often the
+    // picture advanced, which in the lab is bounded by the CDP drag's own pace (about 28 moves a second), not by the wall
+    const log = collectLog(page);
     const sample = async (run: () => Promise<void>) => {
       await page.evaluate(() => { const w = window as unknown as { __frames: number[]; __stop: boolean }; w.__frames = []; w.__stop = false; const loop = (ts: number) => { w.__frames.push(ts); if (!w.__stop) requestAnimationFrame(loop); }; requestAnimationFrame(loop); });
+      const drawsBefore = log.events.filter((e) => e.type === 'view.draw').length;
+      const t0 = Date.now();
       await run();
-      return page.evaluate(() => { const w = window as unknown as { __frames: number[]; __stop: boolean }; w.__stop = true; const f = w.__frames; const gaps = f.slice(1).map((t, i) => t - f[i]!); gaps.sort((a, b) => a - b); return { frames: f.length, median: gaps[Math.floor(gaps.length / 2)] ?? 0, p95: gaps[Math.floor(gaps.length * 0.95)] ?? 0, max: gaps[gaps.length - 1] ?? 0, period: gaps[Math.floor(gaps.length / 2)] ?? 0 }; });
+      const seconds = (Date.now() - t0) / 1000;
+      await log.settle();
+      const draws = log.events.filter((e) => e.type === 'view.draw').length - drawsBefore;
+      const r = await page.evaluate(() => { const w = window as unknown as { __frames: number[]; __stop: boolean }; w.__stop = true; const f = w.__frames; const gaps = f.slice(1).map((t, i) => t - f[i]!); gaps.sort((a, b) => a - b); return { frames: f.length, median: gaps[Math.floor(gaps.length / 2)] ?? 0, p95: gaps[Math.floor(gaps.length * 0.95)] ?? 0, max: gaps[gaps.length - 1] ?? 0 }; });
+      return { ...r, draws, drawsPerSecond: draws / seconds };
     };
     const s = await stageCenter(page);
     const vh = page.viewportSize()!.height;
     const fps = (gap: number) => (gap ? Math.round(1000 / gap) : 0);
-    const fmt = (r: { frames: number; median: number; p95: number; max: number }) => `${r.frames} frames, median ${fps(r.median)} fps, p95 ${fps(r.p95)} fps, slowest ${fps(r.max)} fps (${r.max.toFixed(1)} ms)`;
+    // the canvas draws are the pull's (the turn renders through three.js, which the log does not count)
+    const fmt = (r: { frames: number; median: number; p95: number; max: number; draws: number; drawsPerSecond: number }) => `${r.frames} frames, median ${fps(r.median)} fps, p95 ${fps(r.p95)} fps, slowest ${fps(r.max)} fps (${r.max.toFixed(1)} ms)` + (r.draws ? `; ${r.draws} canvas draws (${r.drawsPerSecond.toFixed(1)}/s, the drag's own pace)` : '');
     const canLift = await page.evaluate(() => !!window.__wall?.store.bay('drawer_bay/f09')?.canLift);
-    // "never under 30 fps" at the display's refresh (about 60 Hz here, the median gap): no gap longer than two refresh
-    // periods, one skipped frame at most, with 1 ms for timer jitter (a single skipped frame measures 33.4 ms, not 33.33)
-    const floor = (r: { period: number }) => 2 * r.period + 1;
-    const results: Record<string, { pull: ReturnType<typeof fmt>; turn: ReturnType<typeof fmt>; pullMax: number; turnMax: number; pullFloor: number; turnFloor: number }> = {};
+    // "never under 30 fps": no animation-frame gap longer than two 60 Hz periods (one skipped frame at most, 34.4 ms with
+    // 1 ms for timer jitter: a single skipped frame measures 33.4 ms, not 33.33) and the median gap at the refresh itself
+    // (no more than 17 ms), so a run slow throughout cannot pass on its own median
+    const FLOOR_MS = 2 * (1000 / 60) + 1, MEDIAN_MS = 17;
+    const results: Record<string, { pull: ReturnType<typeof fmt>; turn: ReturnType<typeof fmt>; pullMax: number; turnMax: number; pullMedian: number; turnMedian: number }> = {};
     // the same pull and turn at the machine's own speed and at 4x CPU throttling: both recorded, the floor asserted at 1x
     for (const rate of [1, 4]) {
       await cdp.send('Emulation.setCPUThrottlingRate', { rate });
@@ -128,7 +147,7 @@ test.describe('performance', () => {
         await touchDrag(cdp, page, s.x, s.y - s.h * 0.3, s.y - s.h * 0.3 + vh * 0.45 * 1.05, 40, 16);
         await waitForState(page, ['open'], 8000);
       });
-      let turn = { frames: 0, median: 0, p95: 0, max: 0, period: 0 };
+      let turn = { frames: 0, median: 0, p95: 0, max: 0, draws: 0, drawsPerSecond: 0 };
       if (canLift) {
         await clickQuiet(page, 'Lift them out');
         await waitForState(page, ['lifted'], 30000);
@@ -137,7 +156,7 @@ test.describe('performance', () => {
         await clickQuiet(page, 'Put them back');
         await waitForState(page, ['open'], 30000);
       }
-      results[`${rate}x`] = { pull: fmt(pull), turn: fmt(turn), pullMax: pull.max, turnMax: turn.max, pullFloor: floor(pull), turnFloor: floor(turn) };
+      results[`${rate}x`] = { pull: fmt(pull), turn: fmt(turn), pullMax: pull.max, turnMax: turn.max, pullMedian: pull.median, turnMedian: turn.median };
       expect(pull.frames).toBeGreaterThan(30);
       if (canLift) expect(turn.frames).toBeGreaterThan(20);
     }
@@ -145,7 +164,11 @@ test.describe('performance', () => {
     const line = Object.entries(results).map(([k, v]) => `${k}: pull ${v.pull}; turn ${v.turn}`).join(' | ');
     console.log(`frame rate: ${line}`);
     test.info().annotations.push({ type: 'frame rate', description: line });
-    expect(results['1x']!.pullMax, 'the slowest frame while pulling: at most one skipped frame').toBeLessThanOrEqual(results['1x']!.pullFloor);
-    if (canLift) expect(results['1x']!.turnMax, 'the slowest frame while turning: at most one skipped frame').toBeLessThanOrEqual(results['1x']!.turnFloor);
+    expect(results['1x']!.pullMedian, 'the median frame while pulling, at the refresh').toBeLessThanOrEqual(MEDIAN_MS);
+    expect(results['1x']!.pullMax, 'the slowest frame while pulling: at most one skipped frame').toBeLessThanOrEqual(FLOOR_MS);
+    if (canLift) {
+      expect(results['1x']!.turnMedian, 'the median frame while turning, at the refresh').toBeLessThanOrEqual(MEDIAN_MS);
+      expect(results['1x']!.turnMax, 'the slowest frame while turning: at most one skipped frame').toBeLessThanOrEqual(FLOOR_MS);
+    }
   });
 });

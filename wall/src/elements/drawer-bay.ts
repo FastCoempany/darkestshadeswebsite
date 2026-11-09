@@ -46,6 +46,9 @@ export class DrawerBay extends LitElement {
     .price { color: var(--color-text-primary); font-size: var(--font-size-body); font-weight: var(--font-weight-regular); font-variant-numeric: tabular-nums; line-height: 1.25; }
     .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; }
     @media (min-width: 1024px) { .look, .name, .status { font-size: 12px; } }
+    /* under 360 px the rail rect is 59 px tall and a two-line name at 11 px overran it by 6 px (the price then sat on the next
+       drawer's face, under its dark crop): smaller type and tighter lines keep every label inside its rect at 320 px */
+    @media (max-width: 359px) { .look, .name, .status { font-size: 10px; line-height: 1.1; } .price { font-size: var(--font-size-small); line-height: 1.15; } .row { margin-top: 0; } .label { gap: 0; } }
   `;
 
   @property({ attribute: false }) bay: ResolvedBay | null = null;

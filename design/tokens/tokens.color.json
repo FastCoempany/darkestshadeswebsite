@@ -90,6 +90,11 @@
       "source": "extended",
       "use": "Gold ink for light surfaces"
     },
+    "camel-400": {
+      "value": "#CB997C",
+      "source": "extended",
+      "use": "Camel for small text over the drawer wall's leather rail: camel-500 lifted to L 0.64 at its hue and saturation, 4.5:1 against the rail's grain at the 99th percentile (D6)"
+    },
     "camel-500": {
       "value": "#BF835F",
       "source": "anastasiia",
@@ -211,8 +216,8 @@
         "value": "#C6A36A"
       },
       "text-editorial": {
-        "ref": "camel-500",
-        "value": "#BF835F"
+        "ref": "camel-400",
+        "value": "#CB997C"
       },
       "border-hairline": {
         "ref": "onyx-700",

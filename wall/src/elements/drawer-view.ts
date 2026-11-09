@@ -33,6 +33,7 @@ export interface OpenRequest { bay: ResolvedBay; pointer: { x: number; y: number
 const HINT_GESTURES = ['pull', 'lift', 'turn'] as const;
 type Hint = (typeof HINT_GESTURES)[number];
 const done = new Set<Hint>();   // hints gone after the first success of that gesture, for the session
+const prefetched = new Set<string>();   // the frames whose lift pieces were prefetched this visit
 
 @customElement('drawer-view')
 export class DrawerView extends LitElement {
@@ -87,7 +88,7 @@ export class DrawerView extends LitElement {
   @state() private posterUrl: string | null = null;
   @state() private empty: FrameSource | null = null;      // the base sequence's last frame: the empty drawer behind the lifted frame
   @state() private emptyShown = false;                    // follows the lifted frame's own fade (lifted-handoff)
-  @state() private photosCount: number | null = null;     // the zoom index's photographs for this frame; null until read, 0 hides the button
+  @state() private photosCount: number | null = null;     // the zoom index's photographs for this frame; the button renders only once it is known and above 0
   @state() private drawn = false;
 
   private player: SequencePlayer | null = null;
@@ -135,7 +136,7 @@ export class DrawerView extends LitElement {
     this.empty = this.emptyDrawer(width);
     this.emptyShown = false;
     this.photosCount = null;
-    void photosFor(frame).then((n) => { if (this.bay === bay) this.photosCount = n; });
+    this.photosCount = await photosFor(frame);   // awaited here, so the sheet's fixtures are the same every time
     await this.updateComplete;
     this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
     await this.player?.prefetch();
@@ -220,7 +221,8 @@ export class DrawerView extends LitElement {
    * low-priority fetches into the HTTP cache, so the lift finds them. Nothing at tier 1, where the still is the lift. */
   private prefetchLift(frame: string | null): void {
     const s = this.store;
-    if (!s || !frame || this.tier !== 2 || !s.assets.hasLift(frame as Parameters<typeof s.assets.hasLift>[0])) return;
+    if (!s || !frame || this.tier !== 2 || !s.assets.hasLift(frame as Parameters<typeof s.assets.hasLift>[0]) || prefetched.has(frame)) return;
+    prefetched.add(frame);   // once a visit: a second open of the same drawer must not fetch the GLB again on a host without validators
     const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
     idle(() => {
       if (!this.open || this.bay?.frame?.id !== frame) return;
@@ -546,7 +548,7 @@ export class DrawerView extends LitElement {
             <button class="quiet" type="button" @click=${() => this.zoomBy(1.2)}>${t('closer')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1 / 1.2)}>${t('further')}</button>
             <button class="quiet" type="button" @click=${() => { this.dispatch({ type: 'RESET' }); this.syncLifted(); }}>${t('reset')}</button>` : nothing}
-          ${st === 'lifted' && this.photosCount !== 0 ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PHOTOS' })}>${t('photos')}</button>` : nothing}
+          ${st === 'lifted' && (this.photosCount ?? 0) > 0 ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PHOTOS' })}>${t('photos')}</button>` : nothing}
           ${st === 'lifted' ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PUT_BACK' })}>${t('putBack')}</button>` : nothing}
           ${st === 'shut' || st === 'open' || st === 'pulling' ? html`<button class="quiet close" type="button" @click=${() => this.dispatch({ type: 'CLOSE' })}>${t('close')}</button>` : nothing}
         </div>
