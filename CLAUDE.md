@@ -62,6 +62,7 @@ npm run budget                    # after a build: the initial JavaScript <= 60 
 npm run lighthouse                # Lighthouse mobile on the built wall: performance >= 90, LCP, CLS, TBT
 npm run assets                    # the zoom images from dam/ into wall/public/zoom/ (D4; never committed)
 npm run all                       # check, test, build, budget, test:e2e, lighthouse, in that order
+node tools/web/phone_set.mjs      # after a build: the phone set for the Artifact link in work/phone/ (D7; never committed): the page without the host's skeleton, 1200 px WebP sequences, .glb/.hdr as .wasm, the manifest rewritten, publish-plan.json
 ```
 ```
 python3 tools/blender/drawer_wall.py wall --layout portrait --knob black-relief --variant lit   # the wall plate render → work/wall/ (and --variant dark, --layout landscape)

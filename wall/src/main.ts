@@ -1,10 +1,12 @@
-// The wall, alone (DRAWER-WALL.md). index.html runs the whole experience from the records: the tiers, ?open=,
-// ?mech=, ?panel=1, ?debug=1 (D6 completes the flows; D5 lays the drawers over the plate).
+// The wall, alone (DRAWER-WALL.md). index.html runs the whole experience from the records: the tiers, and the
+// switches ?open=, ?mech=pull, ?panel=1, ?debug=1, also as plain names in the hash (#open-f09, #pull, #panel, #debug,
+// hyphens joining more than one) because the phone link is a published Artifact and its link passes only a #name.
 import './styles/fonts.css';
 import './styles/base.css';
 import { WallStore } from './data/store';
 import { enableLog, log } from './lib/log';
 import { readSignals, tierFor, tierReasons, probeWebGL2, type Tier } from './lib/tier';
+import { readFlags } from './lib/flags';
 import type { ResolvedBay } from './lib/types';
 import type { DrawerView, OpenRequest } from './elements/drawer-view';
 import type { DrawerWall } from './elements/drawer-wall';
@@ -15,8 +17,8 @@ declare global {
   interface Window { __wall?: { store: WallStore; tier: Tier } }
 }
 
-const params = new URLSearchParams(location.search);
-enableLog(params.get('debug') === '1');
+const flags = readFlags(location.search, location.hash);
+enableLog(flags.debug);
 
 let tier: Tier = 2;
 let view: DrawerView | null = null;
@@ -52,7 +54,7 @@ async function openBay(store: WallStore, wall: DrawerWall, bay: ResolvedBay, poi
 
 async function start(): Promise<void> {
   const store = await WallStore.load('./assets/');
-  if (params.get('mech') === 'pull') store.setMechanic('pull');
+  if (flags.mech === 'pull') store.setMechanic('pull');
   const signals = readSignals(navigator, () => probeWebGL2(document));
   tier = tierFor(signals);
   window.__wall = { store, tier };   // for the tests and the usability sessions' console
@@ -67,9 +69,9 @@ async function start(): Promise<void> {
   store.addEventListener('change', ((ev: CustomEvent<{ changed: string[] }>) => {
     for (const id of ev.detail.changed) { const b = store.bay(id); if (b && view) view.recordChanged(b); }
   }) as EventListener);
-  log('start', { drawers: store.resolved.length, renderSet: store.assets.manifest.renderSet, mechanic: store.mechanic, tier, reasons: tierReasons(signals) });
+  log('start', { drawers: store.resolved.length, renderSet: store.assets.manifest.renderSet, mechanic: store.mechanic, tier, reasons: tierReasons(signals), flags: flags.from });
   // the records panel (?panel=1): the simulated backend
-  if (params.get('panel') === '1') {
+  if (flags.panel) {
     await import('./elements/records-panel');
     const panel = document.createElement('records-panel');
     panel.store = store;
@@ -77,7 +79,7 @@ async function start(): Promise<void> {
     document.body.append(panel);
   }
   // a deep link (?open=F09, an id or a handle) opens that drawer's view on its last frame, not lifted; unknown opens nothing
-  const open = params.get('open');
+  const open = flags.open;
   if (open) {
     const bay = store.resolved.find((b) => b.frame && (b.frame.id.toLowerCase() === open.toLowerCase() || b.frame.handle === open));
     if (bay?.canOpen) {
@@ -88,7 +90,7 @@ async function start(): Promise<void> {
   }
   wall.setAttribute('data-tier', String(tier));
   // ?debug=1: the event log's copy button, for the tests and the usability sessions
-  if (params.get('debug') === '1') {
+  if (flags.debug) {
     const { logText, log: logEvent } = await import('./lib/log');
     const { t } = await import('./lib/copy');
     const b = document.createElement('button');

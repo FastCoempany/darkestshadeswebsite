@@ -19,6 +19,10 @@ html, body {
   color: var(--color-text-primary);
 }
 
+/* the type on body as well as the root: a host that wraps the page in its own skeleton (the phone link, D7) sets a
+   system font on body, which would otherwise sit between the wall's typography and every element */
+body { font: inherit; }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 :focus-visible {
