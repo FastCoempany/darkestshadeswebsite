@@ -28,8 +28,16 @@ describe('readFlags', () => {
     const f = readFlags('', '#nothing-open');
     expect(f).toEqual({ mech: 'tap', panel: false, debug: false, open: null, from: { query: [], hash: [] } });
   });
-  it('lets the query win where both speak', () => {
+  it('lets the query win where both speak, both ways', () => {
     const f = readFlags('?open=F01', '#open-f09-pull');
     expect(f.open).toBe('F01'); expect(f.mech).toBe('pull');
+    expect(readFlags('?mech=tap', '#pull').mech).toBe('tap');
+    expect(readFlags('?debug=0', '#debug').debug).toBe(false);
+    expect(readFlags('?panel=0', '#panel').panel).toBe(false);
+  });
+  it('takes the frame id after open in the hash, not a handle (handles are hyphenated and the hash splits on hyphens)', () => {
+    expect(readFlags('', '#open-what-stevie-saw').open).toBe('what');   // documented: the hash form is #open-f09
+    expect(readFlags('', '#open-pull').open).toBe('pull');              // the token after open is always the frame
+    expect(readFlags('?open=what-stevie-saw', '').open).toBe('what-stevie-saw');
   });
 });

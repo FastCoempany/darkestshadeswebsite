@@ -4,7 +4,7 @@ Run by Antaeus after R2 (DRAWER-WALL.md, The usability test; O16). Five people o
 
 ## The link and its switches
 
-The phone link is at the top of `WALL-PROGRESS.md`: a private Artifact, so the tester's phone needs to be signed in to claude.ai (or Antaeus opens it on his own phone and hands it over). The wall takes its switches as a plain name after `#` on that link, hyphens joining more than one:
+The phone link is at the top of `WALL-PROGRESS.md`: a private Artifact. **Before the first session, share it** from the page's Share menu on claude.ai: either "anyone with the link" (then any phone opens it, no account needed) or an email invitation to each tester; as published it opens only for Antaeus. The test's premise, five people on their own phones, needs one of the two. The wall takes its switches as a plain name after `#` on that link, hyphens joining more than one:
 
 | Switch | On the phone link | On a plain web host |
 |---|---|---|

@@ -126,6 +126,42 @@
           }
         }
       }
+    },
+    "phoneSet": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Present only in the phone set's copy of the manifest (tools/web/phone_set.mjs, D7): what was left out of the build's set and how the shipped files were renamed. The committed manifest never carries it.",
+      "required": [
+        "from",
+        "width",
+        "formats",
+        "renamed",
+        "builtAt"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "formats": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "renamed": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "builtAt": {
+          "type": "string",
+          "format": "date"
+        }
+      }
     }
   }
 }
