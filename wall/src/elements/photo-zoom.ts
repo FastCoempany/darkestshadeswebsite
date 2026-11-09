@@ -21,6 +21,14 @@ function loadIndex(): Promise<ZoomIndex | null> {
   return indexPromise;
 }
 
+/** How many photographs the zoom index holds for a frame (0 when the index is missing or lacks the frame): the view
+ * offers "See the photographs" only when there is one to see (a missing value renders nothing). */
+export async function photosFor(frameId: string | null): Promise<number> {
+  if (!frameId) return 0;
+  const idx = await loadIndex();
+  return idx?.frames[frameId]?.length ?? 0;
+}
+
 @customElement('photo-zoom')
 export class PhotoZoom extends LitElement {
   static override styles = css`
@@ -183,7 +191,12 @@ export class PhotoZoom extends LitElement {
 
   private go(delta: number): void {
     if (!this.entries.length) return;
-    this.index = (this.index + delta + this.entries.length) % this.entries.length;
+    this.select((this.index + delta + this.entries.length) % this.entries.length);
+  }
+
+  /** Show photograph i (an angle button or the arrow keys): fitted again, logged, and announced through the live region. */
+  private select(i: number): void {
+    this.index = i;
     this.reset();
     log('photos.show', { index: this.index, angle: this.entry?.angle });
     this.dispatchEvent(new CustomEvent('announce', { detail: { text: t('announce.photo', { name: this.name, n: this.index + 1, count: this.entries.length, alt: this.entry?.alt ?? '' }) }, bubbles: true, composed: true }));
@@ -203,7 +216,7 @@ export class PhotoZoom extends LitElement {
       <div class="bar">
         ${e ? html`<div class="count" aria-hidden="true">${this.index + 1} / ${this.entries.length} · ${e.angle}</div>` : nothing}
         <div class="buttons">
-        ${this.entries.map((en, i) => html`<button type="button" aria-pressed=${i === this.index ? 'true' : 'false'} @click=${() => { this.index = i; this.reset(); }}>${en.angle}</button>`)}
+        ${this.entries.map((en, i) => html`<button type="button" aria-pressed=${i === this.index ? 'true' : 'false'} @click=${() => this.select(i)}>${en.angle}</button>`)}
         <button type="button" @click=${() => this.setZoom(this.zoom * 1.2)}>${t('closer')}</button>
         <button type="button" @click=${() => this.setZoom(this.zoom / 1.2)}>${t('further')}</button>
         <button type="button" @click=${() => this.setZoom(1)}>${t('reset')}</button>

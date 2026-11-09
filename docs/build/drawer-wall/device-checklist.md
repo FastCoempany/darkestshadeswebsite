@@ -16,9 +16,10 @@ The phone build's link is at the top of `WALL-PROGRESS.md`. Run this on an iPhon
 | Lift | With the drawer open, tap the frame (or "Lift them out") | The frame rises toward you into the light and turns to a three-quarter view; the drawer dims behind it | | |
 | Turn | One finger, left and right, up and down | It turns freely sideways and a little up and down, and keeps turning a little after you let go | | |
 | Pinch | Pinch out; double-tap; pinch in | It comes closer (up to 3×) and stays sharp; double-tap goes between 1× and 2.2×; the emblem on the right temple is readable up close | | |
-| Photographs | Tap "See the photographs" | The real photographs on their pale ground; pinch and drag down to the pixel; the angle buttons switch between them; "Back to the frame" returns | | |
+| Photographs | Tap "See the photographs" | The real photographs on their pale ground; pinch and drag down to the pixel; once you are closer, Up, Down, Left and Right move the picture too; the angle buttons switch between them; "Back to the frame" returns | | |
+| Smoothness | Pull slowly and fast; turn the lifted frame slowly and fast | Both keep up with the finger with no stutter or frozen moments (the aim is 60 frames a second; the lab could only measure the machine's own speed, not a throttled phone) | | |
 | Put back | Tap "Put them back", then "Shut the drawer", then "Close" | The frame settles back into the drawer, the drawer shuts, the wall is there again with that drawer in focus | | |
-| Another | Open a second drawer | The same, without a longer wait than the first (its frames were fetched while you looked) | | |
+| Another | Open a second drawer, then come back to the first | The second drawer's first frame appears at once and the rest of its frames arrive as it opens; a drawer you opened before comes back without a wait | | |
 | Pull first | Add `?mech=pull` to the link and reload; put a finger on a knob and pull down; then swipe on a drawer's face | The drawer view opens under your finger and the pull continues there; the face still scrolls the wall | | |
 | Rotate | Turn the phone to landscape with the wall showing, and with a drawer open | The wall re-lays itself (4 across on a wide screen, 2 across on a narrow one); the drawer view keeps its 4:5 stage centred | | |
 | Low power | Turn on Low Power Mode (iPhone) or Battery Saver (Android); open, pull, lift, turn | Everything still works; turning may be a little less smooth; nothing breaks | | |

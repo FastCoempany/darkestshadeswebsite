@@ -57,6 +57,9 @@ export class SequencePlayer {
     this.blobs = frames.map(() => null);
     this.fetches = frames.map(() => null);
     this.fetcher = opts.fetcher ?? (async (u) => { const r = await fetch(u); if (!r.ok) throw new Error(`${r.status} ${u}`); return r.blob(); });
+    // the frames decode at their encoded size and are scaled on the draw: decoding them at the canvas's size instead
+    // (createImageBitmap's resizeWidth/resizeHeight) was measured in D6 and dropped more frames under 4x CPU throttling
+    // (the resize costs more than the plain-copy draw saves), so it was taken out again
     this.decoder = opts.decoder ?? ((b) => createImageBitmap(b));
     this.window = opts.window ?? DECODE_WINDOW;
     this.onLog = opts.onLog ?? (() => {});

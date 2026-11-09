@@ -22,6 +22,7 @@ import { trapFocus, within, activeIn, type FocusTrap } from '../lib/focus-trap';
 import { t, subjectOf } from '../lib/copy';
 import { log } from '../lib/log';
 import type { Tier } from '../lib/tier';
+import { photosFor } from './photo-zoom';
 
 /** The frame's region of the stage at the end of the pull, as fractions of the stage's box: a tap inside it lifts the
  * frame (the frame sits across the middle of the open drawer in every sequence's last frame). */
@@ -32,6 +33,7 @@ export interface OpenRequest { bay: ResolvedBay; pointer: { x: number; y: number
 const HINT_GESTURES = ['pull', 'lift', 'turn'] as const;
 type Hint = (typeof HINT_GESTURES)[number];
 const done = new Set<Hint>();   // hints gone after the first success of that gesture, for the session
+const prefetched = new Set<string>();   // the frames whose lift pieces were prefetched this visit
 
 @customElement('drawer-view')
 export class DrawerView extends LitElement {
@@ -86,6 +88,7 @@ export class DrawerView extends LitElement {
   @state() private posterUrl: string | null = null;
   @state() private empty: FrameSource | null = null;      // the base sequence's last frame: the empty drawer behind the lifted frame
   @state() private emptyShown = false;                    // follows the lifted frame's own fade (lifted-handoff)
+  @state() private photosCount: number | null = null;     // the zoom index's photographs for this frame; the button renders only once it is known and above 0
   @state() private drawn = false;
 
   private player: SequencePlayer | null = null;
@@ -99,6 +102,7 @@ export class DrawerView extends LitElement {
   private reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   private pendingPointer: OpenRequest['pointer'] = null;
   private lastDrawn = -1;
+  private lastDrawnSize = 0;
 
   get state() { return this.ctx.state; }
   get position() { return this.ctx.p; }
@@ -127,11 +131,14 @@ export class DrawerView extends LitElement {
     const width = widths[0] ?? 0;
     const frames: FrameSource[] = s.assets.sequence(seqName, width).map((e) => ({ avif: s.assets.file(e, 'avif') ? s.assets.url(s.assets.file(e, 'avif')!) : undefined, webp: s.assets.file(e, 'webp') ? s.assets.url(s.assets.file(e, 'webp')!) : undefined }));
     this.player?.dispose();
-    this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
+    this.player = null;
     this.posterUrl = frames[0]?.webp ?? frames[0]?.avif ?? null;
     this.empty = this.emptyDrawer(width);
     this.emptyShown = false;
+    this.photosCount = null;
+    this.photosCount = await photosFor(frame);   // awaited here, so the sheet's fixtures are the same every time
     await this.updateComplete;
+    this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
     await this.player?.prefetch();
     await this.draw();
     if (this.ctx.state === 'shut') this.hint = 'pull';
@@ -174,11 +181,15 @@ export class DrawerView extends LitElement {
     const width = widths.find((w) => w >= want) ?? widths[widths.length - 1] ?? 0;
     const frames: FrameSource[] = s.assets.sequence(name, width).map((e) => ({ avif: s.assets.file(e, 'avif') ? s.assets.url(s.assets.file(e, 'avif')!) : undefined, webp: s.assets.file(e, 'webp') ? s.assets.url(s.assets.file(e, 'webp')!) : undefined }));
     this.player?.dispose();
-    this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
+    this.player = null;
     this.posterUrl = frames[0]?.webp ?? frames[0]?.avif ?? null;
     this.empty = this.emptyDrawer(width);   // rendered from the start (transparent), so its bytes arrive before the lift
     this.emptyShown = false;
+    this.photosCount = null;
+    void photosFor(frame).then((n) => { if (this.bay === req.bay) { this.photosCount = n; if (!n) log('photos.none', { frame }); } });
     await this.updateComplete;
+    this.player = frames.length ? new SequencePlayer(frames, { onLog: log }) : null;
+    this.prefetchLift(frame);
     this.trap = trapFocus(this.renderRoot.querySelector('.view') as HTMLElement, this.renderRoot.querySelector('.stage') as HTMLElement);
     void this.player?.prefetch();
     this.dispatch({ type: 'ENTERED' });
@@ -203,6 +214,25 @@ export class DrawerView extends LitElement {
     cancelAnimationFrame(this.raf);
     this.ctx = { ...this.ctx, p: 1 };
     void this.draw().then(() => this.dispatch({ type: 'SETTLED' }));
+  }
+
+  /** Prefetch at idle, on open (DRAWER-WALL.md, In the browser: the frame's GLB and the three.js chunk, never in the
+   * initial bundle): at tier 2, the three.js chunk through lifted-three.ts, then the GLB and the environment map as
+   * low-priority fetches into the HTTP cache, so the lift finds them. Nothing at tier 1, where the still is the lift. */
+  private prefetchLift(frame: string | null): void {
+    const s = this.store;
+    if (!s || !frame || this.tier !== 2 || !s.assets.hasLift(frame as Parameters<typeof s.assets.hasLift>[0]) || prefetched.has(frame)) return;
+    prefetched.add(frame);   // once a visit: a second open of the same drawer must not fetch the GLB again on a host without validators
+    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
+    idle(() => {
+      if (!this.open || this.bay?.frame?.id !== frame) return;
+      const t0 = performance.now();
+      void import('./lifted-three').then(() => log('prefetch.three', { ms: Math.round(performance.now() - t0) }), () => undefined);
+      for (const e of [s.assets.glb(frame as Parameters<typeof s.assets.glb>[0]), s.assets.env()]) {
+        const f = e ? s.assets.file(e) : null;
+        if (f) void fetch(s.assets.url(f), { priority: 'low' } as RequestInit).then(() => log('prefetch.asset', { id: e!.id }), () => undefined);
+      }
+    }, { timeout: 2000 });
   }
 
   /** The empty drawer behind the lifted frame: the base sequence's last frame at the width in use (the base's nearest). */
@@ -277,8 +307,16 @@ export class DrawerView extends LitElement {
     const h = (this.renderRoot.querySelector('.view') as HTMLElement | null)?.clientHeight || window.innerHeight;
     const p = pullPosition(d.p0, ev.clientY - d.y0, h);
     this.dispatch({ type: 'DRAG', p });
-    void this.draw();
+    this.requestDraw();
   }
+
+  /** One draw per animation frame however many pointer events arrive in it (a finger reports up to 120 a second): the
+   * frame drawn is the position at the frame's start, which is what the eye gets anyway. */
+  private requestDraw(): void {
+    if (this.drawRaf) return;
+    this.drawRaf = requestAnimationFrame(() => { this.drawRaf = 0; void this.draw(); });
+  }
+  private drawRaf = 0;
 
   private onPointerUp(ev: PointerEvent): void {
     const d = this.drag;
@@ -335,7 +373,16 @@ export class DrawerView extends LitElement {
     this.raf = requestAnimationFrame(step);
   }
 
-  private async draw(): Promise<void> {
+  /** Draws run one after another, the latest last: two in flight (the first frame at entry, the last at a deep link)
+   * would otherwise finish in either order and leave the wrong frame on the canvas. */
+  private drawChain: Promise<void> = Promise.resolve();
+  private draw(): Promise<void> {
+    const run = this.drawChain.then(() => this.drawNow());
+    this.drawChain = run.catch(() => undefined);
+    return run;
+  }
+
+  private async drawNow(): Promise<void> {
     const c = this.canvas ?? (this.renderRoot.querySelector('canvas') as HTMLCanvasElement | null);
     if (!c || !this.player) return;
     this.canvas = c;
@@ -345,6 +392,8 @@ export class DrawerView extends LitElement {
     const ctx = c.getContext('2d');
     if (!ctx) return;
     const p = Math.min(1, Math.max(0, this.ctx.p));
+    if (p === this.lastDrawn && this.drawn && c.width === w && c.height === h && this.lastDrawnSize === w * h) return;   // nothing changed since the last draw
+    this.lastDrawnSize = w * h;
     const ok = await this.player.draw(ctx, p, w, h);
     if (ok && !this.drawn) this.drawn = true;
     this.lastDrawn = p;
@@ -379,6 +428,8 @@ export class DrawerView extends LitElement {
       this.dispatch({ type: 'LEFT' });
       this.open = false;
       unlockScroll();
+      cancelAnimationFrame(this.drawRaf);
+      this.drawRaf = 0;
       this.player?.dispose();
       this.player = null;
       this.drawn = false;
@@ -425,7 +476,7 @@ export class DrawerView extends LitElement {
   private onKeyDown(ev: KeyboardEvent): void {
     const st = this.ctx.state;
     const lifted = st === 'lifted';
-    const step = (dp: number) => { this.dispatch({ type: 'DRAG', p: Math.min(1, Math.max(0, this.ctx.p + dp)) }); void this.draw(); clearTimeout(this.keyTimer); this.keyTimer = window.setTimeout(() => this.dispatch({ type: 'RELEASE', v: 0, p: this.ctx.p }), 320); };
+    const step = (dp: number) => { this.dispatch({ type: 'DRAG', p: Math.min(1, Math.max(0, this.ctx.p + dp)) }); this.requestDraw(); clearTimeout(this.keyTimer); this.keyTimer = window.setTimeout(() => this.dispatch({ type: 'RELEASE', v: 0, p: this.ctx.p }), 320); };
     switch (ev.key) {
       case 'Escape': ev.preventDefault(); this.dispatch({ type: 'ESC' }); break;
       case 'ArrowDown': case 'PageDown': if (lifted) { ev.preventDefault(); this.turnBy(0, 8); } else if (st === 'shut' || st === 'pulling' || st === 'open') { ev.preventDefault(); step(0.12); } break;
@@ -497,8 +548,8 @@ export class DrawerView extends LitElement {
             <button class="quiet" type="button" @click=${() => this.zoomBy(1.2)}>${t('closer')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1 / 1.2)}>${t('further')}</button>
             <button class="quiet" type="button" @click=${() => { this.dispatch({ type: 'RESET' }); this.syncLifted(); }}>${t('reset')}</button>` : nothing}
-          ${st === 'lifted' ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PHOTOS' })}>${t('photos')}</button>
-            <button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PUT_BACK' })}>${t('putBack')}</button>` : nothing}
+          ${st === 'lifted' && (this.photosCount ?? 0) > 0 ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PHOTOS' })}>${t('photos')}</button>` : nothing}
+          ${st === 'lifted' ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'PUT_BACK' })}>${t('putBack')}</button>` : nothing}
           ${st === 'shut' || st === 'open' || st === 'pulling' ? html`<button class="quiet close" type="button" @click=${() => this.dispatch({ type: 'CLOSE' })}>${t('close')}</button>` : nothing}
         </div>
       </div>

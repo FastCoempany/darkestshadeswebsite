@@ -12,7 +12,7 @@ import type { BayOpenDetail } from './elements/drawer-bay';
 import './elements/drawer-wall';
 
 declare global {
-  interface Window { __wall?: { phase: string; store?: WallStore } }
+  interface Window { __wall?: { store: WallStore; tier: Tier } }
 }
 
 const params = new URLSearchParams(location.search);
@@ -32,7 +32,7 @@ function loadView(store: WallStore, wall: DrawerWall): Promise<DrawerView> {
       v.store = store;
       v.tier = tier;
       v.addEventListener('announce', ((ev: CustomEvent<{ text: string }>) => wall.announce(ev.detail.text)) as EventListener);
-      v.addEventListener('tier-fallback', () => { tier = 1; v.tier = 1; log('tier', { tier, reason: 'context lost' }); });
+      v.addEventListener('tier-fallback', () => { tier = 1; v.tier = 1; if (window.__wall) window.__wall.tier = 1; log('tier', { tier, reason: 'context lost' }); });
       v.addEventListener('view-closed', ((ev: CustomEvent<{ id: string }>) => {
         const bay = wall.renderRoot.querySelector(`drawer-bay[data-id="${ev.detail.id}"]`)?.shadowRoot?.querySelector('button.face') as HTMLElement | null;
         bay?.focus({ preventScroll: true });
@@ -55,7 +55,7 @@ async function start(): Promise<void> {
   if (params.get('mech') === 'pull') store.setMechanic('pull');
   const signals = readSignals(navigator, () => probeWebGL2(document));
   tier = tierFor(signals);
-  window.__wall = { phase: 'D5', store };
+  window.__wall = { store, tier };   // for the tests and the usability sessions' console
   const wall = document.querySelector('drawer-wall');
   if (!wall) return;
   wall.removeAttribute('data-placeholder');

@@ -207,6 +207,17 @@ test('keyboard only: the lift, the photographs and the way back through the quie
   const cycle: string[] = [];
   for (let i = 0; i < 12; i++) { await page.keyboard.press('Tab'); const f = (await focused(page))!; cycle.push(f.tag === 'CANVAS' ? 'CANVAS' : f.text); if (i > 0 && cycle[i] === 'CANVAS') break; }
   expect(cycle).toEqual(['CANVAS', 'Turn left', 'Turn right', 'Tilt up', 'Tilt down', 'Closer', 'Further', 'Reset', 'See the photographs', 'Put them back', 'CANVAS']);
+  // the arrow keys turn and tilt the frame, + and - bring it closer and further, 0 resets: the pose from the machine
+  const pose = () => page.evaluate(() => { const c = (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number; pitch: number; zoom: number } }).ctx; return { yaw: c.yaw, pitch: c.pitch, zoom: c.zoom }; });
+  const p0 = await pose();
+  await page.keyboard.press('ArrowRight');
+  expect((await pose()).yaw).toBeGreaterThan(p0.yaw);
+  await page.keyboard.press('ArrowUp');
+  expect((await pose()).pitch).not.toBe(p0.pitch);
+  await page.keyboard.press('+');
+  expect((await pose()).zoom).toBeGreaterThan(1);
+  await page.keyboard.press('0');
+  expect(await pose()).toEqual(p0);
   await page.keyboard.press('Shift+Tab');
   expect((await focused(page))?.text).toBe('Put them back');
   // the photographs by keyboard: focus starts on their view; Tab reaches every button of the bar (inside <photo-zoom>'s
@@ -231,6 +242,51 @@ test('keyboard only: the lift, the photographs and the way back through the quie
   await page.keyboard.press('Escape');
   await waitForState(page, ['shut'], 6000);
   await page.keyboard.press('Escape');
+  await page.waitForFunction(() => !(document.querySelector('drawer-view') as HTMLElement & { open?: boolean })?.open);
+  await expect(bayButton(page, 'drawer_bay/f09')).toBeFocused();
+});
+
+test('without photographs in the zoom index, the view offers none', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'the lift needs Chromium');
+  await page.route('**/zoom/index.json', (route) => route.fulfill({ json: { frames: {} } }));
+  await page.goto('index.html?open=F09');
+  await wallLoaded(page);
+  await waitForState(page, ['open'], 15000);
+  const canLift = await page.evaluate(() => !!window.__wall?.store.bay('drawer_bay/f09')?.canLift);
+  test.skip(!canLift, 'no GLB or lifted still in the manifest yet (D4)');
+  await clickQuiet(page, 'Lift them out');
+  await waitForState(page, ['lifted'], 20000);
+  await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /put them back/i })).toHaveCount(1);
+  await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /see the photographs/i })).toHaveCount(0);
+});
+
+test('on the iPhone: a tap opens, the quiet buttons pull and shut, the lift shows what the tier allows, close returns focus', async ({ page, browserName, isMobile, hasTouch }) => {
+  test.skip(browserName !== 'webkit' || !isMobile || !hasTouch, 'WebKit as a phone: touch through its own touchscreen (taps only; drags are the Pixel project\'s through CDP)');
+  await page.goto('index.html');
+  await wallLoaded(page);
+  const c = await bayCenter(page, 'drawer_bay/f09');
+  await page.touchscreen.tap(c.x, c.y);
+  await waitForState(page, ['shut', 'entering']);
+  await waitForState(page, ['shut']);
+  await expect(page.locator('drawer-view').getByRole('dialog', { name: /What Stevie Saw/ })).toBeVisible();
+  await clickQuiet(page, 'Open the drawer');
+  await waitForState(page, ['open']);
+  expect((await viewState(page))!.p).toBe(1);
+  const canLift = await page.evaluate(() => !!window.__wall?.store.bay('drawer_bay/f09')?.canLift);
+  if (canLift) {
+    await clickQuiet(page, 'Lift them out');
+    await waitForState(page, ['lifted'], 30000);
+    const tier = await page.evaluate(() => window.__wall?.tier);
+    test.info().annotations.push({ type: 'tier', description: `WebKit lifted at tier ${tier}` });
+    const lifted = page.locator('drawer-view').locator('lifted-frame');
+    if (tier === 2) await expect(lifted.locator('canvas.live')).toHaveCSS('opacity', '1');
+    else await expect(lifted.locator('img.still')).toHaveCSS('opacity', '1');
+    await clickQuiet(page, 'Put them back');
+    await waitForState(page, ['open'], 30000);
+  }
+  await clickQuiet(page, 'Shut the drawer');
+  await waitForState(page, ['shut']);
+  await clickQuiet(page, 'Close');
   await page.waitForFunction(() => !(document.querySelector('drawer-view') as HTMLElement & { open?: boolean })?.open);
   await expect(bayButton(page, 'drawer_bay/f09')).toBeFocused();
 });

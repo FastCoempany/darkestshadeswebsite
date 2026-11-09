@@ -21,10 +21,13 @@ export default defineConfig({
     video: 'off',
     screenshot: 'off',
   },
+  // Playwright starts the preview itself and fails if the port is taken (a server left by another run would otherwise
+  // serve the tests unseen); the server's errors are shown, so a server that dies mid-run says why
   webServer: {
     command: 'npm run preview',
     url: 'http://127.0.0.1:4173/',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
+    stderr: 'pipe',
     timeout: 60_000,
   },
   projects: [
