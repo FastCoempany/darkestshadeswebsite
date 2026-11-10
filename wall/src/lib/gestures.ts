@@ -109,7 +109,7 @@ export function turnFree(rot: Quat, dxPx: number, dyPx: number): Quat {
   return quatNormalize(quatMultiply(quatMultiply(aboutRight, aboutUp), rot));
 }
 
-/** The turn as angles, for the log and the tests: yaw about the vertical, pitch about the horizontal, roll about the line
+/** The turn as angles, for the tests: yaw about the vertical, pitch about the horizontal, roll about the line
  * of sight, in degrees (three.js's YXZ order), each in −180 to 180. */
 export function turnAngles(q: Quat): { yaw: number; pitch: number; roll: number } {
   const [x, y, z, w] = q;

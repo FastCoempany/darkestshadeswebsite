@@ -62,6 +62,8 @@ describe('each state', () => {
     const over = reduce(at('lifted'), { type: 'TURN', dx: 0, dy: 400 });
     expect(turnAngles(over.rot).pitch).toBeCloseTo(20, 3);          // 160° reads as pitch 20 with yaw and roll at 180: the frame is over
     expect(rotateVector(over.rot, [0, 1, 0])[1]).toBeLessThan(-0.9);
+    const back = reduce(at('lifted'), { type: 'TURN', dx: 0, dy: -400 });   // and 400 px up: the other way, past the old −30° stop
+    expect(rotateVector(back.rot, [0, 1, 0])[1]).toBeLessThan(-0.9);
     // the turn goes on from where it is, in view space
     expect(reduce(over, { type: 'TURN', dx: 0, dy: 50 }).rot).toEqual(turnFree(over.rot, 0, 50));
     expect(reduce(at('lifted'), { type: 'ZOOM', zoom: 9 }).zoom).toBe(3);

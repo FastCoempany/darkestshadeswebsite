@@ -128,20 +128,46 @@ test.describe('the lift', () => {
     await expect(page.locator('drawer-view').locator('picture.empty')).toHaveCSS('opacity', '1');
     // the turn is a quaternion in the machine (x y z w, view space; 00-decisions.md #48): the buttons change it
     const rot = () => page.evaluate(() => JSON.stringify((document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx?.rot ?? null));
+    // ... and the live frame holds the same quaternion and has drawn it (a turn the machine took but the frame never
+    // showed is what the finger got until the review of #48 caught it)
+    type Box = { left: number; top: number; right: number; bottom: number; cx: number; cy: number };
+    // (the machine's turn and the frame's pose are read in the one call, since the inertia keeps both moving between calls)
+    const frame = () => lifted.evaluate((el) => { const f = el as unknown as { pose: { rot: number[] }; drawCount(): number; screenBox(): Box | null; clientWidth: number; clientHeight: number }; const ctx = JSON.stringify((document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx.rot); return { ctx, pose: JSON.stringify(f.pose.rot), held: JSON.stringify(f.pose.rot) === ctx, draws: f.drawCount(), box: f.screenBox()!, w: f.clientWidth, h: f.clientHeight }; });
     const rot0 = await rot();
     expect(rot0).toBe('[0,0,0,1]');
     await clickQuiet(page, 'Turn right');
     const rot1 = await rot();
     expect(rot1).not.toBe(rot0);
+    expect((await frame()).held).toBe(true);
     await clickQuiet(page, 'Tilt up');
     const rot2 = await rot();
     expect(rot2).not.toBe(rot1);
+    expect((await frame()).held).toBe(true);
+    const s = await stageCenter(page);
+    if (!isMobile) {
+      // the mouse's drag: the frame turns and is redrawn while the button is down, and holds the machine's turn
+      const before = await frame();
+      await page.mouse.move(s.x - 60, s.y); await page.mouse.down();
+      for (let i = 1; i <= 8; i++) { await page.mouse.move(s.x - 60 + 15 * i, s.y); await page.waitForTimeout(16); }
+      const during = await frame();
+      expect(during.draws).toBeGreaterThan(before.draws);
+      await page.mouse.up();
+      await page.waitForTimeout(700);                                                      // the inertia settles
+      const rot3 = await rot();
+      expect(rot3).not.toBe(rot2);
+      const after = await frame();
+      expect(after.held).toBe(true);
+      expect(after.draws).toBeGreaterThan(during.draws);
+    }
     if (isMobile) {
       const cdp = await page.context().newCDPSession(page);
-      const s = await stageCenter(page);
+      const before = await frame();
       await touchDragXY(cdp, page, { x: s.x - 60, y: s.y }, { x: s.x + 60, y: s.y });
       const rot3 = await rot();
       expect(rot3).not.toBe(rot2);
+      const after = await frame();
+      expect(after.held).toBe(true);                                                       // the frame shows the finger's turn
+      expect(after.draws).toBeGreaterThan(before.draws);                                   // and drew it while the finger moved
       // no limit up or down (#48): a long drag down turns the frame past where the old clamp stopped, and a second one
       // turns it on round. The frame's up vector, turned by the quaternion: its y is the height, its z points at the viewer
       const up = async () => page.evaluate(() => { const [x, y, z, w] = (document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx.rot as [number, number, number, number]; return { y: 1 - 2 * (x * x + z * z), z: 2 * (y * z + x * w) }; });
@@ -153,10 +179,31 @@ test.describe('the lift', () => {
       await page.waitForTimeout(700);
       const up2 = await up();
       expect(Math.hypot(up2.y - up1.y, up2.z - up1.z)).toBeGreaterThan(0.5);               // pinned at a clamp it would not move at all
+      expect((await frame()).held).toBe(true);
       await touchPinch(cdp, page, s.x, s.y, 2.0);
       const zoom = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { zoom: number } }).ctx?.zoom ?? 1);
       expect(zoom).toBeGreaterThan(1.3);
+      expect((await frame()).held).toBe(true);                                             // the pinch, too, is shown as it happens
     }
+    // the fit: stood on end (eleven Tilt downs, 88°) the temples would reach past the stage's top edge from the inspect
+    // pose's height; the frame moves back inside, so its whole box is in the view
+    await clickQuiet(page, 'Reset');
+    for (let i = 0; i < 11; i++) await clickQuiet(page, 'Tilt down');
+    const onEnd = await frame();
+    expect(onEnd.box.top).toBeGreaterThanOrEqual(-0.5);
+    expect(onEnd.box.bottom).toBeLessThanOrEqual(onEnd.h + 0.5);
+    expect(onEnd.box.bottom - onEnd.box.top).toBeGreaterThan(onEnd.h * 0.6);             // and it is the frame on end, tall in the view
+    // the pivot at every zoom: at 3× the turn keeps the frame's centre where the zoom put it
+    await clickQuiet(page, 'Reset');
+    for (let i = 0; i < 7; i++) await clickQuiet(page, 'Closer');
+    const z0 = await frame();
+    for (let i = 0; i < 4; i++) await clickQuiet(page, 'Turn right');
+    for (let i = 0; i < 7; i++) await clickQuiet(page, 'Tilt down');
+    const z1 = await frame();
+    expect(z1.pose).not.toBe(z0.pose);
+    expect(Math.hypot(z1.box.cx - z0.box.cx, z1.box.cy - z0.box.cy)).toBeLessThan(1);
+    await clickQuiet(page, 'Reset');
+    expect((await frame()).pose).toBe('[0,0,0,1]');
     await clickQuiet(page, 'See the photographs');
     await waitForState(page, ['photos']);
     await expect(page.locator('drawer-view').locator('photo-zoom')).toBeVisible();

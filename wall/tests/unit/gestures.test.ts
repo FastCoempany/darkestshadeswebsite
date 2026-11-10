@@ -80,6 +80,8 @@ describe('turnFree (00-decisions.md #48: one finger turns the frame about any ax
     close(g.rotateVector(g.turnFree(I, 0, 225), up), [0, 0, 1]);        // the top now points at the viewer
     close(g.rotateVector(g.turnFree(I, 0, 450), up), [0, -1, 0]);       // upside down
     close(g.rotateVector(g.turnFree(I, 0, 900), up), up);               // all the way round
+    close(g.rotateVector(g.turnFree(I, 0, -225), up), [0, 0, -1]);      // and up: the top points away from the viewer, past the old −30° stop
+    close(g.rotateVector(g.turnFree(I, 0, -450), up), [0, -1, 0]);      // upside down the other way round
     const a = g.turnFree(I, 0, 1000), b = g.turnFree(I, 0, 1000 - 900);   // 400° is 40° again: the same rotation (a quaternion and its negative are one rotation)
     expect(Math.abs(a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3])).toBeCloseTo(1, 9);
   });
