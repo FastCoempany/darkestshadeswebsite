@@ -24,7 +24,8 @@ export class RecordsPanel extends LitElement {
     button { appearance: none; background: none; border: 0; border-bottom: var(--border-hairline) solid var(--color-border-rule); color: var(--color-text-secondary); font: inherit; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; min-height: 44px; cursor: pointer; }
     button:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     .head { display: flex; justify-content: space-between; align-items: baseline; }
-    .build { font-size: 11px; letter-spacing: var(--font-tracking-micro); color: var(--color-text-tertiary); margin-left: auto; margin-right: var(--space-3); }
+    /* the build's commit hash (lib/build.ts), a line of its own at the foot so the head never wraps; the states sheet masks it */
+    .build { font-size: 11px; letter-spacing: var(--font-tracking-micro); color: var(--color-text-tertiary); margin: var(--space-3) 0 0; text-align: right; }
   `;
 
   @property({ attribute: false }) store: WallStore | null = null;
@@ -56,7 +57,7 @@ export class RecordsPanel extends LitElement {
     const s = this.store;
     if (!s) return nothing;
     return html`
-      <div class="head"><h2 id="panel-title">${t('panel.title')}</h2><span class="build">${WALL_BUILD}</span><button type="button" @click=${() => this.dispatchEvent(new CustomEvent('panel-close', { bubbles: true, composed: true }))}>${t('panel.close')}</button></div>
+      <div class="head"><h2 id="panel-title">${t('panel.title')}</h2><button type="button" @click=${() => this.dispatchEvent(new CustomEvent('panel-close', { bubbles: true, composed: true }))}>${t('panel.close')}</button></div>
       <fieldset>
         <legend>${t('panel.mechanic')}</legend>
         <label><span>${t('panel.mechanic')}</span>
@@ -83,6 +84,7 @@ export class RecordsPanel extends LitElement {
             ${BAY_LIGHTS.map((v) => html`<option value=${v} ?selected=${b.light === v}>${v}</option>`)}
           </select></label>
       </fieldset>`)}
+      <p class="build">${WALL_BUILD}</p>
     `;
   }
 }
