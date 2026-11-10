@@ -14,7 +14,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import type { WallStore } from '../data/store';
 import type { ResolvedBay } from '../lib/types';
 import { initialContext, reduce, type ViewContext, type ViewEvent, VIEW_OPEN_STATES } from '../lib/machine';
-import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, TAP_MAX_PX, isTap, pullPosition, rubberBand } from '../lib/gestures';
+import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, IDENTITY_ROT, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, TAP_MAX_PX, isTap, pullPosition, rubberBand, turnFree } from '../lib/gestures';
 import { springSettled, springStep, type SpringState } from '../lib/spring';
 import { SequencePlayer, type FrameSource } from '../lib/sequence-player';
 import { lockScroll, unlockScroll } from '../lib/scroll-lock';
@@ -119,7 +119,7 @@ export class DrawerView extends LitElement {
     const base = initialContext(true, true);
     const states: Record<string, Partial<ViewContext>> = {
       'shut': { state: 'shut', p: 0 }, 'pulling': { state: 'pulling', p: 0.45 }, 'open': { state: 'open', p: 1 },
-      'lifted': { state: 'lifted', p: 1 }, 'turned': { state: 'lifted', p: 1, yaw: 40, pitch: -10 }, 'zoomed': { state: 'lifted', p: 1, zoom: 2.2 },
+      'lifted': { state: 'lifted', p: 1 }, 'turned': { state: 'lifted', p: 1, rot: turnFree(turnFree(IDENTITY_ROT, 100, 0), 0, -25) }, 'zoomed': { state: 'lifted', p: 1, zoom: 2.2 },
       'photos': { state: 'photos', p: 1 }, 'tier 1 lifted': { state: 'lifted', p: 1 }, 'reduced motion': { state: 'open', p: 1 },
     };
     this.ctx = { ...base, ...(states[name] ?? states['shut']) };
@@ -494,7 +494,7 @@ export class DrawerView extends LitElement {
   private zoomBy(f: number): void { this.dispatch({ type: 'ZOOM', zoom: this.ctx.zoom * f }); this.syncLifted(); }
   private syncLifted(): void {
     const el = this.renderRoot.querySelector('lifted-frame') as (HTMLElement & { pose?: unknown }) | null;
-    if (el) el.pose = { yaw: this.ctx.yaw, pitch: this.ctx.pitch, zoom: this.ctx.zoom };
+    if (el) el.pose = { rot: this.ctx.rot, zoom: this.ctx.zoom };
   }
 
   /** The lifted frame reports its turn and zoom (pointer gestures) so the machine holds the pose. */

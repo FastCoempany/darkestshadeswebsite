@@ -126,20 +126,33 @@ test.describe('the lift', () => {
     expect(await lifted.evaluate((el) => (el as unknown as { liftProgress: number }).liftProgress)).toBe(1);
     await expect(page.locator('drawer-view').locator('picture.empty')).toHaveClass(/\bin\b/);
     await expect(page.locator('drawer-view').locator('picture.empty')).toHaveCSS('opacity', '1');
-    const yaw0 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number } }).ctx?.yaw ?? 0);
+    // the turn is a quaternion in the machine (x y z w, view space; 00-decisions.md #48): the buttons change it
+    const rot = () => page.evaluate(() => JSON.stringify((document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx?.rot ?? null));
+    const rot0 = await rot();
+    expect(rot0).toBe('[0,0,0,1]');
     await clickQuiet(page, 'Turn right');
-    const yaw1 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number } }).ctx?.yaw ?? 0);
-    expect(yaw1).not.toBe(yaw0);
-    const pitch0 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { pitch: number } }).ctx?.pitch ?? 0);
+    const rot1 = await rot();
+    expect(rot1).not.toBe(rot0);
     await clickQuiet(page, 'Tilt up');
-    const pitch1 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { pitch: number } }).ctx?.pitch ?? 0);
-    expect(pitch1).not.toBe(pitch0);
+    const rot2 = await rot();
+    expect(rot2).not.toBe(rot1);
     if (isMobile) {
       const cdp = await page.context().newCDPSession(page);
       const s = await stageCenter(page);
       await touchDragXY(cdp, page, { x: s.x - 60, y: s.y }, { x: s.x + 60, y: s.y });
-      const yaw2 = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number } }).ctx?.yaw ?? 0);
-      expect(yaw2).not.toBe(yaw1);
+      const rot3 = await rot();
+      expect(rot3).not.toBe(rot2);
+      // no limit up or down (#48): a long drag down turns the frame past where the old clamp stopped, and a second one
+      // turns it on round. The frame's up vector, turned by the quaternion: its y is the height, its z points at the viewer
+      const up = async () => page.evaluate(() => { const [x, y, z, w] = (document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx.rot as [number, number, number, number]; return { y: 1 - 2 * (x * x + z * z), z: 2 * (y * z + x * w) }; });
+      await touchDragXY(cdp, page, { x: s.x, y: s.y - 150 }, { x: s.x, y: s.y + 150 });   // 300 px down is 120°, and the inertia adds some: the top is well past horizontal
+      await page.waitForTimeout(700);                                                      // the inertia settles
+      const up1 = await up();
+      expect(up1.y).toBeLessThan(0.2);                                                     // the old clamp held it at cos 35° = 0.82
+      await touchDragXY(cdp, page, { x: s.x, y: s.y - 150 }, { x: s.x, y: s.y + 150 });   // another 120° and more: the up vector moves far from where the first drag left it
+      await page.waitForTimeout(700);
+      const up2 = await up();
+      expect(Math.hypot(up2.y - up1.y, up2.z - up1.z)).toBeGreaterThan(0.5);               // pinned at a clamp it would not move at all
       await touchPinch(cdp, page, s.x, s.y, 2.0);
       const zoom = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { zoom: number } }).ctx?.zoom ?? 1);
       expect(zoom).toBeGreaterThan(1.3);
@@ -209,12 +222,16 @@ test('keyboard only: the lift, the photographs and the way back through the quie
   for (let i = 0; i < 12; i++) { await page.keyboard.press('Tab'); const f = (await focused(page))!; cycle.push(f.tag === 'CANVAS' ? 'CANVAS' : f.text); if (i > 0 && cycle[i] === 'CANVAS') break; }
   expect(cycle).toEqual(['CANVAS', 'Turn left', 'Turn right', 'Tilt up', 'Tilt down', 'Closer', 'Further', 'Reset', 'See the photographs', 'Put them back', 'CANVAS']);
   // the arrow keys turn and tilt the frame, + and - bring it closer and further, 0 resets: the pose from the machine
-  const pose = () => page.evaluate(() => { const c = (document.querySelector('drawer-view') as unknown as { ctx: { yaw: number; pitch: number; zoom: number } }).ctx; return { yaw: c.yaw, pitch: c.pitch, zoom: c.zoom }; });
+  // the pose from the machine: the turn as a quaternion (x y z w, view space), the zoom; a turn to the right swings the
+  // frame's forward (toward the viewer) to the viewer's right, a tilt up changes the quaternion again
+  const pose = () => page.evaluate(() => { const c = (document.querySelector('drawer-view') as unknown as { ctx: { rot: [number, number, number, number]; zoom: number } }).ctx; const [x, y, z, w] = c.rot; const fwdX = 2 * (x * z + y * w); return { rot: JSON.stringify(c.rot), fwdX, zoom: c.zoom }; });
   const p0 = await pose();
+  expect(p0.rot).toBe('[0,0,0,1]');
   await page.keyboard.press('ArrowRight');
-  expect((await pose()).yaw).toBeGreaterThan(p0.yaw);
+  const p1 = await pose();
+  expect(p1.fwdX).toBeGreaterThan(p0.fwdX);
   await page.keyboard.press('ArrowUp');
-  expect((await pose()).pitch).not.toBe(p0.pitch);
+  expect((await pose()).rot).not.toBe(p1.rot);
   await page.keyboard.press('+');
   expect((await pose()).zoom).toBeGreaterThan(1);
   await page.keyboard.press('0');

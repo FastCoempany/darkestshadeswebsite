@@ -6,7 +6,7 @@ The site build of Oct 30–31 was thrown out (`00-decisions.md` #46). Don't read
 
 Part 1 is what we're making. Part 2 is how to build it. Part 3 is for me: how I start the run. This file and `docs/build/WALL-PROGRESS.md` are your memory; re-read both at the start of every phase and after every break or compaction.
 
-The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone) and #47 (no price on the wall, the founder's instruction after D7), and the open items O15–O18 and O20.
+The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone), #47 (no price on the wall) and #48 (the lifted frame turns freely), the founder's two instructions after D7, and the open items O15–O18, O20 and O21.
 
 ---
 
@@ -45,7 +45,7 @@ The default mechanic is **tap first** (O16). The **pull first** variant (`?mech=
 2. **Open.** Tap a drawer (anywhere on it, or Enter or Space). It comes forward: its part of the wall scales up into the drawer view while the room dims behind it, and the view's first frame, rendered from the wall's own angle, takes over. Pull-first variant: put a finger on the knob itself and pull down; the drawer view opens under your finger and the pull continues there. Anywhere else on the wall, a vertical swipe scrolls.
 3. **The drawer view.** One full-screen layer; nothing behind it scrolls. The drawer, shut, barely lit; the hint `wall.hintPull` with a thin falling line. Pull down to slide the drawer out: a scrubbed image sequence, the camera leaning in and down as the drawer comes out, the frame coming into the warm light. Let go and the drawer settles open or shut (velocity first, then position). A quiet button does the same (`wall.open`, `wall.shut`). `wall.close`, Esc, or (on wide screens) a tap on the dim room around the view returns you to the wall, with focus on that drawer.
 4. **Lift.** With the drawer open, the hint `wall.hintLift`. Tap the frame (or `wall.lift`). The rendered frame hands over to a live 3D frame in exactly the same place, then rises toward you into the light, turning to a three-quarter view, while the drawer dims and softens behind it.
-5. **Turn and come closer.** One finger turns it: freely around, a little up and down. Pinch or double-tap brings it closer (to 3×); on desktop, drag and the wheel. Buttons: `wall.turnLeft`, `wall.turnRight`, `wall.closer`, `wall.further`, `wall.reset`. It stays sharp at every zoom because it is drawn live at the screen's resolution.
+5. **Turn and come closer.** One finger turns it about any axis, with no limit in any direction (#48): sideways, up and down, over, upside down, round and round; it follows the finger whichever way it already faces. Pinch or double-tap brings it closer (to 3×); on desktop, drag and the wheel. Buttons: `wall.turnLeft`, `wall.turnRight`, `wall.tiltUp`, `wall.tiltDown`, `wall.closer`, `wall.further`, `wall.reset`. It stays sharp at every zoom because it is drawn live at the screen's resolution.
 6. **The photographs.** `wall.photos` opens the real lightbox photographs (A1, A2, A3 and A6 where they exist) on their stage color, each at full resolution: pinch, drag or double-tap down to one image pixel per screen pixel. `wall.photosClose` goes back to the frame.
 7. **Put back.** `wall.putBack`, a tap on the drawer, or Esc. The frame settles back into the drawer the way it rose. Esc again shuts the drawer; again, closes the view.
 
@@ -215,7 +215,7 @@ Esc steps back: `photos` → `lifted` → `open` → `shut` → `wall`. Pull fir
 | Release | velocity over 0.35 px/ms wins; otherwise position ≥ 0.5 opens | |
 | Settle spring | stiffness 180, damping 26 | Reduced motion: snap plus a 160 ms cross-fade |
 | Lift | spring to the inspect pose, about 900 ms | Reduced motion: 200 ms cross-fade |
-| Turn | yaw 0.4°/px unbounded; pitch 0.25°/px, −30° to +35° | Inertia friction 0.92 a frame; none under reduced motion |
+| Turn | 0.4°/px about the view's vertical for a sideways drag and about its horizontal for a vertical drag, composed in view space as a quaternion; no limit in any direction (#48) | Inertia friction 0.92 a frame; none under reduced motion |
 | Zoom | 1× to 3×, pinch direct, double-tap 1× ↔ 2.2× toward the tap, wheel 1.1× a step | |
 | Hints | after 1.2 s idle in a state; gone after the first success of that gesture, for the session | One hint at a time; never animated beyond a slow fade |
 | Haptics | `navigator.vibrate(10)` at the open and shut stops, where it exists | |
@@ -428,7 +428,7 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 - **One context, no fan-out:** D1's project, `resolve.ts` and `machine.ts`, D5's shared pieces, the Blender lookdev (one eye on the look), the lift handoff.
 - **Fan out:** D2's schema and adapter against D3's tool writing; D5's elements after the shared pieces; D6's end-to-end suites by flow; each phase's reviews.
-- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#47, O15–O18 and O20, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
+- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#48, O15–O18, O20 and O21, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
 
 ## Risks and what to do
 

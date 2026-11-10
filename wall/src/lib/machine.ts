@@ -16,7 +16,7 @@
 // Esc steps back: photos → lifted → open → shut → wall. Pull first: OPEN carries the pointer and the same drag goes on
 // as DRAG(p). A record changing while its drawer is open (RECORD) closes the view only if the drawer can no longer
 // open; otherwise the view stays and its label updates.
-import { clampZoom, releaseDecision, turn } from './gestures';
+import { IDENTITY_ROT, clampZoom, releaseDecision, turnFree, type Quat } from './gestures';
 
 export type ViewState =
   | 'wall' | 'entering' | 'shut' | 'pulling' | 'opening' | 'shutting' | 'open'
@@ -52,18 +52,18 @@ export interface ViewContext {
   target: 'open' | 'shut' | null;
   /** The pull that opened the view carries on without a second touch (pull first). */
   pointerCarried: boolean;
-  yaw: number;
-  pitch: number;
+  /** The lifted frame's turn so far, a unit quaternion in view space (00-decisions.md #48: free, about any axis). */
+  rot: Quat;
   zoom: number;
   canOpen: boolean;
   canLift: boolean;
 }
 
 export function initialContext(canOpen: boolean, canLift: boolean): ViewContext {
-  return { state: 'wall', p: 0, target: null, pointerCarried: false, yaw: 0, pitch: 0, zoom: 1, canOpen, canLift };
+  return { state: 'wall', p: 0, target: null, pointerCarried: false, rot: IDENTITY_ROT, zoom: 1, canOpen, canLift };
 }
 
-const INSPECT = { yaw: 0, pitch: 0, zoom: 1 };
+const INSPECT = { rot: IDENTITY_ROT, zoom: 1 };
 
 export function reduce(ctx: ViewContext, ev: ViewEvent): ViewContext {
   if (ev.type === 'RECORD') {
@@ -109,7 +109,7 @@ export function reduce(ctx: ViewContext, ev: ViewEvent): ViewContext {
       if (ev.type === 'LIFTED') return { ...ctx, state: 'lifted' };
       return ctx;
     case 'lifted':
-      if (ev.type === 'TURN') return { ...ctx, ...turn(ctx.yaw, ctx.pitch, ev.dx, ev.dy) };
+      if (ev.type === 'TURN') return { ...ctx, rot: turnFree(ctx.rot, ev.dx, ev.dy) };
       if (ev.type === 'ZOOM') return { ...ctx, zoom: clampZoom(ev.zoom) };
       if (ev.type === 'RESET') return { ...ctx, ...INSPECT };
       if (ev.type === 'PHOTOS') return { ...ctx, state: 'photos' };
