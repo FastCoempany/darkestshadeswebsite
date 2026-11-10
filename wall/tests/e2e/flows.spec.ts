@@ -158,6 +158,15 @@ test.describe('the lift', () => {
       const after = await frame();
       expect(after.held).toBe(true);
       expect(after.draws).toBeGreaterThan(during.draws);
+      // the dim room beside the stage takes the mouse too (#48: the finger may start anywhere but the buttons)
+      const beside = await frame();
+      await page.mouse.move(s.x - s.w / 2 - 80, s.y); await page.mouse.down();
+      for (let i = 1; i <= 8; i++) { await page.mouse.move(s.x - s.w / 2 - 80 + 15 * i, s.y); await page.waitForTimeout(16); }
+      await page.mouse.up();
+      await page.waitForTimeout(700);
+      const afterBeside = await frame();
+      expect(afterBeside.pose).not.toBe(beside.pose);
+      expect(afterBeside.held).toBe(true);
     }
     if (isMobile) {
       const cdp = await page.context().newCDPSession(page);
@@ -180,6 +189,22 @@ test.describe('the lift', () => {
       const up2 = await up();
       expect(Math.hypot(up2.y - up1.y, up2.z - up1.z)).toBeGreaterThan(0.5);               // pinned at a clamp it would not move at all
       expect((await frame()).held).toBe(true);
+      // the finger may start anywhere but the buttons (#48; the review's phone checks): a drag that starts above the
+      // stage, in the dim room, turns the frame as one on the glasses does
+      const above = await frame();
+      await touchDragXY(cdp, page, { x: s.x, y: s.y - s.h / 2 - 40 }, { x: s.x + 120, y: s.y - s.h / 2 - 40 });
+      await page.waitForTimeout(700);
+      const afterAbove = await frame();
+      expect(afterAbove.pose).not.toBe(above.pose);
+      expect(afterAbove.held).toBe(true);
+      expect(afterAbove.draws).toBeGreaterThan(above.draws);
+      // a short stroke is a small turn, not a tap: 6 px turns the frame a little and leaves it lifted (the drawer's tap
+      // slop is 8 px; the lifted frame's is 4)
+      const before6 = await frame();
+      await touchDragXY(cdp, page, { x: s.x, y: s.y }, { x: s.x + 6, y: s.y }, 3);
+      await page.waitForTimeout(600);
+      expect((await viewState(page))!.state).toBe('lifted');
+      expect((await frame()).pose).not.toBe(before6.pose);
       await touchPinch(cdp, page, s.x, s.y, 2.0);
       const zoom = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { zoom: number } }).ctx?.zoom ?? 1);
       expect(zoom).toBeGreaterThan(1.3);
@@ -225,6 +250,145 @@ test.describe('the lift', () => {
     // the empty drawer has faded out again: the rendered frame is back in the drawer
     await expect(page.locator('drawer-view').locator('picture.empty')).not.toHaveClass(/\bin\b/);
     await expect(page.locator('drawer-view').locator('lifted-frame')).toHaveCount(0);
+  });
+
+  test('a touch during the rise, a pointer held into the photographs, a tap on the dim room and one on the stage', async ({ page, browserName, isMobile }) => {
+    test.skip(browserName !== 'chromium', 'the live frame needs Chromium (WebKit headless has no reliable WebGL)');
+    await page.goto('index.html?open=F09&debug=1');
+    await wallLoaded(page);
+    await waitForState(page, ['open'], 15000);
+    const canLift = await page.evaluate(() => (window as unknown as { __wall: { store: { bay(id: string): { canLift: boolean } } } }).__wall.store.bay('drawer_bay/f09').canLift);
+    test.skip(!canLift, 'no GLB or lifted still in the manifest yet (D4)');
+    const cdp = isMobile ? await page.context().newCDPSession(page) : null;
+    const lifted = page.locator('drawer-view').locator('lifted-frame');
+    const progress = () => lifted.evaluate((el) => (el as unknown as { liftProgress: number }).liftProgress);
+    const frame = () => lifted.evaluate((el) => { const f = el as unknown as { pose: { rot: number[] } }; const ctx = JSON.stringify((document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx.rot); return { ctx, pose: JSON.stringify(f.pose.rot), held: JSON.stringify(f.pose.rot) === ctx }; });
+    const zoom = () => page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { zoom: number } }).ctx.zoom);
+    // the spring in flight: the rise is a spring from the open pose (0) to the inspect pose (1) after the handoff fade,
+    // so a landing that is to test it waits for the spring's first frame in flight (the first test of the kept touch
+    // landed within milliseconds of `lifting`, before the spring's first frame, and never saw the spring). The frame's
+    // progress at the very pointer-down is recorded in the page, since a round trip later the software renderer's
+    // coarse frames may already have carried the rise to its end
+    const inFlight = async () => {
+      await waitForState(page, ['lifting'], 5000);
+      return lifted.evaluate((el) => new Promise<number>((resolve, reject) => {
+        const f = el as unknown as { liftProgress: number };
+        const w = window as unknown as { __landed: number | null };
+        w.__landed = null;
+        document.querySelector('drawer-view')!.shadowRoot!.addEventListener('pointerdown', () => { w.__landed = f.liftProgress; }, { once: true, capture: true });
+        const t0 = performance.now();
+        const tick = () => { const p = f.liftProgress; if (p > 0.05 && p < 0.9) resolve(p); else if (p >= 0.9 || performance.now() - t0 > 20000) reject(new Error(`the spring was not caught in flight: progress ${p}`)); else requestAnimationFrame(tick); };
+        tick();
+      }));
+    };
+    const landed = () => page.evaluate(() => (window as unknown as { __landed: number | null }).__landed);
+    const s = await stageCenter(page);
+    // a finger (a mouse on the desktop) that lands while the spring carries the frame up: the rise must still end, and
+    // the touch is kept and turns the frame from the moment it rests (the review of the finger change: the landing had
+    // cancelled the spring's pending frame, and the view stayed in `lifting` for good, no button, Esc dead)
+    await clickQuiet(page, 'Lift them out');
+    const caught = await inFlight();
+    let x = s.x;
+    if (isMobile) {
+      await cdp!.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: s.x, y: s.y }] });
+    } else {
+      await page.mouse.move(s.x - s.w / 2 - 80, s.y); await page.mouse.down();                     // on the dim room beside the stage
+      x = s.x - s.w / 2 - 80;
+    }
+    const atLanding = await landed();
+    expect(caught).toBeGreaterThan(0.05);
+    expect(atLanding).toBeGreaterThan(0);                                                        // the pointer came down inside the spring:
+    expect(atLanding).toBeLessThan(1);                                                           // the frame was still rising under it
+    if (isMobile) {
+      // the finger keeps moving a little through the rest of the rise, as a real one does
+      for (let i = 0; i < 400 && (await viewState(page))!.state !== 'lifted'; i++) { x += 1; await cdp!.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: s.y }] }); await page.waitForTimeout(50); }
+    } else {
+      await waitForState(page, ['lifted'], 20000);
+    }
+    expect((await viewState(page))!.state).toBe('lifted');
+    expect(await progress()).toBe(1);
+    if (isMobile) {
+      for (let i = 0; i < 20; i++) { x += 8; await cdp!.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: s.y }] }); await page.waitForTimeout(16); }
+      await cdp!.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    } else {
+      for (let i = 1; i <= 8; i++) { x += 15; await page.mouse.move(x, s.y); await page.waitForTimeout(16); }
+      await page.mouse.up();
+    }
+    await page.waitForTimeout(700);
+    const carried = await frame();
+    expect(carried.ctx).not.toBe('[0,0,0,1]');
+    expect(carried.held).toBe(true);
+    // a pointer still held when the view leaves `lifted` is released all the same (the review): a finger on the stage
+    // while "See the photographs" is pressed (by a second finger, or the keyboard), let go among the photographs; back
+    // at the frame, one finger turns, and does not pinch with a ghost of the first
+    if (isMobile) await cdp!.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: s.x, y: s.y }] });
+    else { await page.mouse.move(s.x, s.y); await page.mouse.down(); }
+    await page.locator('drawer-view').locator('button.quiet', { hasText: /^See the photographs$/i }).evaluate((b) => (b as HTMLButtonElement).click());
+    await waitForState(page, ['photos']);
+    if (isMobile) await cdp!.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    else await page.mouse.up();
+    await clickQuiet(page, 'Back to the frame');
+    await waitForState(page, ['lifted']);
+    const ghost = await frame();
+    if (isMobile) await touchDragXY(cdp!, page, { x: s.x - 60, y: s.y }, { x: s.x + 60, y: s.y });
+    else { await page.mouse.move(s.x - 60, s.y); await page.mouse.down(); for (let i = 1; i <= 8; i++) { await page.mouse.move(s.x - 60 + 15 * i, s.y); await page.waitForTimeout(16); } await page.mouse.up(); }
+    await page.waitForTimeout(700);
+    const afterGhost = await frame();
+    expect(afterGhost.pose).not.toBe(ghost.pose);
+    expect(afterGhost.held).toBe(true);
+    expect(await zoom()).toBe(1);                                                                // a turn, not a pinch
+    if (isMobile) {
+      // a tap on the dim room leaves the frame lifted; a tap on the stage (the glasses, or the drawer behind them) puts
+      // it back (DRAWER-WALL.md step 7). The tap on the stage is without the pixel of jitter: here each pointer move
+      // draws a frame through the software renderer, which can hold the handler's clock past the 400 ms a tap has
+      await touchTap(cdp!, page, s.x, s.y - s.h / 2 - 40, 2);
+      await page.waitForTimeout(700);
+      expect((await viewState(page))!.state).toBe('lifted');
+      await touchTap(cdp!, page, s.x, s.y, 0);
+      await waitForState(page, ['returning', 'open'], 5000);
+      await waitForState(page, ['open'], 20000);
+      // a plain tap that lands during the rise: the frame still comes to rest, and the tap is no put back (a touch begun
+      // during the rise is never a tap)
+      await clickQuiet(page, 'Lift them out');
+      await inFlight();
+      await touchTap(cdp!, page, s.x, s.y, 0);
+      expect(await landed()).toBeLessThan(1);
+      await waitForState(page, ['lifted'], 20000);
+      await page.waitForTimeout(700);
+      expect((await viewState(page))!.state).toBe('lifted');
+    } else {
+      // a click on the dim room during the rise: the frame still comes to rest, and the view stays (the click closes
+      // the view only while the drawer is shut or open)
+      await clickQuiet(page, 'Put them back');
+      await waitForState(page, ['open'], 20000);
+      await clickQuiet(page, 'Lift them out');
+      await inFlight();
+      await page.mouse.click(s.x - s.w / 2 - 80, s.y);
+      expect(await landed()).toBeLessThan(1);
+      await waitForState(page, ['lifted'], 20000);
+      await page.waitForTimeout(700);
+      expect((await viewState(page))!.state).toBe('lifted');
+    }
+    await clickQuiet(page, 'Put them back');
+    await waitForState(page, ['open'], 20000);
+    await expect(lifted).toHaveCount(0);
+  });
+
+  test('the live frame fails to set up: the still shows, the view drops to tier 1 and no turn button stands over it', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'the live frame needs Chromium');
+    await page.route('**/assets/glb/**', (route) => route.abort());
+    await page.goto('index.html?open=F09&debug=1');
+    await wallLoaded(page);
+    await waitForState(page, ['open'], 15000);
+    const canLift = await page.evaluate(() => (window as unknown as { __wall: { store: { bay(id: string): { canLift: boolean } } } }).__wall.store.bay('drawer_bay/f09').canLift);
+    test.skip(!canLift, 'no GLB or lifted still in the manifest yet (D4)');
+    await clickQuiet(page, 'Lift them out');
+    await waitForState(page, ['lifted'], 20000);
+    expect(await page.evaluate(() => window.__wall?.tier)).toBe(1);
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /turn left/i })).toHaveCount(0);
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /tilt up/i })).toHaveCount(0);
+    await expect(page.locator('drawer-view').locator('lifted-frame img.still')).toBeVisible();
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /put them back/i })).toHaveCount(1);
   });
 });
 

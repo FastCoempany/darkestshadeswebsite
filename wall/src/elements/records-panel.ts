@@ -3,6 +3,7 @@
 // drawer, and only that drawer, change; the ?mech= choice sits here too. Nothing here ships to a store: it edits
 // the in-memory records through the store's update(), the same path a store's answer would take.
 import { LitElement, html, css, nothing } from 'lit';
+import { WALL_BUILD } from '../lib/build';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { Mechanic, WallStore } from '../data/store';
 import { BAY_LIGHTS, BAY_STATES, FRAME_IDS, type Metaobject } from '../lib/types';
@@ -23,6 +24,8 @@ export class RecordsPanel extends LitElement {
     button { appearance: none; background: none; border: 0; border-bottom: var(--border-hairline) solid var(--color-border-rule); color: var(--color-text-secondary); font: inherit; font-size: 11px; letter-spacing: var(--font-tracking-micro); text-transform: uppercase; min-height: 44px; cursor: pointer; }
     button:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     .head { display: flex; justify-content: space-between; align-items: baseline; }
+    /* the build's commit hash (lib/build.ts), a line of its own at the foot so the head never wraps; the states sheet masks it */
+    .build { font-size: 11px; letter-spacing: var(--font-tracking-micro); color: var(--color-text-tertiary); margin: var(--space-3) 0 0; text-align: right; }
   `;
 
   @property({ attribute: false }) store: WallStore | null = null;
@@ -81,6 +84,7 @@ export class RecordsPanel extends LitElement {
             ${BAY_LIGHTS.map((v) => html`<option value=${v} ?selected=${b.light === v}>${v}</option>`)}
           </select></label>
       </fieldset>`)}
+      ${WALL_BUILD ? html`<p class="build">${WALL_BUILD}</p>` : nothing}
     `;
   }
 }

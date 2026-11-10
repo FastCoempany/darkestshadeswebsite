@@ -5,7 +5,8 @@
 // frame (or wall.lift) to lift it into <lifted-frame>: the live frame fades in over the rendered one while the
 // drawer behind it cross-fades to the base sequence's last frame, the empty drawer (DRAWER-WALL.md, The handoff),
 // and the drawer dims and softens; wall.photos opens <photo-zoom>; put back, shut, close with focus back on the
-// drawer. Every gesture has a quiet button (pull: open/shut; lift; turn: left/right, tilt up/down; pinch: closer/
+// drawer. While the frame rises or is lifted, the stage's and the dim room's pointer events go to <lifted-frame>, so a
+// finger anywhere on the screen but the buttons turns it (#48). Every gesture has a quiet button (pull: open/shut; lift; turn: left/right, tilt up/down; pinch: closer/
 // further/reset). The name stays on screen; no price (00-decisions.md #47). Reduced motion: cross-fades of about 160 ms, the drawer still
 // follows the finger but snaps. Haptics: a 10 ms tick at the stops where navigator.vibrate exists.
 import { LitElement, html, css, nothing } from 'lit';
@@ -72,7 +73,9 @@ export class DrawerView extends LitElement {
     .hint.on { opacity: 1; }
     .hint i { display: block; width: 1px; height: 34px; background: linear-gradient(var(--color-text-secondary), transparent); animation: drip 2.4s ease-in-out infinite; }
     @keyframes drip { 0%, 100% { transform: scaleY(0.4); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } }
-    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4); pointer-events: auto; }
+    /* the controls' row passes the finger through to the room behind it (a turn may start there); the buttons take it */
+    .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4); pointer-events: none; }
+    .controls button { pointer-events: auto; }
     button.quiet { appearance: none; background: none; border: 0; border-bottom: var(--border-hairline) solid var(--color-border-rule); color: var(--color-text-secondary); font: inherit; font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; padding: var(--space-3) var(--space-1); min-height: 44px; min-width: 44px; cursor: pointer; }
     button.quiet:hover { color: var(--color-text-primary); }
     button.quiet:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
@@ -283,16 +286,35 @@ export class DrawerView extends LitElement {
   }
 
   // --- the pull ------------------------------------------------------------------------------------------------
+  /** The lifted frame, while it rises or is lifted: the stage's and the dim room's pointer events are handed to it, so
+   * the finger may start anywhere on the screen but the buttons (#48). The up and the cancel reach it in every state it
+   * exists in (`always`), so a pointer still held when the view leaves `lifted` (for the photographs, or the way back) is
+   * released there too; left behind, it made every later one-finger stroke a pinch (the review of the finger change). */
+  private liftedTarget(always = false): (HTMLElement & { pointerDown(ev: PointerEvent, surface: Element): void; pointerMove(ev: PointerEvent): void; pointerUp(ev: PointerEvent, onStage: boolean): void; wheel(ev: WheelEvent): void }) | null {
+    const st = this.ctx.state;
+    if (!always && st !== 'lifted' && st !== 'lifting') return null;
+    return this.renderRoot.querySelector('lifted-frame') as ReturnType<DrawerView['liftedTarget']>;
+  }
+  private onDimPointerDown(ev: PointerEvent): void { if (ev.button === 0) this.liftedTarget()?.pointerDown(ev, ev.currentTarget as Element); }
+  private onDimPointerMove(ev: PointerEvent): void { this.liftedTarget()?.pointerMove(ev); }
+  private onDimPointerUp(ev: PointerEvent): void { this.liftedTarget(true)?.pointerUp(ev, false); }
+  private onDimWheel(ev: WheelEvent): void { this.liftedTarget()?.wheel(ev); }
+  private onStageWheel(ev: WheelEvent): void { this.liftedTarget()?.wheel(ev); }
+
   private onPointerDown(ev: PointerEvent): void {
     if (ev.button !== 0) return;
     const st = this.ctx.state;
-    if (st === 'lifted' || st === 'photos' || st === 'lifting' || st === 'returning' || st === 'entering' || st === 'leaving') return;
+    const lifted = this.liftedTarget();
+    if (lifted) { lifted.pointerDown(ev, ev.currentTarget as Element); return; }
+    if (st === 'photos' || st === 'returning' || st === 'entering' || st === 'leaving') return;
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
     this.spring = null;
     this.drag = { id: ev.pointerId, x0: ev.clientX, y0: ev.clientY, t0: performance.now(), p0: this.ctx.p, lastY: ev.clientY, lastT: performance.now(), v: 0 };
   }
 
   private onPointerMove(ev: PointerEvent): void {
+    const lifted = this.liftedTarget();
+    if (lifted) { lifted.pointerMove(ev); return; }
     const d = this.drag;
     if (!d || d.id !== ev.pointerId) return;
     const now = performance.now();
@@ -321,6 +343,8 @@ export class DrawerView extends LitElement {
   private drawRaf = 0;
 
   private onPointerUp(ev: PointerEvent): void {
+    const lifted = this.liftedTarget(true);
+    if (lifted) { lifted.pointerUp(ev, true); return; }
     const d = this.drag;
     if (!d || d.id !== ev.pointerId) return;
     this.drag = null;
@@ -520,9 +544,10 @@ export class DrawerView extends LitElement {
     const subject = subjectOf(frame);
     return html`
       <div class="view" role="dialog" aria-modal="true" aria-label=${name} tabindex="-1" @keydown=${this.onKeyDown}>
-      <div class="dim" @click=${(ev: Event) => { if (ev.target === ev.currentTarget && window.innerWidth >= 1024 && (st === 'shut' || st === 'open')) this.dispatch({ type: 'CLOSE' }); }}></div>
+      <div class="dim" @click=${(ev: Event) => { if (ev.target === ev.currentTarget && window.innerWidth >= 1024 && (st === 'shut' || st === 'open')) this.dispatch({ type: 'CLOSE' }); }}
+        @pointerdown=${this.onDimPointerDown} @pointermove=${this.onDimPointerMove} @pointerup=${this.onDimPointerUp} @pointercancel=${this.onDimPointerUp} @wheel=${this.onDimWheel}></div>
       <div class="stage" tabindex="-1"
-        @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp}>
+        @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp} @wheel=${this.onStageWheel}>
         <div class=${classMap({ drawer: true, dimmed: liftedish })}>
           ${this.posterUrl && !this.drawn ? html`<img class="poster" src=${this.posterUrl} alt="" draggable="false">` : nothing}
           <canvas aria-hidden="true"></canvas>

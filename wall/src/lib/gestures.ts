@@ -43,6 +43,13 @@ export function isTap(dx: number, dy: number, dtMs: number): boolean {
   return Math.hypot(dx, dy) < TAP_MAX_PX && dtMs < TAP_MAX_MS;
 }
 
+/** A tap on the lifted frame puts it back, so its slop is tighter than a drawer's: a finger that moved 4 px has turned
+ * the frame 1.6° and meant to; under that, within TAP_MAX_MS, it is a tap. */
+export const LIFTED_TAP_MAX_PX = 4;
+export function isLiftedTap(dx: number, dy: number, dtMs: number): boolean {
+  return Math.hypot(dx, dy) < LIFTED_TAP_MAX_PX && dtMs < TAP_MAX_MS;
+}
+
 /** The rubber band past an end: `overPx` of overshoot becomes at most `maxPx` of movement, easing toward it. */
 export function rubberBand(overPx: number, maxPx = RUBBER_MAX_PX): number {
   if (overPx <= 0) return 0;

@@ -7,6 +7,7 @@ import { WallStore } from './data/store';
 import { enableLog, log } from './lib/log';
 import { readSignals, tierFor, tierReasons, probeWebGL2, type Tier } from './lib/tier';
 import { readFlags } from './lib/flags';
+import { WALL_BUILD } from './lib/build';
 import type { ResolvedBay } from './lib/types';
 import type { DrawerView, OpenRequest } from './elements/drawer-view';
 import type { DrawerWall } from './elements/drawer-wall';
@@ -34,7 +35,7 @@ function loadView(store: WallStore, wall: DrawerWall): Promise<DrawerView> {
       v.store = store;
       v.tier = tier;
       v.addEventListener('announce', ((ev: CustomEvent<{ text: string }>) => wall.announce(ev.detail.text)) as EventListener);
-      v.addEventListener('tier-fallback', () => { tier = 1; v.tier = 1; if (window.__wall) window.__wall.tier = 1; log('tier', { tier, reason: 'context lost' }); });
+      v.addEventListener('tier-fallback', (ev) => { tier = 1; v.tier = 1; if (window.__wall) window.__wall.tier = 1; log('tier', { tier, reason: (ev as CustomEvent<{ reason?: string }>).detail?.reason ?? 'context lost' }); });
       v.addEventListener('view-closed', ((ev: CustomEvent<{ id: string }>) => {
         const bay = wall.renderRoot.querySelector(`drawer-bay[data-id="${ev.detail.id}"]`)?.shadowRoot?.querySelector('button.face') as HTMLElement | null;
         bay?.focus({ preventScroll: true });
@@ -69,7 +70,7 @@ async function start(): Promise<void> {
   store.addEventListener('change', ((ev: CustomEvent<{ changed: string[] }>) => {
     for (const id of ev.detail.changed) { const b = store.bay(id); if (b && view) view.recordChanged(b); }
   }) as EventListener);
-  log('start', { drawers: store.resolved.length, renderSet: store.assets.manifest.renderSet, mechanic: store.mechanic, tier, reasons: tierReasons(signals), flags: flags.from });
+  log('start', { build: WALL_BUILD, drawers: store.resolved.length, renderSet: store.assets.manifest.renderSet, mechanic: store.mechanic, tier, reasons: tierReasons(signals), flags: flags.from });
   // the records panel (?panel=1): the simulated backend
   if (flags.panel) {
     await import('./elements/records-panel');

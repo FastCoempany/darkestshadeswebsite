@@ -1,4 +1,5 @@
 import { defineConfig, type Plugin } from 'vite';
+import { execSync } from 'node:child_process';
 import { copyFileSync, createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, relative, resolve, sep } from 'node:path';
 import { copyFrom, framesFrom } from './src/data/extract';
@@ -159,8 +160,18 @@ function wallNoscript(): Plugin {
   };
 }
 
+/** The build stamp: the commit's short hash, "-dirty" when the tree has uncommitted changes (lib/build.ts reads it). */
+function gitBuild(): string {
+  try {
+    const sha = execSync('git rev-parse --short HEAD', { cwd: __dirname, encoding: 'utf8' }).trim();
+    const dirty = execSync('git status --porcelain', { cwd: __dirname, encoding: 'utf8' }).trim().length > 0;
+    return dirty ? `${sha}-dirty` : sha;
+  } catch { return ''; }                       // no git here: no stamp, and the panel shows no line
+}
+
 export default defineConfig({
   base: './',
+  define: { __WALL_BUILD__: JSON.stringify(gitBuild()) },
   plugins: [fontsLocal(), fontsKit(), wallData(), wallAssets(), wallNoscript()],
   publicDir: 'public',
   build: {
