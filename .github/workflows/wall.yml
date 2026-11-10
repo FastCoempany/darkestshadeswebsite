@@ -40,9 +40,7 @@ jobs:
       - run: npm run check
       - run: npm run budget
       - run: npm run test:e2e
-      - run: npm run lighthouse
-        env:
-          CHROME_PATH: ''
+      - run: npm run lighthouse   # checks/lighthouse.mjs: the VM's Playwright Chromium where it is, else the machine's own Chrome
       - uses: actions/upload-artifact@v4
         if: always()
         with:
