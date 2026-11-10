@@ -76,7 +76,11 @@ export class LiftedFrame extends LitElement {
   private progress = 0;        // 0 at the open pose, 1 at the inspect pose
   /** Where the frame is between the open pose (0) and the inspect pose (1); the tests read it. */
   get liftProgress(): number { return this.progress; }
-  private raf = 0;
+  private raf = 0;             // the rise's (and the way back's) pending animation frame
+  /** The inertia's pending frame, a handle of its own: a finger that lands cancels the inertia and never the rise's spring
+   * (sharing one handle had let a touch during the rise cancel the spring's frame, and the view then stayed in `lifting`
+   * with no button and Esc dead; the review of the finger change). */
+  private spin = 0;
   private dirty = false;
   private pointers = new Map<number, { x: number; y: number }>();
   private pinch: { d: number; z: number } | null = null;
@@ -344,6 +348,7 @@ export class LiftedFrame extends LitElement {
       await wait(this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS);
       return;
     }
+    cancelAnimationFrame(this.spin);               // an inertia still turning would hand its turns to the frame on its way back
     this.pose = { rot: IDENTITY_ROT, zoom: 1 };
     if (this.reduced.matches) {
       this.progress = 0;
@@ -387,7 +392,7 @@ export class LiftedFrame extends LitElement {
   pointerDown(ev: PointerEvent, surface: Element): void {
     try { surface.setPointerCapture(ev.pointerId); } catch { /* a pointer the browser no longer holds: the moves still arrive */ }
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
-    cancelAnimationFrame(this.raf);
+    cancelAnimationFrame(this.spin);               // the inertia stops under the finger; the rise, if it is still on, goes on
     this.velocity = { x: 0, y: 0 };
     if (this.pointers.size === 2) {
       const [a, b] = [...this.pointers.values()];
@@ -453,9 +458,9 @@ export class LiftedFrame extends LitElement {
       const dx = this.velocity.x * 16, dy = this.velocity.y * 16;
       if (Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) return;
       this.dispatchEvent(new CustomEvent('lifted-turn', { detail: { dx, dy }, bubbles: true, composed: true }));
-      this.raf = requestAnimationFrame(step);
+      this.spin = requestAnimationFrame(step);
     };
-    this.raf = requestAnimationFrame(step);
+    this.spin = requestAnimationFrame(step);
   }
 
   wheel(ev: WheelEvent): void {
@@ -477,6 +482,7 @@ export class LiftedFrame extends LitElement {
 
   private dispose(): void {
     cancelAnimationFrame(this.raf);
+    cancelAnimationFrame(this.spin);
     this.ro?.disconnect();
     this.ro = null;
     for (const d of this.disposables) d.dispose();

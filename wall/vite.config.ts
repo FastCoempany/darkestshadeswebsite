@@ -166,7 +166,7 @@ function gitBuild(): string {
     const sha = execSync('git rev-parse --short HEAD', { cwd: __dirname, encoding: 'utf8' }).trim();
     const dirty = execSync('git status --porcelain', { cwd: __dirname, encoding: 'utf8' }).trim().length > 0;
     return dirty ? `${sha}-dirty` : sha;
-  } catch { return 'unknown'; }
+  } catch { return ''; }                       // no git here: no stamp, and the panel shows no line
 }
 
 export default defineConfig({

@@ -74,6 +74,7 @@ describe('isLiftedTap: a tap on the lifted frame puts it back, so its slop is a 
     expect(g.isLiftedTap(4, 0, 300)).toBe(false);
     expect(g.isLiftedTap(0, 6, 100)).toBe(false);      // 6 px: the review's phone checks saw such strokes put the frame back under the drawer's 8 px slop
     expect(g.isLiftedTap(1, 1, 400)).toBe(false);
+    expect(g.isLiftedTap(3, 3, 100)).toBe(false);      // 4.24 px: a finger that drifted 3 px on both axes is a small turn, and the frame stays lifted
     expect(g.isTap(6, 0, 100)).toBe(true);              // the drawer's own tap keeps its 8 px
   });
 });

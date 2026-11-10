@@ -287,15 +287,17 @@ export class DrawerView extends LitElement {
 
   // --- the pull ------------------------------------------------------------------------------------------------
   /** The lifted frame, while it rises or is lifted: the stage's and the dim room's pointer events are handed to it, so
-   * the finger may start anywhere on the screen but the buttons (#48). */
-  private liftedTarget(): (HTMLElement & { pointerDown(ev: PointerEvent, surface: Element): void; pointerMove(ev: PointerEvent): void; pointerUp(ev: PointerEvent, onStage: boolean): void; wheel(ev: WheelEvent): void }) | null {
+   * the finger may start anywhere on the screen but the buttons (#48). The up and the cancel reach it in every state it
+   * exists in (`always`), so a pointer still held when the view leaves `lifted` (for the photographs, or the way back) is
+   * released there too; left behind, it made every later one-finger stroke a pinch (the review of the finger change). */
+  private liftedTarget(always = false): (HTMLElement & { pointerDown(ev: PointerEvent, surface: Element): void; pointerMove(ev: PointerEvent): void; pointerUp(ev: PointerEvent, onStage: boolean): void; wheel(ev: WheelEvent): void }) | null {
     const st = this.ctx.state;
-    if (st !== 'lifted' && st !== 'lifting') return null;
+    if (!always && st !== 'lifted' && st !== 'lifting') return null;
     return this.renderRoot.querySelector('lifted-frame') as ReturnType<DrawerView['liftedTarget']>;
   }
   private onDimPointerDown(ev: PointerEvent): void { if (ev.button === 0) this.liftedTarget()?.pointerDown(ev, ev.currentTarget as Element); }
   private onDimPointerMove(ev: PointerEvent): void { this.liftedTarget()?.pointerMove(ev); }
-  private onDimPointerUp(ev: PointerEvent): void { this.liftedTarget()?.pointerUp(ev, false); }
+  private onDimPointerUp(ev: PointerEvent): void { this.liftedTarget(true)?.pointerUp(ev, false); }
   private onDimWheel(ev: WheelEvent): void { this.liftedTarget()?.wheel(ev); }
   private onStageWheel(ev: WheelEvent): void { this.liftedTarget()?.wheel(ev); }
 
@@ -341,7 +343,7 @@ export class DrawerView extends LitElement {
   private drawRaf = 0;
 
   private onPointerUp(ev: PointerEvent): void {
-    const lifted = this.liftedTarget();
+    const lifted = this.liftedTarget(true);
     if (lifted) { lifted.pointerUp(ev, true); return; }
     const d = this.drag;
     if (!d || d.id !== ev.pointerId) return;

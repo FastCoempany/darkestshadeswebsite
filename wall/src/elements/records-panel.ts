@@ -84,7 +84,7 @@ export class RecordsPanel extends LitElement {
             ${BAY_LIGHTS.map((v) => html`<option value=${v} ?selected=${b.light === v}>${v}</option>`)}
           </select></label>
       </fieldset>`)}
-      <p class="build">${WALL_BUILD}</p>
+      ${WALL_BUILD ? html`<p class="build">${WALL_BUILD}</p>` : nothing}
     `;
   }
 }
