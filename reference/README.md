@@ -16,3 +16,6 @@ The three screen recordings the founder chose as the foundation for the entry an
 
 ## casting/
 Contact sheets and model bibles for the seven cast members, added after the founder's pick (`docs/brief/07-photography.md`). Record the Figma file link here as soon as a casting or photography file is created.
+
+## Held for the site
+An Instagram reel (Nov 9 2026), kept as a link only: https://www.instagram.com/reel/DfYB_gURp3q/. Its aesthetic is to be used on the site in some way; how is open (`docs/brief/00-decisions.md` O19).
