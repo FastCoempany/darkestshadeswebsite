@@ -373,7 +373,7 @@ One branch and one pull request per phase (`wall/d0-start`, `wall/d1-project`, �
 - **Exit:** the four spike results in WALL-PROGRESS.md.
 
 **D1 · The project**
-- `wall/` with the stack above, its scripts, its checks and its Playwright projects; the `surface-scene` role token (black) through `tools/palette.py`, with `text-primary` and `text-secondary` checked on it, and `python3 tools/build_tokens.py`; the fonts' stand-ins; `index.html` and `states.html` showing labelled placeholders where the wall will be; a GitHub Actions workflow running `npm run all` without pixel comparisons, if the token can push workflows (log it if it can't).
+- `wall/` with the stack above, its scripts, its checks and its Playwright projects; the `surface-scene` role token (black) through `tools/palette.py`, with `text-primary` and `text-secondary` checked on it, and `python3 tools/build_tokens.py`; the fonts' stand-ins; `index.html` and `states.html` showing labelled placeholders where the wall will be; a GitHub Actions workflow running `npm run all` without pixel comparisons, building the photographs' zoom set first (`npm run assets`, Pillow on the runner), if the token can push workflows (log it if it can't).
 - **Exit:** `npm run all` passing on the empty project; screenshots of both pages at 390 and 1440 shown.
 
 **D2 · Records and logic**
