@@ -7,9 +7,9 @@ name: wall
 on:
   push:
     branches: [main, 'wall/**']
-    paths: ['wall/**', 'design/tokens/**', 'content/**', '.github/workflows/wall.yml']
+    paths: ['wall/**', 'design/tokens/**', 'content/**', 'dam/product/**', 'assets/photography/MANIFEST.csv', 'tools/photo/zoom_export.py', '.github/workflows/wall.yml']
   pull_request:
-    paths: ['wall/**', 'design/tokens/**', 'content/**', '.github/workflows/wall.yml']
+    paths: ['wall/**', 'design/tokens/**', 'content/**', 'dam/product/**', 'assets/photography/MANIFEST.csv', 'tools/photo/zoom_export.py', '.github/workflows/wall.yml']
 
 jobs:
   all:
@@ -34,13 +34,13 @@ jobs:
       - run: python3 -m pip install --quiet pillow==12.3.0
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
-      - run: npm run assets
+      - run: npm run assets -- --strict   # the 32 photographs, or the step fails
       - run: npm run test
       - run: npm run build
       - run: npm run check
       - run: npm run budget
       - run: npm run test:e2e
-      - run: npm run lighthouse   # checks/lighthouse.mjs: the VM's Playwright Chromium where it is, else the machine's own Chrome
+      - run: CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")" npm run lighthouse   # the Playwright Chromium this workflow installed, as checks/lighthouse.mjs expects; never the image's own Chrome
       - uses: actions/upload-artifact@v4
         if: always()
         with:

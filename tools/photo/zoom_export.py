@@ -28,13 +28,19 @@ def main():
     ap.add_argument("--frames", nargs="*", default=FRAMES)
     ap.add_argument("--max", type=int, default=4096)
     ap.add_argument("--quality", type=int, default=85)
+    ap.add_argument("--strict", action="store_true", help="exit 1 if any photograph is left out (CI)")
     a = ap.parse_args()
+    # the product rows only: the manifest also holds the cast portraits (master_location dam/people/), which share a
+    # frame and an angle with a product photograph; keyed on those alone, the last row won and nine product photographs
+    # carried a portrait's alt text and provenance (found by the CI change's review, Nov 10 2026)
     alts = {}
     with open(MANIFEST, newline="") as f:
         for row in csv.DictReader(f):
-            alts[(row["frame"], row["angle"])] = row
+            if row["master_location"] == "dam/product/":
+                alts[(row["frame"], row["angle"])] = row
     OUT.mkdir(parents=True, exist_ok=True)
     index = {"note": "The real lightbox photographs on their stage colour, resized and nothing else (00-decisions.md #8, #29); alt text from assets/photography/MANIFEST.csv.", "frames": {}}
+    left_out = 0
     for frame in a.frames:
         entries = []
         for angle in ANGLES:
@@ -42,6 +48,7 @@ def main():
             src = DAM / f"DS-{frame}-{angle}-v01-stage.png"
             if not row or not src.exists():
                 print(f"zoom: {frame} {angle}: no final ({'no manifest row' if not row else 'no master'}); left out", file=sys.stderr)
+                left_out += 1
                 continue
             im = Image.open(src)
             if im.mode not in ("RGB", "RGBA"):
@@ -60,6 +67,9 @@ def main():
         index["frames"][frame] = entries
     (OUT / "index.json").write_text(json.dumps(index, indent=1))
     print(f"zoom: {sum(len(v) for v in index['frames'].values())} photographs in {OUT.relative_to(ROOT)}", file=sys.stderr)
+    if a.strict and left_out:
+        print(f"zoom: {left_out} left out; --strict fails", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
