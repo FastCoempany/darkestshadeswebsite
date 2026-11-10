@@ -158,6 +158,15 @@ test.describe('the lift', () => {
       const after = await frame();
       expect(after.held).toBe(true);
       expect(after.draws).toBeGreaterThan(during.draws);
+      // the dim room beside the stage takes the mouse too (#48: the finger may start anywhere but the buttons)
+      const beside = await frame();
+      await page.mouse.move(s.x - s.w / 2 - 80, s.y); await page.mouse.down();
+      for (let i = 1; i <= 8; i++) { await page.mouse.move(s.x - s.w / 2 - 80 + 15 * i, s.y); await page.waitForTimeout(16); }
+      await page.mouse.up();
+      await page.waitForTimeout(700);
+      const afterBeside = await frame();
+      expect(afterBeside.pose).not.toBe(beside.pose);
+      expect(afterBeside.held).toBe(true);
     }
     if (isMobile) {
       const cdp = await page.context().newCDPSession(page);
@@ -180,6 +189,22 @@ test.describe('the lift', () => {
       const up2 = await up();
       expect(Math.hypot(up2.y - up1.y, up2.z - up1.z)).toBeGreaterThan(0.5);               // pinned at a clamp it would not move at all
       expect((await frame()).held).toBe(true);
+      // the finger may start anywhere but the buttons (#48; the review's phone checks): a drag that starts above the
+      // stage, in the dim room, turns the frame as one on the glasses does
+      const above = await frame();
+      await touchDragXY(cdp, page, { x: s.x, y: s.y - s.h / 2 - 40 }, { x: s.x + 120, y: s.y - s.h / 2 - 40 });
+      await page.waitForTimeout(700);
+      const afterAbove = await frame();
+      expect(afterAbove.pose).not.toBe(above.pose);
+      expect(afterAbove.held).toBe(true);
+      expect(afterAbove.draws).toBeGreaterThan(above.draws);
+      // a short stroke is a small turn, not a tap: 6 px turns the frame a little and leaves it lifted (the drawer's tap
+      // slop is 8 px; the lifted frame's is 4)
+      const before6 = await frame();
+      await touchDragXY(cdp, page, { x: s.x, y: s.y }, { x: s.x + 6, y: s.y }, 3);
+      await page.waitForTimeout(600);
+      expect((await viewState(page))!.state).toBe('lifted');
+      expect((await frame()).pose).not.toBe(before6.pose);
       await touchPinch(cdp, page, s.x, s.y, 2.0);
       const zoom = await page.evaluate(() => (document.querySelector('drawer-view') as unknown as { ctx: { zoom: number } }).ctx?.zoom ?? 1);
       expect(zoom).toBeGreaterThan(1.3);
@@ -225,6 +250,44 @@ test.describe('the lift', () => {
     // the empty drawer has faded out again: the rendered frame is back in the drawer
     await expect(page.locator('drawer-view').locator('picture.empty')).not.toHaveClass(/\bin\b/);
     await expect(page.locator('drawer-view').locator('lifted-frame')).toHaveCount(0);
+    if (isMobile) {
+      // a finger that lands while the frame is still rising is kept, and turns the frame from the moment it rests (the
+      // review's phone checks: such a touch had been ignored for its whole stroke)
+      const cdp = await page.context().newCDPSession(page);
+      const s = await stageCenter(page);
+      await clickQuiet(page, 'Lift them out');
+      await waitForState(page, ['lifting'], 5000);
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: s.x, y: s.y }] });
+      let x = s.x;
+      for (let i = 0; i < 400 && (await viewState(page))!.state !== 'lifted'; i++) { x += 1; await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: s.y }] }); await page.waitForTimeout(50); }
+      expect((await viewState(page))!.state).toBe('lifted');
+      for (let i = 0; i < 20; i++) { x += 8; await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: s.y }] }); await page.waitForTimeout(16); }
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      await page.waitForTimeout(700);
+      const lifted2 = page.locator('drawer-view').locator('lifted-frame');
+      const carried = await lifted2.evaluate((el) => { const f = el as unknown as { pose: { rot: number[] } }; const ctx = JSON.stringify((document.querySelector('drawer-view') as unknown as { ctx: { rot: number[] } }).ctx.rot); return { ctx, held: JSON.stringify(f.pose.rot) === ctx }; });
+      expect(carried.ctx).not.toBe('[0,0,0,1]');
+      expect(carried.held).toBe(true);
+      await clickQuiet(page, 'Put them back');
+      await waitForState(page, ['open'], 20000);
+    }
+  });
+
+  test('the live frame fails to set up: the still shows, the view drops to tier 1 and no turn button stands over it', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'the live frame needs Chromium');
+    await page.route('**/assets/glb/**', (route) => route.abort());
+    await page.goto('index.html?open=F09&debug=1');
+    await wallLoaded(page);
+    await waitForState(page, ['open'], 15000);
+    const canLift = await page.evaluate(() => (window as unknown as { __wall: { store: { bay(id: string): { canLift: boolean } } } }).__wall.store.bay('drawer_bay/f09').canLift);
+    test.skip(!canLift, 'no GLB or lifted still in the manifest yet (D4)');
+    await clickQuiet(page, 'Lift them out');
+    await waitForState(page, ['lifted'], 20000);
+    expect(await page.evaluate(() => window.__wall?.tier)).toBe(1);
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /turn left/i })).toHaveCount(0);
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /tilt up/i })).toHaveCount(0);
+    await expect(page.locator('drawer-view').locator('lifted-frame img.still')).toBeVisible();
+    await expect(page.locator('drawer-view').locator('button.quiet', { hasText: /put them back/i })).toHaveCount(1);
   });
 });
 

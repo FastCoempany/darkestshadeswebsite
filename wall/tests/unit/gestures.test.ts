@@ -67,6 +67,17 @@ describe('releaseDecision', () => {
   });
 });
 
+describe('isLiftedTap: a tap on the lifted frame puts it back, so its slop is a turn\'s smallest step', () => {
+  it('is 4 px and 400 ms: under both a tap, a finger that moved 4 px or more a turn, a slow touch a hold', () => {
+    expect(g.LIFTED_TAP_MAX_PX).toBe(4);
+    expect(g.isLiftedTap(2, 2, 300)).toBe(true);
+    expect(g.isLiftedTap(4, 0, 300)).toBe(false);
+    expect(g.isLiftedTap(0, 6, 100)).toBe(false);      // 6 px: the review's phone checks saw such strokes put the frame back under the drawer's 8 px slop
+    expect(g.isLiftedTap(1, 1, 400)).toBe(false);
+    expect(g.isTap(6, 0, 100)).toBe(true);              // the drawer's own tap keeps its 8 px
+  });
+});
+
 describe('turnFree (00-decisions.md #48: one finger turns the frame about any axis, with no limit)', () => {
   const I = g.IDENTITY_ROT;
   const close = (a: readonly number[], b: readonly number[]) => a.forEach((v, i) => expect(v).toBeCloseTo(b[i]!, 5));

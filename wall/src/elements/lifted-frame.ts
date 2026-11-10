@@ -3,7 +3,8 @@
 // the drawer's own HDR as the environment plus one warm key matched to the scene. The handoff: the canvas mounts
 // over the drawer's last frame with the GLB at open.json's transform and a soft contact shadow, cross-fades over
 // 120 ms, then springs to the inspect pose; turning (one finger, about any axis, #48), pinching and the wheel report
-// deltas up to the view, whose machine holds the pose. Tier 1 shows the lifted still instead, and never loads three.js: the library and its
+// deltas up to the view, whose machine holds the pose; the view forwards the pointer events of its whole screen here
+// while the frame is rising or lifted, so the finger may start anywhere but the buttons. Tier 1 shows the lifted still instead, and never loads three.js: the library and its
 // loaders are imported inside setup(), which runs at tier 2 only. On a lost context: tier 1 for the rest of the visit.
 // `lifted-handoff` tells the view when the frame fades in and out, so the empty drawer behind it fades with it.
 import { LitElement, html, css, nothing } from 'lit';
@@ -13,7 +14,7 @@ import type * as THREE from 'three';
 import type { WallStore } from '../data/store';
 import type { FrameFacts } from '../lib/types';
 import type { Tier } from '../lib/tier';
-import { HANDOFF_FADE_MS, IDENTITY_ROT, INERTIA_FRICTION, LIFT_MS, LIFT_REDUCED_MS, clampZoom, isTap, pinchZoom, doubleTapZoom, wheelZoom, TAP_MAX_MS, type Quat } from '../lib/gestures';
+import { HANDOFF_FADE_MS, IDENTITY_ROT, INERTIA_FRICTION, LIFT_MS, LIFT_REDUCED_MS, clampZoom, isLiftedTap, pinchZoom, doubleTapZoom, wheelZoom, TAP_MAX_MS, type Quat } from '../lib/gestures';
 import { springStep, springSettled, type SpringState } from '../lib/spring';
 import { log } from '../lib/log';
 
@@ -317,6 +318,11 @@ export class LiftedFrame extends LitElement {
   /** The handoff and the rise; resolves when the frame rests at the inspect pose. */
   async lift(): Promise<void> {
     const ok = this.ready ? await this.ready : false;
+    if (!ok && this.tier === 2) {
+      // three.js, the GLB or the WebGL context failed in setup(): the still shows and the view drops to tier 1 for the
+      // rest of the visit, as on a lost context, so no turn button stands over a frame that cannot turn
+      this.dispatchEvent(new CustomEvent('tier-fallback', { detail: { reason: 'setup-failed' }, bubbles: true, composed: true }));
+    }
     this.setShown(true);
     if (!ok || this.tier !== 2) {
       await wait(this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS);
@@ -374,9 +380,12 @@ export class LiftedFrame extends LitElement {
   }
 
   // --- the gestures: one finger turns it any way (#48), two pinch, double-tap zooms, the wheel zooms -------------
-  private onPointerDown(ev: PointerEvent): void {
-    if (!this.active) return;
-    (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
+  // The view forwards every pointer event of its stage and its dim room here while the frame is rising or lifted, so the
+  // finger may start anywhere on the screen but the buttons (the canvas itself binds nothing: one path, no double handling).
+  // `surface` is the element that took the event, which keeps the pointer's capture; `onStage` says whether the finger is
+  // over the drawer (a tap there puts the frame back; a tap on the dim room does nothing).
+  pointerDown(ev: PointerEvent, surface: Element): void {
+    try { surface.setPointerCapture(ev.pointerId); } catch { /* a pointer the browser no longer holds: the moves still arrive */ }
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
     cancelAnimationFrame(this.raf);
     this.velocity = { x: 0, y: 0 };
@@ -384,16 +393,21 @@ export class LiftedFrame extends LitElement {
       const [a, b] = [...this.pointers.values()];
       this.pinch = { d: Math.hypot(a!.x - b!.x, a!.y - b!.y), z: this.pose.zoom };
       this.down = null;
-    } else {
+    } else if (this.active) {
       this.down = { x: ev.clientX, y: ev.clientY, t: performance.now() };
       this.last = { x: ev.clientX, y: ev.clientY, t: performance.now() };
+    } else {
+      // the frame is still rising: the touch is kept, never a tap, and turns the frame from the moment it rests
+      this.down = null;
+      this.last = null;
     }
   }
 
-  private onPointerMove(ev: PointerEvent): void {
+  pointerMove(ev: PointerEvent): void {
     const prev = this.pointers.get(ev.pointerId);
-    if (!prev || !this.active) return;
+    if (!prev) return;
     this.pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+    if (!this.active) return;                      // rising: the position is followed, the turn waits
     if (this.pinch && this.pointers.size === 2) {
       const [a, b] = [...this.pointers.values()];
       const d = Math.hypot(a!.x - b!.x, a!.y - b!.y);
@@ -409,12 +423,17 @@ export class LiftedFrame extends LitElement {
     }
   }
 
-  private onPointerUp(ev: PointerEvent): void {
+  pointerUp(ev: PointerEvent, onStage: boolean): void {
+    if (!this.pointers.has(ev.pointerId)) return;
     this.pointers.delete(ev.pointerId);
     if (this.pointers.size < 2) this.pinch = null;
     const d = this.down;
     this.down = null;
-    if (d && isTap(ev.clientX - d.x, ev.clientY - d.y, performance.now() - d.t)) {
+    if (!this.active) return;
+    // a tap puts the frame back (a tap on the drawer, DRAWER-WALL.md step 7), two taps bring it closer: a finger that
+    // moved as much as a small turn is a turn, never a tap (LIFTED_TAP_MAX_PX), and a tap on the dim room is nothing
+    if (d && isLiftedTap(ev.clientX - d.x, ev.clientY - d.y, performance.now() - d.t)) {
+      if (!onStage) return;
       const now = performance.now();
       if (now - this.lastTap < TAP_MAX_MS) {
         this.dispatchEvent(new CustomEvent('lifted-zoom', { detail: { zoom: doubleTapZoom(this.pose.zoom) }, bubbles: true, composed: true }));
@@ -439,7 +458,7 @@ export class LiftedFrame extends LitElement {
     this.raf = requestAnimationFrame(step);
   }
 
-  private onWheel(ev: WheelEvent): void {
+  wheel(ev: WheelEvent): void {
     if (!this.active) return;
     ev.preventDefault();
     this.dispatchEvent(new CustomEvent('lifted-zoom', { detail: { zoom: wheelZoom(this.pose.zoom, ev.deltaY) }, bubbles: true, composed: true }));
@@ -477,8 +496,7 @@ export class LiftedFrame extends LitElement {
     const liveShown = this.live && this.tier === 2;
     return html`
       ${this.stillUrl && !liveShown ? html`<img class=${classMap({ still: true, fade: true, in: this.shown })} src=${this.stillUrl} alt=${this.label} draggable="false">` : nothing}
-      <canvas class=${classMap({ live: true, fade: true, in: this.shown && liveShown })} role="img" aria-label=${this.label} tabindex=${this.active ? 0 : -1}
-        @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp} @wheel=${this.onWheel}></canvas>
+      <canvas class=${classMap({ live: true, fade: true, in: this.shown && liveShown })} role="img" aria-label=${this.label} tabindex=${this.active ? 0 : -1}></canvas>
     `;
   }
 }
