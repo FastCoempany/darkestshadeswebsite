@@ -1,6 +1,9 @@
 name: wall
 
-# The drawer wall's checks (wall/, DRAWER-WALL.md D1): npm run all without the pixel comparisons.
+# The drawer wall's checks (wall/, DRAWER-WALL.md D1): npm run all without the pixel comparisons. The photographs'
+# zoom set (wall/public/zoom/, git-ignored) is built here first from the committed stage masters in dam/product/, as it
+# is on a developer's machine by npm run assets: without it the view offers no photographs and the flows that press
+# "See the photographs" cannot run.
 on:
   push:
     branches: [main, 'wall/**']
@@ -25,8 +28,13 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: wall/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install --quiet pillow==12.3.0
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
+      - run: npm run assets
       - run: npm run test
       - run: npm run build
       - run: npm run check
