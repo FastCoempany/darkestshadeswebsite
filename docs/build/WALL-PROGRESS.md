@@ -6,7 +6,7 @@ The run's memory (`docs/build/DRAWER-WALL.md`, Part 2). Re-read both at the star
 
 | What | Where | Since |
 |---|---|---|
-| **The phone build (R2)** | https://claude.ai/artifact/Wwk3W3BUawYqyuvci7m5rt (private: **Darkest Shades**, the built wall as its files, Version 4 (no price, #47); it opens for Antaeus signed in and for anyone else once shared from the page's Share menu; switches `#pull`, `#debug`, `#pull-debug`, `#panel`, `#open-f09`; start with `docs/build/drawer-wall/device-checklist.md`, the Open row first) | Nov 9 2026, D7 |
+| **The phone build (R2)** | https://claude.ai/artifact/Wwk3W3BUawYqyuvci7m5rt (private: **Darkest Shades**, the built wall as its files, Version 5 (no price, #47, and the review's fixes); it opens for Antaeus signed in and for anyone else once shared from the page's Share menu; switches `#pull`, `#debug`, `#pull-debug`, `#panel`, `#open-f09`; start with `docs/build/drawer-wall/device-checklist.md`, the Open row first) | Nov 9 2026, D7 |
 | **The R1 review set** | https://claude.ai/artifact/XWxD3uvM97E3hqgJdEUtUt (private; Version 5: the same thirteen pieces and the contact sheet in `docs/build/drawer-wall/review/R1/`) | Nov 7 2026, D3; Version 4 on Nov 8 2026, D4 (every drawer-view piece and the lifted still on the raised bed; F09 in the drawer added); Version 5 on Nov 8 2026, D4 (the drawer view focused on the frame at the end of the pull, after the D4 review) |
 
 ## Checks failing for environment reasons
