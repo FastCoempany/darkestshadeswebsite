@@ -13,7 +13,7 @@ On the site that means:
 - No name-dropping: no Prada, Raf Simons, runway or celebrity references on the site.
 
 ## Honesty rules (from `00-decisions.md` #18)
-- **Price is always shown**: "$100".
+- **Price is always shown**: "$100". *Not on the drawer wall: it shows no price (`00-decisions.md` #47); this rule belongs to the parked site copy (O20).*
 - **Countdowns only to real times** set in drop data. No evergreen timers, no resets, no "ends tonight" unless it does.
 - **Quantities only from inventory.** "37 of 120 pairs left" only when both numbers are real; otherwise nothing.
 - **No discounts in any overlay.** No exit-intent offer. The list pop-up gives information and access, not money.

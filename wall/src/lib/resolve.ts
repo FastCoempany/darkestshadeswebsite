@@ -2,9 +2,10 @@
 // and the frame's facts.
 //
 //   1. hidden: a dark drawer, no label, not focusable, doesn't open.
-//   2. locked: dark, wall.notYet with the look number and $100, doesn't open.
-//   3. sold_out: dark, the name, $100 and wall.soldOut; it opens, and the frame can be seen, lifted and turned.
-//   4. available: lit, the name and $100; it opens.
+//   2. locked: dark, wall.notYet with the look number, doesn't open.
+//   3. sold_out: dark, the name and wall.soldOut; it opens, and the frame can be seen, lifted and turned.
+//   4. available: lit, the name; it opens.
+//   No price in any state (00-decisions.md #47): the facts carry none and the label has no slot for one.
 //   5. No frame, an unknown frame id or an unknown value: hidden, and logged.
 //   6. `light` overrides the seam light only; it never changes what a drawer does.
 //   7. The output: the state, the light, canOpen, canLift (the assets exist), the label. A missing value renders nothing.
@@ -16,16 +17,6 @@ export function isBayState(v: unknown): v is BayState {
 
 export function isBayLight(v: unknown): v is BayLightSetting {
   return typeof v === 'string' && (BAY_LIGHTS as readonly string[]).includes(v);
-}
-
-/** The price as the wall shows it, from the frame's record: "$100" for 100.00 USD; cents only when there are any;
- * null when the record has none (then nothing renders, never a made-up number). */
-export function priceText(price: FrameFacts['price']): string | null {
-  if (!price || typeof price.amount !== 'string' || !/^\d+(\.\d+)?$/.test(price.amount)) return null;
-  const amount = Number(price.amount);
-  const symbol = price.currencyCode === 'USD' ? '$' : `${price.currencyCode} `;
-  const whole = Number.isInteger(amount);
-  return `${symbol}${whole ? amount.toFixed(0) : amount.toFixed(2)}`;
 }
 
 function hidden(bay: DrawerBayRecord, frame: FrameFacts | null, problems: string[]): ResolvedBay {
@@ -46,7 +37,6 @@ export function resolveBay(bay: DrawerBayRecord, frames: Readonly<Partial<Record
   const f = frame as FrameFacts;
   if (state === 'hidden') return hidden(bay, f, problems);
 
-  const price = priceText(f.price);
   const lookNumber = f.lookNumber || null;
   const name = f.name || null;
   const auto: SeamLight = state === 'available' ? 'lit' : 'dark';
@@ -54,8 +44,8 @@ export function resolveBay(bay: DrawerBayRecord, frames: Readonly<Partial<Record
   const canOpen = state !== 'locked' && assets.hasSequence(f.id);
   const canLift = canOpen && assets.hasLift(f.id);
   const label = state === 'locked'
-    ? { lookNumber, name: null, price, soldOut: false, notYet: true }
-    : { lookNumber, name, price, soldOut: state === 'sold_out', notYet: false };
+    ? { lookNumber, name: null, soldOut: false, notYet: true }
+    : { lookNumber, name, soldOut: state === 'sold_out', notYet: false };
   return { id: bay.id, handle: bay.handle, state, light, frame: f, canOpen, canLift, focusable: true, label, problems };
 }
 

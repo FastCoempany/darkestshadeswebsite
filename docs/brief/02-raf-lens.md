@@ -13,7 +13,7 @@ The founder's line for it: **philosophy as manifesto, before product.** Prada is
 5. **An archive, not a catalog.** Everything is numbered and documented like a collection in a museum: Drop 001, Look 01, F01, the technical drawings, the emblem's spec. Frames are presented like pieces, with their measurements.
 6. **Stillness, then one cut.** The site holds very still and makes one decisive move per page (a cut to full-bleed, a scale jump), never a carousel of small motions. See `03-references.md`.
 7. **Youth and subculture as substance.** The Brand Story's community (DJs, filmmakers, digital artists, designers) shows up in who is cast and what they're doing, never as slang in the copy.
-8. **Honest.** The price is shown. Quantities and dates are real. Nothing pretends to be scarcer, older or more popular than it is.
+8. **Honest.** The price is shown (not on the drawer wall, which shows no price: `00-decisions.md` #47, O20). Quantities and dates are real. Nothing pretends to be scarcer, older or more popular than it is.
 
 ## What it is not
 - Not logo-mania. The GCD appears at most once per screen.

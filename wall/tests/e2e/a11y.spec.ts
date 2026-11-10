@@ -87,21 +87,24 @@ test.describe('accessibility', () => {
     expect(knobs).toHaveLength(8);
   });
 
-  test('320 px: the wall and the view reflow with no horizontal scroll, the name and $100 on screen', async ({ page, browserName, isMobile }) => {
+  test('320 to 1440 px: no horizontal scroll, every label inside its rail and painted above every crop, the name on screen and no price', async ({ page, browserName, isMobile }) => {
     test.skip(browserName !== 'chromium' || !!isMobile, 'a viewport test on desktop Chromium');
     await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('index.html');
     await wallLoaded(page);
     const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(await overflow()).toBeLessThanOrEqual(0);
-    // every label's content inside its rail rect and above the next drawer's face, with the records as they are and then
-    // with the longest name (F02) sold out on every drawer (the two-line worst case)
+    // every label's content inside its rail rect and above the next drawer's face, and painted above every other drawer
+    // (in landscape the drawer below's dark crop reaches into this drawer's rail): with the records as they are and then
+    // with the longest name (F02) sold out on every drawer (the two-line worst case), portrait at 320 and 390 and
+    // landscape at 1024 and 1440
     const labels = () => page.locator('drawer-wall').evaluate((wall) => {
       const bays = [...wall.shadowRoot!.querySelectorAll('drawer-bay')];
-      const faces = bays.map((b) => (b.shadowRoot!.querySelector('.face') as HTMLElement | null)?.getBoundingClientRect() ?? null);
-      return bays.map((bay) => {
+      const rows = bays.map((bay) => {
         const label = bay.shadowRoot!.querySelector('.label') as HTMLElement | null;
         if (!label) return null;
+        label.scrollIntoView({ block: 'center' });   // the hit test below needs the label inside the viewport
+        const faces = bays.map((b) => (b.shadowRoot!.querySelector('.face') as HTMLElement | null)?.getBoundingClientRect() ?? null);
         const r = label.getBoundingClientRect();
         // the drawer below: the nearest face whose top is under this label's top and which overlaps it sideways (the
         // portrait wall has two columns, the landscape four, so the next bay in order may sit beside, not below)
@@ -109,26 +112,36 @@ test.describe('accessibility', () => {
         const kids = [...label.querySelectorAll('span')].filter((s) => s.getClientRects().length).map((s) => s.getBoundingClientRect());
         const bottom = Math.max(...kids.map((k) => k.bottom)), top = Math.min(...kids.map((k) => k.top));
         const left = Math.min(...kids.map((k) => k.left)), right = Math.max(...kids.map((k) => k.right));
-        return { id: bay.getAttribute('data-id'), lines: Math.round((bottom - top) / 11), over: bottom - r.bottom, left: left - r.left, right: r.right - right, nextFace: below ? below.top - bottom : null, price: (bay.shadowRoot!.querySelector('.price')?.textContent ?? '').trim() };
+        // the hit test: the label takes pointer events for a moment, and the element under its lowest line's bottom
+        // centre must be this drawer, not the one below (whose crop would otherwise paint over the line)
+        label.style.pointerEvents = 'auto';
+        const hit = wall.shadowRoot!.elementFromPoint((left + right) / 2, bottom - 1);
+        label.style.pointerEvents = '';
+        return { id: bay.getAttribute('data-id'), lines: Math.round((bottom - top) / 11), over: bottom - r.bottom, left: left - r.left, right: r.right - right, nextFace: below ? below.top - bottom : null, hitOwn: hit === bay, hit: hit?.getAttribute('data-id') ?? hit?.tagName ?? null, priced: !!bay.shadowRoot!.querySelector('.price') || /\$/.test(bay.shadowRoot!.textContent ?? '') };
       }).filter(Boolean);
+      window.scrollTo(0, 0);
+      return rows;
     });
     const check = (rows: Awaited<ReturnType<typeof labels>>, where: string) => {
       expect(rows.length, where).toBe(8);
       for (const r of rows) {
-        expect(r!.price, `${where}: ${r!.id} shows the price`).toBe('$100');
+        expect(r!.priced, `${where}: ${r!.id} shows a price`).toBe(false);
         expect(r!.over, `${where}: ${r!.id}'s label reaches ${r!.over.toFixed(1)} px below its rect`).toBeLessThanOrEqual(0.5);
         expect(r!.left, `${where}: ${r!.id} left`).toBeGreaterThanOrEqual(-0.5);
         expect(r!.right, `${where}: ${r!.id} right`).toBeGreaterThanOrEqual(-0.5);
         if (r!.nextFace !== null) expect(r!.nextFace, `${where}: ${r!.id}'s label against the next drawer's face`).toBeGreaterThan(0);
+        expect(r!.hitOwn, `${where}: ${r!.id}'s lowest line is painted under ${r!.hit}`).toBe(true);
       }
     };
     check(await labels(), '320 px, the records as they are');
     await page.evaluate(() => { const s = window.__wall!.store; for (const b of s.resolved) { const rec = s.record(b.id)!; s.update({ ...rec, fields: rec.fields.map((f) => (f.key === 'frame' ? { ...f, value: 'F02' } : f.key === 'state' ? { ...f, value: 'sold_out' } : f)) }); } });
     await page.waitForTimeout(300);
     check(await labels(), '320 px, the longest name sold out on every drawer');
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.waitForTimeout(300);
-    check(await labels(), '390 px, the longest name sold out on every drawer');
+    for (const [w, h] of [[390, 844], [1024, 800], [1440, 900]] as const) {
+      await page.setViewportSize({ width: w, height: h });
+      await page.waitForTimeout(300);
+      check(await labels(), `${w} px, the longest name sold out on every drawer`);
+    }
     await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('index.html?open=F02');
     await wallLoaded(page);
@@ -136,7 +149,8 @@ test.describe('accessibility', () => {
     expect(await overflow()).toBeLessThanOrEqual(0);
     const top = page.locator('drawer-view').locator('.top');
     await expect(top.locator('.micro')).toHaveText(/Holly Wore Them to Breakfast/i);
-    await expect(top.locator('.price')).toHaveText('$100');
+    await expect(top.locator('.price')).toHaveCount(0);
+    expect(await top.textContent()).not.toMatch(/\$/);
     const tb = (await top.boundingBox())!;
     expect(tb.x + tb.width).toBeLessThanOrEqual(320);
     for (const b of await page.locator('drawer-view').locator('button.quiet').all()) {

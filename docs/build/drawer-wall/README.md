@@ -1,6 +1,6 @@
 # The drawer wall: working material
 
-The run itself is `docs/build/DRAWER-WALL.md`: the drawer wall alone, built in `wall/`, not a website. The decisions are `docs/brief/00-decisions.md` #43–#46 and O15–O18. This folder holds what the run starts from and what it produces for review.
+The run itself is `docs/build/DRAWER-WALL.md`: the drawer wall alone, built in `wall/`, not a website. The decisions are `docs/brief/00-decisions.md` #43–#47 (#47, no price on the wall, came after D7), O15–O18 and O20. This folder holds what the run starts from and what it produces for review.
 
 | Path | What it is |
 |---|---|

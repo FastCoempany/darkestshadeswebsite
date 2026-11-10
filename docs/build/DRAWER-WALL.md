@@ -6,7 +6,7 @@ The site build of Oct 30–31 was thrown out (`00-decisions.md` #46). Don't read
 
 Part 1 is what we're making. Part 2 is how to build it. Part 3 is for me: how I start the run. This file and `docs/build/WALL-PROGRESS.md` are your memory; re-read both at the start of every phase and after every break or compaction.
 
-The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone), and the open items O15–O18.
+The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone) and #47 (no price on the wall, the founder's instruction after D7), and the open items O15–O18 and O20.
 
 ---
 
@@ -14,7 +14,7 @@ The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 
 
 ## In one paragraph
 
-A dark room with one cabinet in it: a wall of identical drawers in black calfskin, one frame to a drawer. A thin warm light leaks from the seam of every drawer that holds a frame you can see. Under each drawer: its look number, its name and $100. You tap a drawer and it comes forward; you pull it toward you and it slides out, the frame waiting inside in warm light; you tap the frame and it rises into the light, where it turns and comes closer under your finger. One more tap shows the real photographs at full resolution. You put it back, shut the drawer, and the wall is there again. Every drawer is its own thing: its own element, its own record, its own state. Nothing else is on the screen.
+A dark room with one cabinet in it: a wall of identical drawers in black calfskin, one frame to a drawer. A thin warm light leaks from the seam of every drawer that holds a frame you can see. Under each drawer: its look number and its name; no price (#47). You tap a drawer and it comes forward; you pull it toward you and it slides out, the frame waiting inside in warm light; you tap the frame and it rises into the light, where it turns and comes closer under your finger. One more tap shows the real photographs at full resolution. You put it back, shut the drawer, and the wall is there again. Every drawer is its own thing: its own element, its own record, its own state. Nothing else is on the screen.
 
 ## The look (#43)
 
@@ -22,7 +22,7 @@ Private and intimate. Near-black; the scene is the image.
 
 - **Light.** Cool grey-green outside (the cabinet, the room), warm amber inside (the drawer's interior, the light the frame waits in). Soft sources, never hard flash. Shallow focus in the drawer view. The gold of the frame's GCD is the only gold in any view.
 - **Surface.** The prototype grade (`docs/build/drawer-wall/prototype/grade.py`): luminance-weighted film grain about 2.8%, a little halation on the brightest highlights, a soft vignette, a touch of lens softness, made in the image pipeline and identical on every asset. Never CSS filters.
-- **Type.** It recedes. Lines in Stolzl Light (the Urbanist stand-in at 300), sentence case, 22 px and up. Labels and hints in Stolzl Medium micro: 11 px, uppercase, tracking +0.12em. The price in tabular figures at body size (`01-brand-system.md`). No headlines.
+- **Type.** It recedes. Lines in Stolzl Light (the Urbanist stand-in at 300), sentence case, 22 px and up. Labels and hints in Stolzl Medium micro: 11 px, uppercase, tracking +0.12em. No price (`00-decisions.md` #47). No headlines.
 - **Controls.** Nearly invisible, never absent. Every gesture has a visible, quiet text button that does the same thing (WCAG 2.2 SC 2.5.1 and 2.5.7), in `text-secondary`, with the gold focus ring.
 - **Where the pale stage appears.** Only in the photographs: the real lightbox pictures on their stage color, studied. Everything else sits on `surface-scene` (black).
 - **Look references, in the repo:** `docs/build/drawer-wall/prototype/stills/` (the founder-reviewed drawer, shut, half and open; the lift pair, dark and lit). My private links, if your session can read Artifacts: the look mockups `https://claude.ai/artifact/FEiHsc3xekH5HhDXuVyVjv`, "pull toward you" `https://claude.ai/artifact/HNne2t63Vb3Ao3ekCGXqQj`, the leather drawer `https://claude.ai/artifact/8HTpadDkKaHgmoEXQ1SxUz`. The site pages in the look mockups are not part of this.
@@ -34,7 +34,7 @@ Private and intimate. Near-black; the scene is the image.
 - **The seam light.** Each drawer has two looks. `lit`: a thin warm light escapes along its seams, because the drawer holds a frame you can look at. `dark`: no light, because the frame is sold out, locked or hidden. The light is state, never decoration, and never a promise the record doesn't make.
 - **Layouts.** Two renders of the same cabinet. Portrait (narrower than 1024 px): 2 drawers across, 4 rows. Landscape (1024 px and wider): 4 across, 2 rows. Never a row of three (`06-products.md`: F04, F05 and F09). The drawers are identical; only the cabinet's proportions change: the rail under each row is deep enough for that drawer's label at its width. More drawers means a re-render of the wall, nothing else.
 - **The camera.** Orthographic, tilted 15° down: the wall as you'd see it standing in front of a low cabinet, every drawer the same size, the knobs looking up at you.
-- **Labels.** Under each drawer, on its rail, in HTML: the look number in camel micro, the name in micro `text-secondary` (wrapping, never truncated, at 320 px too), and `$100` at body size on the next line. A sold-out drawer adds `wall.soldOut`. A locked one shows `wall.notYet` in place of the name; its look number and `$100` stay. A hidden one has no label.
+- **Labels.** Under each drawer, on its rail, in HTML: the look number in camel micro, the name in micro `text-secondary` (wrapping, never truncated, at 320 px too). No price (#47). A sold-out drawer adds `wall.soldOut` under the name. A locked one shows `wall.notYet` in place of the name; its look number stays. A hidden one has no label.
 - **Nothing else.** No logo, no navigation, no headline. The page's only heading is `wall.title`, visually hidden.
 
 ## One drawer, step by step
@@ -49,7 +49,7 @@ The default mechanic is **tap first** (O16). The **pull first** variant (`?mech=
 6. **The photographs.** `wall.photos` opens the real lightbox photographs (A1, A2, A3 and A6 where they exist) on their stage color, each at full resolution: pinch, drag or double-tap down to one image pixel per screen pixel. `wall.photosClose` goes back to the frame.
 7. **Put back.** `wall.putBack`, a tap on the drawer, or Esc. The frame settles back into the drawer the way it rose. Esc again shuts the drawer; again, closes the view.
 
-The name and `$100` are on screen in the drawer view and the lifted view too. Reduced motion: every move becomes a cross-fade of about 160 ms; the drawer still follows a dragging finger, but it snaps instead of springing; turning has no inertia. Haptics: a 10 ms tick at the drawer's open and shut stops where `navigator.vibrate` exists (Android); never the only signal.
+The name is on screen in the drawer view and the lifted view too; no price (#47). Reduced motion: every move becomes a cross-fade of about 160 ms; the drawer still follows a dragging finger, but it snaps instead of springing; turning has no inertia. Haptics: a 10 ms tick at the drawer's open and shut stops where `navigator.vibrate` exists (Android); never the only signal.
 
 ## Every drawer is its own thing
 
@@ -68,9 +68,9 @@ Two kinds of record, shaped like Shopify metaobjects (`{ id, handle, type, field
 **How a drawer's state is resolved** (`wall/src/lib/resolve.ts`, a pure function of the record and the frame's facts):
 
 1. `hidden`: a dark drawer, no label, not focusable, doesn't open.
-2. `locked`: dark, `wall.notYet` with the look number and `$100`, doesn't open.
-3. `sold_out`: dark, the name, `$100` and `wall.soldOut`; it opens, and the frame can be seen, lifted and turned.
-4. `available`: lit, the name and `$100`; it opens.
+2. `locked`: dark, `wall.notYet` with the look number, doesn't open.
+3. `sold_out`: dark, the name and `wall.soldOut`; it opens, and the frame can be seen, lifted and turned.
+4. `available`: lit, the name; it opens.
 5. No frame, an unknown frame id or an unknown value: hidden, and logged.
 6. `light` overrides the seam light only; it never changes what a drawer does.
 7. The output: the state, the light, `canOpen`, `canLift` (the assets exist), the label. A missing value renders nothing.
@@ -79,7 +79,7 @@ Every case, and every missing or unknown value, has a unit test. **The backend, 
 
 ## Honesty and brand
 
-- `$100` is visible under every drawer except a hidden one, and in every view of a frame. It comes from the frame's `price` in `content/products/`.
+- No price appears anywhere on the wall (`00-decisions.md` #47, Nov 9 2026). The frames' `price` in `content/products/` stays a product fact the wall does not ship.
 - The seam light and every label come from the records. No countdowns, no quantities, no dates, no "only a few left": the wall shows none of them.
 - The frame's GCD executes one way only: the 3D models carry it at full size, proportion and placement (`frame3d.py`), and the export is checked against `content/products/` (D4). F08's renders show its GCD (the model carries it); its photographs don't (#34).
 - The knob GCD is the `gcd-black` variant by default (O15). The only gold in any view is the frame's own GCD; the focus ring is the usual exception.
@@ -220,7 +220,7 @@ Esc steps back: `photos` → `lifted` → `open` → `shut` → `wall`. Pull fir
 | Hints | after 1.2 s idle in a state; gone after the first success of that gesture, for the session | One hint at a time; never animated beyond a slow fade |
 | Haptics | `navigator.vibrate(10)` at the open and shut stops, where it exists | |
 
-**Keyboard.** Each drawer is a `<button>` in wall order, named "{name}, $100. {wall.openLabel}" (a locked one: "{wall.notYet} $100"). In the drawer view (`role="dialog"`, `aria-modal`, labelled by the frame's name): ↓ and ↑ (and Page Down and Page Up) pull and push, Enter on the visible button lifts, ← → turn, ↑ ↓ tilt when lifted, + and − zoom, 0 resets, Esc steps back. **Screen readers:** a polite live region says `wall.announce.*`; the live frame is `role="img"` with `wall.model3dLabel` (the frame's `alt.subjects` text from the copy deck as `{subject}`); the photographs carry their manifest alt text from `assets/photography/MANIFEST.csv`.
+**Keyboard.** Each drawer is a `<button>` in wall order, named "{name}. {wall.openLabel}" (a locked one: "{wall.notYet}"). In the drawer view (`role="dialog"`, `aria-modal`, labelled by the frame's name): ↓ and ↑ (and Page Down and Page Up) pull and push, Enter on the visible button lifts, ← → turn, ↑ ↓ tilt when lifted, + and − zoom, 0 resets, Esc steps back. **Screen readers:** a polite live region says `wall.announce.*`; the live frame is `role="img"` with `wall.model3dLabel` (the frame's `alt.subjects` text from the copy deck as `{subject}`); the photographs carry their manifest alt text from `assets/photography/MANIFEST.csv`.
 
 ## Assets
 
@@ -272,7 +272,7 @@ Outputs per layout and knob style: `plate-lit` (the whole wall, every drawer lit
 
 ## In the browser
 
-- **Tiers** (`wall/src/lib/tier.ts`): tier 0 (no JavaScript): a `<noscript>` with the wall plate and a plain list of the eight drawers (look number, name, `$100`), each linking to its A1 photograph. Tier 1 (no WebGL 2, under 4 GB of device memory where reported, Save-Data, or a lost context): everything but the live frame; lifting shows the lifted still, and turning gives way to the photographs. Tier 2: everything.
+- **Tiers** (`wall/src/lib/tier.ts`): tier 0 (no JavaScript): a `<noscript>` with the wall plate and a plain list of the eight drawers (look number, name; no price), each linking to its A1 photograph. Tier 1 (no WebGL 2, under 4 GB of device memory where reported, Save-Data, or a lost context): everything but the live frame; lifting shows the lifted still, and turning gives way to the photographs. Tier 2: everything.
 - **The sequence player:** frames fetched as blobs (encoded, about 1 MB a drawer at 720 px); decoded `ImageBitmap`s kept only for the current frame ± 2 and closed otherwise; the next ones decoded ahead in the direction of travel; cross-fade between neighbours on a 2D canvas sized to the view at the device pixel ratio; AVIF where `createImageBitmap` takes it, WebP otherwise. The first and last frames load first.
 - **Prefetch:** opening a drawer prefetches its frame sequence, its GLB and the three.js chunk at idle priority. three.js is never in the initial bundle.
 - **The handoff:** at lift, the canvas mounts over the drawer's last frame with the GLB at `open.json`'s transform and a soft contact shadow; the view cross-fades over 120 ms from the rendered frame (with the frame in it) to the empty drawer plus the live frame, then lifts. Until the GLB is ready, the lifted still holds the place.
@@ -308,7 +308,7 @@ wall.announce.lifted    {name}, lifted out.
 wall.announce.back      {name}, back in the drawer.
 ```
 
-Names, look numbers and prices come from `content/products/`; the frames' alt text from the copy deck's `alt` section. Any other string the wall needs goes in the `wall` section as a draft and on WALL-PROGRESS.md's sign-off list. No string is hard-coded in `wall/src/`.
+Names and look numbers come from `content/products/` (never the price, #47); the frames' alt text from the copy deck's `alt` section. Any other string the wall needs goes in the `wall` section as a draft and on WALL-PROGRESS.md's sign-off list. No string is hard-coded in `wall/src/`.
 
 ## Budgets
 
@@ -334,7 +334,7 @@ Names, look numbers and prices come from `content/products/`; the frames' alt te
 
 - **Unit (Vitest):** `resolve.ts` (every state, every override, every missing or unknown value), `machine.ts` (every transition and every impossible one, records changing mid-view), the adapter (metaobject shape in, typed drawers out), the manifest loader, the gesture math (release decisions, rubber band, clamps), the tier choice.
 - **The states sheet:** `states.html` shows every element in every state (each drawer state, both lights, both mechanics, the view shut, pulling, open, lifted, turned, zoomed, the photographs, tier 1, reduced motion, 320 px) from fixtures. Playwright screenshots it at 390 and 1440 against committed baselines; the live canvas is masked in the pixel comparison, and a separate test checks that it drew.
-- **End to end (Playwright, `wall/tests/e2e/`):** projects `wall-pixel` (Chromium as a Pixel, with touch), `wall-iphone` (WebKit as an iPhone; everything but the live 3D, since headless WebKit's WebGL is not reliable) and `wall-desktop` (Chromium). Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: every drawer shows its name and `$100`; tap first: open, pull, settle both ways, lift, turn (yaw changes), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls; tap first: a vertical swipe on a drawer scrolls and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); `?open=`; no JavaScript (tier 0); the records panel changes one drawer and no other.
+- **End to end (Playwright, `wall/tests/e2e/`):** projects `wall-pixel` (Chromium as a Pixel, with touch), `wall-iphone` (WebKit as an iPhone; everything but the live 3D, since headless WebKit's WebGL is not reliable) and `wall-desktop` (Chromium). Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: every drawer shows its name and no price; tap first: open, pull, settle both ways, lift, turn (yaw changes), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls; tap first: a vertical swipe on a drawer scrolls and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); `?open=`; no JavaScript (tier 0); the records panel changes one drawer and no other.
 - **Accessibility:** axe on the wall, the drawer view shut and open, the lifted frame and the photographs; names and live announcements; targets ≥ 44 px; 320 px and 200% zoom; label contrast measured against the plate's pixels under each label (≥ 4.5:1).
 - **Performance:** `npm run lighthouse` on the built wall; the bundle sizes; the frame-rate trace; decoded frames counted through the debug log.
 - **Asset checks:** `drawer_wall.py --check`, `frame_glb.py --check` for every frame, the manifest check, scene black, lens tints present with sources.
@@ -355,8 +355,7 @@ Names, look numbers and prices come from `content/products/`; the frames' alt te
 1. "Find a frame you like and look at it closely." (Do they find the drawer, the pull, the lift?)
 2. "Show me the gold emblem up close."
 3. "Put it back and look at another one."
-4. "What does it cost?" (Is $100 seen without hunting?)
-5. Free play, then three questions: what felt natural, what felt in the way, which version they'd keep.
+4. Free play, then three questions: what felt natural, what felt in the way, which version they'd keep.
 
 Record per person: time to the first open, accidental opens, accidental scrolls, whether they lifted, turned, zoomed and opened the photographs, and their pick. The template has the table. The rule: the version with fewer misfires and a faster first open wins; a tie goes to tap first. `?debug=1` keeps a local event log the tester can copy at the end.
 
@@ -429,7 +428,7 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 - **One context, no fan-out:** D1's project, `resolve.ts` and `machine.ts`, D5's shared pieces, the Blender lookdev (one eye on the look), the lift handoff.
 - **Fan out:** D2's schema and adapter against D3's tool writing; D5's elements after the shared pieces; D6's end-to-end suites by flow; each phase's reviews.
-- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#46 and O15–O18, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
+- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#47, O15–O18 and O20, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
 
 ## Risks and what to do
 

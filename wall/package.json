@@ -14,7 +14,7 @@
     "budget": "node checks/bundle.mjs",
     "lighthouse": "node checks/lighthouse.mjs",
     "assets": "python3 ../tools/photo/zoom_export.py",
-    "all": "npm run check && npm run test && npm run build && npm run budget && npm run test:e2e && npm run lighthouse"
+    "all": "npm run test && npm run build && npm run check && npm run budget && npm run test:e2e && npm run lighthouse"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

@@ -25,12 +25,12 @@ describe('WallStore', () => {
     return { store, events };
   };
 
-  it('resolves the eight committed drawers, each with its frame and $100', () => {
+  it('resolves the eight committed drawers, each with its frame and no price (#47)', () => {
     const { store } = make();
     expect(store.resolved).toHaveLength(8);
     for (const b of store.resolved) {
       expect(b.frame?.id).toMatch(/^F0[1-9]$/);
-      expect(b.label?.price).toBe('$100');
+      expect(b.label).not.toHaveProperty('price');
       expect(b.problems).toEqual([]);
     }
     expect(store.bay('drawer_bay/f04')?.state).toBe('available');

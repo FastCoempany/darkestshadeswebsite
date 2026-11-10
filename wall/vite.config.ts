@@ -119,7 +119,7 @@ function wallAssets(): Plugin {
 }
 
 /** Tier 0 (no JavaScript): the <noscript> in index.html gets the wall plate and a plain list of the eight drawers
- * (look number, name, $100), each linking to its A1 photograph in the zoom set; built from the records, the frames'
+ * (look number, name; no price, 00-decisions.md #47), each linking to its A1 photograph in the zoom set; built from the records, the frames'
  * facts, the copy deck and the manifest at build time, so nothing is hard-coded in the page. */
 function wallNoscript(): Plugin {
   return {
@@ -129,7 +129,7 @@ function wallNoscript(): Plugin {
       handler(html, ctx) {
         if (!ctx.filename.endsWith('index.html')) return html;
         const products = readdirSync(resolve(__dirname, '../content/products')).filter((f) => /^f0[1-9]\.json$/.test(f)).map((f) => JSON.parse(readFileSync(resolve(__dirname, '../content/products', f), 'utf8')));
-        const frames = framesFrom(products) as Record<string, { lookNumber: string | null; name: string | null; price: { amount: string; currencyCode: string } | null } | undefined>;
+        const frames = framesFrom(products) as Record<string, { lookNumber: string | null; name: string | null } | undefined>;
         const copy = copyFrom(JSON.parse(readFileSync(resolve(__dirname, '../content/copy/en.json'), 'utf8')));
         const records = JSON.parse(readFileSync(resolve(__dirname, 'data/wall.json'), 'utf8')) as { records: Array<{ id: string; type: string; fields: Array<{ key: string; value: string | null }> }> };
         const wall = records.records.find((r) => r.type === 'bay_wall');
@@ -139,7 +139,6 @@ function wallNoscript(): Plugin {
         const manifest = existsSync(manifestPath) ? (JSON.parse(readFileSync(manifestPath, 'utf8')) as { assets: Array<{ id: string; kind: string; files: string[]; width?: number; height?: number }> }) : { assets: [] };
         const plate = manifest.assets.find((a) => a.id === 'wall/portrait/black-relief/plate-lit');
         const esc = (x: string) => x.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-        const price = (pr: { amount: string; currencyCode: string } | null) => (pr && pr.currencyCode === 'USD' ? `$${Number(pr.amount).toFixed(Number.isInteger(Number(pr.amount)) ? 0 : 2)}` : '');
         const items = order.map((id) => {
           const b = bays.get(id);
           const fid = b?.fields.find((f) => f.key === 'frame')?.value ?? '';
@@ -148,7 +147,7 @@ function wallNoscript(): Plugin {
           if (!f || !['available', 'sold_out', 'locked'].includes(state)) return '';
           const title = state === 'locked' ? esc(String(copy.wall.notYet ?? '')) : esc(f.name ?? '');
           const sold = state === 'sold_out' ? ` <span>${esc(String(copy.wall.soldOut ?? ''))}</span>` : '';
-          const body = `<span>${esc(f.lookNumber ?? '')}</span> <span>${title}</span> <span>${esc(price(f.price))}</span>${sold}`;
+          const body = `<span>${esc(f.lookNumber ?? '')}</span> <span>${title}</span>${sold}`;
           return state === 'locked' ? `<li>${body}</li>` : `<li><a href="./zoom/${fid.toLowerCase()}-a1.webp">${body}</a></li>`;
         }).filter(Boolean).join('\n      ');
         const avif = plate?.files.find((x) => x.endsWith('.avif')), webp = plate?.files.find((x) => x.endsWith('.webp'));

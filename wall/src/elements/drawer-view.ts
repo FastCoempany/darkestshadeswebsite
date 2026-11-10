@@ -6,7 +6,7 @@
 // drawer behind it cross-fades to the base sequence's last frame, the empty drawer (DRAWER-WALL.md, The handoff),
 // and the drawer dims and softens; wall.photos opens <photo-zoom>; put back, shut, close with focus back on the
 // drawer. Every gesture has a quiet button (pull: open/shut; lift; turn: left/right, tilt up/down; pinch: closer/
-// further/reset). The name and $100 stay on screen. Reduced motion: cross-fades of about 160 ms, the drawer still
+// further/reset). The name stays on screen; no price (00-decisions.md #47). Reduced motion: cross-fades of about 160 ms, the drawer still
 // follows the finger but snaps. Haptics: a 10 ms tick at the stops where navigator.vibrate exists.
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -59,12 +59,11 @@ export class DrawerView extends LitElement {
     .top, .bottom { position: absolute; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
       padding-left: max(var(--space-4), env(safe-area-inset-left, 0px)); padding-right: max(var(--space-4), env(safe-area-inset-right, 0px)); pointer-events: none; }
     .top { top: 0; padding-top: calc(var(--space-4) + env(safe-area-inset-top, 0px)); z-index: 2; }
-    .top.on-stage .micro, .top.on-stage .price { color: var(--color-text-inverse); }
+    .top.on-stage .micro { color: var(--color-text-inverse); }
     photo-zoom { position: absolute; inset: 0; z-index: 1; }
     .bottom { bottom: 0; padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px)); flex-direction: column; align-items: stretch; gap: var(--space-3); }
     .bottom[hidden] { display: none; }
     .micro { font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; color: var(--color-text-secondary); }
-    .price { font-size: var(--font-size-body); font-variant-numeric: tabular-nums; color: var(--color-text-primary); }
     .name { font-size: 22px; font-weight: var(--font-weight-light); color: var(--color-text-primary); margin: 0; text-align: center; }
     .hint { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); color: var(--color-text-secondary); opacity: 0; transition: opacity 900ms var(--motion-ease); min-height: 3.5em; justify-content: flex-end; }
     .hint.on { opacity: 1; }
@@ -530,7 +529,7 @@ export class DrawerView extends LitElement {
             @lifted-handoff=${(ev: CustomEvent<{ shown: boolean }>) => { this.emptyShown = ev.detail.shown; }}></lifted-frame>` : nothing}
       </div>
       ${showPhotos ? html`<photo-zoom .frame=${frame} .name=${name} @photos-close=${() => this.dispatch({ type: 'BACK' })}></photo-zoom>` : nothing}
-      <div class=${classMap({ top: true, 'on-stage': showPhotos })}><span class="micro">${name}</span><span class="price">${b.label?.price ?? ''}</span></div>
+      <div class=${classMap({ top: true, 'on-stage': showPhotos })}><span class="micro">${name}</span></div>
       <div class="bottom" ?hidden=${showPhotos}>
         ${liftedish ? html`<p class="name">${name}</p>` : nothing}
         <div class=${classMap({ hint: true, on: !!this.hint })} aria-hidden="true">

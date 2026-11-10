@@ -67,7 +67,7 @@ Only Owners Wide and Stolzl (`00-decisions.md` #13). Font files are never commit
 
 - Owners Wide is never used for body text or anything under 13 px.
 - Numbers in specs and prices: Stolzl with tabular figures (`font-variant-numeric: tabular-nums`).
-- Prices are set at body size, never hidden, never in a lighter grey than `ash-300`.
+- Prices, where one appears, are set at body size, never hidden, never in a lighter grey than `ash-300`. The drawer wall shows none (`00-decisions.md` #47).
 
 ## Patina: Prada SS90
 

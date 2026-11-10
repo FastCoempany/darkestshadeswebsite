@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { bayButton, bayCenter, clickQuiet, focused, stageCenter, tabTo, touchDrag, touchDragXY, touchEnd, touchMoveTo, touchPinch, touchStart, touchTap, viewState, waitForState, wallLoaded } from './helpers';
 
-// The end-to-end flows (DRAWER-WALL.md, Testing): every drawer shows its name and $100; tap first: open, pull,
+// The end-to-end flows (DRAWER-WALL.md, Testing): every drawer shows its name and no price (#47); tap first: open, pull,
 // settle both ways, lift, turn, pinch, photographs, put back, shut, close with focus back on the drawer; pull
 // first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls; tap first: a vertical swipe on a
 // drawer scrolls and opens nothing; keyboard only (the pull, and the lift, the photographs and the way back through
@@ -9,15 +9,16 @@ import { bayButton, bayCenter, clickQuiet, focused, stageCenter, tabTo, touchDra
 // the lifted still); ?open=; no JavaScript (tier 0); the records panel changes one drawer and no other.
 const FRAMES = [['drawer_bay/f01', '01', 'Lou Went Underground'], ['drawer_bay/f02', '02', 'Holly Wore Them to Breakfast'], ['drawer_bay/f03', '03', 'Roy Forgot the Clear Ones'], ['drawer_bay/f04', '04', 'K Was Never Here'], ['drawer_bay/f05', '05', 'Jackie Gave Them Nothing'], ['drawer_bay/f06', '06', 'What Anna Thought'], ['drawer_bay/f08', '08', 'What Arnie Hid'], ['drawer_bay/f09', '09', 'What Stevie Saw']] as const;
 
-test('every drawer shows its look number, its name and $100, and is a button named for it', async ({ page }) => {
+test('every drawer shows its look number and its name, no price, and is a button named for it', async ({ page }) => {
   await page.goto('index.html');
   await wallLoaded(page);
   for (const [id, look, name] of FRAMES) {
     const bay = page.locator('drawer-wall').locator(`drawer-bay[data-id="${id}"]`);
     await expect(bay.locator('.look')).toHaveText(look);
     await expect(bay.locator('.name')).toHaveText(name.toUpperCase().length ? new RegExp(name, 'i') : name);
-    await expect(bay.locator('.price')).toHaveText('$100');
-    await expect(bayButton(page, id)).toHaveAttribute('aria-label', `${name}, $100. Open the drawer.`);
+    await expect(bay.locator('.price')).toHaveCount(0);
+    expect(await bay.evaluate((el) => el.shadowRoot!.textContent ?? '')).not.toMatch(/\$|100/);   // no price anywhere in the drawer (#47)
+    await expect(bayButton(page, id)).toHaveAttribute('aria-label', `${name}. Open the drawer.`);
   }
 });
 
@@ -382,7 +383,7 @@ test('no JavaScript: the plate and a plain list of the eight drawers, each linki
   await expect(items).toHaveCount(8);
   for (const [, look, name] of FRAMES) await expect(page.locator('.tier0')).toContainText(look);
   await expect(page.locator('.tier0 a[href$="f09-a1.webp"]')).toContainText('What Stevie Saw');
-  await expect(page.locator('.tier0')).toContainText('$100');
+  expect(await page.locator('.tier0').textContent()).not.toMatch(/\$|100/);   // no price in the no-JavaScript list either (#47)
   await ctx.close();
 });
 
@@ -396,9 +397,11 @@ test('the records panel changes one drawer and no other', async ({ page }) => {
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('sold_out');
   await expect(f04.locator('button.face')).toHaveAttribute('data-light', 'dark');
   await expect(f04.locator('.status')).toHaveText('Sold out');
+  await expect(bayButton(page, 'drawer_bay/f04')).toHaveAttribute('aria-label', `${FRAMES.find((f) => f[0] === 'drawer_bay/f04')![2]}. Sold out. Open the drawer.`);   // the sold-out name, no price (#47)
   for (const [id] of FRAMES) if (id !== 'drawer_bay/f04') await expect(bayButton(page, id)).toHaveAttribute('data-light', 'lit');
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('locked');
   await expect(f04.locator('.name')).toHaveText('Not yet.');
+  await expect(bayButton(page, 'drawer_bay/f04')).toHaveAttribute('aria-label', 'Not yet.');   // the locked name, no price (#47)
   await expect(bayButton(page, 'drawer_bay/f04')).toBeDisabled();
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('hidden');
   await expect(f04.locator('button.face')).toHaveCount(0);

@@ -11,27 +11,27 @@ const deck = JSON.parse(readFileSync(DECK, 'utf8'));
 
 describe('the frames the wall ships', () => {
   const frames = framesFrom(products);
-  it('are the eight, each with its look number, name, handle and $100 from its record, and nothing else', () => {
+  it('are the eight, each with its look number, name and handle from its record, and nothing else: no price (#47)', () => {
     expect(Object.keys(frames).sort()).toEqual([...FRAME_IDS].sort());
     for (const id of FRAME_IDS) {
       const f = frames[id]!;
       expect(f.lookNumber).toMatch(/^0[1-9]$/);
       expect(f.name!.length).toBeGreaterThan(0);
       expect(f.handle).toMatch(/^[a-z-]+$/);
-      expect(f.price).toEqual({ amount: '100.00', currencyCode: 'USD' });
-      expect(Object.keys(f).sort()).toEqual(['handle', 'id', 'lookNumber', 'name', 'price']);
+      expect(Object.keys(f).sort()).toEqual(['handle', 'id', 'lookNumber', 'name']);
     }
   });
   it('matches 06-products.md: the look numbers and names', () => {
     expect(frames.F09).toMatchObject({ lookNumber: '09', name: 'What Stevie Saw', handle: 'what-stevie-saw' });
     expect(frames.F02).toMatchObject({ lookNumber: '02', name: 'Holly Wore Them to Breakfast' });
     expect(JSON.stringify(frames)).not.toMatch(/Founder|Oct 20|measurementsMm|placement/);   // no internal notes ship
+    expect(JSON.stringify(frames)).not.toMatch(/price|USD|\$/);   // the records' price never ships (00-decisions.md #47)
   });
   it('leaves out what is not a frame and nulls what a record lacks, filling nothing in', () => {
     expect(frameFacts({ id: 'F07', name: 'x' })).toBeNull();
     expect(frameFacts(null)).toBeNull();
-    expect(frameFacts({ id: 'F01' })).toEqual({ id: 'F01', handle: null, lookNumber: null, name: null, price: null });
-    expect(frameFacts({ id: 'F01', price: { amount: 5, currencyCode: 'USD' } })!.price).toBeNull();
+    expect(frameFacts({ id: 'F01' })).toEqual({ id: 'F01', handle: null, lookNumber: null, name: null });
+    expect(frameFacts({ id: 'F01', price: { amount: '100.00', currencyCode: 'USD' } })).toEqual({ id: 'F01', handle: null, lookNumber: null, name: null });   // the price stays in the record (#47)
   });
 });
 

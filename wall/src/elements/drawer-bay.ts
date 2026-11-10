@@ -1,6 +1,7 @@
 // <drawer-bay> (DRAWER-WALL.md, The wall; Every drawer is its own thing): one drawer, its resolved state, its
 // label, its dark crop, its events. It sits over its rect on the wall plate. The face is a <button> named
-// "{name}, $100. Open the drawer." (a locked one: "Not yet. $100"); a hidden drawer renders no control. Tap first:
+// "{name}. Open the drawer." (a locked one: "Not yet."); no price anywhere (00-decisions.md #47); a hidden drawer
+// renders no control. Tap first:
 // a tap anywhere on the face opens; the wall scrolls natively (touch-action: pan-y). Pull first: the knob's rect
 // takes touch-action: none and a pull there opens with the pointer carried; the rest of the face scrolls.
 import { LitElement, html, css, nothing, type PropertyValues } from 'lit';
@@ -34,21 +35,21 @@ export class DrawerBay extends LitElement {
     .face:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     .face[aria-disabled="true"] { cursor: default; }
     .knob { touch-action: none; }
+    /* z-index 1: the bays share the plate's stacking context, and in landscape the drawer below's dark crop reaches about
+       10 px into this drawer's rail, so a label that fills its rail would otherwise paint under that crop */
     .label {
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center;
-      padding: 0 var(--space-1); gap: 0.1em; pointer-events: none; min-width: 0; overflow: visible;
+      padding: 0 var(--space-1); gap: 0.1em; pointer-events: none; min-width: 0; overflow: visible; z-index: 1;
     }
     .look { color: var(--color-text-editorial); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; font-variant-numeric: tabular-nums; }
     .name { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; overflow-wrap: anywhere; }
-    /* the price and, when the drawer is sold out, the word on one line: a two-line name then still leaves the label inside its
-       rect at 390 px (the word on its own line overran the rect onto the next drawer's piping by 9 px) */
-    .row { display: flex; align-items: baseline; justify-content: center; gap: 0.7em; margin-top: 0.1em; }
-    .price { color: var(--color-text-primary); font-size: var(--font-size-body); font-weight: var(--font-weight-regular); font-variant-numeric: tabular-nums; line-height: 1.25; }
-    .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; }
+    /* when the drawer is sold out, the word under the name, set like the lines above it; no price on the wall (00-decisions.md
+       #47). At 12 px a look number, a two-line name and this word stack to 60 px in the 61.5 px rail at 1024 px (the a11y test) */
+    .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; }
     @media (min-width: 1024px) { .look, .name, .status { font-size: 12px; } }
-    /* under 360 px the rail rect is 59 px tall and a two-line name at 11 px overran it by 6 px (the price then sat on the next
-       drawer's face, under its dark crop): smaller type and tighter lines keep every label inside its rect at 320 px */
-    @media (max-width: 359px) { .look, .name, .status { font-size: 10px; line-height: 1.1; } .price { font-size: var(--font-size-small); line-height: 1.15; } .row { margin-top: 0; } .label { gap: 0; } }
+    /* under 360 px the rail rect is 59 px tall and a two-line name at 11 px overran it by 6 px (the line after it then sat on the
+       next drawer's face, under its dark crop): smaller type and tighter lines keep every label inside its rect at 320 px */
+    @media (max-width: 359px) { .look, .name, .status { font-size: 10px; line-height: 1.1; } .label { gap: 0; } }
   `;
 
   @property({ attribute: false }) bay: ResolvedBay | null = null;
@@ -78,11 +79,10 @@ export class DrawerBay extends LitElement {
 
   private accessibleName(): string {
     const b = this.bay!;
-    const price = b.label?.price ?? '';
-    if (b.state === 'locked') return [t('notYet'), price].filter(Boolean).join(' ');
+    if (b.state === 'locked') return t('notYet');
     const name = b.label?.name ?? '';
     const sold = b.label?.soldOut ? ` ${t('soldOut')}.` : '';
-    return `${name}${name && price ? ', ' : ''}${price}.${sold} ${t('openLabel')}`.trim();
+    return `${name ? `${name}.` : ''}${sold} ${t('openLabel')}`.trim();
   }
 
   private open(pointer: BayOpenDetail['pointer']): void {
@@ -147,10 +147,7 @@ export class DrawerBay extends LitElement {
       ${label ? html`<div class="label" part="label" style=${styleMap(this.pct(r.label))} aria-hidden="true">
         ${label.lookNumber ? html`<span class="look">${label.lookNumber}</span>` : nothing}
         ${label.notYet ? html`<span class="name">${t('notYet')}</span>` : label.name ? html`<span class="name">${label.name}</span>` : nothing}
-        ${label.price || label.soldOut ? html`<span class="row">
-          ${label.price ? html`<span class="price">${label.price}</span>` : nothing}
-          ${label.soldOut ? html`<span class="status">${t('soldOut')}</span>` : nothing}
-        </span>` : nothing}
+        ${label.soldOut ? html`<span class="status">${t('soldOut')}</span>` : nothing}
       </div>` : nothing}
     `;
   }

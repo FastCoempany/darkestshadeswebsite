@@ -18,7 +18,7 @@ Darkest Shades is a sunglasses brand that sells eight frames at $100 in drops. T
 - Color: **role tokens only** in `wall/src/` (`--color-surface-*`, `--color-text-*`, `--color-action-*`, `--color-status-*`, `--color-border-*`, `--color-focus-ring`); no hex values. Graphite `#545454` is never text on dark. One gold element per view. Product photographs always sit on the stage color; the wall's scenes are dark (#43, #44).
 
 **Honesty**
-- The price ($100) is always visible.
+- **No price appears on the wall** (`00-decisions.md` #47, the founder's "remove pricing", Nov 9 2026): not under a drawer, in the drawer or lifted view, in a drawer's accessible name or in the no-JavaScript list, and the built wall ships none of the frames' `price` fields. The records in `content/products/` keep the price as a product fact (O20).
 - The wall shows only what its records hold: no countdowns, quantities or dates it doesn't have; a missing value renders nothing. No discounts, no fake urgency, no invented reviews (`08-copy.md`).
 
 **Products and copy**

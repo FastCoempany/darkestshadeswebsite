@@ -1,5 +1,6 @@
 // What the wall ships from the repo's content, and nothing more: the eight frames' facts (content/products/, only
-// what the wall shows: id, handle, look number, name, price) and the copy deck's wall section with the alt phrases (content/copy/en.json).
+// what the wall shows: id, handle, look number, name; never the price, 00-decisions.md #47) and the copy deck's wall
+// section with the alt phrases (content/copy/en.json).
 // Pure functions over the parsed JSON, used by the Vite plugin that makes `virtual:wall-frames` and
 // `virtual:wall-copy` at build time, and by the tests. Nothing is invented: a value the record lacks is null.
 import { FRAME_IDS, type FrameFacts, type FrameId } from '../lib/types';
@@ -13,13 +14,11 @@ export function frameFacts(product: unknown): FrameFacts | null {
   const p = obj(product);
   const id = str(p.id);
   if (!id || !(FRAME_IDS as readonly string[]).includes(id)) return null;
-  const price = obj(p.price);
   return {
     id: id as FrameId,
     handle: str(p.handle),
     lookNumber: str(p.lookNumber),
     name: str(p.name),
-    price: str(price.amount) && str(price.currencyCode) ? { amount: price.amount as string, currencyCode: price.currencyCode as string } : null,
   };
 }
 
