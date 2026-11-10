@@ -2,8 +2,8 @@
 // first open and never in the initial bundle. One canvas, rendered only while something changes, AgX tone mapping,
 // the drawer's own HDR as the environment plus one warm key matched to the scene. The handoff: the canvas mounts
 // over the drawer's last frame with the GLB at open.json's transform and a soft contact shadow, cross-fades over
-// 120 ms, then springs to the inspect pose; turning, pinching and the wheel report deltas up to the view, whose
-// machine holds the pose. Tier 1 shows the lifted still instead, and never loads three.js: the library and its
+// 120 ms, then springs to the inspect pose; turning (one finger, about any axis, #48), pinching and the wheel report
+// deltas up to the view, whose machine holds the pose. Tier 1 shows the lifted still instead, and never loads three.js: the library and its
 // loaders are imported inside setup(), which runs at tier 2 only. On a lost context: tier 1 for the rest of the visit.
 // `lifted-handoff` tells the view when the frame fades in and out, so the empty drawer behind it fades with it.
 import { LitElement, html, css, nothing } from 'lit';
@@ -13,16 +13,18 @@ import type * as THREE from 'three';
 import type { WallStore } from '../data/store';
 import type { FrameFacts } from '../lib/types';
 import type { Tier } from '../lib/tier';
-import { HANDOFF_FADE_MS, INERTIA_FRICTION, LIFT_MS, LIFT_REDUCED_MS, PITCH_PER_PX, YAW_PER_PX, clampZoom, isTap, pinchZoom, doubleTapZoom, wheelZoom, TAP_MAX_MS } from '../lib/gestures';
+import { HANDOFF_FADE_MS, IDENTITY_ROT, INERTIA_FRICTION, LIFT_MS, LIFT_REDUCED_MS, clampZoom, isTap, pinchZoom, doubleTapZoom, wheelZoom, TAP_MAX_MS, type Quat } from '../lib/gestures';
 import { springStep, springSettled, type SpringState } from '../lib/spring';
 import { log } from '../lib/log';
 
-export interface Pose { yaw: number; pitch: number; zoom: number }
+export interface Pose { rot: Quat; zoom: number }
 interface FramePose { matrix_three: number[][] }
 // camera/open.json and inspect.json: the camera, every frame's pose under `frames` (the default frame's again as `frame`)
 interface CameraJson { camera: { three: { position: number[]; fov_deg: number; near: number; far: number; quaternion_xyzw: number[] } }; frame: FramePose; frames?: Record<string, FramePose> }
 
 const LIFT_SPRING = { stiffness: 120, damping: 20 };
+/** The zoom from which the fit no longer moves the frame (whole at 1x, fading to nothing here). */
+const FIT_ZOOM_MAX = 1.25;
 
 /** three.js and the loaders (lifted-three.ts: the named pieces the live frame uses), loaded once at the first tier-2
  * lift into their own chunk, never in the initial bundle; null until the first setup has run (the pose math needs it). */
@@ -54,7 +56,7 @@ export class LiftedFrame extends LitElement {
   @property({ type: Number }) tier: Tier = 2;
   @property({ type: Boolean }) active = false;
   @property() label = '';
-  @property({ attribute: false }) pose: Pose = { yaw: 0, pitch: 0, zoom: 1 };
+  @property({ attribute: false }) pose: Pose = { rot: IDENTITY_ROT, zoom: 1 };
   @state() private shown = false;
   @state() private stillUrl: string | null = null;
   @state() private live = false;
@@ -64,6 +66,10 @@ export class LiftedFrame extends LitElement {
   private camera: THREE.PerspectiveCamera | null = null;
   private root: THREE.Group | null = null;
   private shadow: THREE.Mesh | null = null;
+  /** The frame's bounds and their centre in its own coordinates (the GLB's box): the free turn pivots on the centre, not
+   * on the authored origin, and the fit keeps the box's corners inside the view. */
+  private bounds: THREE.Box3 | null = null;
+  private centre: THREE.Vector3 | null = null;
   private open: { position: THREE.Vector3; quaternion: THREE.Quaternion } | null = null;
   private inspect: { position: THREE.Vector3; quaternion: THREE.Quaternion } | null = null;
   private progress = 0;        // 0 at the open pose, 1 at the inspect pose
@@ -182,6 +188,8 @@ export class LiftedFrame extends LitElement {
     const shadowMat = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, opacity: 0.7 });
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = box.getSize(new THREE.Vector3());
+    this.bounds = box;
+    this.centre = box.getCenter(new THREE.Vector3());
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.3, size.z * 1.6), shadowMat);
     shadow.rotation.x = -Math.PI / 2;
     shadow.position.set((box.min.x + box.max.x) / 2, box.min.y + 0.0005, (box.min.z + box.max.z) / 2);
@@ -219,23 +227,82 @@ export class LiftedFrame extends LitElement {
     c.updateProjectionMatrix();
   }
 
-  /** The frame's transform for the current progress and pose: between the open and the inspect poses, then yaw
-   * about its own vertical, pitch about the camera's right, and zoom toward the camera. */
+  /** The frame's transform for the current progress and pose: between the open and the inspect poses, then the free
+   * turn (00-decisions.md #48), which the machine keeps in view space (the viewer's right, up and line of sight) and
+   * which the camera's own rotation carries into the world, the zoom toward the camera, the pivot on the frame's centre,
+   * and the fit that keeps the whole frame in the view. */
   private applyPose(): void {
     const root = this.root, o = this.open, i = this.inspect, cam = this.camera, THREE = T;
     if (!root || !o || !i || !cam || !THREE) return;
     const p = this.progress;
     const pos = o.position.clone().lerp(i.position, p);
     const q = o.quaternion.clone().slerp(i.quaternion, p);
-    const yaw = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(this.pose.yaw) * p);
-    const right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion);
-    const pitch = new THREE.Quaternion().setFromAxisAngle(right, THREE.MathUtils.degToRad(this.pose.pitch) * p);
-    root.quaternion.copy(pitch).multiply(yaw).multiply(q);
+    const [rx, ry, rz, rw] = this.pose.rot;
+    const inView = new THREE.Quaternion(rx, ry, rz, rw);
+    const inWorld = cam.quaternion.clone().multiply(inView).multiply(cam.quaternion.clone().invert());
+    const turned = new THREE.Quaternion().slerp(inWorld, p);   // none at the open pose, the whole turn once lifted
+    root.quaternion.copy(turned).multiply(q);
+    // the zoom moves the frame's authored origin toward the camera along its own ray, before the pivot is added, so the
+    // centre's place on the screen is the zoom's alone and the turn below never moves it (with the zoom after the pivot,
+    // the centre circled as the frame turned, by 52 mm at 3x)
     const z = 1 + (clampZoom(this.pose.zoom) - 1) * p;
     const toCam = cam.position.clone().sub(pos);
     pos.add(toCam.multiplyScalar(1 - 1 / z));
+    // the turn pivots on the frame's centre, so it turns in place rather than swinging about the GLB's origin: the
+    // origin moves to where the turn carries it around that centre
+    if (this.centre) {
+      const c = this.centre.clone().applyQuaternion(q);
+      pos.add(c).sub(c.clone().applyQuaternion(turned));
+    }
     root.position.copy(pos);
+    // the fit: a turn that would carry part of the frame past the view's edge (stood on end, the temples reach well
+    // above the inspect pose's height) moves the frame back inside, along the camera's up and right, by as much as
+    // there is room on the other side and no more; nothing at the inspect pose, which fits. It fades out as the zoom
+    // rises (whole at 1x, gone from FIT_ZOOM_MAX), because a zoom is a choice to see a part of the frame larger than
+    // the view, anchored where the fingers are, and the turn's centre must hold there. Two passes, since the corners
+    // sit at different depths.
+    const fit = p * Math.max(0, Math.min(1, (FIT_ZOOM_MAX - z) / (FIT_ZOOM_MAX - 1)));
+    if (this.bounds && fit > 0) {
+      const t = Math.tan(THREE.MathUtils.degToRad(cam.fov) / 2);
+      const up = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion), right = new THREE.Vector3(1, 0, 0).applyQuaternion(cam.quaternion);
+      for (let pass = 0; pass < 2; pass++) {
+        const e = this.extent();
+        if (!e) break;
+        const dy = fitShift(e.y, t) * fit, dx = fitShift(e.x, t * cam.aspect) * fit;
+        if (dy === 0 && dx === 0) break;
+        root.position.add(up.clone().multiplyScalar(dy)).add(right.clone().multiplyScalar(dx));
+      }
+    }
     if (this.shadow) (this.shadow.material as THREE.MeshBasicMaterial).opacity = 0.7 * (1 - p);
+  }
+
+  /** The frame's box as the camera sees it: the eight corners' extent in normalised device coordinates on each axis,
+   * with the depth from the camera of the corner at each end (the fit's shift is exact for that corner). */
+  private extent(): { x: Extent; y: Extent } | null {
+    const root = this.root, cam = this.camera, b = this.bounds, THREE = T;
+    if (!root || !cam || !b || !THREE) return null;
+    root.updateMatrixWorld(true);
+    cam.updateMatrixWorld();   // the camera never moves, but its inverse must exist before the first draw
+    const x: Extent = { min: Infinity, max: -Infinity, dMin: 0, dMax: 0 }, y: Extent = { min: Infinity, max: -Infinity, dMin: 0, dMax: 0 };
+    for (let k = 0; k < 8; k++) {
+      const corner = new THREE.Vector3(k & 1 ? b.max.x : b.min.x, k & 2 ? b.max.y : b.min.y, k & 4 ? b.max.z : b.min.z).applyMatrix4(root.matrixWorld);
+      const d = -corner.clone().applyMatrix4(cam.matrixWorldInverse).z;
+      const n = corner.project(cam);
+      if (n.x < x.min) { x.min = n.x; x.dMin = d; }
+      if (n.x > x.max) { x.max = n.x; x.dMax = d; }
+      if (n.y < y.min) { y.min = n.y; y.dMin = d; }
+      if (n.y > y.max) { y.max = n.y; y.dMax = d; }
+    }
+    return { x, y };
+  }
+
+  /** Where the frame is on the screen, in the host's CSS pixels: its box's extent and its centre (the tests read it). */
+  screenBox(): { left: number; top: number; right: number; bottom: number; cx: number; cy: number } | null {
+    const e = this.extent(), root = this.root, cam = this.camera, c = this.centre;
+    if (!e || !root || !cam || !c) return null;
+    const w = this.clientWidth, h = this.clientHeight;
+    const n = root.localToWorld(c.clone()).project(cam);
+    return { left: (e.x.min + 1) / 2 * w, right: (e.x.max + 1) / 2 * w, top: (1 - e.y.max) / 2 * h, bottom: (1 - e.y.min) / 2 * h, cx: (n.x + 1) / 2 * w, cy: (1 - n.y) / 2 * h };
   }
 
   private render3d(): void {
@@ -271,7 +338,7 @@ export class LiftedFrame extends LitElement {
       await wait(this.reduced.matches ? LIFT_REDUCED_MS : LIFT_MS);
       return;
     }
-    this.pose = { yaw: 0, pitch: 0, zoom: 1 };
+    this.pose = { rot: IDENTITY_ROT, zoom: 1 };
     if (this.reduced.matches) {
       this.progress = 0;
       this.render3d();
@@ -306,7 +373,7 @@ export class LiftedFrame extends LitElement {
     });
   }
 
-  // --- the gestures: one finger turns, two pinch, double-tap zooms, the wheel zooms -----------------------------
+  // --- the gestures: one finger turns it any way (#48), two pinch, double-tap zooms, the wheel zooms -------------
   private onPointerDown(ev: PointerEvent): void {
     if (!this.active) return;
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
@@ -378,10 +445,15 @@ export class LiftedFrame extends LitElement {
     this.dispatchEvent(new CustomEvent('lifted-zoom', { detail: { zoom: wheelZoom(this.pose.zoom, ev.deltaY) }, bubbles: true, composed: true }));
   }
 
-  /** Whether the live canvas has drawn anything (the tests check it drew). */
-  hasDrawn(): boolean {
-    const r = this.renderer;
-    return !!r && r.info.render.frame > 0;
+  /** Whether the live canvas has drawn anything (the tests check it drew), and how many times. */
+  hasDrawn(): boolean { return this.drawCount() > 0; }
+  drawCount(): number { return this.renderer?.info.render.frame ?? 0; }
+  /** The WebGL renderer's name (the perf tests tell a software renderer, which presents a frame in 80 ms or more here,
+   * from a GPU); null before the first setup or where the browser withholds it. */
+  rendererName(): string | null {
+    const gl = this.renderer?.getContext() as WebGL2RenderingContext | WebGLRenderingContext | undefined;
+    const x = gl?.getExtension('WEBGL_debug_renderer_info');
+    return gl && x ? String(gl.getParameter(x.UNMASKED_RENDERER_WEBGL)) : null;
   }
 
   private dispose(): void {
@@ -409,6 +481,19 @@ export class LiftedFrame extends LitElement {
         @pointerdown=${this.onPointerDown} @pointermove=${this.onPointerMove} @pointerup=${this.onPointerUp} @pointercancel=${this.onPointerUp} @wheel=${this.onWheel}></canvas>
     `;
   }
+}
+
+interface Extent { min: number; max: number; dMin: number; dMax: number }
+
+/** The fit's shift along one axis of the view, in world metres: the amount past the edge (in normalised device
+ * coordinates, the view ±1) times the depth of the corner that is past it times the camera's half-angle tangent, which
+ * is exactly the move that brings that corner to the edge, limited to the room on the other side, measured the same
+ * way for the corner there; nothing when both ends are past the edges (zoomed in) or neither is. */
+function fitShift(e: Extent, t: number): number {
+  const over = e.max - 1, under = -1 - e.min;
+  if (over > 0 && under <= 0) return -Math.min(over * e.dMax, -under * e.dMin) * t;
+  if (under > 0 && over <= 0) return Math.min(under * e.dMin, -over * e.dMax) * t;
+  return 0;
 }
 
 function decompose(THREE: ThreeModule, m: number[][]): { position: THREE.Vector3; quaternion: THREE.Quaternion } {

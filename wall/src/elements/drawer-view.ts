@@ -14,7 +14,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import type { WallStore } from '../data/store';
 import type { ResolvedBay } from '../lib/types';
 import { initialContext, reduce, type ViewContext, type ViewEvent, VIEW_OPEN_STATES } from '../lib/machine';
-import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, TAP_MAX_PX, isTap, pullPosition, rubberBand } from '../lib/gestures';
+import { FULL_PULL, HAPTIC_MS, HINT_IDLE_MS, IDENTITY_ROT, LIFT_MS, LIFT_REDUCED_MS, REDUCED_FADE_MS, SETTLE_SPRING, TAP_MAX_PX, TURN_PER_PX, isTap, pullPosition, rubberBand, turnFree } from '../lib/gestures';
 import { springSettled, springStep, type SpringState } from '../lib/spring';
 import { SequencePlayer, type FrameSource } from '../lib/sequence-player';
 import { lockScroll, unlockScroll } from '../lib/scroll-lock';
@@ -27,6 +27,9 @@ import { photosFor } from './photo-zoom';
 /** The frame's region of the stage at the end of the pull, as fractions of the stage's box: a tap inside it lifts the
  * frame (the frame sits across the middle of the open drawer in every sequence's last frame). */
 const FRAME_REGION = { x0: 0.22, x1: 0.78, y0: 0.3, y1: 0.54 };
+/** The quiet buttons' and the keys' steps on the lifted frame, in degrees (D5: Turn left and right and ← → 9.6°, Tilt up
+ * and down 8°, ↑ ↓ 2°); the finger's rate is the machine's (TURN_PER_PX), and a step is sent as that many of its pixels. */
+const TURN_STEP_DEG = 9.6, TILT_STEP_DEG = 8, KEY_TILT_DEG = 2;
 
 export interface OpenRequest { bay: ResolvedBay; pointer: { x: number; y: number; pointerId: number; target: Element } | null; from: DOMRect | null }
 
@@ -119,7 +122,7 @@ export class DrawerView extends LitElement {
     const base = initialContext(true, true);
     const states: Record<string, Partial<ViewContext>> = {
       'shut': { state: 'shut', p: 0 }, 'pulling': { state: 'pulling', p: 0.45 }, 'open': { state: 'open', p: 1 },
-      'lifted': { state: 'lifted', p: 1 }, 'turned': { state: 'lifted', p: 1, yaw: 40, pitch: -10 }, 'zoomed': { state: 'lifted', p: 1, zoom: 2.2 },
+      'lifted': { state: 'lifted', p: 1 }, 'turned': { state: 'lifted', p: 1, rot: turnFree(turnFree(IDENTITY_ROT, 100, 0), 0, -25) }, 'zoomed': { state: 'lifted', p: 1, zoom: 2.2 },
       'photos': { state: 'photos', p: 1 }, 'tier 1 lifted': { state: 'lifted', p: 1 }, 'reduced motion': { state: 'open', p: 1 },
     };
     this.ctx = { ...base, ...(states[name] ?? states['shut']) };
@@ -478,10 +481,10 @@ export class DrawerView extends LitElement {
     const step = (dp: number) => { this.dispatch({ type: 'DRAG', p: Math.min(1, Math.max(0, this.ctx.p + dp)) }); this.requestDraw(); clearTimeout(this.keyTimer); this.keyTimer = window.setTimeout(() => this.dispatch({ type: 'RELEASE', v: 0, p: this.ctx.p }), 320); };
     switch (ev.key) {
       case 'Escape': ev.preventDefault(); this.dispatch({ type: 'ESC' }); break;
-      case 'ArrowDown': case 'PageDown': if (lifted) { ev.preventDefault(); this.turnBy(0, 8); } else if (st === 'shut' || st === 'pulling' || st === 'open') { ev.preventDefault(); step(0.12); } break;
-      case 'ArrowUp': case 'PageUp': if (lifted) { ev.preventDefault(); this.turnBy(0, -8); } else if (st === 'shut' || st === 'pulling' || st === 'open') { ev.preventDefault(); step(-0.12); } break;
-      case 'ArrowLeft': if (lifted) { ev.preventDefault(); this.turnBy(-24, 0); } break;
-      case 'ArrowRight': if (lifted) { ev.preventDefault(); this.turnBy(24, 0); } break;
+      case 'ArrowDown': case 'PageDown': if (lifted) { ev.preventDefault(); this.turnBy(0, KEY_TILT_DEG); } else if (st === 'shut' || st === 'pulling' || st === 'open') { ev.preventDefault(); step(0.12); } break;
+      case 'ArrowUp': case 'PageUp': if (lifted) { ev.preventDefault(); this.turnBy(0, -KEY_TILT_DEG); } else if (st === 'shut' || st === 'pulling' || st === 'open') { ev.preventDefault(); step(-0.12); } break;
+      case 'ArrowLeft': if (lifted) { ev.preventDefault(); this.turnBy(-TURN_STEP_DEG, 0); } break;
+      case 'ArrowRight': if (lifted) { ev.preventDefault(); this.turnBy(TURN_STEP_DEG, 0); } break;
       case '+': case '=': if (lifted) { ev.preventDefault(); this.zoomBy(1.2); } break;
       case '-': if (lifted) { ev.preventDefault(); this.zoomBy(1 / 1.2); } break;
       case '0': if (lifted) { ev.preventDefault(); this.dispatch({ type: 'RESET' }); this.syncLifted(); } break;
@@ -490,16 +493,20 @@ export class DrawerView extends LitElement {
   }
   private keyTimer = 0;
 
-  private turnBy(dx: number, dy: number): void { done.add('turn'); this.clearHint(); this.dispatch({ type: 'TURN', dx, dy }); this.syncLifted(); }
+  /** A button's or a key's turn, in degrees: the machine takes the finger's pixels, so a step is sent as the pixels that
+   * turn that far at the finger's rate (Turn left and right 9.6°, Tilt up and down 8°, ← → 9.6°, ↑ ↓ 2°, as D5 set them). */
+  private turnBy(yawDeg: number, pitchDeg: number): void { done.add('turn'); this.clearHint(); this.dispatch({ type: 'TURN', dx: yawDeg / TURN_PER_PX, dy: pitchDeg / TURN_PER_PX }); this.syncLifted(); }
   private zoomBy(f: number): void { this.dispatch({ type: 'ZOOM', zoom: this.ctx.zoom * f }); this.syncLifted(); }
   private syncLifted(): void {
     const el = this.renderRoot.querySelector('lifted-frame') as (HTMLElement & { pose?: unknown }) | null;
-    if (el) el.pose = { yaw: this.ctx.yaw, pitch: this.ctx.pitch, zoom: this.ctx.zoom };
+    if (el) el.pose = { rot: this.ctx.rot, zoom: this.ctx.zoom };
   }
 
   /** The lifted frame reports its turn and zoom (pointer gestures) so the machine holds the pose. */
-  private onLiftedTurn(ev: CustomEvent<{ dx: number; dy: number }>): void { done.add('turn'); this.clearHint(); this.dispatch({ type: 'TURN', dx: ev.detail.dx, dy: ev.detail.dy }); }
-  private onLiftedZoom(ev: CustomEvent<{ zoom: number }>): void { this.dispatch({ type: 'ZOOM', zoom: ev.detail.zoom }); }
+  // the finger's turn and the pinch: the machine takes the delta and the frame is handed the pose it holds now, as the
+  // buttons do (without the hand-over the frame kept its last pose until the next button press, and leapt there then)
+  private onLiftedTurn(ev: CustomEvent<{ dx: number; dy: number }>): void { done.add('turn'); this.clearHint(); this.dispatch({ type: 'TURN', dx: ev.detail.dx, dy: ev.detail.dy }); this.syncLifted(); }
+  private onLiftedZoom(ev: CustomEvent<{ zoom: number }>): void { this.dispatch({ type: 'ZOOM', zoom: ev.detail.zoom }); this.syncLifted(); }
 
   override render() {
     const s = this.store, b = this.bay, c = this.ctx;
@@ -540,10 +547,10 @@ export class DrawerView extends LitElement {
           ${drawerOpen || st === 'opening' ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'SHUT_DRAWER' })}>${t('shut')}</button>` : nothing}
           ${drawerOpen && c.canLift ? html`<button class="quiet" type="button" @click=${() => this.dispatch({ type: 'LIFT' })}>${t('lift')}</button>` : nothing}
           ${st === 'lifted' && this.tier === 2 ? html`
-            <button class="quiet" type="button" @click=${() => this.turnBy(-24, 0)}>${t('turnLeft')}</button>
-            <button class="quiet" type="button" @click=${() => this.turnBy(24, 0)}>${t('turnRight')}</button>
-            <button class="quiet" type="button" @click=${() => this.turnBy(0, -32)}>${t('tiltUp')}</button>
-            <button class="quiet" type="button" @click=${() => this.turnBy(0, 32)}>${t('tiltDown')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(-TURN_STEP_DEG, 0)}>${t('turnLeft')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(TURN_STEP_DEG, 0)}>${t('turnRight')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(0, -TILT_STEP_DEG)}>${t('tiltUp')}</button>
+            <button class="quiet" type="button" @click=${() => this.turnBy(0, TILT_STEP_DEG)}>${t('tiltDown')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1.2)}>${t('closer')}</button>
             <button class="quiet" type="button" @click=${() => this.zoomBy(1 / 1.2)}>${t('further')}</button>
             <button class="quiet" type="button" @click=${() => { this.dispatch({ type: 'RESET' }); this.syncLifted(); }}>${t('reset')}</button>` : nothing}

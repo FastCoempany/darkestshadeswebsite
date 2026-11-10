@@ -8,7 +8,7 @@ describe('constants', () => {
     expect([g.RELEASE_VELOCITY, g.RELEASE_POSITION]).toEqual([0.35, 0.5]);
     expect(g.SETTLE_SPRING).toEqual({ stiffness: 180, damping: 26 });
     expect([g.REDUCED_FADE_MS, g.LIFT_MS, g.LIFT_REDUCED_MS]).toEqual([160, 900, 200]);
-    expect([g.YAW_PER_PX, g.PITCH_PER_PX, g.PITCH_MIN, g.PITCH_MAX, g.INERTIA_FRICTION]).toEqual([0.4, 0.25, -30, 35, 0.92]);
+    expect([g.TURN_PER_PX, g.INERTIA_FRICTION]).toEqual([0.4, 0.92]);
     expect([g.ZOOM_MIN, g.ZOOM_MAX, g.DOUBLE_TAP_ZOOM, g.WHEEL_STEP]).toEqual([1, 3, 2.2, 1.1]);
     expect([g.HINT_IDLE_MS, g.HAPTIC_MS]).toEqual([1200, 10]);
   });
@@ -67,13 +67,42 @@ describe('releaseDecision', () => {
   });
 });
 
-describe('turn', () => {
-  it('yaws 0.4°/px without bound and pitches 0.25°/px within −30 and +35', () => {
-    expect(g.turn(0, 0, 10, 0)).toEqual({ yaw: 4, pitch: 0 });
-    expect(g.turn(350, 0, 100, 0).yaw).toBeCloseTo(390);
-    expect(g.turn(0, 0, 0, 1000).pitch).toBe(35);
-    expect(g.turn(0, 0, 0, -1000).pitch).toBe(-30);
-    expect(g.turn(0, 10, 0, 8).pitch).toBeCloseTo(12);
+describe('turnFree (00-decisions.md #48: one finger turns the frame about any axis, with no limit)', () => {
+  const I = g.IDENTITY_ROT;
+  const close = (a: readonly number[], b: readonly number[]) => a.forEach((v, i) => expect(v).toBeCloseTo(b[i]!, 5));
+  it('a drag to the right turns about the vertical, 0.4° a pixel; a drag down turns about the horizontal', () => {
+    expect(g.turnAngles(g.turnFree(I, 100, 0))).toMatchObject({ yaw: expect.closeTo(40, 5), pitch: expect.closeTo(0, 5), roll: expect.closeTo(0, 5) });
+    expect(g.turnAngles(g.turnFree(I, 0, 100))).toMatchObject({ yaw: expect.closeTo(0, 5), pitch: expect.closeTo(40, 5), roll: expect.closeTo(0, 5) });
+    expect(g.turnAngles(g.turnFree(I, -25, 0)).yaw).toBeCloseTo(-10, 5);
+  });
+  it('no direction has a limit: 225 px down stands the frame on end, 450 px turns it over, and it keeps going', () => {
+    const up: [number, number, number] = [0, 1, 0];
+    close(g.rotateVector(g.turnFree(I, 0, 225), up), [0, 0, 1]);        // the top now points at the viewer
+    close(g.rotateVector(g.turnFree(I, 0, 450), up), [0, -1, 0]);       // upside down
+    close(g.rotateVector(g.turnFree(I, 0, 900), up), up);               // all the way round
+    close(g.rotateVector(g.turnFree(I, 0, -225), up), [0, 0, -1]);      // and up: the top points away from the viewer, past the old −30° stop
+    close(g.rotateVector(g.turnFree(I, 0, -450), up), [0, -1, 0]);      // upside down the other way round
+    const a = g.turnFree(I, 0, 1000), b = g.turnFree(I, 0, 1000 - 900);   // 400° is 40° again: the same rotation (a quaternion and its negative are one rotation)
+    expect(Math.abs(a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3])).toBeCloseTo(1, 9);
+  });
+  it('turns compose in view space: the frame follows the finger whatever way it faces', () => {
+    const onEnd = g.turnFree(I, 0, 225);                                // the top toward the viewer
+    const thenRight = g.turnFree(onEnd, 225, 0);                        // a drag to the right still turns about the view's vertical
+    const fwd: [number, number, number] = [0, 0, 1];
+    close(g.rotateVector(thenRight, fwd), g.rotateVector(g.quatFromAxisAngle([0, 1, 0], 90), g.rotateVector(onEnd, fwd)));
+    close(g.rotateVector(thenRight, [0, 1, 0]), [1, 0, 0]);             // the top, which pointed at the viewer, now points right
+  });
+  it('stays a unit quaternion over a long drag, and a zero drag changes nothing', () => {
+    let q = I;
+    for (let i = 0; i < 5000; i++) q = g.turnFree(q, 3, -2);
+    expect(Math.hypot(...q)).toBeCloseTo(1, 9);
+    expect(g.turnFree(I, 0, 0)).toEqual([0, 0, 0, 1]);
+  });
+  it('quaternion helpers: multiply composes, normalize scales, rotateVector turns', () => {
+    const a = g.quatFromAxisAngle([0, 1, 0], 90), b = g.quatFromAxisAngle([1, 0, 0], 90);
+    close(g.rotateVector(g.quatMultiply(a, b), [0, 0, 1]), g.rotateVector(a, g.rotateVector(b, [0, 0, 1])));
+    close(g.quatNormalize([0, 0, 0, 2]), [0, 0, 0, 1]);
+    close(g.rotateVector(a, [0, 0, 1]), [1, 0, 0]);
   });
 });
 

@@ -6,7 +6,7 @@ The site build of Oct 30–31 was thrown out (`00-decisions.md` #46). Don't read
 
 Part 1 is what we're making. Part 2 is how to build it. Part 3 is for me: how I start the run. This file and `docs/build/WALL-PROGRESS.md` are your memory; re-read both at the start of every phase and after every break or compaction.
 
-The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone) and #47 (no price on the wall, the founder's instruction after D7), and the open items O15–O18 and O20.
+The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone), #47 (no price on the wall) and #48 (the lifted frame turns freely), the founder's two instructions after D7, and the open items O15–O18, O20 and O21.
 
 ---
 
@@ -45,7 +45,7 @@ The default mechanic is **tap first** (O16). The **pull first** variant (`?mech=
 2. **Open.** Tap a drawer (anywhere on it, or Enter or Space). It comes forward: its part of the wall scales up into the drawer view while the room dims behind it, and the view's first frame, rendered from the wall's own angle, takes over. Pull-first variant: put a finger on the knob itself and pull down; the drawer view opens under your finger and the pull continues there. Anywhere else on the wall, a vertical swipe scrolls.
 3. **The drawer view.** One full-screen layer; nothing behind it scrolls. The drawer, shut, barely lit; the hint `wall.hintPull` with a thin falling line. Pull down to slide the drawer out: a scrubbed image sequence, the camera leaning in and down as the drawer comes out, the frame coming into the warm light. Let go and the drawer settles open or shut (velocity first, then position). A quiet button does the same (`wall.open`, `wall.shut`). `wall.close`, Esc, or (on wide screens) a tap on the dim room around the view returns you to the wall, with focus on that drawer.
 4. **Lift.** With the drawer open, the hint `wall.hintLift`. Tap the frame (or `wall.lift`). The rendered frame hands over to a live 3D frame in exactly the same place, then rises toward you into the light, turning to a three-quarter view, while the drawer dims and softens behind it.
-5. **Turn and come closer.** One finger turns it: freely around, a little up and down. Pinch or double-tap brings it closer (to 3×); on desktop, drag and the wheel. Buttons: `wall.turnLeft`, `wall.turnRight`, `wall.closer`, `wall.further`, `wall.reset`. It stays sharp at every zoom because it is drawn live at the screen's resolution.
+5. **Turn and come closer.** One finger turns it about any axis, with no limit in any direction (#48): sideways, up and down, over, upside down, round and round; it follows the finger whichever way it already faces. It turns about its own centre, and it stays whole in the view: a turn that would carry its temples past the stage's edge moves it back inside by as much as there is room on the other side (at 1×; not once it is zoomed in, from 1.25×, when the zoom's own anchor holds). Pinch or double-tap brings it closer (to 3×); on desktop, drag and the wheel. Buttons: `wall.turnLeft`, `wall.turnRight`, `wall.tiltUp`, `wall.tiltDown`, `wall.closer`, `wall.further`, `wall.reset`. It stays sharp at every zoom because it is drawn live at the screen's resolution.
 6. **The photographs.** `wall.photos` opens the real lightbox photographs (A1, A2, A3 and A6 where they exist) on their stage color, each at full resolution: pinch, drag or double-tap down to one image pixel per screen pixel. `wall.photosClose` goes back to the frame.
 7. **Put back.** `wall.putBack`, a tap on the drawer, or Esc. The frame settles back into the drawer the way it rose. Esc again shuts the drawer; again, closes the view.
 
@@ -215,7 +215,7 @@ Esc steps back: `photos` → `lifted` → `open` → `shut` → `wall`. Pull fir
 | Release | velocity over 0.35 px/ms wins; otherwise position ≥ 0.5 opens | |
 | Settle spring | stiffness 180, damping 26 | Reduced motion: snap plus a 160 ms cross-fade |
 | Lift | spring to the inspect pose, about 900 ms | Reduced motion: 200 ms cross-fade |
-| Turn | yaw 0.4°/px unbounded; pitch 0.25°/px, −30° to +35° | Inertia friction 0.92 a frame; none under reduced motion |
+| Turn | 0.4°/px about the view's vertical for a sideways drag and about its horizontal for a vertical drag, composed in view space as a quaternion; no limit in any direction (#48); the pivot is the frame's own centre; the fit keeps the whole frame in the view at 1×, fading to none at 1.25×. The buttons step 9.6° (Turn left and right) and 8° (Tilt up and down), the keys 9.6° (← →) and 2° (↑ ↓) | Inertia friction 0.92 a frame; none under reduced motion |
 | Zoom | 1× to 3×, pinch direct, double-tap 1× ↔ 2.2× toward the tap, wheel 1.1× a step | |
 | Hints | after 1.2 s idle in a state; gone after the first success of that gesture, for the session | One hint at a time; never animated beyond a slow fade |
 | Haptics | `navigator.vibrate(10)` at the open and shut stops, where it exists | |
@@ -298,6 +298,8 @@ wall.photos             See the photographs
 wall.photosClose        Back to the frame
 wall.turnLeft           Turn left
 wall.turnRight          Turn right
+wall.tiltUp             Tilt up
+wall.tiltDown           Tilt down
 wall.closer             Closer
 wall.further            Further
 wall.reset              Reset
@@ -334,7 +336,8 @@ Names and look numbers come from `content/products/` (never the price, #47); the
 
 - **Unit (Vitest):** `resolve.ts` (every state, every override, every missing or unknown value), `machine.ts` (every transition and every impossible one, records changing mid-view), the adapter (metaobject shape in, typed drawers out), the manifest loader, the gesture math (release decisions, rubber band, clamps), the tier choice.
 - **The states sheet:** `states.html` shows every element in every state (each drawer state, both lights, both mechanics, the view shut, pulling, open, lifted, turned, zoomed, the photographs, tier 1, reduced motion, 320 px) from fixtures. Playwright screenshots it at 390 and 1440 against committed baselines; the live canvas is masked in the pixel comparison, and a separate test checks that it drew.
-- **End to end (Playwright, `wall/tests/e2e/`):** projects `wall-pixel` (Chromium as a Pixel, with touch), `wall-iphone` (WebKit as an iPhone; everything but the live 3D, since headless WebKit's WebGL is not reliable) and `wall-desktop` (Chromium). Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: every drawer shows its name and no price; tap first: open, pull, settle both ways, lift, turn (yaw changes), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls; tap first: a vertical swipe on a drawer scrolls and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); `?open=`; no JavaScript (tier 0); the records panel changes one drawer and no other.
+- **End to end (Playwright, `wall/tests/e2e/`):** projects `wall-pixel` (Chromium as a Pixel, with touch), `wall-iphone` (WebKit as an iPhone; everything but the live 3D, since headless WebKit's WebGL is not reliable) and `wall-desktop` (Chromium). Touch drags go through CDP `Input.dispatchTouchEvent` (Playwright's touchscreen only taps). The flows: every drawer shows its name and no price; tap first: open, pull, settle both ways, lift, turn (the quaternion changes after Turn right, Tilt up and a drag, and the live frame holds it and has drawn it; on the Pixel two 300 px drags down take it past the old clamp and on round; stood on end its whole box is in the view; at 3× the turn keeps its centre), pinch (two-finger CDP), photographs, put back, shut, close with focus back on the drawer; pull first: a pull on the knob opens and keeps pulling, a swipe on the face scrolls; tap first: a vertical swipe on a drawer scrolls and opens nothing; keyboard only, end to end; reduced motion (no springs, cross-fades); WebGL disabled (tier 1); `?open=`; no JavaScript (tier 0); the records panel changes one drawer and no other.
+- **Performance (`perf.spec.ts`):** three.js absent from the initial bundle; at most 5 decoded frames held through a pull; input to the frame after the next on open, pull and turn; the frame rate pulling and turning from the animation-frame gaps at the machine's speed (asserted) and at 4× CPU throttling (recorded). The turn draws the live frame through WebGL, so where the browser presents WebGL through a software renderer (SwiftShader on this VM and on a CI runner, 80 ms or more a frame whatever the canvas) the turn's gaps and latency are recorded, not asserted, and the wall's own share is asserted everywhere: the main thread's time in each pointer event's handlers and in each draw, one draw per event (#48's review).
 - **Accessibility:** axe on the wall, the drawer view shut and open, the lifted frame and the photographs; names and live announcements; targets ≥ 44 px; 320 px and 200% zoom; label contrast measured against the plate's pixels under each label (≥ 4.5:1).
 - **Performance:** `npm run lighthouse` on the built wall; the bundle sizes; the frame-rate trace; decoded frames counted through the debug log.
 - **Asset checks:** `drawer_wall.py --check`, `frame_glb.py --check` for every frame, the manifest check, scene black, lens tints present with sources.
@@ -428,7 +431,7 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 - **One context, no fan-out:** D1's project, `resolve.ts` and `machine.ts`, D5's shared pieces, the Blender lookdev (one eye on the look), the lift handoff.
 - **Fan out:** D2's schema and adapter against D3's tool writing; D5's elements after the shared pieces; D6's end-to-end suites by flow; each phase's reviews.
-- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#47, O15–O18 and O20, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
+- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#48, O15–O18, O20 and O21, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
 
 ## Risks and what to do
 

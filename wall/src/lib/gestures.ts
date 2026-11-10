@@ -18,11 +18,9 @@ export const REDUCED_FADE_MS = 160;
 /** The lift: a spring to the inspect pose, about 900 ms; 200 ms cross-fade under reduced motion. */
 export const LIFT_MS = 900;
 export const LIFT_REDUCED_MS = 200;
-/** Turning: yaw 0.4°/px unbounded; pitch 0.25°/px, −30° to +35°; inertia friction 0.92 a frame, none under reduced motion. */
-export const YAW_PER_PX = 0.4;
-export const PITCH_PER_PX = 0.25;
-export const PITCH_MIN = -30;
-export const PITCH_MAX = 35;
+/** Turning (00-decisions.md #48): one finger turns the lifted frame about any axis, 0.4° a pixel, with no limit in any
+ * direction; inertia friction 0.92 a frame, none under reduced motion. */
+export const TURN_PER_PX = 0.4;
 export const INERTIA_FRICTION = 0.92;
 /** Zoom 1× to 3×; double-tap 1× ↔ 2.2× toward the tap; wheel 1.1× a step. */
 export const ZOOM_MIN = 1;
@@ -68,9 +66,60 @@ export function releaseDecision(velocityPxPerMs: number, position: number): 'ope
   return position >= RELEASE_POSITION ? 'open' : 'shut';
 }
 
-/** One finger turns the frame: yaw free, pitch clamped. */
-export function turn(yaw: number, pitch: number, dxPx: number, dyPx: number): { yaw: number; pitch: number } {
-  return { yaw: yaw + dxPx * YAW_PER_PX, pitch: clamp(pitch + dyPx * PITCH_PER_PX, PITCH_MIN, PITCH_MAX) };
+/** A rotation as a unit quaternion, x y z w, in view space: x is the viewer's right, y up, z toward the viewer. */
+export type Quat = readonly [number, number, number, number];
+export const IDENTITY_ROT: Quat = [0, 0, 0, 1];
+
+export function quatFromAxisAngle(axis: readonly [number, number, number], deg: number): Quat {
+  const h = (deg * Math.PI) / 360, s = Math.sin(h);
+  return [axis[0] * s, axis[1] * s, axis[2] * s, Math.cos(h)];
+}
+
+/** a · b: b's rotation first, then a's. */
+export function quatMultiply(a: Quat, b: Quat): Quat {
+  const [ax, ay, az, aw] = a, [bx, by, bz, bw] = b;
+  return [
+    aw * bx + ax * bw + ay * bz - az * by,
+    aw * by - ax * bz + ay * bw + az * bx,
+    aw * bz + ax * by - ay * bx + az * bw,
+    aw * bw - ax * bx - ay * by - az * bz,
+  ];
+}
+
+export function quatNormalize(q: Quat): Quat {
+  const n = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
+  return [q[0] / n, q[1] / n, q[2] / n, q[3] / n];
+}
+
+/** A vector turned by the rotation. */
+export function rotateVector(q: Quat, v: readonly [number, number, number]): [number, number, number] {
+  const [x, y, z, w] = q;
+  const [vx, vy, vz] = v;
+  // t = 2 (q.xyz × v); v' = v + w t + q.xyz × t
+  const tx = 2 * (y * vz - z * vy), ty = 2 * (z * vx - x * vz), tz = 2 * (x * vy - y * vx);
+  return [vx + w * tx + (y * tz - z * ty), vy + w * ty + (z * tx - x * tz), vz + w * tz + (x * ty - y * tx)];
+}
+
+/** One finger turns the frame freely (#48): a drag of `dxPx` to the right turns it about the view's vertical axis, a drag
+ * of `dyPx` down turns it about the view's horizontal axis, 0.4° a pixel each, applied in view space on top of the turn
+ * so far, so the frame always follows the finger whatever way it is already facing, and no direction has a limit. */
+export function turnFree(rot: Quat, dxPx: number, dyPx: number): Quat {
+  const aboutUp = quatFromAxisAngle([0, 1, 0], dxPx * TURN_PER_PX);
+  const aboutRight = quatFromAxisAngle([1, 0, 0], dyPx * TURN_PER_PX);
+  return quatNormalize(quatMultiply(quatMultiply(aboutRight, aboutUp), rot));
+}
+
+/** The turn as angles, for the tests: yaw about the vertical, pitch about the horizontal, roll about the line
+ * of sight, in degrees (three.js's YXZ order), each in −180 to 180. */
+export function turnAngles(q: Quat): { yaw: number; pitch: number; roll: number } {
+  const [x, y, z, w] = q;
+  const m11 = 1 - 2 * (y * y + z * z), m13 = 2 * (x * z + y * w);
+  const m21 = 2 * (x * y + z * w), m22 = 1 - 2 * (x * x + z * z), m23 = 2 * (y * z - x * w);
+  const m31 = 2 * (x * z - y * w), m33 = 1 - 2 * (x * x + y * y);
+  const deg = (r: number) => (r * 180) / Math.PI;
+  const pitch = Math.asin(-clamp(m23, -1, 1));
+  if (Math.abs(m23) < 0.9999999) return { yaw: deg(Math.atan2(m13, m33)), pitch: deg(pitch), roll: deg(Math.atan2(m21, m22)) };
+  return { yaw: deg(Math.atan2(-m31, m11)), pitch: deg(pitch), roll: 0 };
 }
 
 /** Inertia after the finger lifts: the angular velocity decays by 0.92 a frame; under reduced motion there is none. */

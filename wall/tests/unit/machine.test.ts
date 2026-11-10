@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { initialContext, reduce, type ViewContext, type ViewEvent, type ViewState, DRAWER_OPEN_STATES, VIEW_OPEN_STATES } from '../../src/lib/machine';
+import { IDENTITY_ROT, rotateVector, turnAngles, turnFree } from '../../src/lib/gestures';
 
 // Every transition of the drawer's state machine (DRAWER-WALL.md), every impossible one, Esc stepping back, the pull
 // carried from the wall, and a record changing mid-view.
@@ -54,13 +55,20 @@ describe('each state', () => {
     expect(reduce(noLift, { type: 'LIFT' })).toBe(noLift);
     expect(reduce(at('open'), { type: 'CLOSE' }).state).toBe('leaving');
   });
-  it('lifted: TURN turns with pitch clamped, ZOOM clamps, RESET resets, PHOTOS and PUT_BACK move on', () => {
-    const t = reduce(at('lifted'), { type: 'TURN', dx: 100, dy: -400 });
-    expect(t.yaw).toBeCloseTo(40);
-    expect(t.pitch).toBe(-30);
+  it('lifted: TURN turns freely about any axis (#48), ZOOM clamps, RESET resets, PHOTOS and PUT_BACK move on', () => {
+    const t = reduce(at('lifted'), { type: 'TURN', dx: 100, dy: 0 });
+    expect(turnAngles(t.rot).yaw).toBeCloseTo(40, 5);
+    // no limit up or down: 400 px down is 160°, past where the old clamp stopped, and the top of the frame now points down and back
+    const over = reduce(at('lifted'), { type: 'TURN', dx: 0, dy: 400 });
+    expect(turnAngles(over.rot).pitch).toBeCloseTo(20, 3);          // 160° reads as pitch 20 with yaw and roll at 180: the frame is over
+    expect(rotateVector(over.rot, [0, 1, 0])[1]).toBeLessThan(-0.9);
+    const back = reduce(at('lifted'), { type: 'TURN', dx: 0, dy: -400 });   // and 400 px up: the other way, past the old −30° stop
+    expect(rotateVector(back.rot, [0, 1, 0])[1]).toBeLessThan(-0.9);
+    // the turn goes on from where it is, in view space
+    expect(reduce(over, { type: 'TURN', dx: 0, dy: 50 }).rot).toEqual(turnFree(over.rot, 0, 50));
     expect(reduce(at('lifted'), { type: 'ZOOM', zoom: 9 }).zoom).toBe(3);
     expect(reduce(at('lifted'), { type: 'ZOOM', zoom: 0.2 }).zoom).toBe(1);
-    expect(reduce(at('lifted', { yaw: 50, pitch: 10, zoom: 2 }), { type: 'RESET' })).toMatchObject({ yaw: 0, pitch: 0, zoom: 1, state: 'lifted' });
+    expect(reduce(at('lifted', { rot: turnFree(IDENTITY_ROT, 50, 10), zoom: 2 }), { type: 'RESET' })).toMatchObject({ rot: [0, 0, 0, 1], zoom: 1, state: 'lifted' });
     expect(reduce(at('lifted'), { type: 'PHOTOS' }).state).toBe('photos');
     expect(reduce(at('lifted'), { type: 'PUT_BACK' }).state).toBe('returning');
   });
@@ -68,10 +76,10 @@ describe('each state', () => {
     expect(reduce(at('photos'), { type: 'BACK' }).state).toBe('lifted');
   });
   it('returning: RETURNED lands in open with the pose reset', () => {
-    expect(reduce(at('returning', { yaw: 30, zoom: 2 }), { type: 'RETURNED' })).toMatchObject({ state: 'open', yaw: 0, zoom: 1 });
+    expect(reduce(at('returning', { rot: turnFree(IDENTITY_ROT, 30, 0), zoom: 2 }), { type: 'RETURNED' })).toMatchObject({ state: 'open', rot: [0, 0, 0, 1], zoom: 1 });
   });
   it('leaving: LEFT lands on the wall with everything reset', () => {
-    expect(reduce(at('leaving', { p: 1, yaw: 30, pointerCarried: true }), { type: 'LEFT' })).toMatchObject({ state: 'wall', p: 0, yaw: 0, pointerCarried: false });
+    expect(reduce(at('leaving', { p: 1, rot: turnFree(IDENTITY_ROT, 30, 0), pointerCarried: true }), { type: 'LEFT' })).toMatchObject({ state: 'wall', p: 0, rot: [0, 0, 0, 1], pointerCarried: false });
   });
 });
 
