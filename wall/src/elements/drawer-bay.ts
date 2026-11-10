@@ -35,18 +35,21 @@ export class DrawerBay extends LitElement {
     .face:focus-visible { outline: var(--border-focus) solid var(--color-focus-ring); outline-offset: var(--border-focus-offset); }
     .face[aria-disabled="true"] { cursor: default; }
     .knob { touch-action: none; }
+    /* z-index 1: the bays share the plate's stacking context, and in landscape the drawer below's dark crop reaches about
+       10 px into this drawer's rail, so a label that fills its rail would otherwise paint under that crop */
     .label {
       display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-align: center;
-      padding: 0 var(--space-1); gap: 0.1em; pointer-events: none; min-width: 0; overflow: visible;
+      padding: 0 var(--space-1); gap: 0.1em; pointer-events: none; min-width: 0; overflow: visible; z-index: 1;
     }
     .look { color: var(--color-text-editorial); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; font-variant-numeric: tabular-nums; }
     .name { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; overflow-wrap: anywhere; }
-    /* when the drawer is sold out, the word under the name; no price on the wall (00-decisions.md #47) */
-    .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.3; margin-top: 0.1em; }
+    /* when the drawer is sold out, the word under the name, set like the lines above it; no price on the wall (00-decisions.md
+       #47). At 12 px a look number, a two-line name and this word stack to 60 px in the 61.5 px rail at 1024 px (the a11y test) */
+    .status { color: var(--color-text-secondary); font-size: 11px; font-weight: var(--font-weight-medium); letter-spacing: var(--font-tracking-micro); text-transform: uppercase; line-height: 1.2; }
     @media (min-width: 1024px) { .look, .name, .status { font-size: 12px; } }
     /* under 360 px the rail rect is 59 px tall and a two-line name at 11 px overran it by 6 px (the line after it then sat on the
        next drawer's face, under its dark crop): smaller type and tighter lines keep every label inside its rect at 320 px */
-    @media (max-width: 359px) { .look, .name, .status { font-size: 10px; line-height: 1.1; margin-top: 0; } .label { gap: 0; } }
+    @media (max-width: 359px) { .look, .name, .status { font-size: 10px; line-height: 1.1; } .label { gap: 0; } }
   `;
 
   @property({ attribute: false }) bay: ResolvedBay | null = null;

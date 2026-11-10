@@ -397,9 +397,11 @@ test('the records panel changes one drawer and no other', async ({ page }) => {
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('sold_out');
   await expect(f04.locator('button.face')).toHaveAttribute('data-light', 'dark');
   await expect(f04.locator('.status')).toHaveText('Sold out');
+  await expect(bayButton(page, 'drawer_bay/f04')).toHaveAttribute('aria-label', `${FRAMES.find((f) => f[0] === 'drawer_bay/f04')![2]}. Sold out. Open the drawer.`);   // the sold-out name, no price (#47)
   for (const [id] of FRAMES) if (id !== 'drawer_bay/f04') await expect(bayButton(page, id)).toHaveAttribute('data-light', 'lit');
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('locked');
   await expect(f04.locator('.name')).toHaveText('Not yet.');
+  await expect(bayButton(page, 'drawer_bay/f04')).toHaveAttribute('aria-label', 'Not yet.');   // the locked name, no price (#47)
   await expect(bayButton(page, 'drawer_bay/f04')).toBeDisabled();
   await panel.locator('fieldset[data-id="drawer_bay/f04"] select').nth(1).selectOption('hidden');
   await expect(f04.locator('button.face')).toHaveCount(0);

@@ -6,7 +6,7 @@ The site build of Oct 30–31 was thrown out (`00-decisions.md` #46). Don't read
 
 Part 1 is what we're making. Part 2 is how to build it. Part 3 is for me: how I start the run. This file and `docs/build/WALL-PROGRESS.md` are your memory; re-read both at the start of every phase and after every break or compaction.
 
-The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone), and the open items O15–O18.
+The decisions behind this run: `docs/brief/00-decisions.md` #43 (the look), #44 (the drawer wall), #45 (no added cost), #46 (the wall alone) and #47 (no price on the wall, the founder's instruction after D7), and the open items O15–O18 and O20.
 
 ---
 
@@ -428,7 +428,7 @@ Sections, in this order: **Checks failing for environment reasons** (each with i
 
 - **One context, no fan-out:** D1's project, `resolve.ts` and `machine.ts`, D5's shared pieces, the Blender lookdev (one eye on the look), the lift handoff.
 - **Fan out:** D2's schema and adapter against D3's tool writing; D5's elements after the shared pieces; D6's end-to-end suites by flow; each phase's reviews.
-- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#46 and O15–O18, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
+- **Brief every agent** with `CLAUDE.md`, `00-decisions.md` #43–#47, O15–O18 and O20, Part 1 of this file, the parts of Part 2 its task touches, the paths of what exists and the files it owns. In a fan-out nobody touches `package.json`, shared config, the tokens, the copy deck, the manifest or another agent's files.
 
 ## Risks and what to do
 
